@@ -96,3 +96,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+*.sln
+*.csproj
