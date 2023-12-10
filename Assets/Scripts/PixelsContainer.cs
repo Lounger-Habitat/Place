@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -116,6 +117,54 @@ public class PixelsContainer : MonoBehaviour
                 y = sy + j;
                 pixelContainer[x, y].SetColor(pixels[i, j]);
             }
+        }
+    }
+
+    // 把container当前的像素颜色矩阵，保存成为图片
+    public void SaveImage(string filePath = "Assets/Images/painting.png")
+    {
+        // 创建一个Texture2D
+        Texture2D texture = new Texture2D(width, height);
+        // 遍历每个像素
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y <height; y++)
+            {
+                // 获取像素颜色
+                Color pixelColor = pixelContainer[x, y].GetColor();
+                // 设置Texture2D的像素颜色
+                texture.SetPixel(x, y, pixelColor);
+            }
+        }
+        // 应用设置
+        texture.Apply();
+        // 把Texture2D保存成为图片
+        byte[] bytes = texture.EncodeToPNG();
+        File.WriteAllBytes(filePath, bytes);
+    }
+
+    public void Clear()
+    {
+        if (pixelContainer != null)
+        {
+            foreach (PixelsCell pixelCell in pixelContainer)
+            {
+                pixelCell.SetColor(Color.white);
+            }
+        }
+    }
+
+    void Update()
+    {
+        // 如果按下 C 键，清空所有像素
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Clear();
+        }
+        // 如果按下 S 键，保存图片
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            SaveImage();
         }
     }
 }

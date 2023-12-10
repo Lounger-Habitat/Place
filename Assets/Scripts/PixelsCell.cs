@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -45,5 +46,10 @@ public class PixelsCell : MonoBehaviour
     public void SetColor(Color color){
         cellRenderer.material.color = color;
         lastColor = cellRenderer.material.color;
+    }
+
+    public Color GetColor()
+    {
+        return cellRenderer.material.color;
     }
 }

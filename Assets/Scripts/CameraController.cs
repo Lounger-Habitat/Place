@@ -11,9 +11,22 @@ public class RuntimeCameraController : MonoBehaviour
     private bool isPanning = false;
     private Vector3 panOrigin;
 
+    private Vector3 targetRotation; // 目标位置
+
     void Update()
     {
         HandleMouseInput();
+        // 按下 . 键旋转相机
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            targetRotation = new Vector3(-20f, 0f, 0f);
+        }
+        // 按下 / 键旋转相机
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            targetRotation = new Vector3(0f, 0f, 0f);
+        }
+        SetRotation(targetRotation);
     }
 
     void HandleMouseInput()
@@ -51,5 +64,13 @@ public class RuntimeCameraController : MonoBehaviour
         // 滚轮滚动缩放
         float zoomInput = Input.GetAxis("Mouse ScrollWheel");
         transform.Translate(Vector3.forward * zoomInput * zoomSpeed * Time.deltaTime, Space.Self);
+    }
+
+    // 设置相机旋转角度
+    public void SetRotation(Vector3 rotation)
+    {
+        rotation.x = Mathf.Clamp(rotation.x, -90f, 90f);
+        // 使用平滑插值（Lerp）或球形插值（Slerp）来逐渐调整相机的旋转角度
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(rotation), Time.deltaTime * rotationSpeed);
     }
 }

@@ -14,8 +14,6 @@ public class PlayerController : MonoBehaviour
         // 在Start中初始化位置
         homePosition = transform.position;
         targetPosition = homePosition;
-        Debug.Log("homePosition:" + homePosition);
-        Debug.Log("homePosition:" + targetPosition);
     }
     void Update()
     {
@@ -25,7 +23,7 @@ public class PlayerController : MonoBehaviour
             targetPosition = consolePosition.transform.position;
         }else if (Input.GetKeyDown(KeyCode.B))
         {
-            Debug.Log("按下了B键");
+            // Debug.Log("按下了B键");
             targetPosition = homePosition;
         }
         MoveToTarget(targetPosition);
@@ -39,7 +37,7 @@ public class PlayerController : MonoBehaviour
         // 如果已经到达目标位置，可以在这里执行其他操作，比如销毁对象或者触发事件
         if (transform.position == targetPosition)
         {
-            Debug.Log("已到达目标位置！");
+            // Debug.Log("已到达目标位置！");
             // 在这里执行其他操作...
         }
     }

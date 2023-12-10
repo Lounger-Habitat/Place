@@ -86,11 +86,11 @@ public class DefaultController : MonoBehaviour
         int originalWidth = originalTexture.width;
         int originalHeight = originalTexture.height;
 
-        Debug.Log("Original Size: " + originalWidth + " x " + originalHeight);
+        // Debug.Log("Original Size: " + originalWidth + " x " + originalHeight);
 
         // 图片等比例调整缩放,不超出画布大小
  
-        (int targetWidth , int targetHeight) = ScaleImageToFitCanvas(originalWidth, originalHeight, 100, 100);
+        (int targetWidth , int targetHeight) = ScaleImageToFitCanvas(originalWidth, originalHeight, 200, 200);
 
         Texture2D resizedTexture = ResizeTexture(originalTexture, targetWidth, targetHeight);
 
