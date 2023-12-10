@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5202859004474477528}
   - component: {fileID: 6683300009411265994}
+  - component: {fileID: 1708656381497797858}
   m_Layer: 0
   m_Name: PixelContainer
   m_TagString: Untagged
@@ -45,9 +46,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pixelCellPrefab: {fileID: 4307301919914602647, guid: c9337372fe34f4182a9d4ea6e6d2e1ba, type: 3}
-  width: 100
-  height: 100
+  width: 200
+  height: 200
   cell_w: 0.05
   cell_h: 0.05
   cell_d: 0.05
   selectedColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &1708656381497797858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6105268086515855989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afa99626923714b6ab15ec1e9854083f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  directoryPath: Assets/Images
+  loadedTextures: []

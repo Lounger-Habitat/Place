@@ -65,7 +65,7 @@ public class PixelsContainer : MonoBehaviour
         }
     }
 
-    void UpdateColor(Color color)
+    void UpdateCursorColor(Color color)
     {
         if (pixelContainer != null)
         {
@@ -73,7 +73,7 @@ public class PixelsContainer : MonoBehaviour
             {
                 for (int y = 0; y < height; y++) 
                 {
-                    pixelContainer[x, y].SetColor(color);
+                    pixelContainer[x, y].SetCurrentCursorColor(color);
                 }
             }
         }
@@ -81,19 +81,41 @@ public class PixelsContainer : MonoBehaviour
     public void OnRedSelect()
     {
         selectedColor = Color.red;
-        UpdateColor(selectedColor);
+        UpdateCursorColor(selectedColor);
 
+    }
+    public void OnGreenSelect()
+    {
+        selectedColor = Color.green;
+        UpdateCursorColor(selectedColor);
     }
     public void OnBlueSelect()
     {
         selectedColor = Color.blue;
-        UpdateColor(selectedColor);
+        UpdateCursorColor(selectedColor);
     }
     public void DrawCommand(string command, int x, int y, int r, int g, int b)
     {
         if (command == "/d")
         {
-            pixelContainer[x, y].DrawPixel(new Color(r, g, b));
+            pixelContainer[x, y].SetColor(new Color(r, g, b));
+        }
+    }
+
+    public void DrawPreImage(int sx, int sy, Color[,] pixels)
+    {
+        int w = pixels.GetLength(0);
+        int h = pixels.GetLength(1);
+        int x = sx;
+        int y = sy;
+        for (int i = 0; i < w; i++)
+        {
+            x = sx + i;
+            for (int j = 0; j < h; j++)
+            {
+                y = sy + j;
+                pixelContainer[x, y].SetColor(pixels[i, j]);
+            }
         }
     }
 }
