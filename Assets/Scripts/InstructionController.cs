@@ -41,7 +41,7 @@ public class InstructionController : MonoBehaviour
             b = int.Parse(components[5]);
 
             // 在这里可以使用解析得到的值进行其他操作
-            Debug.Log("解析结果： x=" + x + ", y=" + y + ", r=" + r + ", g=" + g + ", b=" + b);
+            // Debug.Log("解析结果： x=" + x + ", y=" + y + ", r=" + r + ", g=" + g + ", b=" + b);
             PixelContainer.DrawCommand(command,x,y,r,g,b);
 
         }

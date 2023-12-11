@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,14 +37,19 @@ public class PixelsCell : MonoBehaviour
         lastColor = cellRenderer.material.color;
     }
 
-    public void SetColor(Color color)
+    public void SetCurrentCursorColor(Color color)
     {
         // 设置颜色
         currentColor = color;
     }
 
-    public void DrawPixel(Color color){
+    public void SetColor(Color color){
         cellRenderer.material.color = color;
         lastColor = cellRenderer.material.color;
+    }
+
+    public Color GetColor()
+    {
+        return cellRenderer.material.color;
     }
 }
