@@ -99,3 +99,4 @@ sysinfo.txt
 *.sln
 *.csproj
 *.csproj
+Assembly-CSharp.csproj
