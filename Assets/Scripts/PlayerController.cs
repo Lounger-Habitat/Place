@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour
     public GameObject consolePosition;
     private Vector3 homePosition;
     public float moveSpeed = 5f; // 移动速度
-
+    
+    public Animator playerAnimator;
     void Start()
     {
         // 在Start中初始化位置
@@ -31,14 +32,16 @@ public class PlayerController : MonoBehaviour
 
     void MoveToTarget(Vector3 targetPosition)
     {
-        // 沿着目标位置移动
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-
         // 如果已经到达目标位置，可以在这里执行其他操作，比如销毁对象或者触发事件
         if (transform.position == targetPosition)
         {
             // Debug.Log("已到达目标位置！");
             // 在这里执行其他操作...
+            playerAnimator.SetBool("isRun",false);
+            return;
         }
+        // 沿着目标位置移动
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        playerAnimator.SetBool("isRun",true);
     }
 }
