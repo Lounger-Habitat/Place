@@ -65,6 +65,8 @@
      <Compile Include="Assets\Ragdoll Mecanim Mixer\Ramecan Mixer\Scripts\Mixer\RamecanMixer.cs" />
      <Compile Include="Assets\Ragdoll Mecanim Mixer\Bonus-Demo\Scripts\AnimEventsStub.cs" />
      <Compile Include="Assets\Scripts\InstructionController.cs" />
+     <Compile Include="Assets\BiLiLi\UnitySocketClient.cs" />
+     <Compile Include="Assets\BiLiLi\SocketClient.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets\Ragdoll Mecanim Mixer\Ramecan Mixer\Scripts\Mixer" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -85,6 +87,7 @@
      <Folder Include="Assets\Ragdoll Mecanim Mixer\Ramecan Mixer\Scripts\RagdollConstructor" />
      <Folder Include="Assets\Ragdoll Mecanim Mixer\Bonus-Demo\Other" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+     <Folder Include="Assets\BiLiLi" />
      <Folder Include="Assets\Ragdoll Mecanim Mixer\Ramecan Mixer\Scripts" />
      <Folder Include="Assets\TextMesh Pro" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
