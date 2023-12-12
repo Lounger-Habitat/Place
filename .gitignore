@@ -100,3 +100,5 @@ sysinfo.txt
 *.csproj
 *.csproj
 Assembly-CSharp.csproj
+Place.sln
+Assembly-CSharp.csproj
