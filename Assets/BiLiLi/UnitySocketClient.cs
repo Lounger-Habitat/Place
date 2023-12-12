@@ -2,26 +2,32 @@ using System;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using UnityEngine;
 
 public class UnitySocketClient : BaseSocket
 {
     private Socket clientSocket; // 客户端socket
     private Action<string> msgCallback; // 消息回调
     private byte[] readBuff; // 收到消息的缓存
-
+    Thread thread1;
     public UnitySocketClient(Action<string> callback) {
         msgCallback = callback;
         clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        new Thread(() => {
+        thread1= new Thread(() => {
             clientSocket.Connect("127.0.0.1", 12345); //连接服务器, 未连接上就会一直阻塞
+            Debug.Log("lianjiechengg");
             Listening();
-        }).Start();
+        });
+        thread1.Start();
     }
 
     public void Listening() {
         readBuff = new byte[1024];
         while(true) {
             Receive();
+            if(!clientSocket.Connected){
+                break;
+            }
         }
     }
 
@@ -29,7 +35,12 @@ public class UnitySocketClient : BaseSocket
         Array.Clear(readBuff, 0, readBuff.Length); // 清空缓存
         int count = clientSocket.Receive(readBuff); // 收到消息, 并存放在缓冲区, 没有消息就会一直阻塞
         string msg = Encoding.UTF8.GetString(readBuff, 0, count);
-        msgCallback("客服发来消息: " + msg);
+        if(msg =="exit"){
+            msgCallback($"客服发来消息: tuichu" );
+            clientSocket.Close();
+        }else{
+            msgCallback("客服发来消息: " + msg);
+        }
     }
 
     public void Send(string msg) {
@@ -39,6 +50,7 @@ public class UnitySocketClient : BaseSocket
 
     ~UnitySocketClient() {
         clientSocket.Close();
+        thread1.Abort();
     }
 }
 
