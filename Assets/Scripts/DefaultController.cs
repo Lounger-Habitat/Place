@@ -6,6 +6,20 @@ using UnityEngine;
 
 public class DefaultController : MonoBehaviour
 {
+    public static DefaultController Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            // DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     public string directoryPath = "Assets/Images"; // 替换成你的目录路径
 
     public List<Texture2D> loadedTextures = new List<Texture2D>();
@@ -72,19 +86,11 @@ public class DefaultController : MonoBehaviour
         }
     }
 
-    Color[,] ProcessImage(int index = 0)
+    public Color[,] ProcessImage(Texture2D image)
     {
-        // 如果List中有图片，可以在这里获取第一张图片
-        if (loadedTextures == null && loadedTextures.Count == 0)
-        {
-            Debug.Log("没图片！");
-        }
-
-        Texture2D originalTexture = loadedTextures[index];
-
         // 获取原始图片大小
-        int originalWidth = originalTexture.width;
-        int originalHeight = originalTexture.height;
+        int originalWidth = image.width;
+        int originalHeight = image.height;
 
         // Debug.Log("Original Size: " + originalWidth + " x " + originalHeight);
 
@@ -92,7 +98,7 @@ public class DefaultController : MonoBehaviour
  
         (int targetWidth , int targetHeight) = ScaleImageToFitCanvas(originalWidth, originalHeight, 200, 200);
 
-        Texture2D resizedTexture = ResizeTexture(originalTexture, targetWidth, targetHeight);
+        Texture2D resizedTexture = ResizeTexture(image, targetWidth, targetHeight);
 
         // 遍历每个像素并获取颜色信息
         Color[] pixels = resizedTexture.GetPixels();
@@ -159,7 +165,13 @@ public class DefaultController : MonoBehaviour
 
             int x=10;
             int y=10;
-            Color[,] imagePixel = ProcessImage(0);
+            // 如果List中有图片，可以在这里获取第一张图片
+            if (loadedTextures == null && loadedTextures.Count == 0)
+            {
+                Debug.Log("没图片！");
+            }
+            Texture2D originalTexture = loadedTextures[0];
+            Color[,] imagePixel = ProcessImage(originalTexture);
             container.DrawPreImage(x,y,imagePixel);
         }
     }

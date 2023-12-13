@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Vector3 targetPosition; // 目标位置
-    public GameObject consolePosition;
+    private GameObject consolePosition;
     private Vector3 homePosition;
     public float moveSpeed = 5f; // 移动速度
 
@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
         // 在Start中初始化位置
         homePosition = transform.position;
         targetPosition = homePosition;
+        //获取 consoleObject
+        consolePosition = GameObject.Find("Console");
+
     }
     void Update()
     {

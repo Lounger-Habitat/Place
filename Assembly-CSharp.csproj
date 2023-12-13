@@ -64,6 +64,9 @@
     <Analyzer Include="/Applications/Unity/Hub/Editor/2022.3.14f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets/Scripts/TeamManager.cs" />
+    <Compile Include="Assets/Scripts/ChatCommandManager.cs" />
+    <Compile Include="Assets/Scripts/TeamAreaManager.cs" />
     <Compile Include="Assets/Scripts/PixelsContainer.cs" />
     <Compile Include="Assets/Scripts/InstructionController.cs" />
     <Compile Include="Assets/Scripts/PlayerController.cs" />

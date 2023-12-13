@@ -8,6 +8,20 @@ using UnityEngine.UI;
 
 public class PixelsContainer : MonoBehaviour
 {
+    public static PixelsContainer Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            // DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     // This is a container for the pixels that are spawned in the game
     // container is a matrix of pixels
     // each pixel is a game object , we may create a pixel cell class later
@@ -101,6 +115,15 @@ public class PixelsContainer : MonoBehaviour
         {
             pixelContainer[x, y].SetColor(new Color(r, g, b));
         }
+    }
+
+    public void GenerateImage(int sx, int sy, string prompt)
+    {
+        // TODO : 生成图片
+        // Texture2D image =  DiffusionManager.Instance.generateImage(prompt);
+        // Color[,] p = DefaultController.Instance.ProcessImage(image);
+
+        // DrawPreImage(sx, sy, p);
     }
 
     public void DrawPreImage(int sx, int sy, Color[,] pixels)
