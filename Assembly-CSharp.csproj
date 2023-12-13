@@ -64,14 +64,34 @@
     <Analyzer Include="/Applications/Unity/Hub/Editor/2022.3.14f1/Unity.app/Contents/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Bonus-Demo/Scripts/HitController.cs" />
     <Compile Include="Assets/Scripts/TeamManager.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Bonus-Demo/Scripts/CharController.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Bonus-Demo/Particles/ParticlesAutoDestroy.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Bonus-Demo/Scripts/CameraOrbit.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Ramecan Mixer/Scripts/Mixer/RamecanMixer.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Ramecan Mixer/Scripts/Mixer/State.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Bonus-Demo/Scripts/EnemyController.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Ramecan Mixer/Scripts/RagdollConstructor/PreviewBone.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Bonus-Demo/Scripts/EnemyCollectiveController.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Bonus-Demo/Scripts/Redirector.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Ramecan Mixer/Scripts/Mixer/Bone.cs" />
+    <Compile Include="Assets/Scripts/RuntimeCameraController.cs" />
     <Compile Include="Assets/Scripts/ChatCommandManager.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Bonus-Demo/Scripts/FighterController.cs" />
+    <Compile Include="Assets/BiLiLi/SocketClient.cs" />
     <Compile Include="Assets/Scripts/TeamAreaManager.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Ramecan Mixer/Scripts/Mixer/BoneState.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Ramecan Mixer/Scripts/RagdollConstructor/RagdollAvatar.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Ramecan Mixer/Scripts/RagdollConstructor/Extensions.cs" />
+    <Compile Include="Assets/BiLiLi/UnitySocketClient.cs" />
     <Compile Include="Assets/Scripts/PixelsContainer.cs" />
     <Compile Include="Assets/Scripts/InstructionController.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Bonus-Demo/Scripts/Hand.cs" />
     <Compile Include="Assets/Scripts/PlayerController.cs" />
-    <Compile Include="Assets/Scripts/CameraController.cs" />
     <Compile Include="Assets/Scripts/PixelsCell.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Ramecan Mixer/Scripts/RagdollConstructor/RagdollConstructor.cs" />
+    <Compile Include="Assets/Ragdoll Mecanim Mixer/Bonus-Demo/Scripts/AnimEventsStub.cs" />
     <Compile Include="Assets/Scripts/DefaultController.cs" />
   </ItemGroup>
   <ItemGroup>
