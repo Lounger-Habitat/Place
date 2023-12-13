@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6105268086515855989}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6683300009411265994
 MonoBehaviour:
@@ -46,12 +46,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pixelCellPrefab: {fileID: 4307301919914602647, guid: c9337372fe34f4182a9d4ea6e6d2e1ba, type: 3}
-  width: 200
-  height: 200
+  width: 60
+  height: 60
   cell_w: 0.05
   cell_h: 0.05
   cell_d: 0.05
-  selectedColor: {r: 0, g: 0, b: 0, a: 1}
+  selectedColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1708656381497797858
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -24,10 +24,10 @@ public class UnitySocketClient : BaseSocket
     public void Listening() {
         readBuff = new byte[1024];
         while(true) {
-            Receive();
             if(!clientSocket.Connected){
                 break;
             }
+            Receive();
         }
     }
 
@@ -35,11 +35,11 @@ public class UnitySocketClient : BaseSocket
         Array.Clear(readBuff, 0, readBuff.Length); // 清空缓存
         int count = clientSocket.Receive(readBuff); // 收到消息, 并存放在缓冲区, 没有消息就会一直阻塞
         string msg = Encoding.UTF8.GetString(readBuff, 0, count);
-        if(msg =="exit"){
+        if(msg =="exit"||string.IsNullOrEmpty(msg)){
             msgCallback($"客服发来消息: tuichu" );
             clientSocket.Close();
         }else{
-            msgCallback("客服发来消息: " + msg);
+            msgCallback("服务端发来消息: " + msg);
         }
     }
 
@@ -52,10 +52,18 @@ public class UnitySocketClient : BaseSocket
         clientSocket.Close();
         thread1.Abort();
     }
+
+    public void Close()
+    {
+        clientSocket.Close();
+        thread1.Abort();
+    }
 }
 
 public interface BaseSocket {
     void Listening(); // 监听连接, 监听消息
     void Receive(); // 接收到消息
     void Send(string msg); // 发送消息
+
+    void Close();
 }

@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         // 沿着目标位置移动
+        transform.LookAt(targetPosition);
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         playerAnimator.SetBool("isRun",true);
     }

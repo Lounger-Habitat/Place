@@ -24,6 +24,6 @@ public class SocketClient : MonoBehaviour
     }
 
     private void OnDestroy(){
-        
+        socket.Close();
     }
 }

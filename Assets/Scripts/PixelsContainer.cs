@@ -13,8 +13,8 @@ public class PixelsContainer : MonoBehaviour
     // each pixel is a game object , we may create a pixel cell class later
     public static PixelsCell[,] pixelContainer;
     public PixelsCell pixelCellPrefab;
-    public int width = 100 ;
-    public int height = 100;
+    public int width;
+    public int height;
 
     public float cell_w = 0.1f;
     public float cell_h = 0.1f;
@@ -34,7 +34,6 @@ public class PixelsContainer : MonoBehaviour
     void CreateContainer()
     {
         // 初始化cell的宽高的默认值
-
         Vector3 cellScale = new Vector3(cell_w, cell_h, cell_d);
 
         pixelContainer = new PixelsCell[width, height];
@@ -68,6 +67,7 @@ public class PixelsContainer : MonoBehaviour
 
     void UpdateCursorColor(Color color)
     {
+        Debug.Log("w"+width+"--h"+height);
         if (pixelContainer != null)
         {
             for (int x = 0; x < width; x++)
