@@ -50,6 +50,7 @@ public class ChatCommandManager : MonoBehaviour
                 {
                     // 这里调用发送消息的逻辑
                     // SayMessage(string.Join(" ", parts, 1, parts.Length - 1));
+                    Debug.Log(parts[1]);
                 }
                 break;
             // 可以在这里添加其他命令的处理
@@ -73,7 +74,7 @@ public class ChatCommandManager : MonoBehaviour
                 }
                 break;
             case "/generate":
-            case "/g":
+            case "/gen":
                 if (parts.Length >= 5)
                 {
                     int x,y;
@@ -83,6 +84,19 @@ public class ChatCommandManager : MonoBehaviour
                     y = int.Parse(parts[2]);
                     p = parts[3];
                     PixelsContainer.Instance.GenerateImage(x,y,p);
+                }
+                else
+                {
+                    Debug.LogError("输入字符串格式不正确");
+                }
+                break;
+            case "/instruction":
+            case "/ins":
+                if (parts.Length >= 2)
+                {
+                    string p;
+                    p = parts[1];
+                    PromptManager.Instance.GenerateInstruction(p);
                 }
                 else
                 {
