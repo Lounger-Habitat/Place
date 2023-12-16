@@ -23,17 +23,19 @@ public class PromptManager : MonoBehaviour
     private readonly string apiKey = "YOUR_API_KEY";
     private readonly string apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
 
+
+
     public void GenerateInstruction(string p)
     {
-        RequestData requestData = new RequestData
+        LMRequestData requestData = new LMRequestData
         {
-            contents = new RequestData.Content[]
+            contents = new LMRequestData.Content[]
             {
-                new RequestData.Content
+                new LMRequestData.Content
                 {
-                    parts = new RequestData.Content.Part[]
+                    parts = new LMRequestData.Content.Part[]
                     {
-                        new RequestData.Content.Part
+                        new LMRequestData.Content.Part
                         {
                             text = p
                         }
@@ -127,7 +129,7 @@ public class PromptFeedback
 
 
 [System.Serializable]
-public class RequestData
+public class LMRequestData
 {
     public Content[] contents;
 

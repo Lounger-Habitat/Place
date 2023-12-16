@@ -43,6 +43,8 @@ public class PixelsContainer : MonoBehaviour
         // 设置像素容器 transform 位于父物体的位置
 
         CreateContainer();
+        DiffusionManager.Instance.OnImageLoaded += OnImageLoaded;
+
     }
 
     void CreateContainer()
@@ -119,11 +121,16 @@ public class PixelsContainer : MonoBehaviour
 
     public void GenerateImage(int sx, int sy, string prompt)
     {
-        // TODO : 生成图片
-        // Texture2D image =  DiffusionManager.Instance.generateImage(prompt);
-        // Color[,] p = DefaultController.Instance.ProcessImage(image);
+        DiffusionManager.Instance.GenerateImage(sx,sy,prompt);
+        Debug.Log("正在生成,wait ...");
+    }
 
-        // DrawPreImage(sx, sy, p);
+    public void OnImageLoaded(Texture2D texture, string finishReason, long seed,int sx, int sy)
+    {
+        Debug.Log("生成图片完成 : " + finishReason);
+        Debug.Log("seed : " + seed);
+        Color[,] p = DefaultController.Instance.ProcessImage(texture);
+        DrawPreImage(sx, sy, p);
     }
 
     public void DrawPreImage(int sx, int sy, Color[,] pixels)

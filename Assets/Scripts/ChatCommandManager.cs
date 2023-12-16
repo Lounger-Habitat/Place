@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+
 
 public class ChatCommandManager : MonoBehaviour
 { 
@@ -74,15 +76,15 @@ public class ChatCommandManager : MonoBehaviour
                 }
                 break;
             case "/generate":
-            case "/gen":
-                if (parts.Length >= 5)
+            case "/g":
+                if (parts.Length >= 4)
                 {
                     int x,y;
                     string c,p;
                     c = parts[0];
                     x = int.Parse(parts[1]);
                     y = int.Parse(parts[2]);
-                    p = parts[3];
+                    p = string.Join(" ", parts.Skip(3).ToArray());
                     PixelsContainer.Instance.GenerateImage(x,y,p);
                 }
                 else

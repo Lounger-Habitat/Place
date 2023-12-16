@@ -274,7 +274,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &111321605
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -629,6 +629,7 @@ GameObject:
   - component: {fileID: 374293511}
   - component: {fileID: 374293510}
   - component: {fileID: 374293512}
+  - component: {fileID: 374293513}
   m_Layer: 0
   m_Name: NetManager
   m_TagString: Untagged
@@ -673,6 +674,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c953dbc0cfd694c3a824a2381b9c06a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &374293513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374293509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd4828527e1df41d9a5ab708ef30450b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &374900575
@@ -1604,7 +1617,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1593898345
 MeshCollider:
   m_ObjectHideFlags: 0
