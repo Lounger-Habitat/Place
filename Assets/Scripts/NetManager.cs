@@ -14,6 +14,8 @@ public class NetManager : MonoBehaviour
     private const string ip = "127.0.0.1"; // Python服务器的IP
     private const int port = 7878; // Python服务器的端口
 
+    public DanmakuManager danmakuManager;
+
     void Start()
     {
         // 在 Start 方法中调用异步操作
@@ -152,6 +154,7 @@ public class NetManager : MonoBehaviour
                 ChatCommandManager.Instance.RunChatCommand(item[1]);
             }
             Debug.Log(items[i]);
+            danmakuManager.AddNewDanmaku(items[i]);
         }
     }
 

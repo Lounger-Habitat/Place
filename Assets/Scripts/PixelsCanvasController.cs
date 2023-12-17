@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class PixelsCanvasController : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class PixelsCanvasController : MonoBehaviour
     public Renderer canvasRenderer;
 
     private Texture2D texture;
-    private Color drawColor = Color.red; // 可以改为您想要的颜色
+    private Color drawColor = Color.white; // 可以改为您想要的颜色
 
     public int height = 500;
     public int width = 500;
@@ -334,9 +335,10 @@ public class PixelsCanvasController : MonoBehaviour
 
     public void DrawCommand(string command, int x, int y, int r, int g, int b)
     {
+        Color aimColor = new Color(r, g, b);
         if (command == "/d")
         {
-            texture.SetPixel(x, y, drawColor);
+            texture.SetPixel(x, y, aimColor);
             texture.Apply(); // 应用更改到贴图
         }
     }

@@ -68,7 +68,7 @@ public class ChatCommandManager : MonoBehaviour
                     r = int.Parse(parts[3]);
                     g = int.Parse(parts[4]);
                     b = int.Parse(parts[5]);
-                    PixelsContainer.Instance.DrawCommand(c,x,y,r,g,b);
+                    PixelsCanvasController.Instance.DrawCommand(c,x,y,r,g,b);
                 }
                 else
                 {
@@ -85,7 +85,7 @@ public class ChatCommandManager : MonoBehaviour
                     x = int.Parse(parts[1]);
                     y = int.Parse(parts[2]);
                     p = string.Join(" ", parts.Skip(3).ToArray());
-                    PixelsContainer.Instance.GenerateImage(x,y,p);
+                    PixelsCanvasController.Instance.GenerateImage(x,y,p);
                 }
                 else
                 {

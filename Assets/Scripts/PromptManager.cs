@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 public class PromptManager : MonoBehaviour
 {
     public static PromptManager Instance { get; private set; }
+    public DanmakuManager danmakuManager;
 
     void Awake()
     {
@@ -76,6 +77,7 @@ public class PromptManager : MonoBehaviour
                 {
                     string text = firstCandidate.content.parts[0].text;
                     Debug.Log("Response: " + text);
+                    danmakuManager.AddNewDanmaku("Response: " + text);
                 }
             }
         }
