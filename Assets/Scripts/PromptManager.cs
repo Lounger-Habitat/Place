@@ -75,7 +75,7 @@ public class PromptManager : MonoBehaviour
                 if (firstCandidate.content != null && firstCandidate.content.parts != null && firstCandidate.content.parts.Length > 0)
                 {
                     string text = firstCandidate.content.parts[0].text;
-                    Debug.Log("Gemini-pro Response: " + text);
+                    Debug.Log("Response: " + text);
                 }
             }
         }

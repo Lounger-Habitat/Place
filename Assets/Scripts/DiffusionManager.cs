@@ -30,7 +30,7 @@ public class DiffusionManager : MonoBehaviour
     public int samples = 1;
 
 
-    private readonly string apiURL = "https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image";
+    private readonly string apiURL = "https://api.stability.ai/v1/generation/{engine_id}/text-to-image";
     private readonly string engineID = "stable-diffusion-xl-1024-v1-0"; // 替换为具体的engineID
   
     [SerializeField] private string requestBody;
@@ -38,7 +38,7 @@ public class DiffusionManager : MonoBehaviour
     private readonly string apiKey = "YOUR_API_KEY";
     public void GenerateImage(int x ,int y ,string p)
     {
-        // string apiUrl = apiURL.Replace("{engine_id}", engineID);
+        string apiUrl = apiURL.Replace("{engine_id}", engineID);
         Debug.Log("生成图片 : " + p);
         SDRequestData requestBodyData = new SDRequestData
         {
@@ -54,7 +54,7 @@ public class DiffusionManager : MonoBehaviour
             }
         };
         requestBody = JsonUtility.ToJson(requestBodyData, true);
-        StartCoroutine(PostRequest(apiURL, requestBody,x,y));
+        StartCoroutine(PostRequest(apiUrl, requestBody,x,y));
     }
     private Texture2D ConvertBytesToTexture2D(byte[] imageBytes)
     {
@@ -78,7 +78,7 @@ public class DiffusionManager : MonoBehaviour
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
-        request.SetRequestHeader("Authorization", "Bearer sk-f4jbxXV9LAk69DG1Rbg3Vr5QF9th1osMV5izgj5CmxUnyVFU");
+        request.SetRequestHeader("Authorization", "Bearer " + apiKey);
         request.SetRequestHeader("Accept", "application/json");
 
         Debug.Log($"Sending request to {url} with body: {json}");
