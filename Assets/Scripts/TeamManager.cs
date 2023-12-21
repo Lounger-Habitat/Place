@@ -70,11 +70,18 @@ public class TeamManager : MonoBehaviour
     }
 
     public void AddTeam(string teamId)
-    {
+    {   
         Team team = teams.Find(t => t.Id == teamId);
-        TeamAreaManager teamAreaManager = teamAreas.Find(ta => ta.getTeamInfo().Id == team.Id);
-        // 在这里实现加入队伍的逻辑
-        teamAreaManager.CreateCharacterInTeamArea();
+        if(team==null)
+        {
+            //没找到这个team 玩蛇皮
+            Debug.Log("没有这个队伍,先创建这个队伍");
+        }else
+        {
+            TeamAreaManager teamAreaManager = teamAreas.Find(ta => ta.getTeamInfo().Id == team.Id);
+            // 在这里实现加入队伍的逻辑
+            teamAreaManager.CreateCharacterInTeamArea();
+        }
     }
 }
 
