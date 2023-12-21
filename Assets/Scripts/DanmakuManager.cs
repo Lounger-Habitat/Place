@@ -13,7 +13,7 @@ public class DanmakuManager : MonoBehaviour
         // 按下h键发送弹幕
         if (Input.GetKeyDown(KeyCode.H))
         {
-            AddNewDanmaku("user:xxx!");
+            AddNewDanmaku("user:你好!");
         }
 
     }
