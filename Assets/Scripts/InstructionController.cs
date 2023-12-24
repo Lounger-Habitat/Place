@@ -22,6 +22,6 @@ public class InstructionController : MonoBehaviour
         string inputText = instruction.text;
 
         // 调用你的其他函数
-        ChatCommandManager.Instance.RunChatCommand(inputText); // Modify this line
+        ChatCommandManager.Instance.RunChatCommand("cx",inputText); // Modify this line
     }
 }

@@ -26,16 +26,18 @@ public class ChatCommandManager : MonoBehaviour
     {
     }
 
-    public void RunChatCommand(string command)
+    public void RunChatCommand(string username,string command)
     {
         string[] parts = command.Trim().Split(' ');
         switch (parts[0])
         {
             case "/create":
             case "/c":
+                // /c teamId teamName
                 if (parts.Length >= 3)
                 {
-                    TeamManager.Instance.CreateTeam(parts[1], parts[2]);
+                    // 这里调用创建队伍的逻辑
+                    TeamManager.Instance.CreateTeam(username,parts[1], parts[2]);
                 }
                 break;
             case "/add":
@@ -43,7 +45,7 @@ public class ChatCommandManager : MonoBehaviour
                 if (parts.Length >= 2)
                 {
                     // 这里调用加入队伍的逻辑
-                    TeamManager.Instance.AddTeam(parts[1]);
+                    TeamManager.Instance.AddTeam(username,parts[1]);
                 }
                 break;
             case "/say":

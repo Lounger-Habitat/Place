@@ -26,7 +26,7 @@ public class RuntimeCameraController : MonoBehaviour
         {
             targetRotation = new Vector3(0f, 0f, 0f);
         }
-        SetRotation(targetRotation);
+        // SetRotation(targetRotation);
     }
 
     void HandleMouseInput()
