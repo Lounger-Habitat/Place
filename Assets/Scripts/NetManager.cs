@@ -147,14 +147,25 @@ public class NetManager : MonoBehaviour
         // 处理 command1
         for (int i = 0; i < items.Length; i++)
         {
-            string[] item = items[i].Trim().Split("：");
-            if (item.Length > 1 && item[1].StartsWith("/"))
+            string[] item = items[i].Trim().Split("|");
+            switch (item[0])
             {
-                print("获得弹幕指令");
-                ChatCommandManager.Instance.RunChatCommand(item[1]);
+                case "<danmu>":
+                    string[] c = item[1].Trim().Split(":");
+                    if (c.Length > 1 && c[1].StartsWith("/"))
+                        {
+                            print("获得弹幕指令");
+                            string[] room_and_user = c[0].Trim().Split(" ");
+                            ChatCommandManager.Instance.RunChatCommand(room_and_user[1],c[1]);
+                        }
+                    break;
+                case "<gift>":
+                    break;
+                default:
+                    break;
             }
-            Debug.Log(items[i]);
-            danmakuManager.AddNewDanmaku(items[i]);
+            Debug.Log(item[1]);
+            danmakuManager.AddNewDanmaku(item[1]);
         }
     }
 
