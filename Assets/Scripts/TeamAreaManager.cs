@@ -12,14 +12,15 @@ public class TeamAreaManager : MonoBehaviour
     public GameObject characterPrefab;
 
     // 在队伍区域里创建角色
-    public void CreateCharacterInTeamArea()
+    public void CreateCharacterInTeamArea(string username)
     {
         // 检查队伍区域是否已满
         if (currentTeamNumberCount < teaminfo.MaxTeamNumber)
         {
             // 创建角色
             Vector3 spawnPosition = GetRandomPositionInArea();
-            Instantiate(characterPrefab, spawnPosition, Quaternion.identity);
+            GameObject go = Instantiate(characterPrefab, spawnPosition, Quaternion.identity);
+            TeamManager.Instance.CreateNameTag(go.transform, username);
             currentTeamNumberCount += 1;
             // 可以在这里设置角色的其他属性，比如所属队伍等
         }

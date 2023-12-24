@@ -18,6 +18,7 @@ public class TeamManager : MonoBehaviour
         }
     }
     public GameObject teamAreaPrefab;
+    public GameObject nameUI;
     public int maxTeams; // 场景可容纳的最大队伍数
     private List<Team> teams = new List<Team>();
     private List<TeamAreaManager> teamAreas = new List<TeamAreaManager>();
@@ -43,16 +44,38 @@ public class TeamManager : MonoBehaviour
                 spawnPosition = new Vector3(40, 1, -40);
                 break;
         }
-        TeamAreaManager ta = Instantiate(teamAreaPrefab, spawnPosition, Quaternion.identity).GetComponent<TeamAreaManager>();
+        GameObject go = Instantiate(teamAreaPrefab, spawnPosition, Quaternion.identity);
+        CreateNameTag(go.transform,team.Name);
+        TeamAreaManager ta = go.GetComponent<TeamAreaManager>();
         ta.setTeamInfo(team);
         teamAreas.Add(ta);
         return ta;
     }
 
 
+    public void CreateNameTag(Transform characterTransform,string name)
+    {
+        GameObject canvasObj = GameObject.Find("WS_Canvas");
+        if (canvasObj != null && nameUI != null)
+        {
+            Canvas canvas = canvasObj.GetComponent<Canvas>();
 
+            // 在Canvas下生成NameTag UI
+            GameObject nameTagObj = Instantiate(nameUI, canvasObj.transform);
 
-    public void CreateTeam(string teamId, string teamName)
+            // 设置NameTag UI的位置和属性
+            // 假设NameTag UI有一个脚本用于定位和显示
+            NameTag nameTagScript = nameTagObj.GetComponent<NameTag>();
+            if (nameTagScript != null)
+            {
+                nameTagScript.target = characterTransform;
+                nameTagScript.name = name;
+                // 设置其他必要的属性，如偏移量等
+            }
+        }
+    }
+
+    public void CreateTeam(string username, string teamId, string teamName)
     {
         if (teams.Count < maxTeams && !teams.Exists(t => t.Id == teamId))
         {
@@ -61,7 +84,7 @@ public class TeamManager : MonoBehaviour
             TeamAreaManager teamAreaManager = CreateTeamArea(newTeam);
             // 在这里创建角色并加入队伍，具体实现取决于你的游戏逻辑
             // 例如: CreateCharacterInTeamArea(newTeam);
-            teamAreaManager.CreateCharacterInTeamArea();
+            teamAreaManager.CreateCharacterInTeamArea(username);
         }
         else
         {
@@ -69,7 +92,7 @@ public class TeamManager : MonoBehaviour
         }
     }
 
-    public void AddTeam(string teamId)
+    public void AddTeam(string username,string teamId)
     {   
         Team team = teams.Find(t => t.Id == teamId);
         if(team==null)
@@ -80,7 +103,7 @@ public class TeamManager : MonoBehaviour
         {
             TeamAreaManager teamAreaManager = teamAreas.Find(ta => ta.getTeamInfo().Id == team.Id);
             // 在这里实现加入队伍的逻辑
-            teamAreaManager.CreateCharacterInTeamArea();
+            teamAreaManager.CreateCharacterInTeamArea(username);
         }
     }
 }
