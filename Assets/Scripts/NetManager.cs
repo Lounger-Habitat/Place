@@ -108,7 +108,7 @@ public class NetManager : MonoBehaviour
                 if (bytesRead > 0)
                 {
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    // Debug.Log("Listening received: " + message);
+                    Debug.Log("Listening received: " + message);
                     HandleCommand(message.Trim());
                 }
             }
@@ -125,7 +125,6 @@ public class NetManager : MonoBehaviour
     private void HandleCommand(string command)
     {
         string[] parts = command.Split(' ');
-
         switch (parts[0])
         {
             case "/bili":
@@ -145,12 +144,15 @@ public class NetManager : MonoBehaviour
         String buffer = String.Join(" ", parts);
         string[] items = buffer.Trim().Split("/bili");
         // 处理 command1
-        for (int i = 0; i < items.Length; i++)
+        Debug.Log("Split : " + items.Length);
+        for (int i = 1; i < items.Length; i++)
         {
             string[] item = items[i].Trim().Split("|");
-            switch (item[0])
+            Debug.Log("type" + item[0]);
+            switch (item[0].Trim())
             {
                 case "<danmu>":
+                    Debug.Log("danmu : " + item[1]);
                     string[] c = item[1].Trim().Split(":");
                     if (c.Length > 1 && c[1].StartsWith("/"))
                         {
@@ -161,10 +163,12 @@ public class NetManager : MonoBehaviour
                     break;
                 case "<gift>":
                     break;
+                case "<heart>":
+                    break;
                 default:
                     break;
             }
-            Debug.Log(item[1]);
+            Debug.Log("norm : " + item[1]);
             danmakuManager.AddNewDanmaku(item[1]);
         }
     }
