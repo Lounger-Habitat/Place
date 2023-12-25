@@ -69,7 +69,7 @@ public class TeamManager : MonoBehaviour
             if (nameTagScript != null)
             {
                 nameTagScript.target = characterTransform;
-                nameTagScript.name = name;
+                nameTagScript.go_name = name;
                 // 设置其他必要的属性，如偏移量等
             }
         }
