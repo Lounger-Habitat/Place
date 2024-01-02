@@ -124,6 +124,7 @@ public class NetManager : MonoBehaviour
 
     private void HandleCommand(string command)
     {
+        // 处理消息 类型
         string[] parts = command.Split(' ');
         switch (parts[0])
         {
@@ -141,10 +142,19 @@ public class NetManager : MonoBehaviour
 
     private void HandleBiliResponse(string[] parts)
     {
+        /*
+            1、检查消息类别
+                弹幕消息
+                    聊天消息
+                    命令消息
+                        检查用户是否有权限，比如是否加入了队伍，是否是队长
+                        每个人都可以加入队伍的人，可以发送指令
+                礼物消息
+                心跳消息
+
+        */
         String buffer = String.Join(" ", parts);
         string[] items = buffer.Trim().Split("/bili");
-        // 处理 command1
-        Debug.Log("Split : " + items.Length);
         for (int i = 1; i < items.Length; i++)
         {
             string[] item = items[i].Trim().Split("|");
@@ -152,14 +162,14 @@ public class NetManager : MonoBehaviour
             switch (item[0].Trim())
             {
                 case "<danmu>":
-                    Debug.Log("danmu : " + item[1]);
                     string[] c = item[1].Trim().Split(":");
+                    // 指令
                     if (c.Length > 1 && c[1].StartsWith("/"))
-                        {
-                            print("获得弹幕指令");
-                            string[] room_and_user = c[0].Trim().Split(" ");
-                            ChatCommandManager.Instance.RunChatCommand(room_and_user[1],c[1]);
-                        }
+                    {
+                        string[] room_and_user = c[0].Trim().Split(" ");
+                        ChatCommandManager.Instance.RunChatCommand(room_and_user[1],c[1]);
+                    }
+                    // 普通弹幕
                     break;
                 case "<gift>":
                     break;
@@ -168,7 +178,6 @@ public class NetManager : MonoBehaviour
                 default:
                     break;
             }
-            Debug.Log("norm : " + item[1]);
             danmakuManager.AddNewDanmaku(item[1]);
         }
     }

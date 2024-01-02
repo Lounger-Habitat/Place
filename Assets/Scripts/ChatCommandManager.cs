@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-
 public class ChatCommandManager : MonoBehaviour
 { 
 
@@ -22,9 +21,7 @@ public class ChatCommandManager : MonoBehaviour
     }
     // TeamManager teamManager;
     // PixelsContainer pixelsContainer;
-    void Start()
-    {
-    }
+
 
     public void RunChatCommand(string username,string command)
     {
@@ -60,6 +57,11 @@ public class ChatCommandManager : MonoBehaviour
             // 可以在这里添加其他命令的处理
             case "/draw":
             case "/d":
+                if (!TeamManager.Instance.CheckUser(username))
+                {
+                    break;
+                }
+                User u = TeamManager.Instance.FindUser(username);
                 if (parts.Length >= 5)
                 {
                     int x,y,r,g,b;
@@ -70,7 +72,8 @@ public class ChatCommandManager : MonoBehaviour
                     r = int.Parse(parts[3]);
                     g = int.Parse(parts[4]);
                     b = int.Parse(parts[5]);
-                    PixelsCanvasController.Instance.DrawCommand(c,x,y,r,g,b);
+                    u.instructionQueue.Enqueue(new Instruction(c,x,y,r,g,b));
+                    // PixelsCanvasController.Instance.DrawCommand(c,x,y,r,g,b);
                 }
                 else
                 {
