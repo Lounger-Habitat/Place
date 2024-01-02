@@ -683,8 +683,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 963194227}
   canvasRenderer: {fileID: 146392825}
-  height: 1024
-  width: 1024
+  height: 200
+  width: 200
   directoryPath: Assets/Images
   loadedTextures: []
   index: 0
@@ -1807,6 +1807,7 @@ MonoBehaviour:
   teamAreaPrefab: {fileID: 1662118176535954286, guid: 00d76afdeedfa4776b05e7871bf7a36d, type: 3}
   nameUI: {fileID: 1805166185846826150, guid: f8b0cc44c992b4c4db37824e8720121e, type: 3}
   maxTeams: 5
+  teamAreas: []
 --- !u!4 &374900577
 Transform:
   m_ObjectHideFlags: 0
@@ -3751,6 +3752,7 @@ GameObject:
   - component: {fileID: 1803570390}
   - component: {fileID: 1803570389}
   - component: {fileID: 1803570388}
+  - component: {fileID: 1803570391}
   m_Layer: 0
   m_Name: Console
   m_TagString: Untagged
@@ -3767,7 +3769,7 @@ Transform:
   m_GameObject: {fileID: 1803570386}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0.29999998}
+  m_LocalPosition: {x: 0, y: 3, z: 0.3}
   m_LocalScale: {x: 0.19999999, y: 5, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3788,7 +3790,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3844,6 +3846,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1803570386}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1803570391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803570386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8a4402a9c0374d408ef03aab4638336, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1809324149
 GameObject:
   m_ObjectHideFlags: 0

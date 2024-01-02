@@ -21,7 +21,7 @@ public class TeamManager : MonoBehaviour
     public GameObject nameUI;
     public int maxTeams; // 场景可容纳的最大队伍数
     private List<Team> teams = new List<Team>();
-    private List<TeamAreaManager> teamAreas = new List<TeamAreaManager>();
+    public  List<TeamAreaManager> teamAreas = new List<TeamAreaManager>();
 
     // 创建队伍区域
     public TeamAreaManager CreateTeamArea(Team team)
@@ -105,6 +105,30 @@ public class TeamManager : MonoBehaviour
             // 在这里实现加入队伍的逻辑
             teamAreaManager.CreateCharacterInTeamArea(username);
         }
+    }
+
+    // 检查命令是否合法
+    public bool CheckUser(string username) {
+        foreach (TeamAreaManager teamAreaManager in teamAreas)
+        {
+            if (teamAreaManager.IsUserInGame(username))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public User FindUser(string username) {
+        foreach (TeamAreaManager teamAreaManager in teamAreas)
+        {
+            User user = teamAreaManager.FindUser(username);
+            if (user != null)
+            {
+                return user;
+            }
+        }
+        return null;
     }
 }
 
