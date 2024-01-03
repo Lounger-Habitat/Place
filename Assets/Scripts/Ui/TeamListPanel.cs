@@ -28,7 +28,7 @@ public class TeamListPanel : MonoBehaviour
             var teamTransform = Instantiate(teamItem,transform);
             teamTransform.gameObject.SetActive(true);
             teamTransform.Find("TeamName").GetComponent<TMP_Text>().text = item.teamName;
-            teamTransform.Find("Data").GetComponent<TMP_Text>().text = item.teamNumber;
+            teamTransform.Find("Data").GetComponent<TMP_Text>().text = $"当前人数:\n{item.teamNumber}";
             if (item.iconTexture!=null)
             {
                 Sprite sp = Sprite.Create(item.iconTexture,new Rect(0,0,item.iconTexture.width,item.iconTexture.height),new Vector2(.5f,.5f));

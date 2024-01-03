@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TeamManager : MonoBehaviour
@@ -85,6 +86,9 @@ public class TeamManager : MonoBehaviour
             // 在这里创建角色并加入队伍，具体实现取决于你的游戏逻辑
             // 例如: CreateCharacterInTeamArea(newTeam);
             teamAreaManager.CreateCharacterInTeamArea(username);
+            //刷新两个UI列表，不应该写在这里，应该写在数据变化后，TODO: 改改改
+            SetTeamUi();
+            SetUserUi();
         }
         else
         {
@@ -104,6 +108,9 @@ public class TeamManager : MonoBehaviour
             TeamAreaManager teamAreaManager = teamAreas.Find(ta => ta.getTeamInfo().Id == team.Id);
             // 在这里实现加入队伍的逻辑
             teamAreaManager.CreateCharacterInTeamArea(username);
+            //TODO:刷新两个UI列表，不应该写在这里，应该写在数据变化后，TODO: 改改改
+            SetTeamUi();
+            SetUserUi();
         }
     }
 
@@ -130,6 +137,41 @@ public class TeamManager : MonoBehaviour
         }
         return null;
     }
+
+    ///UI相关，暂时这么整、后边改
+    private void SetTeamUi(){
+        //设定队伍列表相关UI，目前只有队伍列表、后续可以根据队伍排行之类的更改
+        List<TeamItem> teamRank = new List<TeamItem>();
+        foreach (var item in teamAreas)
+        {
+            teamRank.Add(new TeamItem(){
+                teamName=item.getTeamInfo().Name,
+                teamNumber = item.currentTeamNumberCount.ToString(),
+                iconTexture = null
+            });
+        }
+        UiManager.Instance.SetTeamData(teamRank);
+    }
+
+    private void SetUserUi(){
+        //设置用户排行列表相关
+        List<User> userList = new List<User>();
+        foreach (var item in teamAreas)
+        {
+            userList.AddRange(item.userList);
+        }
+        userList.OrderByDescending(u =>u.level);
+        List<RankItem> ranks = new List<RankItem>();
+        foreach (var item in userList)
+        {
+            ranks.Add(new RankItem(){
+                userName = item.username,
+                rankData = item.level.ToString(),
+                iconTexture = null
+            });
+        }
+        UiManager.Instance.SetRankData(ranks);
+    }
 }
 
 // 简单的Team类，用于表示队伍
@@ -139,7 +181,6 @@ public class Team
     public string Name;
     // 这里可以添加更多队伍相关的属性和方法
     public int MaxTeamNumber;
-
 
     public Team(string id, string name, int max)
     {
