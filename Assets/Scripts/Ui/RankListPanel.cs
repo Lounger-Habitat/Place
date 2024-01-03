@@ -30,7 +30,7 @@ public class RankListPanel : MonoBehaviour
             var rankTransform = Instantiate(rankItem, transform);
             rankTransform.gameObject.SetActive(true);
             rankTransform.Find("Name").GetComponent<TMP_Text>().text = item.userName;
-            rankTransform.Find("Data").GetComponent<TMP_Text>().text = item.rankData;
+            rankTransform.Find("Data").GetComponent<TMP_Text>().text = $"贡献等级:{item.rankData}";
             if (item.iconTexture != null)
             {
                 Sprite sp = Sprite.Create(item.iconTexture, new Rect(0, 0, item.iconTexture.width, item.iconTexture.height), new Vector2(.5f, .5f));
