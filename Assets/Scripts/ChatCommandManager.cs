@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-
 public class ChatCommandManager : MonoBehaviour
 { 
 
@@ -22,20 +21,20 @@ public class ChatCommandManager : MonoBehaviour
     }
     // TeamManager teamManager;
     // PixelsContainer pixelsContainer;
-    void Start()
-    {
-    }
 
-    public void RunChatCommand(string command)
+
+    public void RunChatCommand(string username,string command)
     {
         string[] parts = command.Trim().Split(' ');
         switch (parts[0])
         {
             case "/create":
             case "/c":
+                // /c teamId teamName
                 if (parts.Length >= 3)
                 {
-                    TeamManager.Instance.CreateTeam(parts[1], parts[2]);
+                    // 这里调用创建队伍的逻辑
+                    TeamManager.Instance.CreateTeam(username,parts[1], parts[2]);
                 }
                 break;
             case "/add":
@@ -43,7 +42,7 @@ public class ChatCommandManager : MonoBehaviour
                 if (parts.Length >= 2)
                 {
                     // 这里调用加入队伍的逻辑
-                    TeamManager.Instance.AddTeam(parts[1]);
+                    TeamManager.Instance.AddTeam(username,parts[1]);
                 }
                 break;
             case "/say":
@@ -58,6 +57,11 @@ public class ChatCommandManager : MonoBehaviour
             // 可以在这里添加其他命令的处理
             case "/draw":
             case "/d":
+                if (!TeamManager.Instance.CheckUser(username))
+                {
+                    break;
+                }
+                User u = TeamManager.Instance.FindUser(username);
                 if (parts.Length >= 5)
                 {
                     int x,y,r,g,b;
@@ -68,7 +72,8 @@ public class ChatCommandManager : MonoBehaviour
                     r = int.Parse(parts[3]);
                     g = int.Parse(parts[4]);
                     b = int.Parse(parts[5]);
-                    PixelsCanvasController.Instance.DrawCommand(c,x,y,r,g,b);
+                    u.instructionQueue.Enqueue(new Instruction(c,x,y,r,g,b));
+                    // PixelsCanvasController.Instance.DrawCommand(c,x,y,r,g,b);
                 }
                 else
                 {
