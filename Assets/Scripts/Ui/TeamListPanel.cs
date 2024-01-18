@@ -11,7 +11,7 @@ public class TeamListPanel : MonoBehaviour
     private List<Transform> poolList = new List<Transform>();
     public void Init(){
         teamItem  = transform.GetChild(0);
-        teamItem.gameObject.SetActive(false);
+        //teamItem.gameObject.SetActive(false);
     }
 
     public void SetData(List<TeamItem> rankItems){

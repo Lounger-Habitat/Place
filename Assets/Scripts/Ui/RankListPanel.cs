@@ -12,7 +12,7 @@ public class RankListPanel : MonoBehaviour
     public void Init()
     {
         rankItem = transform.GetChild(0);
-        rankItem.gameObject.SetActive(false);
+        //rankItem.gameObject.SetActive(false);
     }
 
     public void SetData(List<RankItem> rankItems)
