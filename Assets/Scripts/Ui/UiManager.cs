@@ -27,13 +27,18 @@ public class UiManager : MonoBehaviour
     }
 
     public void SetRankData(List<RankItem> data){
-        rankList.SetData(data);//设置数据
+        rankList.SetRankUI(data);//设置数据
         //做一些事情，比如刷新UI
         LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
     }
     
     public void SetTeamData(List<TeamItem> data){
-        teamList.SetData(data);//
+        teamList.SetTeamUI(data);//
+        //做一些事情，比如刷新UI
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
+    }
+    public void SetTeamData(TeamItem data){
+        teamList.SetTeamUI(data);//
         //做一些事情，比如刷新UI
         LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
     }
