@@ -60,7 +60,7 @@ public class RankListPanel : MonoBehaviour
                 //没有数据了 需要自动填充
                 rankItem.Find("Name").GetComponent<TMP_Text>().text = "虚位以待";
                 rankItem.Find("Data").GetComponent<TMP_Text>().text = $"贡献等级:";
-                rankItem.Find("Icon").GetComponent<Image>().sprite = null;
+                rankItem.Find("UserIcon").GetComponent<Image>().sprite = null;
             }
             else
             {
@@ -71,11 +71,11 @@ public class RankListPanel : MonoBehaviour
                 {
                     Sprite sp = Sprite.Create(item.iconTexture,
                         new Rect(0, 0, item.iconTexture.width, item.iconTexture.height), new Vector2(.5f, .5f));
-                    rankItem.Find("Icon").GetComponent<Image>().sprite = sp;
+                    rankItem.Find("UserIcon").GetComponent<Image>().sprite = sp;
                 }
                 else
                 {
-                    rankItem.Find("Icon").GetComponent<Image>().sprite = null;
+                    rankItem.Find("UserIcon").GetComponent<Image>().sprite = null;
                 }
             }
         }

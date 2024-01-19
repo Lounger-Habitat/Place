@@ -9,29 +9,31 @@ public class TeamListPanel : MonoBehaviour
     private Transform teamItem;
     private List<Transform> useList = new List<Transform>();
     private List<Transform> poolList = new List<Transform>();
-    public void Init(){
-        teamItem  = transform.GetChild(0);
+    public void Init()
+    {
+        teamItem = transform.GetChild(0);
         //teamItem.gameObject.SetActive(false);
     }
 
-    public void SetData(List<TeamItem> rankItems){
+    public void SetData(List<TeamItem> rankItems)
+    {
         //先删除
         var count = useList.Count;
         for (int i = 1; i <= count; i++)
         {
-           Destroy(useList[count-i].gameObject);
+            Destroy(useList[count - i].gameObject);
         }
         useList.Clear();
         //再生成
         foreach (var item in rankItems)
         {
-            var teamTransform = Instantiate(teamItem,transform);
+            var teamTransform = Instantiate(teamItem, transform);
             teamTransform.gameObject.SetActive(true);
             teamTransform.Find("TeamName").GetComponent<TMP_Text>().text = item.teamName;
             teamTransform.Find("Data").GetComponent<TMP_Text>().text = $"当前人数:\n{item.teamNumber}";
-            if (item.iconTexture!=null)
+            if (item.iconTexture != null)
             {
-                Sprite sp = Sprite.Create(item.iconTexture,new Rect(0,0,item.iconTexture.width,item.iconTexture.height),new Vector2(.5f,.5f));
+                Sprite sp = Sprite.Create(item.iconTexture, new Rect(0, 0, item.iconTexture.width, item.iconTexture.height), new Vector2(.5f, .5f));
                 teamTransform.Find("Icon").GetComponent<Image>().sprite = sp;
             }
             useList.Add(teamTransform);
@@ -43,37 +45,49 @@ public class TeamListPanel : MonoBehaviour
     //必须传递四个队伍，如果不传递四个队伍会将不存在队伍清除（目前是报错）
     public void SetTeamUI(List<TeamItem> rankItems)
     {
+
         //四个队伍
         for (int i = 0; i < 4; i++)
         {   //根据位置设置
-            teamItem  = transform.GetChild(i);
-            var item = rankItems[i];
-            teamItem.Find("TeamName").GetComponent<TMP_Text>().text = item.teamName;
-            teamItem.Find("Data").GetComponent<TMP_Text>().text = $"当前人数:\n{item.teamNumber}";
-            if (item.iconTexture!=null)
+            teamItem = transform.GetChild(i);
+            if (rankItems.Count > i)
             {
-                Sprite sp = Sprite.Create(item.iconTexture,new Rect(0,0,item.iconTexture.width,item.iconTexture.height),new Vector2(.5f,.5f));
-                teamItem.Find("Icon").GetComponent<Image>().sprite = sp;
+                var item = rankItems[i];
+                teamItem.Find("TeamName").GetComponent<TMP_Text>().text = item.teamName;
+                teamItem.Find("Data").GetComponent<TMP_Text>().text = $"当前人数:\n{item.teamNumber}";
+                if (item.iconTexture != null)
+                {
+                    Sprite sp = Sprite.Create(item.iconTexture, new Rect(0, 0, item.iconTexture.width, item.iconTexture.height), new Vector2(.5f, .5f));
+                    //teamItem.Find("Icon").GetComponent<Image>().sprite = sp;
+                }
             }
+            else
+            {
+                teamItem.Find("TeamName").GetComponent<TMP_Text>().text = "等待创建";
+                teamItem.Find("Data").GetComponent<TMP_Text>().text = $"当前人数:\n{0}";
+                //teamItem.Find("Icon").GetComponent<Image>().sprite = null;
+            }
+
         }
     }
 
-    public void SetTeamUI(TeamItem rankItem)
+    public void SetTeamUI(TeamItem teamData)
     {
-        
-        teamItem  = transform.GetChild(rankItem.index);
-        var item = rankItem;
+
+        teamItem = transform.GetChild(teamData.index);
+        var item = teamData;
         teamItem.Find("TeamName").GetComponent<TMP_Text>().text = item.teamName;
         teamItem.Find("Data").GetComponent<TMP_Text>().text = $"当前人数:\n{item.teamNumber}";
-        if (item.iconTexture!=null)
+        if (item.iconTexture != null)
         {
-            Sprite sp = Sprite.Create(item.iconTexture,new Rect(0,0,item.iconTexture.width,item.iconTexture.height),new Vector2(.5f,.5f));
-            teamItem.Find("Icon").GetComponent<Image>().sprite = sp;
+            Sprite sp = Sprite.Create(item.iconTexture, new Rect(0, 0, item.iconTexture.width, item.iconTexture.height), new Vector2(.5f, .5f));
+            //teamItem.Find("Icon").GetComponent<Image>().sprite = sp;
         }
     }
 }
 
-public struct TeamItem{
+public struct TeamItem
+{
     /// <summary>
     /// 团队名称
     /// </summary>
