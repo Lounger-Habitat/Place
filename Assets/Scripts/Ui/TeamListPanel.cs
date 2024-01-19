@@ -39,6 +39,38 @@ public class TeamListPanel : MonoBehaviour
         //刷新UI
         LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
     }
+
+    //必须传递四个队伍，如果不传递四个队伍会将不存在队伍清除（目前是报错）
+    public void SetTeamUI(List<TeamItem> rankItems)
+    {
+        //四个队伍
+        for (int i = 0; i < 4; i++)
+        {   //根据位置设置
+            teamItem  = transform.GetChild(i);
+            var item = rankItems[i];
+            teamItem.Find("TeamName").GetComponent<TMP_Text>().text = item.teamName;
+            teamItem.Find("Data").GetComponent<TMP_Text>().text = $"当前人数:\n{item.teamNumber}";
+            if (item.iconTexture!=null)
+            {
+                Sprite sp = Sprite.Create(item.iconTexture,new Rect(0,0,item.iconTexture.width,item.iconTexture.height),new Vector2(.5f,.5f));
+                teamItem.Find("Icon").GetComponent<Image>().sprite = sp;
+            }
+        }
+    }
+
+    public void SetTeamUI(TeamItem rankItem)
+    {
+        
+        teamItem  = transform.GetChild(rankItem.index);
+        var item = rankItem;
+        teamItem.Find("TeamName").GetComponent<TMP_Text>().text = item.teamName;
+        teamItem.Find("Data").GetComponent<TMP_Text>().text = $"当前人数:\n{item.teamNumber}";
+        if (item.iconTexture!=null)
+        {
+            Sprite sp = Sprite.Create(item.iconTexture,new Rect(0,0,item.iconTexture.width,item.iconTexture.height),new Vector2(.5f,.5f));
+            teamItem.Find("Icon").GetComponent<Image>().sprite = sp;
+        }
+    }
 }
 
 public struct TeamItem{
@@ -54,4 +86,8 @@ public struct TeamItem{
     /// 团队图标
     /// </summary>
     public Texture2D iconTexture;
+    /// <summary>
+    /// 团队ID
+    /// </summary>
+    public int index;
 }

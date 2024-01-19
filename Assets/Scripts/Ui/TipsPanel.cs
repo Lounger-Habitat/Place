@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-
+using DG.Tweening;
 public class TipsPanel : MonoBehaviour
 {
     RectTransform rectTransform;
@@ -14,7 +14,7 @@ public class TipsPanel : MonoBehaviour
         tipsQueue.Clear();
     }
 
-    public void SetData(TipsItem tips)
+    private void SetData(TipsItem tips)
     {
         transform.GetChild(1).GetComponent<TMP_Text>().text = tips.userName;
         transform.GetChild(2).GetComponent<TMP_Text>().text = tips.text;
@@ -24,13 +24,17 @@ public class TipsPanel : MonoBehaviour
 
     public void AddTips(TipsItem tip)
     {
-        //首先入列
-        tipsQueue.Enqueue(tip);
+        lock (tipsQueue)
+        {   //首先入列
+            tipsQueue.Enqueue(tip);
+        }
         //检查是否在进行弹出提示，如果在进行弹出提示就不用管了
         if (!isShowTips)
         {
             //否则就要启动弹出动画
+            StartCoroutine(ShowTipsAni());
         }
+        
     }
 
     WaitForSeconds wait = new WaitForSeconds(2.6f);
@@ -42,15 +46,27 @@ public class TipsPanel : MonoBehaviour
         //检查队列中是否还有元素
         while (tipsQueue.Any())
         {
-            var data = tipsQueue.Dequeue();
-            SetData(data);
+            lock (tipsQueue)
+            {
+                var data = tipsQueue.Dequeue();
+                SetData(data);
+            }
+            MoveTipsPanel();
             yield return wait;
         }
         isShowTips = false;
+        MoveTipsPanel(false);
     }
 
-    private void MoveTipsPanel(bool isShow){
-        
+    private void MoveTipsPanel(bool isShow = true){
+        if (isShow)//如果是打开移动到打开位置
+        {
+            rectTransform.DOAnchorPosX(0, 1.8f);
+        }
+        else
+        {
+            rectTransform.DOAnchorPosX(-230, 1.8f);
+        }
     }
 }
 

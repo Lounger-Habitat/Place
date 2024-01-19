@@ -142,13 +142,16 @@ public class TeamManager : MonoBehaviour
     private void SetTeamUi(){
         //设定队伍列表相关UI，目前只有队伍列表、后续可以根据队伍排行之类的更改
         List<TeamItem> teamRank = new List<TeamItem>();
+        int index = 0;
         foreach (var item in teamAreas)
         {
             teamRank.Add(new TeamItem(){
                 teamName=item.getTeamInfo().Name,
                 teamNumber = item.currentTeamNumberCount.ToString(),
-                iconTexture = null
+                iconTexture = null,
+                index = index
             });
+            index++;
         }
         UiManager.Instance.SetTeamData(teamRank);
     }
