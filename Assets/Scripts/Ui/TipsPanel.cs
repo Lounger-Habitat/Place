@@ -37,7 +37,7 @@ public class TipsPanel : MonoBehaviour
         
     }
 
-    WaitForSeconds wait = new WaitForSeconds(2.6f);
+    WaitForSeconds wait = new WaitForSeconds(4.6f);
     private bool isShowTips = false;
     IEnumerator ShowTipsAni()
     {
@@ -61,11 +61,11 @@ public class TipsPanel : MonoBehaviour
     private void MoveTipsPanel(bool isShow = true){
         if (isShow)//如果是打开移动到打开位置
         {
-            rectTransform.DOAnchorPosX(0, 1.8f);
+            rectTransform.DOAnchorPosX(0, 1f);
         }
         else
         {
-            rectTransform.DOAnchorPosX(-230, 1.8f);
+            rectTransform.DOAnchorPosX(-230, 1f);
         }
     }
 }

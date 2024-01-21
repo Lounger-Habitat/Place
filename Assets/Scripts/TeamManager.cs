@@ -83,9 +83,17 @@ public class TeamManager : MonoBehaviour
             Team newTeam = new Team(teamId, teamName, 5);
             teams.Add(newTeam);
             TeamAreaManager teamAreaManager = CreateTeamArea(newTeam);
-            // 在这里创建角色并加入队伍，具体实现取决于你的游戏逻辑
-            // 例如: CreateCharacterInTeamArea(newTeam);
-            teamAreaManager.CreateCharacterInTeamArea(username);
+            if (username.Equals("sys"))
+            {
+
+            }
+            else
+            {
+                // 在这里创建角色并加入队伍，具体实现取决于你的游戏逻辑
+                // 例如: CreateCharacterInTeamArea(newTeam);
+                teamAreaManager.CreateCharacterInTeamArea(username);
+            }
+
             //刷新两个UI列表，不应该写在这里，应该写在数据变化后，TODO: 改改改
             SetTeamUi();
             SetUserUi();

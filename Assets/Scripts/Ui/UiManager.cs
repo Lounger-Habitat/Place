@@ -9,6 +9,7 @@ public class UiManager : MonoBehaviour
     public static UiManager Instance;
     private RankListPanel rankList;
     private TeamListPanel teamList;
+    private TipsPanel tipspanel;
     // Start is called before the first frame update
     void Awake(){
         if (Instance!=null)
@@ -20,8 +21,10 @@ public class UiManager : MonoBehaviour
     }
     void Start()
     {
+        tipspanel = GetComponentInChildren<TipsPanel>();
         rankList  = GetComponentInChildren<RankListPanel>();
         teamList = GetComponentInChildren<TeamListPanel>();
+        tipspanel.Init();
         rankList.Init();
         teamList.Init();
     }
@@ -41,5 +44,9 @@ public class UiManager : MonoBehaviour
         teamList.SetTeamUI(data);//
         //做一些事情，比如刷新UI
         LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
+    }
+
+    public void AddTips(TipsItem tips){
+        tipspanel.AddTips(tips);
     }
 }
