@@ -52,7 +52,7 @@ public class RankListPanel : MonoBehaviour
     public void SetRankUI(List<RankItem> rankItems)
     {
         //不限制传入数量，数量不够会自动补充
-        for (int i = 0; i < 4; i++) //只显示前四名，前三名有奖牌，显示第四名
+        for (int i = 0; i < 8; i++) //只显示前8名，前三名有奖牌，显示后边
         {
             rankItem = transform.GetChild(i);
             if (rankItems.Count <= i)
