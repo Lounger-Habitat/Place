@@ -18,23 +18,7 @@ public class ChatCommandManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    // TeamManager teamManager;
-    // PixelsContainer pixelsContainer;
-    //简简单单生成四个队伍
-    void Start()
-    {
-        Invoke("createTeam", 1.5f);
-    }
-
-    //沙雕，但是有效
-    void createTeam()
-    {
-        TeamManager.Instance.CreateTeam("sys", "1001", "坤坤之家");
-        TeamManager.Instance.CreateTeam("sys", "1002", "小鸡脚");
-        TeamManager.Instance.CreateTeam("sys", "1003", "篮球");
-        TeamManager.Instance.CreateTeam("sys", "1004", "背带裤");
-    }
-
+    
     public void RunChatCommand(string username, string command)
     {
         string[] parts = command.Trim().Split(' ');

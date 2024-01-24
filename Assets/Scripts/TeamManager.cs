@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TeamManager : MonoBehaviour
 {
+    public Transform[] areaList;
     public static TeamManager Instance { get; private set; }
 
     void Awake()
@@ -43,6 +44,18 @@ public class TeamManager : MonoBehaviour
                 break;
             case "5":
                 spawnPosition = new Vector3(40, 1, -40);
+                break;
+            case"1001":
+                spawnPosition = areaList[0].position;
+                break;
+            case"1002":
+                spawnPosition = areaList[1].position;
+                break;
+            case"1003":
+                spawnPosition = areaList[2].position;
+                break;
+            case"1004":
+                spawnPosition = areaList[3].position;
                 break;
         }
         GameObject go = Instantiate(teamAreaPrefab, spawnPosition, Quaternion.identity);
