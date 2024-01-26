@@ -50,7 +50,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         float inkRate = (float)(currentTeamNumberCount / defaultInkTime) + exInk;
 
         ink += inkRate;
-        Debug.Log("ink " + ink);
+        //Debug.Log("ink " + ink);
 
         UpdateTeamAreaName();
         
