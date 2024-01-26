@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f; // 移动速度
     public User user;
 
-
+    private NavMeshAgent navMeshAgent;
     
     public Animator playerAnimator;
     void Start()
@@ -19,8 +20,8 @@ public class PlayerController : MonoBehaviour
         // homePosition = transform.position;
         targetPosition = homePosition;
         //获取 consoleObject
-        consolePosition = GameObject.Find("Console");
-
+        consolePosition = GameObject.Find("Console001");
+        navMeshAgent = GetComponent<NavMeshAgent>();
         // stateMachine = GetComponent<PlayerFSM>();
 
     }
@@ -39,6 +40,10 @@ public class PlayerController : MonoBehaviour
 
         // // 如果
         // user.Update();
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            navMeshAgent.destination=targetPosition;
+        }
     }
 
     public void MoveToTarget(Vector3 targetPosition)
@@ -52,8 +57,14 @@ public class PlayerController : MonoBehaviour
         //     return;
         // }
         // 沿着目标位置移动
-        transform.LookAt(targetPosition);
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        //transform.LookAt(targetPosition);
+        //transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         // playerAnimator.SetBool("isRun",true);
+        navMeshAgent.destination=targetPosition;
+    }
+
+    public void CheckTargetPos()
+    {
+
     }
 }
