@@ -174,18 +174,4 @@ public class TeamManager : MonoBehaviour
     }
 }
 
-// 简单的Team类，用于表示队伍
-public class Team
-{
-    public string Id;
-    public string Name;
-    // 这里可以添加更多队伍相关的属性和方法
-    public int MaxTeamNumber;
 
-    public Team(string id, string name, int max)
-    {
-        Id = id;
-        Name = name;
-        MaxTeamNumber = max;
-    }
-}

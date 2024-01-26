@@ -39,7 +39,11 @@ public class PixelsCanvasController : MonoBehaviour
 
     void Start()
     {
-        DiffusionManager.Instance.OnImageLoaded += OnImageLoaded;
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+        }
+        // DiffusionManager.Instance.OnImageLoaded += OnImageLoaded;
         // 假设平面使用的是材质的第一个贴图
         // 生成一个新的贴图
         Texture2D myTexture = GenerateTexture(height, width, Color.black); // 可以根据需要调整尺寸和颜色
@@ -218,6 +222,7 @@ public class PixelsCanvasController : MonoBehaviour
         texture.Apply(); // 应用更改到目标贴图
     }
 
+
     public Texture2D ScaleTextureProportionally(Texture2D source, int maxWidth, int maxHeight)
     {
         if (source == null)
@@ -336,12 +341,59 @@ public class PixelsCanvasController : MonoBehaviour
     public void DrawCommand(string command, int x, int y, int r, int g, int b)
     {
         Color aimColor = new Color(r, g, b);
-        if (command == "/d")
+        if (texture != null && x >= 0 && x < texture.width && y >= 0 && y < texture.height)
         {
             texture.SetPixel(x, y, aimColor);
             texture.Apply(); // 应用更改到贴图
         }
     }
+    public void LineCommand(string command, int x, int y, int ex, int ey, int r, int g, int b)
+    {
+        // 使用 Bresenham 算法来计算这两点之间的像素点
+        int dx = Math.Abs(ex - x);
+        int dy = Math.Abs(ey - y);
+        int sx = (x < ex) ? 1 : -1;
+        int sy = (y < ey) ? 1 : -1;
+        int err = dx - dy;
+
+        while (true)
+        {
+            DrawCommand(command,x, y , r, g, b); // 绘制像素点
+
+            if ((x == ex) && (y == ey))
+                break;
+
+            int e2 = 2 * err;
+
+            if (e2 > -dy)
+            {
+                err = err - dy;
+                x = x + sx;
+            }
+
+            if (e2 < dx)
+            {
+                err = err + dx;
+                y = y + sy;
+            }
+        }
+
+    }
+    public void PaintCommand(string command, int x, int y, int dx, int dy, int r, int g, int b)
+    {
+        Color[] colors = texture.GetPixels(x, y, dx, dy);
+        for (int i = x; i < x + dx; i++)
+        {
+            for (int j = y; j < y + dy; j++)
+            {
+                // DrawCommand(command,i, j , r, g, b);
+                colors[(j - y) * dx + (i - x)] = new Color(r, g, b);
+            }
+        }
+        texture.SetPixels(x, y, dx, dy, colors);
+        texture.Apply(); // 应用更改到目标贴图
+    }
+    
 
     public void GenerateImage(int sx, int sy, string prompt)
     {

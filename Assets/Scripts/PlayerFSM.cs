@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class PlayerFSM : MonoBehaviour
@@ -8,7 +9,7 @@ public class PlayerFSM : MonoBehaviour
 
     public GameObject player;
 
-    public List<Instruction> li = new List<Instruction>();
+    public List<Instruction> insList = new List<Instruction>();
 
     void Awake()
     {
@@ -66,39 +67,60 @@ public class WaitingForCommandInTeamArea : IState
 
     private PlayerController pc;
 
-
     public WaitingForCommandInTeamArea(PlayerFSM playerFSM)
     {
         this.manager = playerFSM;
     }
 
-    public void OnEnter() { 
+    public void OnEnter()
+    {
         // Debug.Log("进入WaitingForCommandInTeamArea状态");
         // manager.player.GetComponent<Animator>().SetBool("isRun",false);
         pc = manager.player.GetComponent<PlayerController>();
         Debug.Log(pc);
-        pc.playerAnimator.SetBool("isRun",false);
-     }
+        pc.playerAnimator.SetBool("isRun", false);
+        pc.user.currentState = CharacterState.WaitingForCommandInTeamArea;
+    }
     public void OnExit() { /* 清理逻辑 */ }
-    public void Update() { 
-        if (pc.user.instructionQueue.Count > 0)
+    public void Update()
+    {
+        int teamInkCount = PlaceCenter.Instance.GetTeamInkCount(int.Parse(pc.user.camp));
+        Debug.Log("user queue" + pc.user.instructionQueue.Count);
+        if (pc.user.instructionQueue.Count > 0 && teamInkCount > 0)
         {
             // 遍历instructionQueue ，取出全部 Instruction
             // Debug.Log("队列中有命令");
             for (int i = 0; i < pc.user.instructionQueue.Count; i++)
             {
                 Instruction instruction = pc.user.instructionQueue.Dequeue();
-                // Debug.Log(instruction.mode);
-                // 这里调用绘制像素的逻辑
-                // PixelsContainer.Instance.DrawPixel(instruction.x, instruction.y, instruction.r, instruction.g, instruction.b);
-                manager.li.Add(instruction);
-                Debug.Log("x:"+instruction.x + ",y:"+instruction.y+",r:"+instruction.r+",g:"+ instruction.g+",b:"+ instruction.b);
-                // Debug.Log(instruction.x + instruction.y+ instruction.r+ instruction.g+ instruction.b);
+
+                // 判断指令颜料 和 当前有的数量 是否满足
+                int needInkCount = PlaceCenter.Instance.ComputeInstructionColorCount(instruction);
+
+                Debug.Log("needInkCount" + needInkCount);
+
+                
+
+                // if (needInkCount > teamInkCount)
+                // {
+                //     // 颜料不足
+                //     Debug.Log("颜料不足");
+                //     // 持续等待
+                //     sleep = true;
+                //     manager.StartCoroutine(SleepCoroutine());
+
+                // }
+
+                PlaceCenter.Instance.SetTeamInkCount(int.Parse(pc.user.camp),-needInkCount);
+
+
+                manager.insList.Add(instruction);
+
 
             }
             manager.ChangeState(CharacterState.TransportingCommandToConsole);
         }
-     }
+    }
 }
 
 
@@ -113,17 +135,21 @@ public class TransportingCommandToConsole : IState
         this.manager = playerFSM;
     }
 
-    public void OnEnter() { 
+    public void OnEnter()
+    {
         // Debug.Log("进入WaitingForCommandInTeamArea状态");
         // manager.player.GetComponent<Animator>().SetBool("isRun",false);
         pc = manager.player.GetComponent<PlayerController>();
-        pc.playerAnimator.SetBool("isRun",true);
+        pc.playerAnimator.SetBool("isRun", true);
         pc.targetPosition = pc.consolePosition.transform.position;
+        pc.user.currentState = CharacterState.TransportingCommandToConsole;
 
-     }
+    }
     public void OnExit() { /* 清理逻辑 */ }
-    public void Update() { 
-        pc.MoveToTarget(pc.targetPosition);
+    public void Update()
+    {
+        Vector3 v = new Vector3(pc.targetPosition.x, 0.25f, pc.targetPosition.z);
+        pc.MoveToTarget(v);
     }
 }
 
@@ -138,33 +164,52 @@ public class WaitingForCommandExecutionAtConsole : IState
         this.manager = playerFSM;
     }
 
-    public void OnEnter() { 
+    public void OnEnter()
+    {
         // Debug.Log("进入WaitingForCommandInTeamArea状态");
         // manager.player.GetComponent<Animator>().SetBool("isRun",false);
         pc = manager.player.GetComponent<PlayerController>();
-        pc.playerAnimator.SetBool("isRun",false);
+        pc.playerAnimator.SetBool("isRun", false);
         pc.targetPosition = pc.consolePosition.transform.position;
+        pc.user.currentState = CharacterState.WaitingForCommandExecutionAtConsole;
 
-     }
+    }
     public void OnExit() { /* 清理逻辑 */ }
-    public void Update() { 
+    public void Update()
+    {
 
-        if (manager.li.Count > 0)
+        if (manager.insList.Count > 0)
         {
-            foreach (Instruction instruction in manager.li)
+            foreach (Instruction ins in manager.insList)
             {
                 // Debug.Log(instruction.mode);
                 // 这里调用绘制像素的逻辑
                 // PixelsContainer.Instance.DrawPixel(instruction.x, instruction.y, instruction.r, instruction.g, instruction.b);
-                Debug.Log("x:"+instruction.x + ",y:"+instruction.y+",r:"+instruction.r+",g:"+ instruction.g+",b:"+ instruction.b);
-                PixelsCanvasController.Instance.DrawCommand(instruction.mode,instruction.x,instruction.y,instruction.r,instruction.g,instruction.b);
+                switch (ins.mode)
+                {
+                    case "/draw":
+                    case "/d":
+                        PlaceBoardManager.Instance.DrawCommand(ins.mode, ins.x, ins.y, ins.r, ins.g, ins.b);
+                        break;
+                    case "/line":
+                    case "/l":
+                        PlaceBoardManager.Instance.LineCommand(ins.mode, ins.x, ins.y, ins.ex, ins.ey, ins.r, ins.g, ins.b);
+                        break;
+                    case "/paint":
+                    case "/p":
+                        PlaceBoardManager.Instance.PaintCommand(ins.mode, ins.x, ins.y, ins.dx, ins.dy, ins.r, ins.g, ins.b);
+                        break;
+                    default:
+                        break;
+                }
+
 
             }
-            manager.li.Clear();
+            manager.insList.Clear();
         }
-        
 
-        if (manager.li.Count == 0)
+
+        if (manager.insList.Count == 0)
         {
             manager.ChangeState(CharacterState.ReturningFromConsoleToGetCommand);
         }
@@ -182,16 +227,20 @@ public class ReturningFromConsoleToGetCommand : IState
         this.manager = playerFSM;
     }
 
-    public void OnEnter() { 
+    public void OnEnter()
+    {
         // Debug.Log("进入WaitingForCommandInTeamArea状态");
         // manager.player.GetComponent<Animator>().SetBool("isRun",false);
         pc = manager.player.GetComponent<PlayerController>();
-        pc.playerAnimator.SetBool("isRun",true);
+        pc.playerAnimator.SetBool("isRun", true);
         pc.targetPosition = pc.homePosition;
+        pc.user.currentState = CharacterState.ReturningFromConsoleToGetCommand;
 
-     }
+    }
     public void OnExit() { /* 清理逻辑 */ }
-    public void Update() { 
-        pc.MoveToTarget(pc.targetPosition);
+    public void Update()
+    {
+        Vector3 v = new Vector3(pc.targetPosition.x, 0.25f, pc.targetPosition.z);
+        pc.MoveToTarget(v);
     }
 }

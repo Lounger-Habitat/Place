@@ -9,10 +9,12 @@ public class NameTag : MonoBehaviour
     public string go_name; // 名字标签的文本
     private RectTransform rectTransform;
 
+    TMP_Text tmp_text;
+
     void Start()
     {
         rectTransform = GetComponent<RectTransform>(); // 获取RectTransform组件
-        TMP_Text tmp_text = GetComponentInChildren<TMP_Text>(); // 获取TextMeshPro组件
+        tmp_text = GetComponentInChildren<TMP_Text>(); // 获取TextMeshPro组件
         tmp_text.text = go_name; // 设置文本
     }
 
@@ -26,6 +28,8 @@ public class NameTag : MonoBehaviour
             // 可选：使UI元素始终朝向摄像机
             // rectTransform.LookAt(Camera.main.transform);
             rectTransform.rotation = Camera.main.transform.rotation;
+
+            tmp_text.text = go_name;
         }
     }
 }

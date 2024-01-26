@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -43,7 +44,7 @@ public class PixelsContainer : MonoBehaviour
         // 设置像素容器 transform 位于父物体的位置
 
         CreateContainer();
-        DiffusionManager.Instance.OnImageLoaded += OnImageLoaded;
+        // DiffusionManager.Instance.OnImageLoaded += OnImageLoaded;
 
     }
 
@@ -113,10 +114,24 @@ public class PixelsContainer : MonoBehaviour
     }
     public void DrawCommand(string command, int x, int y, int r, int g, int b)
     {
-        if (command == "/d")
-        {
-            pixelContainer[x, y].SetColor(new Color(r, g, b));
-        }
+
+        pixelContainer[x, y].SetColor(new Color(r, g, b));
+
+    }
+    public void LineCommand(string command, int x, int y, int ex, int ey, int r, int g, int b)
+    {
+        // 绘制一条(x,y)到(ex,ey)的直线命令
+        // 1. 计算直线所涉及的点
+
+        // 2. 绘制每个点
+
+        pixelContainer[x, y].SetColor(new Color(r, g, b));
+
+    }
+    public void PaintCommand(string command, int x, int y, int dx, int dy, int r, int g, int b)
+    {
+
+        pixelContainer[x, y].SetColor(new Color(r, g, b));
     }
 
     public void GenerateImage(int sx, int sy, string prompt)

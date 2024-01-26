@@ -24,7 +24,7 @@ public class TeamAreaManager : MonoBehaviour
             GameObject go = Instantiate(characterPrefab, spawnPosition, Quaternion.identity);
             PlayerController PlayerControllerScript = go.GetComponent<PlayerController>();
             TeamManager.Instance.CreateNameTag(go.transform, username);
-            User user = new User(username, 1, go);
+            User user = new User(username, go, teaminfo.Id);
             if (PlayerControllerScript != null)
             {
                 PlayerControllerScript.homePosition = transform.position;
