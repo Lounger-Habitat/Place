@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TeamManager : MonoBehaviour
 {
+    public Transform[] areaList;
     public static TeamManager Instance { get; private set; }
 
     void Awake()
@@ -44,6 +45,18 @@ public class TeamManager : MonoBehaviour
             case "5":
                 spawnPosition = new Vector3(40, 1, -40);
                 break;
+            case"1001":
+                spawnPosition = areaList[0].position;
+                break;
+            case"1002":
+                spawnPosition = areaList[1].position;
+                break;
+            case"1003":
+                spawnPosition = areaList[2].position;
+                break;
+            case"1004":
+                spawnPosition = areaList[3].position;
+                break;
         }
         GameObject go = Instantiate(teamAreaPrefab, spawnPosition, Quaternion.identity);
         CreateNameTag(go.transform,team.Name);
@@ -83,9 +96,17 @@ public class TeamManager : MonoBehaviour
             Team newTeam = new Team(teamId, teamName, 5);
             teams.Add(newTeam);
             TeamAreaManager teamAreaManager = CreateTeamArea(newTeam);
-            // 在这里创建角色并加入队伍，具体实现取决于你的游戏逻辑
-            // 例如: CreateCharacterInTeamArea(newTeam);
-            teamAreaManager.CreateCharacterInTeamArea(username);
+            if (username.Equals("sys"))
+            {
+
+            }
+            else
+            {
+                // 在这里创建角色并加入队伍，具体实现取决于你的游戏逻辑
+                // 例如: CreateCharacterInTeamArea(newTeam);
+                teamAreaManager.CreateCharacterInTeamArea(username);
+            }
+
             //刷新两个UI列表，不应该写在这里，应该写在数据变化后，TODO: 改改改
             SetTeamUi();
             SetUserUi();
@@ -142,13 +163,16 @@ public class TeamManager : MonoBehaviour
     private void SetTeamUi(){
         //设定队伍列表相关UI，目前只有队伍列表、后续可以根据队伍排行之类的更改
         List<TeamItem> teamRank = new List<TeamItem>();
+        int index = 0;
         foreach (var item in teamAreas)
         {
             teamRank.Add(new TeamItem(){
                 teamName=item.getTeamInfo().Name,
                 teamNumber = item.currentTeamNumberCount.ToString(),
-                iconTexture = null
+                iconTexture = null,
+                index = index
             });
+            index++;
         }
         UiManager.Instance.SetTeamData(teamRank);
     }
