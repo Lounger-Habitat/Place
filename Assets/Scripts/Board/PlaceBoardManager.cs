@@ -26,7 +26,7 @@ public class PlaceBoardManager : MonoBehaviour
 
     public int index = 0;
 
-    private Texture2D defaultTexture;
+    public Texture2D defaultTexture;
 
     public static PlaceBoardManager Instance { get; private set; }
 
@@ -134,32 +134,35 @@ public class PlaceBoardManager : MonoBehaviour
             }
         }
         // 按下 d 键
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
         {
-            // 读取 /Asssets/Images/SourceTexture.png
-            // Texture2D sourceTexture = LoadTexture("Assets/Images/dog.jpg");
-            // Debug.Log(sourceTexture.name);
-
-            if (loadedTextures == null && loadedTextures.Count == 0)
+            if (Input.GetKeyDown(KeyCode.D))
             {
-                Debug.Log("没图片！");
-            }
-            Texture2D originalTexture = loadedTextures[index];
-            bool ist = CheckForTransparency(texture);
-            Debug.Log(ist);
-            Debug.Log(originalTexture.name);
-            PasteTexture(originalTexture, 100, 100);
-        }
+                // 读取 /Asssets/Images/SourceTexture.png
+                // Texture2D sourceTexture = LoadTexture("Assets/Images/dog.jpg");
+                // Debug.Log(sourceTexture.name);
 
-        // 如果按下 C 键，清空所有像素
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            Reset();
-        }
-        // 如果按下 . 键，保存图片
-        if (Input.GetKeyDown(KeyCode.Period))
-        {
-            SaveImage();
+                if (loadedTextures == null && loadedTextures.Count == 0)
+                {
+                    Debug.Log("没图片！");
+                }
+                Texture2D originalTexture = loadedTextures[index];
+                bool ist = CheckForTransparency(texture);
+                Debug.Log(ist);
+                Debug.Log(originalTexture.name);
+                PasteTexture(originalTexture, 100, 100);
+            }
+
+            // 如果按下 C 键，清空所有像素
+            if (Input.GetKeyDown(KeyCode.Alpha0))
+            {
+                Reset();
+            }
+            // 如果按下 . 键，保存图片
+            if (Input.GetKeyDown(KeyCode.Period))
+            {
+                SaveImage();
+            }
         }
     }
 

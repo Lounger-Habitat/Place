@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
         // homePosition = transform.position;
         targetPosition = homePosition;
         //获取 consoleObject
-        consolePosition = GameObject.Find("Console001");
+        consolePosition = GameObject.Find("Console");
         navMeshAgent = GetComponent<NavMeshAgent>();
         // stateMachine = GetComponent<PlayerFSM>();
 
@@ -40,10 +40,11 @@ public class PlayerController : MonoBehaviour
 
         // // 如果
         // user.Update();
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            navMeshAgent.destination=targetPosition;
-        }
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     navMeshAgent.destination=targetPosition;
+        // }
+        PlaceCenter.Instance.OnRankUIUpdate(user);
     }
 
     public void MoveToTarget(Vector3 targetPosition)
@@ -63,8 +64,8 @@ public class PlayerController : MonoBehaviour
         navMeshAgent.destination=targetPosition;
     }
 
-    public void CheckTargetPos()
-    {
+    // public void CheckTargetPos()
+    // {
 
-    }
+    // }
 }

@@ -21,14 +21,15 @@ public class PlayerFSM : MonoBehaviour
         player = transform.gameObject;
         states = new Dictionary<CharacterState, IState>
         {
+            { CharacterState.Trance, new Trance(this) },
             { CharacterState.WaitingForCommandInTeamArea, new WaitingForCommandInTeamArea(this) },
             { CharacterState.TransportingCommandToConsole, new TransportingCommandToConsole(this) },
             { CharacterState.WaitingForCommandExecutionAtConsole, new WaitingForCommandExecutionAtConsole(this) },
-            { CharacterState.ReturningFromConsoleToGetCommand, new ReturningFromConsoleToGetCommand(this) },
+            { CharacterState.MoveToTeamArea, new MoveToTeamArea(this) },
             // 添加其他状态s
         };
 
-        ChangeState(CharacterState.WaitingForCommandInTeamArea);
+        ChangeState(CharacterState.MoveToTeamArea);
     }
 
     void Update()
@@ -47,10 +48,11 @@ public class PlayerFSM : MonoBehaviour
 
 public enum CharacterState
 {
+    Trance,
     WaitingForCommandInTeamArea,
     TransportingCommandToConsole,
     WaitingForCommandExecutionAtConsole,
-    ReturningFromConsoleToGetCommand
+    MoveToTeamArea
 }
 
 
@@ -59,6 +61,38 @@ public interface IState
     void OnEnter();
     void OnExit();
     void Update();
+}
+
+public class Trance : IState
+{
+    private PlayerFSM manager;
+
+    private PlayerController pc;
+
+    public Trance(PlayerFSM playerFSM)
+    {
+        this.manager = playerFSM;
+    }
+
+    public void OnEnter()
+    {
+        // Debug.Log("进入WaitingForCommandInTeamArea状态");
+        // manager.player.GetComponent<Animator>().SetBool("isRun",false);
+        pc = manager.player.GetComponent<PlayerController>();
+        Debug.Log(pc);
+        pc.playerAnimator.SetBool("isRun", false);
+        pc.user.currentState = CharacterState.Trance;
+    }
+    public void OnExit() { /* 清理逻辑 */ }
+    public void Update()
+    {
+        // 如果没事就去等颜料
+        if (pc.user.carryingInkCount == 0)
+        {
+            manager.ChangeState(CharacterState.WaitingForCommandInTeamArea);
+        }
+    }
+
 }
 
 public class WaitingForCommandInTeamArea : IState
@@ -85,7 +119,6 @@ public class WaitingForCommandInTeamArea : IState
     public void Update()
     {
         int teamInkCount = PlaceCenter.Instance.GetTeamInkCount(int.Parse(pc.user.camp));
-        Debug.Log("user queue" + pc.user.instructionQueue.Count);
         if (pc.user.instructionQueue.Count > 0 && teamInkCount > 0)
         {
             // 遍历instructionQueue ，取出全部 Instruction
@@ -110,6 +143,8 @@ public class WaitingForCommandInTeamArea : IState
                 //     manager.StartCoroutine(SleepCoroutine());
 
                 // }
+
+                pc.user.carryingInkCount += needInkCount;
 
                 PlaceCenter.Instance.SetTeamInkCount(int.Parse(pc.user.camp),-needInkCount);
 
@@ -211,18 +246,18 @@ public class WaitingForCommandExecutionAtConsole : IState
 
         if (manager.insList.Count == 0)
         {
-            manager.ChangeState(CharacterState.ReturningFromConsoleToGetCommand);
+            manager.ChangeState(CharacterState.MoveToTeamArea);
         }
     }
 }
 
-public class ReturningFromConsoleToGetCommand : IState
+public class MoveToTeamArea : IState
 {
     private PlayerFSM manager;
 
     private PlayerController pc;
 
-    public ReturningFromConsoleToGetCommand(PlayerFSM playerFSM)
+    public MoveToTeamArea(PlayerFSM playerFSM)
     {
         this.manager = playerFSM;
     }
@@ -234,7 +269,7 @@ public class ReturningFromConsoleToGetCommand : IState
         pc = manager.player.GetComponent<PlayerController>();
         pc.playerAnimator.SetBool("isRun", true);
         pc.targetPosition = pc.homePosition;
-        pc.user.currentState = CharacterState.ReturningFromConsoleToGetCommand;
+        pc.user.currentState = CharacterState.MoveToTeamArea;
 
     }
     public void OnExit() { /* 清理逻辑 */ }

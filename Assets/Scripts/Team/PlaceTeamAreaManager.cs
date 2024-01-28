@@ -42,17 +42,23 @@ public class PlaceTeamAreaManager : MonoBehaviour
         // 当前人数/10 = 每秒产生颜料数
         // if vip ，
         float exInk = 0f;
+
         foreach (User u in userList)
         {
+            //  额外 墨水
             exInk += (u.getLevel() - 1) * 0.1f;
+            // 用户积分
+            u.score += (u.getLevel()-1) * 10;
         }
-        
+
         float inkRate = (float)(currentTeamNumberCount / defaultInkTime) + exInk;
 
         ink += inkRate;
         //Debug.Log("ink " + ink);
 
         UpdateTeamAreaName();
+        teaminfo.score = PlaceCredits.CalculateScore(ink);
+        PlaceCenter.Instance.OnTeamUIUpdate(teaminfo);
         
     }
 
@@ -85,6 +91,10 @@ public class PlaceTeamAreaManager : MonoBehaviour
             userList.Add(user);
             currentTeamNumberCount += 1;
             // 可以在这里设置角色的其他属性，比如所属队伍等
+            PlaceUIManager.Instance.AddTips(new TipsItem(){
+                userName=username,
+                text =$"加入{teaminfo.Name}队伍！"
+            });
         }
         else
         {
@@ -120,9 +130,9 @@ public class PlaceTeamAreaManager : MonoBehaviour
     }
     private Vector3 GetRandomPositionInArea()
     {
-        float x = Random.Range(-2f, 2f); // 10x10区域内的随机x坐标
-        float z = Random.Range(-2f, 2f); // 10x10区域内的随机z坐标
-        return transform.position + new Vector3(x, 0, z);
+        float x = Random.Range(-5f, 5f); // 10x10区域内的随机x坐标
+        float z = Random.Range(-5f, 5f); // 10x10区域内的随机z坐标
+        return transform.position + new Vector3(x, 0.85f, z);
     }
 
     public void setTeamInfo(Team team)
@@ -179,9 +189,9 @@ public class PlaceTeamAreaManager : MonoBehaviour
                 Debug.Log(name + " 进入队伍区域内,state : " + pc.user.currentState);
                 // 判断成员状态
                 PlayerFSM stateMachine = pc.user.character.GetComponent<PlayerFSM>();
-                if (pc.user.currentState == CharacterState.ReturningFromConsoleToGetCommand){
+                if (pc.user.currentState == CharacterState.MoveToTeamArea){
                     // Debug.Log("ReturningFromConsoleToGetCommand -> WaitingForCommandInTeamArea");
-                    stateMachine.ChangeState(CharacterState.WaitingForCommandInTeamArea);
+                    stateMachine.ChangeState(CharacterState.Trance);
                 }
                 else if (pc.user.currentState == CharacterState.WaitingForCommandInTeamArea){
                     // 角色在队伍区域内

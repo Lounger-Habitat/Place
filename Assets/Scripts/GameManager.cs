@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        UiManager.Instance.Init();
+        PlaceUIManager.Instance.Init();
         createTeam();
         StartGame();
     }
@@ -26,16 +26,16 @@ public class GameManager : MonoBehaviour
     //简单的队伍创建，自动
     void createTeam()
     {
-        TeamManager.Instance.CreateTeam("sys", "1001", "坤坤之家");
-        TeamManager.Instance.CreateTeam("sys", "1002", "小鸡脚");
-        TeamManager.Instance.CreateTeam("sys", "1003", "篮球");
-        TeamManager.Instance.CreateTeam("sys", "1004", "背带裤");
+        // TeamManager.Instance.CreateTeam("sys", "1001", "坤坤之家");
+        // TeamManager.Instance.CreateTeam("sys", "1002", "小鸡脚");
+        // TeamManager.Instance.CreateTeam("sys", "1003", "篮球");
+        // TeamManager.Instance.CreateTeam("sys", "1004", "背带裤");
     }
 
     public void StartGame()
     {
         isRuning = true;
-        UiManager.Instance.StartGame(() =>
+        PlaceUIManager.Instance.StartGame(() =>
         {
             isRuning = false;
             //游戏结束，其他逻辑

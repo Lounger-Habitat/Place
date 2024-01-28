@@ -8,7 +8,6 @@ public class TestManager : MonoBehaviour
     public string ins;
     public string playerName;
     // Start is called before the first frame update
-    public int teamId;
 
     public Vector3 position;
     public Vector3 rotation;
@@ -20,11 +19,6 @@ public class TestManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             PlaceInstructionManager.DefaultRunChatCommand(playerName,ins);
-            // ChatCommandManager.Instance.RunChatCommand("test",ins);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            PlaceCenter.Instance.AddPlayer(playerName,teamId);
             // ChatCommandManager.Instance.RunChatCommand("test",ins);
         }
         if (Input.GetKeyDown(KeyCode.Alpha7))

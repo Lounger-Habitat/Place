@@ -12,10 +12,13 @@ public class Team
     // 这里可以添加更多队伍相关的属性和方法
     public int MaxTeamNumber;
 
+    public int score;
+
     public Team(string id, string name, int max)
     {
         Id = id;
         Name = name;
         MaxTeamNumber = max;
+        score = 0;
     }
 }

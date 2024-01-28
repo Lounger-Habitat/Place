@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TeamListPanel : MonoBehaviour
+public class TeamPanel : MonoBehaviour
 {
     private Transform teamItem;
     private List<Transform> useList = new List<Transform>();
@@ -84,6 +85,11 @@ public class TeamListPanel : MonoBehaviour
             //teamItem.Find("Icon").GetComponent<Image>().sprite = sp;
         }
     }
+
+    public void UpdateTeamUI(Team team){
+        teamItem = transform.GetChild(int.Parse(team.Id)-1);
+        teamItem.Find("Data").GetComponent<TMP_Text>().text = $"{team.score}";
+    }
 }
 
 public struct TeamItem
@@ -104,4 +110,12 @@ public struct TeamItem
     /// 团队ID
     /// </summary>
     public int index;
+
+    TeamItem(string name,string id,Texture2D texture,int index)
+    {
+        teamName = name;
+        teamNumber = id;
+        iconTexture = texture;
+        this.index = index;
+    }
 }

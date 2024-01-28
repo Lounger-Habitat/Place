@@ -18,6 +18,7 @@ public class PlaceTeamManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        CreateTeamArea();
     }
 
     [Header("队伍区域预制件")]
@@ -32,7 +33,7 @@ public class PlaceTeamManager : MonoBehaviour
 
     void Start() 
     {
-        CreateTeamArea();
+        // CreateTeamArea();
     }
     // 创建队伍区域
     public void CreateTeamArea()

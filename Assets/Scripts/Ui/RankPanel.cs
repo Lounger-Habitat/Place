@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RankListPanel : MonoBehaviour
+public class RankPanel : MonoBehaviour
 {
     private Transform rankItem;
     private List<Transform> useList = new List<Transform>();
@@ -79,6 +79,25 @@ public class RankListPanel : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void UpdateRankUI(List<User> userList){
+
+        // userList -> rankItems // 功能一样 合并
+        List<RankItem> rankItems = new List<RankItem>();
+        for (int i = 0; i < userList.Count; i++)
+        {
+            User user = userList[i];
+            RankItem rankItem = new RankItem();
+            rankItem.userName = user.username;
+            rankItem.rankData = user.score.ToString();
+            rankItem.iconTexture = null;
+            rankItems.Add(rankItem);
+        }
+
+        SetRankUI(rankItems);
+
+
     }
 }
 

@@ -1,4 +1,0 @@
-repository "Place@Cosmos_Meta@cloud"
-  path "/"
-    br "/main"
-    co "/main"

@@ -174,7 +174,7 @@ public class TeamManager : MonoBehaviour
             });
             index++;
         }
-        UiManager.Instance.SetTeamData(teamRank);
+        // UiManager.Instance.SetTeamData(teamRank);
     }
 
     private void SetUserUi(){
@@ -194,7 +194,7 @@ public class TeamManager : MonoBehaviour
                 iconTexture = null
             });
         }
-        UiManager.Instance.SetRankData(ranks);
+        // UiManager.Instance.SetRankData(ranks);
     }
 }
 

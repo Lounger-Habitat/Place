@@ -17,6 +17,10 @@ public class User {
 
     public Queue<Instruction> instructionQueue = new Queue<Instruction>();
 
+    public int score { get; set; }
+
+    public int carryingInkCount { get; set; }
+
 
     public User(string username,GameObject character,string camp,int level=1) {
         this.username = username;
@@ -26,9 +30,8 @@ public class User {
         this.instructionQueue = new Queue<Instruction>();
         this.currentState = CharacterState.WaitingForCommandInTeamArea;
         this.lastColor = Color.white;
-    }
-
-    public void Update(){
+        this.score = 0;
+        this.carryingInkCount = 0;
     }
 
     public string getUsername() {
