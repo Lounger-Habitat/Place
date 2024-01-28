@@ -60,22 +60,22 @@ public class PlaceUIManager : MonoBehaviour
 
     }
 
-    public void SetRankData(List<RankItem> data){
+    public void SetRankData(List<User> data){
         rankPanel.SetRankUI(data);//设置数据
         //做一些事情，比如刷新UI
         LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
     }
     
-    public void SetTeamData(List<TeamItem> data){
+    public void SetTeamData(List<Team> data){
         teamPanel.SetTeamUI(data);//
         //做一些事情，比如刷新UI
         LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
     }
-    public void SetTeamData(TeamItem data){
-        teamPanel.SetTeamUI(data);//
-        //做一些事情，比如刷新UI
-        LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
-    }
+    // public void SetTeamData(TeamItem data){
+    //     teamPanel.SetTeamUI(data);//
+    //     //做一些事情，比如刷新UI
+    //     LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
+    // }
 
     public void AddTips(TipsItem tips){
         tipsPanel.AddTips(tips);

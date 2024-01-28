@@ -14,6 +14,7 @@ public class Team
 
     public int score;
 
+    public int currentTeamNumberCount;
     public Team(string id, string name, int max)
     {
         Id = id;

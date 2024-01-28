@@ -162,16 +162,11 @@ public class TeamManager : MonoBehaviour
     ///UI相关，暂时这么整、后边改
     private void SetTeamUi(){
         //设定队伍列表相关UI，目前只有队伍列表、后续可以根据队伍排行之类的更改
-        List<TeamItem> teamRank = new List<TeamItem>();
+        List<Team> teamRank = new List<Team>();
         int index = 0;
         foreach (var item in teamAreas)
         {
-            teamRank.Add(new TeamItem(){
-                teamName=item.getTeamInfo().Name,
-                teamNumber = item.currentTeamNumberCount.ToString(),
-                iconTexture = null,
-                index = index
-            });
+            teamRank.Add(new Team(index.ToString(),item.getTeamInfo().Name,10));
             index++;
         }
         // UiManager.Instance.SetTeamData(teamRank);
@@ -185,15 +180,15 @@ public class TeamManager : MonoBehaviour
             userList.AddRange(item.userList);
         }
         userList.OrderByDescending(u =>u.level);
-        List<RankItem> ranks = new List<RankItem>();
-        foreach (var item in userList)
-        {
-            ranks.Add(new RankItem(){
-                userName = item.username,
-                rankData = item.level.ToString(),
-                iconTexture = null
-            });
-        }
+        // List<User> ranks = new List<RankItem>();
+        // foreach (var item in userList)
+        // {
+        //     ranks.Add(new RankItem(){
+        //         userName = item.username,
+        //         rankData = item.level.ToString(),
+        //         iconTexture = null
+        //     });
+        // }
         // UiManager.Instance.SetRankData(ranks);
     }
 }

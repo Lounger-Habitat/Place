@@ -23,7 +23,7 @@ public class CountdownPanel : MonoBehaviour
     IEnumerator UpdateCountdown(int duration)  
     {  
         countdownTime = duration;  
-        while (countdownTime > 0)  
+        while (countdownTime >= 0)  
         {  var time=new TimeSpan(0, 0,Convert.ToInt32( countdownTime));
             //int min = (int)countdownTime / 60; 
             //string timeString = min.ToString("d2") + ":" + (min % 60).ToString("d2"); 

@@ -289,34 +289,34 @@ public class PlaceCenter : MonoBehaviour
         UIEvent.OnRankUIUpdate(top8);
     }
 
-    public void OnUserUIUpdate(User user)
-    {
+    // public void OnUserUIUpdate(User user)
+    // {
 
-        // 如果 top 8 数量为 小于8
-        if (top8.Count < 8 && user.score > 0)
-        {
-            top8.Add(user);
-        }
-        else
-        {
-            // top8 数量已经达到8个
-            // 比较当前用户的分数和top8中最小的分数
-            int minScore = top8.Min(u => u.score);
-            if (user.score > minScore)
-            {
-                // 替换最小分数的用户
-                User minUser = top8.Find(u => u.score == minScore);
-                top8.Remove(minUser);
-                top8.Add(user);
-            }
-        }
+    //     // 如果 top 8 数量为 小于8
+    //     if (top8.Count < 8 && user.score > 0)
+    //     {
+    //         top8.Add(user);
+    //     }
+    //     else
+    //     {
+    //         // top8 数量已经达到8个
+    //         // 比较当前用户的分数和top8中最小的分数
+    //         int minScore = top8.Min(u => u.score);
+    //         if (user.score > minScore)
+    //         {
+    //             // 替换最小分数的用户
+    //             User minUser = top8.Find(u => u.score == minScore);
+    //             top8.Remove(minUser);
+    //             top8.Add(user);
+    //         }
+    //     }
 
-        // top8 里的元素按照 u.score 由大到小排序
+    //     // top8 里的元素按照 u.score 由大到小排序
 
-        top8.Sort((u1, u2) => u2.score.CompareTo(u1.score));
+    //     top8.Sort((u1, u2) => u2.score.CompareTo(u1.score));
 
-        // --------------------  stop ----------------
+    //     // --------------------  stop ----------------
 
-        UIEvent.OnUserUIUpdate(user);
-    }
+    //     UIEvent.OnUserUIUpdate(user);
+    // }
 }

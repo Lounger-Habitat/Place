@@ -237,9 +237,8 @@ public class WaitingForCommandExecutionAtConsole : IState
                     default:
                         break;
                 }
-
-
             }
+            pc.user.carryingInkCount = 0;
             manager.insList.Clear();
         }
 

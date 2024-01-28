@@ -20,7 +20,7 @@ public class User {
     public int score { get; set; }
 
     public int carryingInkCount { get; set; }
-
+    public Sprite userIcon{get;set;}
 
     public User(string username,GameObject character,string camp,int level=1) {
         this.username = username;
@@ -32,6 +32,7 @@ public class User {
         this.lastColor = Color.white;
         this.score = 0;
         this.carryingInkCount = 0;
+        this.userIcon = null;
     }
 
     public string getUsername() {
