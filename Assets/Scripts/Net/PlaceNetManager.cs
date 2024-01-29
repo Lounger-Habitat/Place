@@ -35,17 +35,17 @@ public class PlaceNetManager : MonoBehaviour
     void Update()
     {
         // 开启网络连接
-        if (Input.GetKeyDown(KeyCode.Alpha4))
+        if (Input.GetKeyDown(KeyCode.U))
         {
             ConnectToServer();
         }
         // 关闭网络连接
-        if (Input.GetKeyDown(KeyCode.Alpha5) && clientSocket != null)
+        if (Input.GetKeyDown(KeyCode.I) && clientSocket != null)
         {
             _ = CloseConnectionAsync();
         }
         // 发送测试消息
-        if (Input.GetKeyDown(KeyCode.Alpha6) && clientSocket != null)
+        if (Input.GetKeyDown(KeyCode.O) && clientSocket != null)
         {
             _ = RPC("Hello from Unity Send Message!");
             

@@ -48,7 +48,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
             //  额外 墨水
             exInk += (u.getLevel() - 1) * 0.1f;
             // 用户积分
-            u.score += (u.getLevel()-1) * 10;
+            u.score += (u.getLevel()) * 10;
         }
 
         float inkRate = (float)(currentTeamNumberCount / defaultInkTime) + exInk;
