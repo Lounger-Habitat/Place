@@ -10,7 +10,7 @@ public class TipsPanel : MonoBehaviour
     public void Init()
     {
         rectTransform = transform as RectTransform;
-        rectTransform.anchoredPosition = new Vector2(-230, -467);
+        rectTransform.anchoredPosition = new Vector2(-260, -467);
         tipsQueue.Clear();
     }
 
@@ -61,7 +61,7 @@ public class TipsPanel : MonoBehaviour
     private void MoveTipsPanel(bool isShow = true){
         if (isShow)//如果是打开移动到打开位置
         {
-            rectTransform.DOAnchorPosX(0, 1f);
+            rectTransform.DOAnchorPosX(60, 1f);
         }
         else
         {
