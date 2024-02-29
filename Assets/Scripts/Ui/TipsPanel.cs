@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,18 +7,29 @@ using UnityEngine;
 using DG.Tweening;
 public class TipsPanel : MonoBehaviour
 {
-    RectTransform rectTransform;
+    //应该把每个Tips单独写成一个类，目前先这么写
+    public RectTransform messageTipsPanel;
+    public RectTransform giftTipsPanel;
     public void Init()
     {
-        rectTransform = transform as RectTransform;
-        rectTransform.anchoredPosition = new Vector2(-260, -467);
+        //rectTransform = transform as RectTransform;
+        messageTipsPanel.anchoredPosition = new Vector2(-260, -467);
         tipsQueue.Clear();
     }
 
     private void SetData(TipsItem tips)
     {
-        transform.GetChild(1).GetComponent<TMP_Text>().text = tips.userName;
-        transform.GetChild(2).GetComponent<TMP_Text>().text = tips.text;
+        switch (tips.tipsType)
+        {
+            case TipsType.messagePanel:
+                messageTipsPanel.GetChild(1).GetComponent<TMP_Text>().text = tips.userName;
+                messageTipsPanel.GetChild(2).GetComponent<TMP_Text>().text = tips.text;
+                break;
+            case TipsType.giftPanel:
+                giftTipsPanel.Find("Background").Find("Text_Name").GetComponent<TMP_Text>().text = tips.userName;
+                giftTipsPanel.Find("Bottom").Find("ListFrame05_Light_Green").Find("Text").GetComponent<TMP_Text>().text = tips.userName;
+                break;
+        }
     }
 
     private Queue<TipsItem> tipsQueue = new Queue<TipsItem>();
@@ -39,6 +51,7 @@ public class TipsPanel : MonoBehaviour
 
     WaitForSeconds wait = new WaitForSeconds(4.6f);
     private bool isShowTips = false;
+    private TipsItem nowData;
     IEnumerator ShowTipsAni()
     {
         //将标志位置为true
@@ -48,25 +61,77 @@ public class TipsPanel : MonoBehaviour
         {
             lock (tipsQueue)
             {
-                var data = tipsQueue.Dequeue();
-                SetData(data);
+                nowData = tipsQueue.Dequeue();
             }
-            MoveTipsPanel();
+            SetData(nowData);
+            switch (nowData.tipsType)
+            {
+                case TipsType.messagePanel:
+                    MoveTipsPanel();
+                    break;
+                case TipsType.giftPanel:
+                    MoveGiftPanel();
+                    break;
+            }
             yield return wait;
+            switch (nowData.tipsType)
+            {
+                case TipsType.messagePanel:
+                    MoveTipsPanel(false);
+                    break;
+                case TipsType.giftPanel:
+                    MoveGiftPanel(false);
+                    break;
+            }
+            yield return new WaitForSeconds(1.2f);
         }
         isShowTips = false;
-        MoveTipsPanel(false);
     }
 
     private void MoveTipsPanel(bool isShow = true){
         if (isShow)//如果是打开移动到打开位置
         {
-            rectTransform.DOAnchorPosX(60, 1f);
+            messageTipsPanel.DOAnchorPosX(60, 1f);
         }
         else
         {
-            rectTransform.DOAnchorPosX(-230, 1f);
+            messageTipsPanel.DOAnchorPosX(-280, 0.6f);
         }
+    }
+
+    private void MoveGiftPanel(bool isShow = true)
+    {
+        if (isShow)
+        {
+            giftTipsPanel.DOAnchorPosX(0, 0.7f);
+            giftTipsPanel.DOLocalRotate(new Vector3(0,0,8.5f), 3.5f);
+        }
+        else
+        {
+            giftTipsPanel.DOAnchorPosX(-900, 0.6f);
+            giftTipsPanel.DOLocalRotate(new Vector3(0,0,0), 1f);
+        }
+    }
+
+    [ContextMenu("message")]
+    public void Test()
+    {
+        AddTips(new TipsItem()
+        {
+            userName = "全力以赴",
+            text = "Add Team",
+            tipsType = TipsType.messagePanel
+        });
+    }
+    [ContextMenu("Gift")]
+    public void Test1()
+    {
+        AddTips(new TipsItem()
+        {
+            userName = "金钱帝国",
+            text = "gift hhhhhhh",
+            tipsType = TipsType.giftPanel
+        });
     }
 }
 
@@ -75,4 +140,11 @@ public class TipsItem
     public string userName;
     public string text;
     public Sprite icon;
+    public TipsType tipsType;
+}
+
+public enum TipsType
+{
+    messagePanel,
+    giftPanel
 }
