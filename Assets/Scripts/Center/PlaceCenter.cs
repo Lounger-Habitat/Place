@@ -61,7 +61,7 @@ public class PlaceCenter : MonoBehaviour
         PlaceUIManager.Instance.Init();
         // 游戏计时
         StartGame();
-        CreateTeam();
+        //CreateTeam();
     }
 
     public void Reset()

@@ -83,7 +83,7 @@ public class TipsPanel : MonoBehaviour
                     MoveGiftPanel(false);
                     break;
             }
-            yield return new WaitForSeconds(1.2f);
+            yield return new WaitForSeconds(0.8f);
         }
         isShowTips = false;
     }
@@ -95,7 +95,7 @@ public class TipsPanel : MonoBehaviour
         }
         else
         {
-            messageTipsPanel.DOAnchorPosX(-280, 0.6f);
+            messageTipsPanel.DOAnchorPosX(-280, 0.7f);
         }
     }
 
@@ -109,7 +109,7 @@ public class TipsPanel : MonoBehaviour
         else
         {
             giftTipsPanel.DOAnchorPosX(-900, 0.6f);
-            giftTipsPanel.DOLocalRotate(new Vector3(0,0,0), 1f);
+            giftTipsPanel.DOLocalRotate(new Vector3(0,0,0), 0.8f);
         }
     }
 
