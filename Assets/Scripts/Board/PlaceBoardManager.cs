@@ -100,6 +100,8 @@ public class PlaceBoardManager : MonoBehaviour
     {
         if (mode == "2D")
         {
+            if (Input.GetMouseButtonDown(0))
+            {
             Vector2 mousePosition = Input.mousePosition;
             RectTransform rectTransform = canvasImage.rectTransform;
             Vector2 localPoint;
@@ -117,6 +119,7 @@ public class PlaceBoardManager : MonoBehaviour
                 // Debug.Log(uv);
 
                 UpdateTexture((int)uv.x, (int)uv.y);
+            }
             }
         }
         else if (mode == "3D")

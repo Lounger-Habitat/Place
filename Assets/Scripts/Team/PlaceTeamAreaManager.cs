@@ -91,10 +91,10 @@ public class PlaceTeamAreaManager : MonoBehaviour
             userList.Add(user);
             currentTeamNumberCount += 1;
             // 可以在这里设置角色的其他属性，比如所属队伍等
-            PlaceUIManager.Instance.AddTips(new TipsItem()
-            {
-                userName = username,
-                text = $"加入{teaminfo.Name}队伍！"
+            PlaceUIManager.Instance.AddTips(new TipsItem(){
+                userName=username,
+                text =$"加入{teaminfo.Name}队伍！",
+                tipsType = TipsType.messagePanel
             });
         }
         else

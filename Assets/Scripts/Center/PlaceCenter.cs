@@ -89,6 +89,13 @@ public class PlaceCenter : MonoBehaviour
         teams.Add("B", PlaceTeamManager.Instance.teamAreas[1].teaminfo);
         teams.Add("C", PlaceTeamManager.Instance.teamAreas[2].teaminfo);
         teams.Add("D", PlaceTeamManager.Instance.teamAreas[3].teaminfo);
+        var teamList = new List<Team>(){
+            PlaceTeamManager.Instance.teamAreas[0].teaminfo,
+            PlaceTeamManager.Instance.teamAreas[1].teaminfo,
+            PlaceTeamManager.Instance.teamAreas[2].teaminfo,
+            PlaceTeamManager.Instance.teamAreas[3].teaminfo
+        };
+        PlaceUIManager.Instance.SetTeamData(teamList);
     }
 
     // 绘制 ui
