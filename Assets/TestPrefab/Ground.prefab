@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1944317189923456096}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7, y: 0.25, z: 7}
+  m_LocalPosition: {x: -15.61, y: 0.85, z: 15.75}
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -50,7 +50,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1944317189923456096}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -104,7 +104,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 1, z: 1.5}
+  m_Size: {x: 3, y: 1, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1006801792826650654
 MonoBehaviour:
@@ -118,14 +118,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46f5c2944cfcd43e3b8fd3ed89d2c913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ink: 0
   currentTeamNumberCount: 0
   userList: []
   teaminfo:
     Id: 1
     Name: team1
     MaxTeamNumber: 5
-  characterPrefab: {fileID: 430537269256766113, guid: 054b3569808b3984e8f90b118fb6c543, type: 3}
+    score: 0
+    ink: 0
+    currentTeamNumberCount: 0
+  characterPrefab: {fileID: 430537269256766113, guid: ef0e218a1cfd0491a843effbc7cbcdb8, type: 3}
   teamAreaName: {fileID: 0}
 --- !u!1 &2619484340150140833
 GameObject:
@@ -156,7 +158,7 @@ Transform:
   m_GameObject: {fileID: 2619484340150140833}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7, y: 0.25, z: -7}
+  m_LocalPosition: {x: -8.315, y: 0.85, z: -30.61}
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -177,7 +179,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2619484340150140833}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -231,7 +233,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 1, z: 1.5}
+  m_Size: {x: 3, y: 1, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5103046904917838491
 MonoBehaviour:
@@ -245,14 +247,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46f5c2944cfcd43e3b8fd3ed89d2c913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ink: 0
   currentTeamNumberCount: 0
   userList: []
   teaminfo:
     Id: 3
     Name: team3
     MaxTeamNumber: 5
-  characterPrefab: {fileID: 430537269256766113, guid: 054b3569808b3984e8f90b118fb6c543, type: 3}
+    score: 0
+    ink: 0
+    currentTeamNumberCount: 0
+  characterPrefab: {fileID: 430537269256766113, guid: ef0e218a1cfd0491a843effbc7cbcdb8, type: 3}
   teamAreaName: {fileID: 0}
 --- !u!1 &4348314925115373300
 GameObject:
@@ -283,7 +287,7 @@ Transform:
   m_GameObject: {fileID: 4348314925115373300}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7, y: 0.25, z: 7}
+  m_LocalPosition: {x: 14.89, y: 0.85, z: 14.84}
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -304,7 +308,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4348314925115373300}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -358,7 +362,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 1, z: 1.5}
+  m_Size: {x: 3, y: 1, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3047600377745935534
 MonoBehaviour:
@@ -372,14 +376,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46f5c2944cfcd43e3b8fd3ed89d2c913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ink: 0
   currentTeamNumberCount: 0
   userList: []
   teaminfo:
     Id: 2
     Name: team2
     MaxTeamNumber: 5
-  characterPrefab: {fileID: 430537269256766113, guid: 054b3569808b3984e8f90b118fb6c543, type: 3}
+    score: 0
+    ink: 0
+    currentTeamNumberCount: 0
+  characterPrefab: {fileID: 430537269256766113, guid: ef0e218a1cfd0491a843effbc7cbcdb8, type: 3}
   teamAreaName: {fileID: 0}
 --- !u!1 &4644679168734662037
 GameObject:
@@ -410,7 +416,7 @@ Transform:
   m_GameObject: {fileID: 4644679168734662037}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: -0.05, y: 2.64, z: -11.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -431,7 +437,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4644679168734662037}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -485,8 +491,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.6
-  m_Height: 2
+  m_Radius: 3
+  m_Height: 10
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8917311937278598238
@@ -569,7 +575,7 @@ Transform:
   m_GameObject: {fileID: 6086910918397416151}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7, y: 0.25, z: -7}
+  m_LocalPosition: {x: 8.951, y: 0.85, z: -29.955}
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -590,7 +596,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6086910918397416151}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -644,7 +650,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 1, z: 1.5}
+  m_Size: {x: 3, y: 1, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &572208321018829251
 MonoBehaviour:
@@ -658,14 +664,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46f5c2944cfcd43e3b8fd3ed89d2c913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ink: 0
   currentTeamNumberCount: 0
   userList: []
   teaminfo:
     Id: 4
     Name: team4
     MaxTeamNumber: 5
-  characterPrefab: {fileID: 430537269256766113, guid: 054b3569808b3984e8f90b118fb6c543, type: 3}
+    score: 0
+    ink: 0
+    currentTeamNumberCount: 0
+  characterPrefab: {fileID: 430537269256766113, guid: ef0e218a1cfd0491a843effbc7cbcdb8, type: 3}
   teamAreaName: {fileID: 0}
 --- !u!1 &8553172201977988486
 GameObject:
@@ -784,6 +792,10 @@ PrefabInstance:
     - target: {fileID: 3841460321768393603, guid: d34fb72203e9a468da253de66a884a13, type: 3}
       propertyPath: m_Name
       value: Pixels
+      objectReference: {fileID: 0}
+    - target: {fileID: 3841460321768393603, guid: d34fb72203e9a468da253de66a884a13, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4968601915884792069, guid: d34fb72203e9a468da253de66a884a13, type: 3}
       propertyPath: m_LocalPosition.x

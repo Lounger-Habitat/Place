@@ -25,16 +25,16 @@ public class ChatCommandManager : MonoBehaviour
         switch (parts[0])
         {
             case "1":
-                TeamManager.Instance.AddTeam(username, "1001");
+                TeamManager.Instance.AddTeam(username, 1001);
                 break;
             case "2":
-                TeamManager.Instance.AddTeam(username, "1002");
+                TeamManager.Instance.AddTeam(username, 1002);
                 break;
             case "3":
-                TeamManager.Instance.AddTeam(username, "1003");
+                TeamManager.Instance.AddTeam(username, 1003);
                 break;
             case "4":
-                TeamManager.Instance.AddTeam(username, "1004");
+                TeamManager.Instance.AddTeam(username, 1004);
                 break;
             // case "/create":
             // case "/c":
@@ -50,7 +50,8 @@ public class ChatCommandManager : MonoBehaviour
                 if (parts.Length >= 2)
                 {
                     // 这里调用加入队伍的逻辑
-                    TeamManager.Instance.AddTeam(username, parts[1]);
+                    int teamId = int.Parse(parts[1]);
+                    TeamManager.Instance.AddTeam(username, teamId);
                 }
                 break;
             case "/say":

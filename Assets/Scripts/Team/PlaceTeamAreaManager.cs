@@ -5,8 +5,6 @@ using UnityEngine.Purchasing;
 
 public class PlaceTeamAreaManager : MonoBehaviour
 {
-    // 墨水能量数
-    public float ink;
     // 队伍区域当前容纳的人数
     public int currentTeamNumberCount = 0;
     private float defaultInkTime = 10f;
@@ -19,9 +17,13 @@ public class PlaceTeamAreaManager : MonoBehaviour
 
     public GameObject teamAreaName;
 
+    public Transform totem;
+    public Transform door;
 
 
-    void Update(){
+
+    void Update()
+    {
         // 每秒更新
         // 累加计时器
         timer += Time.deltaTime;
@@ -41,31 +43,28 @@ public class PlaceTeamAreaManager : MonoBehaviour
         // 墨水数随着时间增加，默认初始每10s增加一点，随着人数的增加，增加速度增加
         // 当前人数/10 = 每秒产生颜料数
         // if vip ，
-        float exInk = 0f;
+        float inkRate = 0f;
+        float exInkRate = 0f;
 
         foreach (User u in userList)
         {
             //  额外 墨水
-            exInk += (u.getLevel() - 1) * 0.1f;
-            // 用户积分
-            u.score += (u.getLevel()-1) * 10;
+            exInkRate += (u.getLevel() - 1)  / 100;
         }
-
-        float inkRate = (float)(currentTeamNumberCount / defaultInkTime) + exInk;
-
-        ink += inkRate;
+        inkRate = (currentTeamNumberCount / defaultInkTime) + exInkRate;
+        teaminfo.ink += inkRate ;
         //Debug.Log("ink " + ink);
 
         UpdateTeamAreaName();
-        teaminfo.score = PlaceCredits.CalculateScore(ink);
-        PlaceCenter.Instance.OnTeamUIUpdate(teaminfo);
-        
+        // teaminfo.score = PlaceCredits.CalculateScore(ink);
+        // PlaceCenter.Instance.OnTeamUIUpdate(teaminfo);
+
     }
 
     void UpdateTeamAreaName()
     {
         string nameTemplate = "{0} - {1}";
-        string formattedString = string.Format(nameTemplate, teaminfo.Name, (int)System.Math.Round(ink));
+        string formattedString = string.Format(nameTemplate, teaminfo.Name, (int)System.Math.Round(teaminfo.ink));
         teamAreaName.GetComponent<NameTag>().go_name = formattedString;
     }
 
@@ -80,20 +79,22 @@ public class PlaceTeamAreaManager : MonoBehaviour
             // 创建角色
             Vector3 spawnPosition = GetRandomPositionInArea();
             go = Instantiate(characterPrefab, spawnPosition, Quaternion.identity);
-            PlayerController PlayerControllerScript = go.GetComponent<PlayerController>();
+            PlacePlayerController PlayerControllerScript = go.GetComponent<PlacePlayerController>();
             PlaceCenter.Instance.CreateNameTag(go.transform, username);
-            user = new User(username,go,teaminfo.Id);
+            user = new User(username, go, teaminfo.Id);
             if (PlayerControllerScript != null)
             {
-                PlayerControllerScript.homePosition = transform.position;
+                PlayerControllerScript.selfTotem = totem;
+                PlayerControllerScript.selfDoor = door;
                 PlayerControllerScript.user = user;
             }
             userList.Add(user);
             currentTeamNumberCount += 1;
             // 可以在这里设置角色的其他属性，比如所属队伍等
-            PlaceUIManager.Instance.AddTips(new TipsItem(){
-                userName=username,
-                text =$"加入{teaminfo.Name}队伍！"
+            PlaceUIManager.Instance.AddTips(new TipsItem()
+            {
+                userName = username,
+                text = $"加入{teaminfo.Name}队伍！"
             });
         }
         else
@@ -104,7 +105,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
 
     }
 
-    public GameObject CreateMessageBubbleOnPlayer(string username,string message)
+    public GameObject CreateMessageBubbleOnPlayer(string username, string message)
     {
         GameObject go = null;
 
@@ -158,7 +159,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
     // 查找用户
     public User FindUser(string username)
     {
-        
+
         foreach (User user in userList)
         {
             if (user.username == username)
@@ -173,7 +174,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
     {
         if (other.CompareTag("Player")) // 确保触发器有一个特定的标签
         {
-            PlayerController pc = other.transform.root.gameObject.GetComponent<PlayerController>();
+            PlacePlayerController pc = other.transform.root.gameObject.GetComponent<PlacePlayerController>();
             // 角色刚刚进入触发器
             Debug.Log("角色进入触发器");
             string name = pc.user.username;
@@ -186,22 +187,24 @@ public class PlaceTeamAreaManager : MonoBehaviour
             if (IsUserInTeam(name)) // 本队队员进入队伍区域
             {
                 // 检查角色是否在队伍区域内
-                Debug.Log(name + " 进入队伍区域内,state : " + pc.user.currentState);
+                Debug.Log(name + " 进入队伍区域内");
                 // 判断成员状态
-                PlayerFSM stateMachine = pc.user.character.GetComponent<PlayerFSM>();
-                if (pc.user.currentState == CharacterState.MoveToTeamArea){
-                    // Debug.Log("ReturningFromConsoleToGetCommand -> WaitingForCommandInTeamArea");
-                    stateMachine.ChangeState(CharacterState.Trance);
-                }
-                else if (pc.user.currentState == CharacterState.WaitingForCommandInTeamArea){
-                    // 角色在队伍区域内
-                    Debug.Log("等待指令");
-                }
-                else
-                {
-                    // 角色不在队伍区域内
-                    Debug.Log("非法状态");
-                }
+                // PlayerFSM stateMachine = pc.user.character.GetComponent<PlayerFSM>();
+                // if (pc.user.currentState == CharacterState.MoveToTeamArea)
+                // {
+                //     // Debug.Log("ReturningFromConsoleToGetCommand -> WaitingForCommandInTeamArea");
+                //     stateMachine.ChangeState(CharacterState.Trance);
+                // }
+                // else if (pc.user.currentState == CharacterState.WaitingForCommandInTeamArea)
+                // {
+                //     // 角色在队伍区域内
+                //     Debug.Log("等待指令");
+                // }
+                // else
+                // {
+                //     // 角色不在队伍区域内
+                //     Debug.Log("非法状态");
+                // }
             }
             // TODO ： 友方队伍
             else // 敌对队员进入队伍区域

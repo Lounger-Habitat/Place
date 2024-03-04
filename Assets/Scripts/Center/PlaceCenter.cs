@@ -43,11 +43,13 @@ public class PlaceCenter : MonoBehaviour
     public string[] defaultTeamName = new string[] { "A", "B", "C", "D" };
 
 
-    public GameObject nameUI;
-    public GameObject bubbleUI;
+    public GameObject nameUI = null!;
+    public GameObject bubbleUI = null!;
 
     // 游戏开始标志
-    bool gameRuning;
+    public bool gameRuning = false;
+
+    int[] lastTeamScore = new int[5] {0,0,0,0,0};
 
     public void Start()
     {
@@ -62,6 +64,13 @@ public class PlaceCenter : MonoBehaviour
         // 游戏计时
         StartGame();
         CreateTeam();
+    }
+
+    void Update() {
+        if (gameRuning)
+        {
+            CalculateTeamScore();
+        }
     }
 
     public void Reset()
@@ -152,7 +161,7 @@ public class PlaceCenter : MonoBehaviour
             return;
         }
 
-        int teamId = int.Parse(users[username].camp);
+        int teamId = users[username].camp;
 
 
         // 创建气泡
@@ -231,13 +240,14 @@ public class PlaceCenter : MonoBehaviour
     // 获取队伍颜料数
     public int GetTeamInkCount(int teamId)
     {
-        int inkCount = (int)(PlaceTeamManager.Instance.teamAreas[teamId - 1].ink);
+        Debug.Log("Team :" + teamId);
+        int inkCount = (int)(PlaceTeamManager.Instance.teamAreas[teamId - 1].teaminfo.ink);
         return inkCount;
     }
 
     public void SetTeamInkCount(int teamId, int delta)
     {
-        PlaceTeamManager.Instance.teamAreas[teamId - 1].ink += (float)delta;
+        PlaceTeamManager.Instance.teamAreas[teamId - 1].teaminfo.ink += (float)delta;
     }
 
     public void StartGame()
@@ -289,6 +299,32 @@ public class PlaceCenter : MonoBehaviour
         UIEvent.OnRankUIUpdate(top8);
     }
 
+
+    // 计算 队伍分数
+    public void CalculateTeamScore()
+    {
+        int[] newTeamScore  = new int[5];
+        foreach (int c in PlaceBoardManager.Instance.pixelsInfos)
+        {
+            newTeamScore[c]++;
+        }
+
+        for (int i = 0; i < newTeamScore.Length; i++)
+        {
+            if (i!=0 && lastTeamScore[i] != newTeamScore[i]  )
+            {
+                int score = newTeamScore[i];
+                // 如果不相等，调用其他函数或执行其他逻辑
+                PlaceTeamManager.Instance.teamAreas[i-1].teaminfo.score = score;
+                // OnTeamUIUpdate(PlaceTeamManager.Instance.teamAreas[i-1].teaminfo);
+            }
+        }
+
+        // UI显示
+        PlaceUIManager.Instance.SetTeamData(teams.Values.ToList());
+
+    }
+
     // public void OnUserUIUpdate(User user)
     // {
 
@@ -319,4 +355,44 @@ public class PlaceCenter : MonoBehaviour
 
     //     UIEvent.OnUserUIUpdate(user);
     // }
+
+    public void GainPower(string username, float power)
+    {
+        if (!users.ContainsKey(username))
+        {
+            Debug.Log("用户不存在");
+            return;
+        }
+        User u = users[username];
+        int normalPower = 0;
+        switch (power)
+        {
+            case 0.1f:
+                normalPower = 1;
+                // u.level += normalPower;
+                // u.score += normalPower * 10;
+                // PlaceTeamManager.Instance.teamAreas[u.camp - 1].teaminfo.ink += normalPower * 10;
+                // 特效 动画
+                // UI 更新
+                break;
+            case 1:
+                normalPower = 10;
+                break;
+            case 1.9f:
+                normalPower = 19;
+                break;
+            case 5.2f:
+                normalPower = 52;
+                break;
+            case 9.9f:
+                normalPower = 99;
+                break;
+            case 20:
+                normalPower = 200;
+                break;
+        }
+        u.level += normalPower;
+        u.score += normalPower * 10;
+        PlaceTeamManager.Instance.teamAreas[u.camp - 1].teaminfo.ink += normalPower;
+    }
 }

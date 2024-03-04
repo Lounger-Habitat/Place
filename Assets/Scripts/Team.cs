@@ -7,19 +7,22 @@ using UnityEngine.UIElements;
 [System.Serializable]
 public class Team
 {
-    public string Id;
+    public int Id;
     public string Name;
     // 这里可以添加更多队伍相关的属性和方法
     public int MaxTeamNumber;
 
     public int score;
 
+    public float ink;
+
     public int currentTeamNumberCount;
-    public Team(string id, string name, int max)
+    public Team(int id, string name, int max)
     {
         Id = id;
         Name = name;
         MaxTeamNumber = max;
         score = 0;
+        ink = 0;
     }
 }

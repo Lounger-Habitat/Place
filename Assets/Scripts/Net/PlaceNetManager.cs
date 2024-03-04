@@ -158,11 +158,11 @@ public class PlaceNetManager : MonoBehaviour
         /*
             1、检查消息类别
                 弹幕消息
-                    聊天消息
+                    聊天消息 /bili <danmu> | {s} 
                     命令消息
                         检查用户是否有权限，比如是否加入了队伍，是否是队长
                         每个人都可以加入队伍的人，可以发送指令
-                礼物消息
+                礼物消息    /bili <gift> | {s} 
                 心跳消息
 
         */
@@ -207,6 +207,12 @@ public class PlaceNetManager : MonoBehaviour
                     // 普通弹幕
                     break;
                 case "<gift>":
+                    string[] c_gift = item[1].Trim().Split(":");
+                    if (c_gift.Length > 1)
+                    {
+                        string[] room_and_user = c_gift[0].Trim().Split(" ");
+                        PlaceInstructionManager.DefaultRunChatCommand(room_and_user[1],c_gift[1]);
+                    }
                     break;
                 case "<heart>":
                     break;

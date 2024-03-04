@@ -59,7 +59,7 @@ public class TeamPanel : MonoBehaviour
     // }
 
     public void UpdateTeamUI(Team team){
-        teamItem = transform.GetChild(int.Parse(team.Id)-1);
+        teamItem = transform.GetChild(team.Id-1);
         teamItem.Find("Data").GetComponent<TMP_Text>().text = $"{team.score}";
     }
 }

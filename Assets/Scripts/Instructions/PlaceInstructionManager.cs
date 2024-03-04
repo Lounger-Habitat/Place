@@ -271,4 +271,37 @@ public static class PlaceInstructionManager
                 //     break;
         }
     }
+    public static void DefaultGiftCommand(string username, string command) {
+        // 找到 对应 的 礼物
+        string parts = command.Trim();
+        float message = float.Parse(parts);
+        PlaceCenter.Instance.GainPower(username, message);
+        // switch (parts)
+        // {
+        //     case "0.1":
+        //         int message = 1;
+        //         PlaceCenter.Instance.GainPower(username, message);
+        //         break;
+        //     case "1":
+        //         int message = 1;
+        //         PlaceCenter.Instance.GainPower(username, message);
+        //         break;
+        //     case "1.9":
+        //         int message = 1;
+        //         PlaceCenter.Instance.GainPower(username, message);
+        //         break;
+        //     case "5.2":
+        //         int message = 1;
+        //         PlaceCenter.Instance.GainPower(username, message);
+        //         break;
+        //     case "9.9":
+        //         int message = 1;
+        //         PlaceCenter.Instance.GainPower(username, message);
+        //         break;
+        //     case "20":
+        //         int message = 1;
+        //         PlaceCenter.Instance.GainPower(username, message);
+        //         break;
+        // }
+    }
 }
