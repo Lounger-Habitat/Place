@@ -63,9 +63,4 @@ public class PlayerController : MonoBehaviour
         // playerAnimator.SetBool("isRun",true);
         navMeshAgent.destination=targetPosition;
     }
-
-    // public void CheckTargetPos()
-    // {
-
-    // }
 }

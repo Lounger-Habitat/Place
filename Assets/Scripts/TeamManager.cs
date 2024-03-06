@@ -30,31 +30,31 @@ public class TeamManager : MonoBehaviour
     {
         Vector3 spawnPosition = Vector3.zero;;
         switch (team.Id) {
-            case "1":
+            case 1:
                 spawnPosition = new Vector3(-40, 1, -40);
                 break;
-            case "2":
+            case 2:
                 spawnPosition = new Vector3(-20, 1, -40);
                 break;
-            case "3":
+            case 3:
                 spawnPosition = new Vector3(0, 1, -40);
                 break;
-            case "4":
+            case 4:
                 spawnPosition = new Vector3(20, 1, -40);
                 break;
-            case "5":
+            case 5:
                 spawnPosition = new Vector3(40, 1, -40);
                 break;
-            case"1001":
+            case 1001:
                 spawnPosition = areaList[0].position;
                 break;
-            case"1002":
+            case 1002:
                 spawnPosition = areaList[1].position;
                 break;
-            case"1003":
+            case 1003:
                 spawnPosition = areaList[2].position;
                 break;
-            case"1004":
+            case 1004:
                 spawnPosition = areaList[3].position;
                 break;
         }
@@ -89,7 +89,7 @@ public class TeamManager : MonoBehaviour
         }
     }
 
-    public void CreateTeam(string username, string teamId, string teamName)
+    public void CreateTeam(string username, int teamId, string teamName)
     {
         if (teams.Count < maxTeams && !teams.Exists(t => t.Id == teamId))
         {
@@ -117,7 +117,7 @@ public class TeamManager : MonoBehaviour
         }
     }
 
-    public void AddTeam(string username,string teamId)
+    public void AddTeam(string username,int teamId)
     {   
         Team team = teams.Find(t => t.Id == teamId);
         if(team==null)
@@ -166,7 +166,7 @@ public class TeamManager : MonoBehaviour
         int index = 0;
         foreach (var item in teamAreas)
         {
-            teamRank.Add(new Team(index.ToString(),item.getTeamInfo().Name,10));
+            teamRank.Add(new Team(index,item.getTeamInfo().Name,10));
             index++;
         }
         // UiManager.Instance.SetTeamData(teamRank);

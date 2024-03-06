@@ -25,17 +25,17 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         {
 
             // 角色刚刚进入触发器
-            PlayerController pc = other.transform.root.gameObject.GetComponent<PlayerController>();
+            PlacePlayerController pc = other.transform.root.gameObject.GetComponent<PlacePlayerController>();
             string name = pc.user.username;
             Debug.Log(name + " 进入触发器");
 
             // 检查角色是否在队伍区域内
             
-            PlayerFSM stateMachine = other.transform.root.gameObject.GetComponent<PlayerFSM>();
-            if (pc.user.currentState == CharacterState.TransportingCommandToConsole)
-            {
-                stateMachine.ChangeState(CharacterState.WaitingForCommandExecutionAtConsole);
-            }
+            // PlayerFSM stateMachine = other.transform.root.gameObject.GetComponent<PlayerFSM>();
+            // if (pc.user.currentState == CharacterState.TransportingCommandToConsole)
+            // {
+            //     stateMachine.ChangeState(CharacterState.WaitingForCommandExecutionAtConsole);
+            // }
             
         }
     }

@@ -28,6 +28,8 @@ public class PlaceBoardManager : MonoBehaviour
 
     public Texture2D defaultTexture;
 
+    public int[] pixelsInfos;
+
     public static PlaceBoardManager Instance { get; private set; }
 
     void Awake()
@@ -49,7 +51,7 @@ public class PlaceBoardManager : MonoBehaviour
         // DiffusionManager.Instance.OnImageLoaded += OnImageLoaded;
         // 假设平面使用的是材质的第一个贴图
         // 生成一个新的贴图
-        Texture2D myTexture = GenerateTexture(height, width, Color.black); // 可以根据需要调整尺寸和颜色
+        Texture2D myTexture = GenerateTexture(height, width, Color.white); // 可以根据需要调整尺寸和颜色
 
         if (mode == "2D")
         {
@@ -61,7 +63,7 @@ public class PlaceBoardManager : MonoBehaviour
             // 将新贴图应用到某个对象的材质上
             // 例如，将其应用到当前游戏对象的 Renderer 上
             // Renderer renderer = GetComponent<Renderer>();
-            
+
             // if (canvasMaterial != null)
             // {
             //     canvasMaterial.mainTexture = myTexture;
@@ -70,7 +72,8 @@ public class PlaceBoardManager : MonoBehaviour
 
             canvasImage.texture = myTexture;
             texture = canvasImage.texture as Texture2D;
-        }else if (mode == "3D")
+        }
+        else if (mode == "3D")
         {
             if (mainCamera == null)
             {
@@ -230,9 +233,11 @@ public class PlaceBoardManager : MonoBehaviour
 
         // 填充贴图
         Color[] fillPixels = new Color[width * height];
+        pixelsInfos = new int[width * height];
         for (int i = 0; i < fillPixels.Length; i++)
         {
             fillPixels[i] = fillColor;
+            pixelsInfos[i] = 0;
         }
         newTexture.SetPixels(fillPixels);
         newTexture.Apply();
@@ -362,8 +367,8 @@ public class PlaceBoardManager : MonoBehaviour
         // 修改第一列和最后一列
         for (int y = 1; y < height - 1; y++)
         {
-            texture.SetPixel(0, y, Color.blue);         // 第一列
-            texture.SetPixel(width - 1, y, Color.blue);   // 最后一列
+            texture.SetPixel(0, y, Color.green);        // 第一列
+            texture.SetPixel(width - 1, y, Color.green);   // 最后一列
         }
 
         texture.Apply();
@@ -396,12 +401,14 @@ public class PlaceBoardManager : MonoBehaviour
     void Reset()
     {
         texture.SetPixels(defaultTexture.GetPixels());
+        Array.Clear(pixelsInfos, 0, pixelsInfos.Length);
         texture.Apply();
     }
 
 
-    public void DrawCommand(string command, int x, int y, int r, int g, int b)
+    public void DrawCommand(string command, int x, int y, int r, int g, int b, int camp = 0)
     {
+        MarkPixels(x, y, camp);
         DrawPixels(command, x, y, r, g, b);
     }
     public void DrawPixels(string command = "/d", int x = 0, int y = 0, int r = 0, int g = 0, int b = 0)
@@ -415,14 +422,14 @@ public class PlaceBoardManager : MonoBehaviour
     }
     public int GetLineCount(int x, int y, int ex, int ey)
     {
-        return DrawLine(x: x, y: y, ex: ex, ey: ey,isDraw:false);
+        return DrawLine(x: x, y: y, ex: ex, ey: ey, isDraw: false);
     }
 
-    public void LineCommand(string command, int x, int y, int ex, int ey, int r, int g, int b)
+    public void LineCommand(string command, int x, int y, int ex, int ey, int r, int g, int b, int camp = 0)
     {
-        DrawLine(command, x, y, ex, ey, r, g, b);
+        DrawLine(command, x, y, ex, ey, r, g, b, camp);
     }
-    private int DrawLine(string command = "/l", int x = 0, int y = 0, int ex = 0, int ey = 0, int r = 0, int g = 0, int b = 0, bool isDraw = true)
+    private int DrawLine(string command = "/l", int x = 0, int y = 0, int ex = 0, int ey = 0, int r = 0, int g = 0, int b = 0, int camp = 0, bool isDraw = true)
     {
         // 使用 Bresenham 算法来计算这两点之间的像素点
         int dx = Math.Abs(ex - x);
@@ -437,7 +444,7 @@ public class PlaceBoardManager : MonoBehaviour
         {
             if (isDraw)
             {
-                DrawCommand(command, x, y, r, g, b); // 绘制像素点
+                DrawCommand(command, x, y, r, g, b, camp); // 绘制像素点
             }
             else
             {
@@ -466,12 +473,12 @@ public class PlaceBoardManager : MonoBehaviour
         return pixelsCount;
 
     }
-    public void PaintCommand(string command, int x, int y, int dx, int dy, int r, int g, int b)
+    public void PaintCommand(string command, int x, int y, int dx, int dy, int r, int g, int b, int camp = 0)
     {
-        DrawPaint(command, x, y, dx, dy, r, g, b);
+        DrawPaint(command, x, y, dx, dy, r, g, b, camp);
     }
 
-    void DrawPaint(string command = "/p", int x = 0, int y = 0, int dx = 0, int dy = 0, int r = 0, int g = 0, int b = 0)
+    void DrawPaint(string command = "/p", int x = 0, int y = 0, int dx = 0, int dy = 0, int r = 0, int g = 0, int b = 0, int camp = 0)
     {
         Color[] colors = texture.GetPixels(x, y, dx, dy);
         for (int i = x; i < x + dx; i++)
@@ -480,6 +487,7 @@ public class PlaceBoardManager : MonoBehaviour
             {
                 // DrawCommand(command,i, j , r, g, b);
                 colors[(j - y) * dx + (i - x)] = new Color(r, g, b);
+                MarkPixels(i, j, camp);
             }
         }
         texture.SetPixels(x, y, dx, dy, colors);
@@ -506,6 +514,16 @@ public class PlaceBoardManager : MonoBehaviour
         PasteTexture(texture, sx, sy, 5);
         // Color[,] p = DefaultController.Instance.ProcessImage(texture);
         // DrawPreImage(sx, sy, p);
+    }
+
+
+    public void MarkPixels(int x, int y, int camp=0)
+    {
+        // 对x,y 处理ß
+        // 记录
+        int index = x + (y * width);
+        pixelsInfos[index] = camp;
+
     }
 
 

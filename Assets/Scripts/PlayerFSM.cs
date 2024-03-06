@@ -118,7 +118,7 @@ public class WaitingForCommandInTeamArea : IState
     public void OnExit() { /* 清理逻辑 */ }
     public void Update()
     {
-        int teamInkCount = PlaceCenter.Instance.GetTeamInkCount(int.Parse(pc.user.camp));
+        int teamInkCount = PlaceCenter.Instance.GetTeamInkCount(pc.user.camp);
         if (pc.user.instructionQueue.Count > 0 && teamInkCount > 0)
         {
             // 遍历instructionQueue ，取出全部 Instruction
@@ -129,10 +129,11 @@ public class WaitingForCommandInTeamArea : IState
 
                 // 判断指令颜料 和 当前有的数量 是否满足
                 int needInkCount = PlaceCenter.Instance.ComputeInstructionColorCount(instruction);
+                instruction.needInkCount = needInkCount;
 
                 Debug.Log("needInkCount" + needInkCount);
 
-                
+
 
                 // if (needInkCount > teamInkCount)
                 // {
@@ -146,7 +147,7 @@ public class WaitingForCommandInTeamArea : IState
 
                 pc.user.carryingInkCount += needInkCount;
 
-                PlaceCenter.Instance.SetTeamInkCount(int.Parse(pc.user.camp),-needInkCount);
+                PlaceCenter.Instance.SetTeamInkCount(pc.user.camp, -needInkCount);
 
 
                 manager.insList.Add(instruction);
@@ -224,21 +225,31 @@ public class WaitingForCommandExecutionAtConsole : IState
                 {
                     case "/draw":
                     case "/d":
-                        PlaceBoardManager.Instance.DrawCommand(ins.mode, ins.x, ins.y, ins.r, ins.g, ins.b);
+                        PlaceBoardManager.Instance.DrawCommand(ins.mode, ins.x, ins.y, ins.r, ins.g, ins.b, pc.user.camp);
+                        pc.user.carryingInkCount -= ins.needInkCount;
+                        pc.user.score += ins.needInkCount;
                         break;
                     case "/line":
                     case "/l":
-                        PlaceBoardManager.Instance.LineCommand(ins.mode, ins.x, ins.y, ins.ex, ins.ey, ins.r, ins.g, ins.b);
+                        PlaceBoardManager.Instance.LineCommand(ins.mode, ins.x, ins.y, ins.ex, ins.ey, ins.r, ins.g, ins.b, pc.user.camp);
+                        pc.user.carryingInkCount -= ins.needInkCount;
+                        pc.user.score += ins.needInkCount;
                         break;
                     case "/paint":
                     case "/p":
-                        PlaceBoardManager.Instance.PaintCommand(ins.mode, ins.x, ins.y, ins.dx, ins.dy, ins.r, ins.g, ins.b);
+                        PlaceBoardManager.Instance.PaintCommand(ins.mode, ins.x, ins.y, ins.dx, ins.dy, ins.r, ins.g, ins.b, pc.user.camp);
+                        pc.user.carryingInkCount -= ins.needInkCount;
+                        pc.user.score += ins.needInkCount;
                         break;
                     default:
                         break;
                 }
             }
-            pc.user.carryingInkCount = 0;
+            if (pc.user.carryingInkCount != 0)
+            {
+                Debug.Log("账不对啊");
+                pc.user.carryingInkCount = 0;
+            }
             manager.insList.Clear();
         }
 
