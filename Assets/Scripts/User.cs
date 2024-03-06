@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [System.Serializable]
@@ -24,6 +23,10 @@ public class User {
 
     // 玩家 指令队列， 用于保存 玩家弹幕输入的指令，等待被执行
     public Queue<Instruction> instructionQueue = new Queue<Instruction>();
+
+    public bool defendingIns = false;
+
+    public int attckingIns = 0;
 
     // 玩家当前分数
     public int score { get; set; }

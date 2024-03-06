@@ -200,6 +200,7 @@ GameObject:
   - component: {fileID: 3317641290615442857}
   - component: {fileID: 7394164402554768190}
   - component: {fileID: 1724690068559484212}
+  - component: {fileID: 5840602151029470282}
   m_Layer: 0
   m_Name: PlayerXiong
   m_TagString: Player
@@ -245,6 +246,8 @@ MonoBehaviour:
     level: 0
     character: {fileID: 0}
     camp: 0
+    defendingIns: 0
+    attckingIns: 0
   playerAnimator: {fileID: 8615389718625719871}
 --- !u!114 &4232644711222386307
 MonoBehaviour:
@@ -349,11 +352,36 @@ MonoBehaviour:
     level: 0
     character: {fileID: 0}
     camp: 0
+    defendingIns: 0
+    attckingIns: 0
   speed: 5
   hp: 100
   isDefending: 0
   isAttacking: 0
   isDrawing: 0
+--- !u!136 &5840602151029470282
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430537269256766113}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 5
+  m_Height: 0
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &430537269359459120
 GameObject:
   m_ObjectHideFlags: 0

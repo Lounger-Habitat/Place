@@ -24,6 +24,10 @@ public class PlacePlayerController : MonoBehaviour
 
     private NavMeshAgent navMeshAgent;
 
+    // 遇到的敌人
+    public Dictionary<string,PlacePlayerController> enemies = new Dictionary<string,PlacePlayerController>();
+    
+    
     // 身上指令
 
     public List<Instruction> insList = new List<Instruction>();
@@ -117,8 +121,25 @@ public class PlacePlayerController : MonoBehaviour
         Debug.Log("TransToDefend");
     }
 
+    public void TransToAttack() {
+        isAttacking = true;
+        Debug.Log("TransToAttack");
+    }
     public void Resurgence(){
+        hp = 100;
+        // 重新生成 任务 ，特效 动画
+        transform.position = selfTotem.position;
         Debug.Log("Resurgence");
+    }
+
+    public bool isFriend(int c){
+        return user.camp == c;
+    }
+
+    public void AttackTarget()
+    {
+        
+        Debug.Log("AttackTarget");
     }
     
 }
