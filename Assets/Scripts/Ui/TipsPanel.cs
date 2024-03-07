@@ -25,7 +25,7 @@ public class TipsPanel : MonoBehaviour
                 messageTipsPanel.GetChild(1).GetComponent<TMP_Text>().text = tips.userName;
                 messageTipsPanel.GetChild(2).GetComponent<TMP_Text>().text = tips.text;
                 break;
-            case TipsType.giftPanel:
+            case TipsType.giftAttackPanel:
                 giftTipsPanel.Find("Background").Find("Text_Name").GetComponent<TMP_Text>().text = tips.userName;
                 giftTipsPanel.Find("Bottom").Find("ListFrame05_Light_Green").Find("Text").GetComponent<TMP_Text>().text = tips.userName;
                 break;
@@ -69,7 +69,7 @@ public class TipsPanel : MonoBehaviour
                 case TipsType.messagePanel:
                     MoveTipsPanel();
                     break;
-                case TipsType.giftPanel:
+                case TipsType.giftAttackPanel:
                     MoveGiftPanel();
                     break;
             }
@@ -79,7 +79,7 @@ public class TipsPanel : MonoBehaviour
                 case TipsType.messagePanel:
                     MoveTipsPanel(false);
                     break;
-                case TipsType.giftPanel:
+                case TipsType.giftAttackPanel:
                     MoveGiftPanel(false);
                     break;
             }
@@ -130,7 +130,7 @@ public class TipsPanel : MonoBehaviour
         {
             userName = "金钱帝国",
             text = "gift hhhhhhh",
-            tipsType = TipsType.giftPanel
+            tipsType = TipsType.giftAttackPanel
         });
     }
 }
@@ -146,5 +146,7 @@ public class TipsItem
 public enum TipsType
 {
     messagePanel,
-    giftPanel
+    giftAttackPanel,
+    giftDefensePanel,
+    giftDrawPanel
 }
