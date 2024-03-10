@@ -247,8 +247,8 @@ public class PlaceCenter : MonoBehaviour
     // 获取队伍颜料数
     public int GetTeamInkCount(int teamId)
     {
-        Debug.Log("Team :" + teamId);
         int inkCount = (int)(PlaceTeamManager.Instance.teamAreas[teamId - 1].teaminfo.ink);
+        Debug.Log("Team " + teamId + " ink count :" + inkCount);
         return inkCount;
     }
 
