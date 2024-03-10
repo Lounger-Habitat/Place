@@ -5,4 +5,8 @@ using UnityEngine;
 public class TipsBase : MonoBehaviour
 {
     public TipsType panelType;
+
+    public virtual void SetData(TipsItem tips) { }
+    
+    public virtual void MoveTipsPanel(bool isOn = true){}
 }

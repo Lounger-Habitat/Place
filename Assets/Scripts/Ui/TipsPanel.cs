@@ -10,11 +10,19 @@ public class TipsPanel : MonoBehaviour
     //应该把每个Tips单独写成一个类，目前先这么写
     public RectTransform messageTipsPanel;
     public RectTransform giftTipsPanel;
+
+    private Dictionary<TipsType, TipsBase> tipsPanels = new Dictionary<TipsType, TipsBase>();
     public void Init()
     {
         //rectTransform = transform as RectTransform;
         messageTipsPanel.anchoredPosition = new Vector2(-260, -467);
         tipsQueue.Clear();
+        //初始化所有提示面板
+        var tips = GetComponentsInChildren<TipsBase>();
+        foreach (var item in tips)
+        {
+            tipsPanels[item.panelType] = item;
+        }
     }
 
     private void SetData(TipsItem tips)
@@ -63,26 +71,31 @@ public class TipsPanel : MonoBehaviour
             {
                 nowData = tipsQueue.Dequeue();
             }
-            SetData(nowData);
-            switch (nowData.tipsType)
-            {
-                case TipsType.messagePanel:
-                    MoveTipsPanel();
-                    break;
-                case TipsType.giftAttackPanel:
-                    MoveGiftPanel();
-                    break;
-            }
+
+            var panel = tipsPanels[nowData.tipsType];
+            panel.SetData(nowData);
+            panel.MoveTipsPanel();
+            //SetData(nowData);
+            // switch (nowData.tipsType)
+            // {
+            //     case TipsType.messagePanel:
+            //         MoveTipsPanel();
+            //         break;
+            //     case TipsType.giftAttackPanel:
+            //         MoveGiftPanel();
+            //         break;
+            // }
             yield return wait;
-            switch (nowData.tipsType)
-            {
-                case TipsType.messagePanel:
-                    MoveTipsPanel(false);
-                    break;
-                case TipsType.giftAttackPanel:
-                    MoveGiftPanel(false);
-                    break;
-            }
+            panel.MoveTipsPanel(false);
+            // switch (nowData.tipsType)
+            // {
+            //     case TipsType.messagePanel:
+            //         MoveTipsPanel(false);
+            //         break;
+            //     case TipsType.giftAttackPanel:
+            //         MoveGiftPanel(false);
+            //         break;
+            // }
             yield return new WaitForSeconds(0.8f);
         }
         isShowTips = false;
