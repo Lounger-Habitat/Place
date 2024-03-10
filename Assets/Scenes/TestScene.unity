@@ -18511,6 +18511,10 @@ PrefabInstance:
       propertyPath: teamAreaName
       value: 
       objectReference: {fileID: 1796025063}
+    - target: {fileID: 572208321018829251, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
+      propertyPath: characterPrefab
+      value: 
+      objectReference: {fileID: 214267395533796048, guid: d5dc7bf4b9e8a66439f231e5b2e93a52, type: 3}
     - target: {fileID: 669339925042123210, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
       propertyPath: m_Size.x
       value: 2.5
@@ -18575,6 +18579,10 @@ PrefabInstance:
       propertyPath: teamAreaName
       value: 
       objectReference: {fileID: 547351778}
+    - target: {fileID: 1006801792826650654, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
+      propertyPath: characterPrefab
+      value: 
+      objectReference: {fileID: 214267395533796048, guid: d5dc7bf4b9e8a66439f231e5b2e93a52, type: 3}
     - target: {fileID: 1582858471404072628, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
       propertyPath: m_LocalPosition.x
       value: 14.89
@@ -18623,6 +18631,10 @@ PrefabInstance:
       propertyPath: teamAreaName
       value: 
       objectReference: {fileID: 365672470}
+    - target: {fileID: 3047600377745935534, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
+      propertyPath: characterPrefab
+      value: 
+      objectReference: {fileID: 214267395533796048, guid: d5dc7bf4b9e8a66439f231e5b2e93a52, type: 3}
     - target: {fileID: 3924818977012523148, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -18643,6 +18655,10 @@ PrefabInstance:
       propertyPath: teamAreaName
       value: 
       objectReference: {fileID: 1247055845}
+    - target: {fileID: 5103046904917838491, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
+      propertyPath: characterPrefab
+      value: 
+      objectReference: {fileID: 214267395533796048, guid: d5dc7bf4b9e8a66439f231e5b2e93a52, type: 3}
     - target: {fileID: 5494009364427659146, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
       propertyPath: m_Size.x
       value: 2.5
