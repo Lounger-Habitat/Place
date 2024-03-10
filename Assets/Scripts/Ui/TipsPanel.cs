@@ -15,7 +15,7 @@ public class TipsPanel : MonoBehaviour
     public void Init()
     {
         //rectTransform = transform as RectTransform;
-        messageTipsPanel.anchoredPosition = new Vector2(-260, -467);
+        //messageTipsPanel.anchoredPosition = new Vector2(-260, -467);
         tipsQueue.Clear();
         //初始化所有提示面板
         var tips = GetComponentsInChildren<TipsBase>();
@@ -71,31 +71,11 @@ public class TipsPanel : MonoBehaviour
             {
                 nowData = tipsQueue.Dequeue();
             }
-
             var panel = tipsPanels[nowData.tipsType];
             panel.SetData(nowData);
             panel.MoveTipsPanel();
-            //SetData(nowData);
-            // switch (nowData.tipsType)
-            // {
-            //     case TipsType.messagePanel:
-            //         MoveTipsPanel();
-            //         break;
-            //     case TipsType.giftAttackPanel:
-            //         MoveGiftPanel();
-            //         break;
-            // }
             yield return wait;
             panel.MoveTipsPanel(false);
-            // switch (nowData.tipsType)
-            // {
-            //     case TipsType.messagePanel:
-            //         MoveTipsPanel(false);
-            //         break;
-            //     case TipsType.giftAttackPanel:
-            //         MoveGiftPanel(false);
-            //         break;
-            // }
             yield return new WaitForSeconds(0.8f);
         }
         isShowTips = false;
@@ -136,7 +116,7 @@ public class TipsPanel : MonoBehaviour
             tipsType = TipsType.messagePanel
         });
     }
-    [ContextMenu("Gift")]
+    [ContextMenu("Gift1")]
     public void Test1()
     {
         AddTips(new TipsItem()
@@ -144,6 +124,26 @@ public class TipsPanel : MonoBehaviour
             userName = "金钱帝国",
             text = "gift hhhhhhh",
             tipsType = TipsType.giftAttackPanel
+        });
+    }
+    [ContextMenu("Gift2")]
+    public void Test2()
+    {
+        AddTips(new TipsItem()
+        {
+            userName = "金钱帝国",
+            text = "gift giftDefensePanel",
+            tipsType = TipsType.giftDefensePanel
+        });
+    }
+    [ContextMenu("Gift3")]
+    public void Test3()
+    {
+        AddTips(new TipsItem()
+        {
+            userName = "金钱帝国",
+            text = "gift giftDrawPanel",
+            tipsType = TipsType.giftDrawPanel
         });
     }
 }

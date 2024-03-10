@@ -172,7 +172,6 @@ GameObject:
   - component: {fileID: 7703269435565011976}
   - component: {fileID: 2311344120738502171}
   - component: {fileID: 66089497075851693}
-  - component: {fileID: 1756751677177421774}
   - component: {fileID: 7667218908350292049}
   - component: {fileID: 7382149031278010177}
   - component: {fileID: 5877330641120409951}
@@ -192,7 +191,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 214267395533796048}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -6.2333837, y: 0.62999916, z: -16.963242}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -251,29 +250,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!136 &1756751677177421774
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214267395533796048}
-  m_Material: {fileID: 13400000, guid: 547004b29f88e684ea3fae8d4a6c0733, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.21647912
-  m_Height: 0.73419195
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.347096, z: 0.06950796}
 --- !u!195 &7667218908350292049
 NavMeshAgent:
   m_ObjectHideFlags: 0
