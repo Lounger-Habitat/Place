@@ -25,4 +25,10 @@ public class Team
         score = 0;
         ink = 0;
     }
+
+    public void Reset() {
+        score = 0;
+        ink = 0;
+        currentTeamNumberCount = 0;
+    }
 }

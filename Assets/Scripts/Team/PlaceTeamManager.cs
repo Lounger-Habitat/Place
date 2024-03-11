@@ -48,4 +48,10 @@ public class PlaceTeamManager : MonoBehaviour
         teamAreas.Add(tam4);
     }
 
+    public void Reset() {
+        foreach (PlaceTeamAreaManager tam in teamAreas) {
+            tam.Reset();
+        }
+    }
+
 }

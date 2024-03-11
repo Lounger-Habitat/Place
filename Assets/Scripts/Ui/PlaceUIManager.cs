@@ -86,4 +86,10 @@ public class PlaceUIManager : MonoBehaviour
         countDown.Init(action);
         countDown.StartTimeDown();
     }
+
+
+    public void Reset() {
+        // TODO
+        countDown.Reset();
+    }
 }

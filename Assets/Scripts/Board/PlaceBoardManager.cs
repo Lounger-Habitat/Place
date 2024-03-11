@@ -398,7 +398,7 @@ public class PlaceBoardManager : MonoBehaviour
         Debug.Log("Saved Image to: " + path);
     }
 
-    void Reset()
+    public void Reset()
     {
         texture.SetPixels(defaultTexture.GetPixels());
         Array.Clear(pixelsInfos, 0, pixelsInfos.Length);

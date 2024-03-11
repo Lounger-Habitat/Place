@@ -62,7 +62,7 @@ public class PlaceCenter : MonoBehaviour
         // 界面初始化
         PlaceUIManager.Instance.Init();
         // 游戏计时
-        StartGame();
+        
         //CreateTeam();
     }
 
@@ -71,15 +71,12 @@ public class PlaceCenter : MonoBehaviour
         {
             CalculateTeamScore();
         }
-    }
-
-    public void Reset()
-    {
-        // 重置用户信息
-        // 重置队伍信息
-        // 重置场地信息
-        // 重置界面
-        // 重置调度模块
+        if (Input.GetKeyDown(KeyCode.R)) {
+            StartGame();
+        }
+        if (Input.GetKeyDown(KeyCode.T)) {
+            ResetGame();
+        }
     }
 
 
@@ -401,5 +398,26 @@ public class PlaceCenter : MonoBehaviour
         u.level += normalPower;
         u.score += normalPower * 10;
         PlaceTeamManager.Instance.teamAreas[u.camp - 1].teaminfo.ink += normalPower;
+    }
+
+
+    // 重新开始游戏
+    void RestartGame()
+    {
+        ResetGame();
+        StartGame();
+    }
+
+    void ResetGame()
+    {
+        PlaceBoardManager.Instance.Reset();
+        PlaceTeamManager.Instance.Reset();
+        PlaceUIManager.Instance.Reset();
+
+        // clear 
+        users.Clear();
+        top8.Clear();
+
+        StopAllCoroutines();
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine.Purchasing;
 public class PlaceTeamAreaManager : MonoBehaviour
 {
     // 队伍区域当前容纳的人数
-    public int currentTeamNumberCount = 0;
+    // public int currentTeamNumberCount = 0;
     private float defaultInkTime = 10f;
     public List<User> userList = new List<User>();
     public Team teaminfo;
@@ -51,7 +51,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
             //  额外 墨水
             exInkRate += (u.getLevel() - 1)  / 100;
         }
-        inkRate = (currentTeamNumberCount / defaultInkTime) + exInkRate;
+        inkRate = (teaminfo.currentTeamNumberCount / defaultInkTime) + exInkRate;
         teaminfo.ink += inkRate ;
         //Debug.Log("ink " + ink);
 
@@ -74,14 +74,15 @@ public class PlaceTeamAreaManager : MonoBehaviour
         GameObject go = null;
         User user = null;
         // 检查队伍区域是否已满
-        if (currentTeamNumberCount < teaminfo.MaxTeamNumber)
+        if (teaminfo.currentTeamNumberCount < teaminfo.MaxTeamNumber)
         {
             // 创建角色
             Vector3 spawnPosition = GetRandomPositionInArea();
             go = Instantiate(characterPrefab, spawnPosition, Quaternion.identity);
             PlacePlayerController PlayerControllerScript = go.GetComponent<PlacePlayerController>();
-            PlaceCenter.Instance.CreateNameTag(go.transform, username);
+            GameObject nameTag = PlaceCenter.Instance.CreateNameTag(go.transform, username);
             user = new User(username, go, teaminfo.Id);
+            user.nameTag = nameTag;
             if (PlayerControllerScript != null)
             {
                 PlayerControllerScript.selfTotem = totem;
@@ -89,7 +90,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
                 PlayerControllerScript.user = user;
             }
             userList.Add(user);
-            currentTeamNumberCount += 1;
+            teaminfo.currentTeamNumberCount += 1;
             // 可以在这里设置角色的其他属性，比如所属队伍等
             PlaceUIManager.Instance.AddTips(new TipsItem(){
                 userName=username,
@@ -168,6 +169,17 @@ public class PlaceTeamAreaManager : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public void Reset()
+    {
+        teaminfo.Reset();
+        // 便利userList
+        foreach (User user in userList)
+        {
+            user.Reset();
+        }
+        userList.Clear();
     }
 
     void OnTriggerEnter(Collider other)

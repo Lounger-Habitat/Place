@@ -40,4 +40,10 @@ public class TestManager : MonoBehaviour
         Camera.main.transform.position = position;
         Camera.main.transform.rotation = Quaternion.Euler(rotation);
     }
+
+    public void RandomAddTest(){
+        // 添加player
+
+        //执行指令
+    }
 }

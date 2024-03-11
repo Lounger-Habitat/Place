@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityNavMeshAgent;
 using UnityEngine;
 
 [System.Serializable]
@@ -14,6 +15,8 @@ public class User {
 
     // 玩家角色 模型
     public GameObject character;
+    // 玩家名字
+    public GameObject nameTag;
 
     // 玩家 队伍 阵营
     public int camp;
@@ -68,5 +71,18 @@ public class User {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public void Reset()
+    {
+        // destroy the character
+        GameObject.Destroy(character);
+        GameObject.Destroy(nameTag);
+        // 清空指令，释放内存
+        instructionQueue.Clear();
+
+        // 重置玩家状态
+        score = 0;
+        carryingInkCount = 0;
     }
 }

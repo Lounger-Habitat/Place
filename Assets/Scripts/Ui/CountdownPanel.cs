@@ -9,11 +9,12 @@ public class CountdownPanel : MonoBehaviour
     public TMP_Text countdownText; // 用于引用UI中的Text组件  
     private int startTime = 1200; // 20分钟转换为秒是1200秒  
     private float countdownTime;
+    private Coroutine handle;
 
     public Action TimeOverAction;
     public void StartTimeDown()  
     {  
-        StartCoroutine(UpdateCountdown(startTime));  
+        handle = StartCoroutine(UpdateCountdown(startTime));  
     }
 
     public void Init(Action action)
@@ -36,8 +37,9 @@ public class CountdownPanel : MonoBehaviour
         TimeOverAction?.Invoke();
     }
 
-    public void ResetThis()
+    public void Reset()
     {
         TimeOverAction = null;
+        StopCoroutine(handle);
     }
 }
