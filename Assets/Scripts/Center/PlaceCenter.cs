@@ -62,7 +62,7 @@ public class PlaceCenter : MonoBehaviour
         // 界面初始化
         PlaceUIManager.Instance.Init();
         // 游戏计时
-        StartGame();
+        //StartGame();目前放到开始界面当中
         //CreateTeam();
     }
 
@@ -259,12 +259,12 @@ public class PlaceCenter : MonoBehaviour
 
     public void StartGame()
     {
-        gameRuning = true;
         PlaceUIManager.Instance.StartGame(() =>
         {
             gameRuning = false;
             //游戏结束，其他逻辑
         });
+        gameRuning = true;
     }
 
     public void OnTeamUIUpdate(Team team)
