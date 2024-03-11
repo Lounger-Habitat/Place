@@ -256,6 +256,11 @@ public class PlaceCenter : MonoBehaviour
 
     public void StartGame()
     {
+        if (gameRuning)
+        {
+            Debug.Log("游戏已经开始");
+            return;
+        }
         PlaceUIManager.Instance.StartGame(() =>
         {
             gameRuning = false;
@@ -418,6 +423,5 @@ public class PlaceCenter : MonoBehaviour
         users.Clear();
         top8.Clear();
 
-        StopAllCoroutines();
     }
 }
