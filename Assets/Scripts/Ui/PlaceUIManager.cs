@@ -13,6 +13,8 @@ public class PlaceUIManager : MonoBehaviour
     private RankPanel rankPanel;
     private TeamPanel teamPanel;
     private TipsPanel tipsPanel;
+    private BeginUI beginUI;
+    private EndUI endUI;
 
     private CountdownPanel countDown;
     // Start is called before the first frame update
@@ -50,10 +52,12 @@ public class PlaceUIManager : MonoBehaviour
         rankPanel  = GetComponentInChildren<RankPanel>();
         teamPanel = GetComponentInChildren<TeamPanel>();
         countDown = GetComponentInChildren<CountdownPanel>();
+        beginUI = GetComponentInChildren<BeginUI>();
+        endUI = GetComponentInChildren<EndUI>();
         tipsPanel.Init();
         rankPanel.Init();
         teamPanel.Init();
-
+        beginUI.Init();
         // Event
         UIEvent.OnTeamUpdateEvent += UpdateTeam;//
         UIEvent.OnRankUpdateEvent += UpdateRank;
@@ -91,5 +95,11 @@ public class PlaceUIManager : MonoBehaviour
     public void Reset() {
         // TODO
         countDown.Reset();
+    }
+    
+    [ContextMenu("EndGame")]
+    public void EndGameUI(/*调用这个方法应该把最后的画作，排行榜前三玩家传递进来*/)
+    {
+        endUI.Init();
     }
 }

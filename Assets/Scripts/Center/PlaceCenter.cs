@@ -256,12 +256,12 @@ public class PlaceCenter : MonoBehaviour
 
     public void StartGame()
     {
-        gameRuning = true;
         PlaceUIManager.Instance.StartGame(() =>
         {
             gameRuning = false;
             //游戏结束，其他逻辑
         });
+        gameRuning = true;
     }
 
     public void OnTeamUIUpdate(Team team)
