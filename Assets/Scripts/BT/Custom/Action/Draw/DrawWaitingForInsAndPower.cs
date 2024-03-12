@@ -9,6 +9,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
     {
         base.OnStart();
         pc.playerAnimator.SetBool("isRun", false);
+        pc.user.currentState.detailState = DetailState.DrawWaitingForInsAndPower;
     }
 
     public override TaskStatus OnUpdate()

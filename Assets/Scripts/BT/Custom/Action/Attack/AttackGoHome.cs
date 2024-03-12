@@ -8,6 +8,8 @@ public class AttackGoHome : PlaceAction
     public override void OnStart()
     {
         base.OnStart();
+
+        pc.user.currentState.detailState = DetailState.AttackGoHome;
     }
 
     public override TaskStatus OnUpdate()

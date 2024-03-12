@@ -16,6 +16,8 @@ public class DefendToDoor : PlaceAction
             Debug.Log("DefendToDoor");
         }
 
+        pc.user.currentState.detailState = DetailState.DefendToDoor;
+
     }
 
     public override TaskStatus OnUpdate()

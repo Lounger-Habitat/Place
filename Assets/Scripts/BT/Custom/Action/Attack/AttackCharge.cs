@@ -8,6 +8,8 @@ public class AttackCharge : PlaceAction
     public override void OnStart()
     {
         base.OnStart();
+
+        pc.user.currentState.detailState = DetailState.AttackCharge;
     }
 
     public override TaskStatus OnUpdate()

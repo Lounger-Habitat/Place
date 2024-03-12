@@ -17,6 +17,8 @@ public class DefendAtDoorIdle : PlaceAction
         }
         pc.playerAnimator.SetBool("isRun", false);
 
+        pc.user.currentState.detailState = DetailState.DefendAtDoorIdle;
+
     }
 
     public override TaskStatus OnUpdate()

@@ -16,6 +16,7 @@ public class DrawMoveToAltar : PlaceAction
             Debug.Log("MoveToAltar");
         }
         pc.playerAnimator.SetBool("isRun", true);
+        pc.user.currentState.detailState = DetailState.DrawMoveToAltar;
 
     }
 

@@ -16,6 +16,9 @@ public class AttackResetToTotem : PlaceAction
             Debug.Log("AttackAtTotem");
         }
 
+        pc.user.currentState.topState = HighLevelState.Attack;
+        pc.user.currentState.detailState = DetailState.AttackResetToTotem;
+
     }
 
     public override TaskStatus OnUpdate()

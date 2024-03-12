@@ -81,7 +81,7 @@ public class Trance : IState
         pc = manager.player.GetComponent<PlayerController>();
         Debug.Log(pc);
         pc.playerAnimator.SetBool("isRun", false);
-        pc.user.currentState = CharacterState.Trance;
+        // pc.user.currentState = CharacterState.Trance;
     }
     public void OnExit() { /* 清理逻辑 */ }
     public void Update()
@@ -113,7 +113,7 @@ public class WaitingForCommandInTeamArea : IState
         pc = manager.player.GetComponent<PlayerController>();
         Debug.Log(pc);
         pc.playerAnimator.SetBool("isRun", false);
-        pc.user.currentState = CharacterState.WaitingForCommandInTeamArea;
+        // pc.user.currentState = CharacterState.WaitingForCommandInTeamArea;
     }
     public void OnExit() { /* 清理逻辑 */ }
     public void Update()
@@ -178,7 +178,7 @@ public class TransportingCommandToConsole : IState
         pc = manager.player.GetComponent<PlayerController>();
         pc.playerAnimator.SetBool("isRun", true);
         pc.targetPosition = pc.consolePosition.transform.position;
-        pc.user.currentState = CharacterState.TransportingCommandToConsole;
+        // pc.user.currentState = CharacterState.TransportingCommandToConsole;
 
     }
     public void OnExit() { /* 清理逻辑 */ }
@@ -207,7 +207,7 @@ public class WaitingForCommandExecutionAtConsole : IState
         pc = manager.player.GetComponent<PlayerController>();
         pc.playerAnimator.SetBool("isRun", false);
         pc.targetPosition = pc.consolePosition.transform.position;
-        pc.user.currentState = CharacterState.WaitingForCommandExecutionAtConsole;
+        // pc.user.currentState = CharacterState.WaitingForCommandExecutionAtConsole;
 
     }
     public void OnExit() { /* 清理逻辑 */ }
@@ -279,7 +279,7 @@ public class MoveToTeamArea : IState
         pc = manager.player.GetComponent<PlayerController>();
         pc.playerAnimator.SetBool("isRun", true);
         pc.targetPosition = pc.homePosition;
-        pc.user.currentState = CharacterState.MoveToTeamArea;
+        // pc.user.currentState = CharacterState.MoveToTeamArea;
 
     }
     public void OnExit() { /* 清理逻辑 */ }

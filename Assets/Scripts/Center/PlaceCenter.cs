@@ -367,11 +367,11 @@ public class PlaceCenter : MonoBehaviour
     //大哥送礼物了不存在。。。 送了礼物得显示一下吧  不然钱白花了 咋区分是多少钱的礼物，状态咋区分，攻击 防御 画画
     public void GainPower(string username, float power)
     {
-        if (!users.ContainsKey(username))
-        {
-            Debug.Log("用户不存在");
-            return;
-        }
+        // if (!users.ContainsKey(username))
+        // {
+        //     Debug.Log("用户不存在");
+        //     return;
+        // }
         User u = users[username];
         int normalPower = 0;
         TipsType messageType = TipsType.messagePanel;

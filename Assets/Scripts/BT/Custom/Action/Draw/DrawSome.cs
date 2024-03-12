@@ -9,6 +9,7 @@ public class DrawSome : PlaceAction
     {
         base.OnStart();
         pc.playerAnimator.SetBool("isRun", false);
+        pc.user.currentState.detailState = DetailState.DrawSome;
     }
 
     public override TaskStatus OnUpdate()

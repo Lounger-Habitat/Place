@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityNavMeshAgent;
 using UnityEngine;
+using UnityEngine.Playables;
 
 [System.Serializable]
 public class User {
@@ -11,7 +12,7 @@ public class User {
 	public int level;
 
     // 玩家当前状态，状态机使用的变量，升级到行为树后，暂时没用，正在考虑留不留
-    public CharacterState currentState { get; set; }
+    public PlayerState currentState;
 
     // 玩家角色 模型
     public GameObject character;
@@ -49,12 +50,12 @@ public class User {
         this.camp = camp;
         this.character = character;
         this.instructionQueue = new Queue<Instruction>();
-        this.currentState = CharacterState.WaitingForCommandInTeamArea;
         this.lastColor = Color.white;
         this.score = 0;
         this.carryingInkCount = 0;
         this.maxCarryingInsCount = 1;
         this.userIcon = null;
+        this.currentState = new PlayerState(HighLevelState.Draw, DetailState.DrawMoveToTotem);
     }
 
     public string getUsername() {
@@ -85,4 +86,43 @@ public class User {
         score = 0;
         carryingInkCount = 0;
     }
+}
+
+
+public struct PlayerState
+{
+    public HighLevelState topState;
+    public DetailState detailState;
+
+    public PlayerState(HighLevelState topState, DetailState detailState)
+    {
+        this.topState = topState;
+        this.detailState = detailState;
+    }
+}
+
+public enum HighLevelState {
+    Draw,
+    Attack,
+    Defend,
+}
+
+public enum DetailState {
+    DrawMoveToTotem,
+    DrawWaitingForInsAndPower,
+    DrawSome,
+    DrawMoveToAltar,
+    DefendResetToTotem,
+    DefendToDoor,
+    DefendAtDoorIdle,
+    DefendAtDoorHelp,
+    DefendAtDoorAttack,
+    AttackResetToTotem,
+    AttackWaitingForIns,
+    AttackGoSteal,
+    AttackStealing,
+    AttackFight,
+    AttackCharge,
+    AttackGoHome
+
 }

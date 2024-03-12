@@ -17,6 +17,10 @@ public class DrawMoveToTotem : PlaceAction
         }
         pc.playerAnimator.SetBool("isRun", true);
 
+        pc.user.currentState.topState = HighLevelState.Draw;
+        pc.user.currentState.detailState = DetailState.DrawMoveToTotem;
+
+
     }
 
     public override TaskStatus OnUpdate()

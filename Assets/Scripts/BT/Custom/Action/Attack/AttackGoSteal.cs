@@ -10,6 +10,8 @@ public class AttackGoSteal : PlaceAction
     {
         base.OnStart();
         pc.playerAnimator.SetBool("isRun", false);
+
+        pc.user.currentState.detailState = DetailState.AttackGoSteal;
     }
 
     public override TaskStatus OnUpdate()

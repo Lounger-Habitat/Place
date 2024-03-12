@@ -9,6 +9,8 @@ public class AttackWaitingForIns : PlaceAction
     {
         base.OnStart();
         pc.playerAnimator.SetBool("isRun", false);
+
+        pc.user.currentState.detailState = DetailState.AttackWaitingForIns;
     }
 
     public override TaskStatus OnUpdate()

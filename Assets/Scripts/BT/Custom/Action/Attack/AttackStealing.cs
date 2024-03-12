@@ -8,6 +8,8 @@ public class AttackStealing : PlaceAction
     public override void OnStart()
     {
         base.OnStart();
+
+        pc.user.currentState.detailState = DetailState.AttackStealing;
     }
 
     public override TaskStatus OnUpdate()

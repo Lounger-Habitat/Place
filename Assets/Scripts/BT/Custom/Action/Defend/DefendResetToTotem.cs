@@ -25,6 +25,9 @@ public class DefendResetToTotem : PlaceAction
         
         }
 
+        pc.user.currentState.topState = HighLevelState.Defend;
+        pc.user.currentState.detailState = DetailState.DefendResetToTotem;
+
     }
 
     public override TaskStatus OnUpdate()
