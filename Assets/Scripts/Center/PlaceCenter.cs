@@ -364,7 +364,7 @@ public class PlaceCenter : MonoBehaviour
 
     //     UIEvent.OnUserUIUpdate(user);
     // }
-
+    //大哥送礼物了不存在。。。 送了礼物得显示一下吧  不然钱白花了 咋区分是多少钱的礼物，状态咋区分，攻击 防御 画画
     public void GainPower(string username, float power)
     {
         if (!users.ContainsKey(username))
@@ -374,9 +374,11 @@ public class PlaceCenter : MonoBehaviour
         }
         User u = users[username];
         int normalPower = 0;
+        TipsType messageType = TipsType.messagePanel;
+        string message = "";
         switch (power)
         {
-            case 0.1f:
+            case 0.1f://这是礼物得人民币价值，那应该在这个里边通知
                 normalPower = 1;
                 // u.level += normalPower;
                 // u.score += normalPower * 10;
@@ -385,24 +387,37 @@ public class PlaceCenter : MonoBehaviour
                 // UI 更新
                 break;
             case 1:
-                normalPower = 10;
+                normalPower = 10;//固定是加颜料
+                messageType = TipsType.giftDrawPanel;
+                message = "颜料爆发";
                 break;
             case 1.9f:
-                normalPower = 19;
+                normalPower = 19;//固定是攻击
                 break;
             case 5.2f:
-                normalPower = 52;
+                normalPower = 52;//固定是防御
                 break;
             case 9.9f:
                 normalPower = 99;
                 break;
             case 20:
                 normalPower = 200;
+                messageType = TipsType.giftDrawPanel;
+                message = "颜料核弹";
                 break;
         }
         u.level += normalPower;
         u.score += normalPower * 10;
         PlaceTeamManager.Instance.teamAreas[u.camp - 1].teaminfo.ink += normalPower;
+        //在这通知UI？还得要状态切换啊，先检查状态再通知
+        PlaceUIManager.Instance.AddTips(new TipsItem()
+        {
+            userName = username,
+            text = message,
+            icon = null,//玩家头像
+            tipsType = messageType,
+            value =$"X{normalPower:D}" //对吗这样，这是钱数，钱能买多少颜料不是应该有个对应关系么
+        });
     }
 
 

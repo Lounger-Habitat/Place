@@ -29,10 +29,10 @@ public class TestManager : MonoBehaviour
             PlaceInstructionManager.DefaultGiftCommand(playerName,gift);
         }
         // 按下.，执行指令  接受 指令
-        if (Input.GetKeyDown(KeyCode.Period))
-        {
-            CameraView();
-        }
+        // if (Input.GetKeyDown(KeyCode.Period))
+        // {
+        //     CameraView();
+        // }
         
     }
 

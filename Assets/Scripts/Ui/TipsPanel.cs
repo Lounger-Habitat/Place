@@ -150,12 +150,15 @@ public class TipsPanel : MonoBehaviour
 
 public class TipsItem
 {
+    //我这里边还少一个东西应该
     public string userName;
     public string text;
     public Sprite icon;
     public TipsType tipsType;
+    public string value;
 }
 
+//这是提示的类型，
 public enum TipsType
 {
     messagePanel,
