@@ -132,9 +132,9 @@ public class PlaceTeamAreaManager : MonoBehaviour
     }
     private Vector3 GetRandomPositionInArea()
     {
-        float x = Random.Range(-5f, 5f); // 10x10区域内的随机x坐标
-        float z = Random.Range(-5f, 5f); // 10x10区域内的随机z坐标
-        return transform.position + new Vector3(x, 0.85f, z);
+        float x = Random.Range(-3f, 3f); // 10x10区域内的随机x坐标
+        float z = Random.Range(-3f, 3f); // 10x10区域内的随机z坐标
+        return transform.position + new Vector3(x, 1.0f, z);
     }
 
     public void setTeamInfo(Team team)
