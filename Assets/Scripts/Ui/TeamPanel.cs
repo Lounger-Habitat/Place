@@ -62,4 +62,35 @@ public class TeamPanel : MonoBehaviour
         teamItem = transform.GetChild(team.Id-1);
         teamItem.Find("Data").GetComponent<TMP_Text>().text = $"{team.score}";
     }
+
+    public void UpdateTeamUI(PlaceTeamAreaManager teamArae)
+    {
+        teamItem = transform.GetChild(teamArae.teaminfo.Id-1);
+        teamItem.Find("TeamName").GetComponent<TMP_Text>().text = teamArae.teaminfo.Name;//名字起的太随便，先用现有的
+        teamItem.Find("Data").GetComponent<TMP_Text>().text = $"{teamArae.userList.Count}/{teamArae.teaminfo.MaxTeamNumber}";
+        teamItem.Find("TeamScore").GetChild(0).GetComponent<TMP_Text>().text = $"{teamArae.teaminfo.score}";
+        
+        //更新排行
+        var list = teamArae.userList;
+        list.Sort((a, b) => b.score - a.score);
+        //list.Sort((a, b) => b.score.CompareTo(a.score));
+        for (int i = 0; i < 3; i++)
+        {
+            var rankItem = teamItem.Find($"RankItem_{i}");
+            if (list.Count <= i)
+            {
+                //没有数据了 需要自动填充
+                rankItem.Find("Name").GetComponent<TMP_Text>().text = "虚位以待";
+                rankItem.Find("Data").GetComponent<TMP_Text>().text = $"贡献:";
+                //rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = null;
+            }
+            else
+            {
+                var item = list[i];
+                rankItem.Find("Name").GetComponent<TMP_Text>().text = item.username;
+                rankItem.Find("Data").GetComponent<TMP_Text>().text = $"贡献:{item.score}";
+                //rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = item.userIcon;//TODO:需要对接user头像，目前没有，所以我的遮罩就没了
+            }
+        }
+    }
 }

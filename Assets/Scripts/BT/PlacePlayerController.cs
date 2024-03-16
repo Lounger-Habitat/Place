@@ -86,7 +86,7 @@ public class PlacePlayerController : MonoBehaviour
     }
     public void Update()
     {
-        PlaceCenter.Instance.OnRankUIUpdate(user);
+        //PlaceCenter.Instance.OnRankUIUpdate(user);
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
             Debug.Log("trans to Draw");

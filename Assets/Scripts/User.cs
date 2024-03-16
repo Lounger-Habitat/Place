@@ -44,11 +44,14 @@ public class User {
     // 玩家 头像
     public Sprite userIcon{get;set;}
 
-    public User(string username,GameObject character,int camp,int level=1) {
+    public PlaceTeamAreaManager selfTeam;
+    
+    public User(string username,GameObject character,int camp,PlaceTeamAreaManager teamArea,int level=1) {
         this.username = username;
         this.level = level;
         this.camp = camp;
         this.character = character;
+        this.selfTeam = teamArea;
         this.instructionQueue = new Queue<Instruction>();
         this.lastColor = Color.white;
         this.score = 0;

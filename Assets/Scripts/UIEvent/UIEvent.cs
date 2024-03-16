@@ -14,6 +14,9 @@ public class UIEvent
     // Rank 更新事件
     public delegate void RankUpdateEventHandler(List<User> userList);
     public static event RankUpdateEventHandler OnRankUpdateEvent;
+    
+    public delegate void TeamAreaUpdateEventHandler(PlaceTeamAreaManager teamArea);
+    public static event TeamAreaUpdateEventHandler OnTeamAreaUpdateEvent;
 
 
     public static void OnTeamUIUpdate(Team team) {
@@ -34,5 +37,10 @@ public class UIEvent
         {        
             OnUserUpdateEvent(user);
         }
+    }
+    
+    public static void OnTeamAreaUIUpdate(PlaceTeamAreaManager team)
+    {
+        OnTeamAreaUpdateEvent?.Invoke(team);
     }
 }
