@@ -46,17 +46,14 @@ public class User {
     // 资源
 
 
-
-
-
-
-
-
-    public User(string username,GameObject character,int camp) {
+    public PlaceTeamAreaManager selfTeam;
+    
+    public User(string username,GameObject character,int camp,PlaceTeamAreaManager teamArea) {
         this.username = username;
         this.level = 1;
         this.camp = camp;
         this.character = character;
+        this.selfTeam = teamArea;
         this.instructionQueue = new Queue<Instruction>();
         this.lastColor = Color.white;
         this.score = 0;

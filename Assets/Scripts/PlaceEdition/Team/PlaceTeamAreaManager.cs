@@ -58,7 +58,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         UpdateTeamAreaName();
         // teaminfo.score = PlaceCredits.CalculateScore(ink);
         // PlaceCenter.Instance.OnTeamUIUpdate(teaminfo);
-
+        UpDateTeamUI();
     }
 
     void UpdateTeamAreaName()
@@ -66,6 +66,12 @@ public class PlaceTeamAreaManager : MonoBehaviour
         string nameTemplate = "{0} - {1}";
         string formattedString = string.Format(nameTemplate, teaminfo.Name, (int)System.Math.Round(teaminfo.ink));
         teamAreaName.GetComponent<NameTag>().go_name = formattedString;
+    }
+
+    //更新UI数据，包含队伍中包含的User排行数据
+    void UpDateTeamUI()
+    {
+        UIEvent.OnTeamAreaUIUpdate(this);
     }
 
     // 在队伍区域里创建角色
@@ -81,7 +87,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
             go = Instantiate(characterPrefab, spawnPosition, Quaternion.identity);
             PlacePlayerController PlayerControllerScript = go.GetComponent<PlacePlayerController>();
             GameObject nameTag = PlaceCenter.Instance.CreateNameTag(go.transform, username);
-            user = new User(username, go, teaminfo.Id);
+            user = new User(username, go, teaminfo.Id,this);
             user.nameTag = nameTag;
             if (PlayerControllerScript != null)
             {
@@ -132,9 +138,9 @@ public class PlaceTeamAreaManager : MonoBehaviour
     }
     private Vector3 GetRandomPositionInArea()
     {
-        float x = Random.Range(-5f, 5f); // 10x10区域内的随机x坐标
-        float z = Random.Range(-5f, 5f); // 10x10区域内的随机z坐标
-        return transform.position + new Vector3(x, 0.85f, z);
+        float x = Random.Range(-3f, 3f); // 10x10区域内的随机x坐标
+        float z = Random.Range(-3f, 3f); // 10x10区域内的随机z坐标
+        return transform.position + new Vector3(x, 1.0f, z);
     }
 
     public void setTeamInfo(Team team)

@@ -36,6 +36,11 @@ public class PlaceUIManager : MonoBehaviour
         // throw new NotImplementedException();
     }
 
+    private void UpdateTeamArea(PlaceTeamAreaManager teamArea)
+    {
+        teamPanel.UpdateTeamUI(teamArea);
+    }
+
     private void UpdateUser(User user)
     {
         throw new NotImplementedException();
@@ -55,12 +60,13 @@ public class PlaceUIManager : MonoBehaviour
         beginUI = GetComponentInChildren<BeginUI>();
         endUI = GetComponentInChildren<EndUI>();
         tipsPanel.Init();
-        rankPanel.Init();
+        //rankPanel.Init();
         teamPanel.Init();
         beginUI.Init();
         // Event
         UIEvent.OnTeamUpdateEvent += UpdateTeam;//
         UIEvent.OnRankUpdateEvent += UpdateRank;
+        UIEvent.OnTeamAreaUpdateEvent += UpdateTeamArea;
 
     }
 
@@ -71,9 +77,9 @@ public class PlaceUIManager : MonoBehaviour
     }
     
     public void SetTeamData(List<Team> data){
-        teamPanel.SetTeamUI(data);//
+        //teamPanel.SetTeamUI(data);//
         //做一些事情，比如刷新UI
-        LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
+        //LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
     }
     // public void SetTeamData(TeamItem data){
     //     teamPanel.SetTeamUI(data);//

@@ -63,7 +63,7 @@ public class PlaceCenter : MonoBehaviour
         PlaceUIManager.Instance.Init();
         // 游戏计时
         
-        //CreateTeam();
+        CreateTeam();
     }
 
     void Update() {
@@ -364,18 +364,30 @@ public class PlaceCenter : MonoBehaviour
 
     //     UIEvent.OnUserUIUpdate(user);
     // }
-    //大哥送礼物了不存在。。。 送了礼物得显示一下吧  不然钱白花了 咋区分是多少钱的礼物，状态咋区分，攻击 防御 画画
+    //
     public void GainPower(string username, float power)
     {
-        // if (!users.ContainsKey(username))
-        // {
-        //     Debug.Log("用户不存在");
-        //     return;
-        // }
+        if (!users.ContainsKey(username))
+        {
+            Debug.Log("用户不存在");
+            return;
+        }
         User u = users[username];
-        int normalPower = 0;
         TipsType messageType = TipsType.messagePanel;
+        int normalPower = 0;
         string message = "";
+        switch (u.currentState.topState)
+        {
+            case HighLevelState.Draw:
+                messageType = TipsType.giftDrawPanel;
+                break;
+            case HighLevelState.Attack:
+                messageType = TipsType.giftAttackPanel;
+                break;
+            case HighLevelState.Defend:
+                messageType = TipsType.giftDefensePanel;
+                break;
+        }
         switch (power)
         {
             case 0.1f://这是礼物得人民币价值，那应该在这个里边通知
@@ -388,7 +400,6 @@ public class PlaceCenter : MonoBehaviour
                 break;
             case 1:
                 normalPower = 100;//固定是加颜料
-                messageType = TipsType.giftDrawPanel;
                 message = "颜料爆发";
                 break;
             case 1.9f:
@@ -402,7 +413,6 @@ public class PlaceCenter : MonoBehaviour
                 break;
             case 20:
                 normalPower = 2000;
-                messageType = TipsType.giftDrawPanel;
                 message = "颜料核弹";
                 break;
         }
@@ -416,7 +426,7 @@ public class PlaceCenter : MonoBehaviour
             text = message,
             icon = null,//玩家头像
             tipsType = messageType,
-            value =$"X{normalPower:D}" //对吗这样，这是钱数，钱能买多少颜料不是应该有个对应关系么
+            value =$"X{normalPower:D}"
         });
     }
 
