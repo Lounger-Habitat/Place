@@ -85,8 +85,8 @@ public class PlaceTeamAreaManager : MonoBehaviour
             user.nameTag = nameTag;
             if (PlayerControllerScript != null)
             {
-                PlayerControllerScript.selfTotem = totem;
-                PlayerControllerScript.selfDoor = door;
+                // PlayerControllerScript.selfTotem = totem;
+                // PlayerControllerScript.selfDoor = door;
                 PlayerControllerScript.user = user;
             }
             userList.Add(user);

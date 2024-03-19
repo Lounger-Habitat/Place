@@ -245,7 +245,7 @@ public class PlaceCenter : MonoBehaviour
     public int GetTeamInkCount(int teamId)
     {
         int inkCount = (int)(PlaceTeamManager.Instance.teamAreas[teamId - 1].teaminfo.ink);
-        Debug.Log("Team " + teamId + " ink count :" + inkCount);
+        // Debug.Log("Team " + teamId + " ink count :" + inkCount);
         return inkCount;
     }
 
@@ -379,7 +379,7 @@ public class PlaceCenter : MonoBehaviour
         switch (power)
         {
             case 0.1f://这是礼物得人民币价值，那应该在这个里边通知
-                normalPower = 1;
+                normalPower = 10;
                 // u.level += normalPower;
                 // u.score += normalPower * 10;
                 // PlaceTeamManager.Instance.teamAreas[u.camp - 1].teaminfo.ink += normalPower * 10;
@@ -387,21 +387,21 @@ public class PlaceCenter : MonoBehaviour
                 // UI 更新
                 break;
             case 1:
-                normalPower = 10;//固定是加颜料
+                normalPower = 100;//固定是加颜料
                 messageType = TipsType.giftDrawPanel;
                 message = "颜料爆发";
                 break;
             case 1.9f:
-                normalPower = 19;//固定是攻击
+                normalPower = 190;//固定是攻击
                 break;
             case 5.2f:
-                normalPower = 52;//固定是防御
+                normalPower = 520;//固定是防御
                 break;
             case 9.9f:
-                normalPower = 99;
+                normalPower = 990;
                 break;
             case 20:
-                normalPower = 200;
+                normalPower = 2000;
                 messageType = TipsType.giftDrawPanel;
                 message = "颜料核弹";
                 break;

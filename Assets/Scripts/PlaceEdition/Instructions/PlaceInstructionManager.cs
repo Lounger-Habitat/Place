@@ -104,6 +104,10 @@ public static class PlaceInstructionManager
                         g = (int)(color.g * 255); // g
                         b = (int)(color.b * 255); // b
                         Instruction drawIns = new Instruction(c, x, y, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                            Debug.Log("指令不合法");
+                            break;
+                        }
                         drawUser.instructionQueue.Enqueue(drawIns);
                         Debug.Log(username + " : draw " + c + " " + x + " " + y + " " + r + " " + g + " " + b);
                     }
@@ -119,6 +123,10 @@ public static class PlaceInstructionManager
                         b = int.Parse(parts[5]); // b
                         drawUser.lastColor = new Color(r, g, b);
                         Instruction drawIns = new Instruction(c, x, y, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                            Debug.Log("指令不合法");
+                            break;
+                        }
                         drawUser.instructionQueue.Enqueue(drawIns);
                         Debug.Log(username + " : draw " + c + " " + x + " " + y + " " + r + " " + g + " " + b);
                     }
@@ -154,7 +162,12 @@ public static class PlaceInstructionManager
                         r = (int)(color.r * 255); // r
                         g = (int)(color.g * 255); // g
                         b = (int)(color.b * 255); // b
-                        lineUser.instructionQueue.Enqueue(new Instruction(c, x, y, ex: ex, ey: ey, r: r, g: g, b: b));
+                        Instruction ins_l = new Instruction(c, x, y, ex: ex, ey: ey, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(ins_l)){
+                            Debug.Log("指令不合法");
+                            break;
+                        }
+                        lineUser.instructionQueue.Enqueue(ins_l);
                     }
                     else if (parts.Length == 8)
                     {
@@ -169,7 +182,12 @@ public static class PlaceInstructionManager
                         g = int.Parse(parts[6]); // g
                         b = int.Parse(parts[7]); // b
                         lineUser.lastColor = new Color(r, g, b);
-                        lineUser.instructionQueue.Enqueue(new Instruction(c, x, y, ex: ex, ey: ey, r: r, g: g, b: b));
+                        Instruction ins_l = new Instruction(c, x, y, ex: ex, ey: ey, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(ins_l)){
+                            Debug.Log("指令不合法");
+                            break;
+                        }
+                        lineUser.instructionQueue.Enqueue(ins_l);
                     }
                     else
                     {
@@ -203,7 +221,12 @@ public static class PlaceInstructionManager
                         r = (int)(color.r * 255); // r
                         g = (int)(color.g * 255); // g
                         b = (int)(color.b * 255); // b
-                        paintUser.instructionQueue.Enqueue(new Instruction(c, x, y, dx, dy, r: r, g: g, b: b));
+                        Instruction ins_p = new Instruction(c, x, y, dx, dy, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(ins_p)){
+                            Debug.Log("指令不合法");
+                            break;
+                        }
+                        paintUser.instructionQueue.Enqueue(ins_p);
                     }
                     else if (parts.Length == 8)
                     {
@@ -218,7 +241,12 @@ public static class PlaceInstructionManager
                         g = int.Parse(parts[6]); // g
                         b = int.Parse(parts[7]); // b
                         paintUser.lastColor = new Color(r, g, b);
-                        paintUser.instructionQueue.Enqueue(new Instruction(c, x, y, dx, dy, r: r, g: g, b: b));
+                        Instruction ins_p = new Instruction(c, x, y, dx, dy, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(ins_p)){
+                            Debug.Log("指令不合法");
+                            break;
+                        }
+                        paintUser.instructionQueue.Enqueue(ins_p);
                     }
                     else
                     {

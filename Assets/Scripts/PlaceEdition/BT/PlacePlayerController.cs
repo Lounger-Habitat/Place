@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
+using System;
+using Unity.VisualScripting;
 
 public class PlacePlayerController : MonoBehaviour
 {
@@ -50,6 +52,10 @@ public class PlacePlayerController : MonoBehaviour
     public bool isAttacking = false;
     public bool isDrawing = false;
 
+    public List<Vector3> totemPath = new List<Vector3>();
+    public List<Vector3> consolePath = new List<Vector3>();
+    public int pathIndex = 0;  // 当前路径点的索引
+
     public void Start()
     {
         // 获取行为树
@@ -70,9 +76,14 @@ public class PlacePlayerController : MonoBehaviour
         {
             altar = GameObject.Find("Console").transform;
         }
-        if (target == null)
+
+        if (selfTotem == null)
         {
-            target = selfTotem;
+            selfTotem = GameObject.Find($"TeamArea{user.camp}").transform;
+        }
+        if (selfDoor == null)
+        {
+            selfDoor = GameObject.Find($"TeamArea{user.camp}Door").transform;
         }
         // if (enemyTotem == null)
         // {
@@ -82,6 +93,8 @@ public class PlacePlayerController : MonoBehaviour
         // {
         //     enemyDoor = GameObject.Find("TeamArea2Door").transform;
         // }
+        totemPath = GenerateCirclePath(selfTotem.position, 3, 100);
+        consolePath = GenerateCirclePath(altar.position, 3, 100);
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
     public void Update()
@@ -140,6 +153,26 @@ public class PlacePlayerController : MonoBehaviour
     {
         
         Debug.Log("AttackTarget");
+    }
+
+    public List<Vector3> GenerateCirclePath(Vector3 center, float radius, int numberOfPoints) {
+        List<Vector3> path = new List<Vector3>();
+        double angleIncrement = 2 * Math.PI / numberOfPoints;  // 计算角度间隔
+
+        for (int i = 0; i < numberOfPoints; i++) {
+            double angle = i * angleIncrement;  // 当前点的角度
+            float x = (float)(center.x + radius * Math.Cos(angle));  // 计算X坐标
+            float z = (float)(center.z + radius * Math.Sin(angle));  // 计算Y坐标
+            path.Add(new Vector3(x, transform.position.y, z)); // 将点添加到路径中
+        }
+
+        return path;
+    }
+
+
+    public void Dance(List<Vector3> path) {
+        navMeshAgent.SetDestination(path[pathIndex]);  // 设置下一个目标点
+        pathIndex = (pathIndex + 1) % path.Count;  // 移动到下一个路径点
     }
     
 }

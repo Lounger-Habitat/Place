@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -747,8 +747,8 @@ MonoBehaviour:
   canvasRenderer: {fileID: 0}
   mode: 2D
   canvasImage: {fileID: 0}
-  height: 200
-  width: 200
+  height: 50
+  width: 50
   directoryPath: Assets/Images
   loadedTextures: []
   index: 0
@@ -2798,7 +2798,7 @@ GameObject:
   - component: {fileID: 1782160503}
   - component: {fileID: 1782160502}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

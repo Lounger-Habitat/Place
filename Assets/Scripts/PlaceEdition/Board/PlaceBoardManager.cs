@@ -51,7 +51,7 @@ public class PlaceBoardManager : MonoBehaviour
         // DiffusionManager.Instance.OnImageLoaded += OnImageLoaded;
         // 假设平面使用的是材质的第一个贴图
         // 生成一个新的贴图
-        Texture2D myTexture = GenerateTexture(height, width, Color.white); // 可以根据需要调整尺寸和颜色
+        Texture2D myTexture = GenerateTexture(height, width, new Color(64/255f,64/255f,64/255f)); // 可以根据需要调整尺寸和颜色
 
         if (mode == "2D")
         {
@@ -524,6 +524,22 @@ public class PlaceBoardManager : MonoBehaviour
         int index = x + (y * width);
         pixelsInfos[index] = camp;
 
+    }
+
+    public bool CheckIns(Instruction ins) {
+        if (ins.mode == "/draw" || ins.mode == "/d")
+        {
+            return ins.x < width && ins.y < height && ins.x >= 0 && ins.y >= 0;
+        }
+        else if (ins.mode == "/line" || ins.mode == "/l")
+        {
+            return ins.x < width && ins.y < height && ins.ex < width && ins.ey < height && ins.x >= 0 && ins.y >= 0 && ins.ex >= 0 && ins.ey >= 0;
+        }
+        else if (ins.mode == "/paint" || ins.mode == "/p")
+        {
+            return ins.x < width && ins.y < height && ins.dx < width && ins.dy < height && ins.x >= 0 && ins.y >= 0 && ins.dx >= 0 && ins.dy >= 0;
+        }
+        return false;
     }
 
 

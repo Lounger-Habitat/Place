@@ -26,7 +26,7 @@ public class DrawMoveToTotem : PlaceAction
     public override TaskStatus OnUpdate()
     {
         Vector2 positionA = new Vector2(transform.position.x, transform.position.z);
-        Vector2 positionB = new Vector2(base.pc.target.position.x, base.pc.target.position.z);
+        Vector2 positionB = new Vector2(pc.target.position.x, pc.target.position.z);
 
         if (Vector2.Distance(positionA, positionB) < 1f)
         {

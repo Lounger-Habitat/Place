@@ -10,6 +10,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
         base.OnStart();
         pc.playerAnimator.SetBool("isRun", false);
         pc.user.currentState.detailState = DetailState.DrawWaitingForInsAndPower;
+        pc.pathIndex = Random.Range(0, pc.totemPath.Count);
     }
 
     public override TaskStatus OnUpdate()
@@ -36,16 +37,24 @@ public class DrawWaitingForInsAndPower : PlaceAction
             // Debug.Log("队列中有命令");
             for (int i = 0; i < pc.user.instructionQueue.Count; i++)
             {
+                // 如果当前携带的指令数量已经达到最大值
                 if (pc.insList.Count == pc.user.maxCarryingInsCount)
+                {
+                    return TaskStatus.Success;
+                }
+                // 如果当前已经携带指令，但后续颜料不够了
+                int needInkCount = PlaceCenter.Instance.ComputeInstructionColorCount(pc.user.instructionQueue.Peek());
+                teamInkCount = PlaceCenter.Instance.GetTeamInkCount(pc.user.camp);
+                if (pc.insList.Count > 0 && teamInkCount < needInkCount)
                 {
                     return TaskStatus.Success;
                 }
                 
                 // 取出指令
-                Instruction instruction = pc.user.instructionQueue.Peek();
+                // Instruction instruction = pc.user.instructionQueue.Peek();
 
                 // 判断指令颜料 和 当前有的数量 是否满足
-                int needInkCount = PlaceCenter.Instance.ComputeInstructionColorCount(instruction);
+                
                 
 
                 // instruction.needInkCount = needInkCount;
@@ -54,7 +63,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
 
 
 
-                if (needInkCount > teamInkCount)
+                if (pc.insList.Count == 0 && teamInkCount < needInkCount)
                 {
                     // 颜料不足
                     Debug.Log("颜料不足");
@@ -67,7 +76,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
 
                 }
 
-                instruction = pc.user.instructionQueue.Dequeue();
+                Instruction instruction = pc.user.instructionQueue.Dequeue();
                 instruction.needInkCount = needInkCount;
                 // 指令加入准备队列
                 // pc.insReadyList.Add(instruction);
@@ -83,6 +92,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
 
             return TaskStatus.Success;
         }
+        pc.Dance(pc.totemPath);
         return TaskStatus.Running;
     }
 }
