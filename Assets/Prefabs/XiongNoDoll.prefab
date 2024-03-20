@@ -260,7 +260,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2
+  m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -344,6 +344,7 @@ MonoBehaviour:
     speed: 0
     character: {fileID: 0}
     nameTag: {fileID: 0}
+    selfTeam: {fileID: 0}
   speed: 5
   hp: 100
   isDefending: 0

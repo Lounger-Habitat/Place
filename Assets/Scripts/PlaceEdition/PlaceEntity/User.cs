@@ -95,10 +95,25 @@ public class User {
 
     }
 
-    public void UpLevel() {
-        level++;
-        speed = 2 + (level-1) * 0.1f;
-        maxCarryingInsCount = (int)(1 + (level-1) * 0.2f);
+    public void Update(int score) {
+        this.level = CalLevel(score);
+        this.speed = 2 + (level-1) * 0.1f;
+        this.maxCarryingInsCount = (int)(1 + (level-1) * 0.2f);
+    }
+
+    public int CalLevel(int score) {
+        /* 
+            n 是 level 默认是1, 
+            d = 20,
+            a1 = 100
+            a_n = a_1+(n−1)d
+            S_n = n/2(a_1+a_n) = n/2(a_1+a_1+(n−1)d) = n/2(2a_1+(n−1)d)
+            给定 S_n = score, 求 n
+            20n^2+180n−2S=0
+            n = (-180+sqrt(32400+160score))/40
+        */ 
+        int n = (int)(-180 + Mathf.Sqrt(32400 + 160 * score)) / 40;
+        return n;
     }
 }
 

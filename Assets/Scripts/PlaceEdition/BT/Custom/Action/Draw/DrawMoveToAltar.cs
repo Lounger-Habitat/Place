@@ -11,10 +11,10 @@ public class DrawMoveToAltar : PlaceAction
         base.OnStart();
         base.pc.target = base.pc.altar;
         // 初始化目的位置
-        if (base.pc.target.name == "Console")
-        {
-            Debug.Log("MoveToAltar");
-        }
+        // if (base.pc.target.name == "Console")
+        // {
+        //     Debug.Log("MoveToAltar");
+        // }
         pc.playerAnimator.SetBool("isRun", true);
         pc.user.currentState.detailState = DetailState.DrawMoveToAltar;
 

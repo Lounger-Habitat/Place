@@ -747,8 +747,8 @@ MonoBehaviour:
   canvasRenderer: {fileID: 0}
   mode: 2D
   canvasImage: {fileID: 0}
-  height: 50
-  width: 50
+  height: 200
+  width: 200
   directoryPath: Assets/Images
   loadedTextures: []
   index: 0
@@ -19731,6 +19731,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1796025063}
     - target: {fileID: 572208321018829251, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
+      propertyPath: teaminfo.ink
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 572208321018829251, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
       propertyPath: teaminfo.Name
       value: "\u5E7F\u64AD\u4F53\u64CD"
       objectReference: {fileID: 0}
@@ -19803,6 +19807,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 547351778}
     - target: {fileID: 1006801792826650654, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
+      propertyPath: teaminfo.ink
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006801792826650654, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
       propertyPath: teaminfo.Name
       value: "\u56F0\u56F0\u4E4B\u5BB6"
       objectReference: {fileID: 0}
@@ -19859,6 +19867,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 365672470}
     - target: {fileID: 3047600377745935534, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
+      propertyPath: teaminfo.ink
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3047600377745935534, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
       propertyPath: teaminfo.Name
       value: "\u6700\u7231\u6CF0\u7F8E"
       objectReference: {fileID: 0}
@@ -19886,6 +19898,10 @@ PrefabInstance:
       propertyPath: teamAreaName
       value: 
       objectReference: {fileID: 1247055845}
+    - target: {fileID: 5103046904917838491, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
+      propertyPath: teaminfo.ink
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5103046904917838491, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
       propertyPath: teaminfo.Name
       value: "\u968F\u7F18\u5927\u961F"

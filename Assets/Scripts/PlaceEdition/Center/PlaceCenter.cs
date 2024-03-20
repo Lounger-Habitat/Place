@@ -403,21 +403,39 @@ public class PlaceCenter : MonoBehaviour
                 message = "颜料爆发";
                 break;
             case 1.9f:
-                normalPower = 190;//固定是攻击
+                normalPower = 199;//固定是攻击
                 break;
             case 5.2f:
                 normalPower = 520;//固定是防御
                 break;
             case 9.9f:
-                normalPower = 990;
+                normalPower = 999;
                 break;
-            case 20:
-                normalPower = 2000;
+            case 19.9f:
+                normalPower = 1999;
                 message = "颜料核弹";
                 break;
+            case 29.9f:
+                normalPower = 2990;
+                break;
+            case 52f:
+                normalPower = 5200;
+                break;
+            case 66.6f:
+                normalPower = 6666;
+                break;
+            case 88.8f:
+                normalPower = 8888;
+                break;
+            case 99.9f:
+                normalPower = 9999;
+                break;
+            case 120f:
+                normalPower = 12000;
+                break;
         }
-        u.level += normalPower;
-        u.score += normalPower * 10;
+        u.score += normalPower;
+        u.Update(u.score);
         PlaceTeamManager.Instance.teamAreas[u.camp - 1].teaminfo.ink += normalPower;
         //在这通知UI？还得要状态切换啊，先检查状态再通知
         PlaceUIManager.Instance.AddTips(new TipsItem()
