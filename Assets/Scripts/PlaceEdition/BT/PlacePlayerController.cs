@@ -127,6 +127,7 @@ public class PlacePlayerController : MonoBehaviour
     public void MoveToTarget()
     {
         navMeshAgent.destination=target.position;
+        navMeshAgent.speed = user.speed;
     }
 
     public void TransToDefend() {

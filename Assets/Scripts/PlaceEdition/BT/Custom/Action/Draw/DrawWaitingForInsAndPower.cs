@@ -59,14 +59,14 @@ public class DrawWaitingForInsAndPower : PlaceAction
 
                 // instruction.needInkCount = needInkCount;
 
-                Debug.Log("needInkCount" + needInkCount);
+                // Debug.Log("needInkCount: " + needInkCount);
 
 
 
                 if (pc.insList.Count == 0 && teamInkCount < needInkCount)
                 {
                     // 颜料不足
-                    Debug.Log("颜料不足");
+                    Debug.Log($"{pc.user.username} : 颜料不足 , 需要: {needInkCount} , 当前: {teamInkCount}");
                     if (pc.insList.Count > 0) {
                         return TaskStatus.Success;
                     }

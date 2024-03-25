@@ -10,7 +10,7 @@ public class CheckAttackState : Conditional
     public override void OnStart()
     {
         pg = (SharedPlayerGoal)Owner.GetVariable("playerGoal");
-        Debug.Log("CheckAttackState" + " PlayerGoal: " + pg.Value);
+        // Debug.Log("CheckAttackState" + " PlayerGoal: " + pg.Value);
     }
     public override TaskStatus OnUpdate()
     {

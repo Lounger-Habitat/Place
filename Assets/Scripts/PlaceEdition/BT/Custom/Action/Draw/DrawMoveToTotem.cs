@@ -11,10 +11,10 @@ public class DrawMoveToTotem : PlaceAction
         base.OnStart();
         base.pc.target = base.pc.selfTotem;
         // 初始化目的位置
-        if (base.pc.target.name == "Totem")
-        {
-            Debug.Log("MoveToTotem");
-        }
+        // if (base.pc.target.name == "Totem")
+        // {
+        //     Debug.Log("MoveToTotem");
+        // }
         pc.playerAnimator.SetBool("isRun", true);
 
         pc.user.currentState.topState = HighLevelState.Draw;

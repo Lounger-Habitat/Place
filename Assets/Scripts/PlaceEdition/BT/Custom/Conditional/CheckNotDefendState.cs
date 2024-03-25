@@ -10,7 +10,7 @@ public class CheckNotDefendState : Conditional
     public override void OnStart()
     {
         pg = (SharedPlayerGoal)Owner.GetVariable("playerGoal");
-        Debug.Log("CheckDefendState" + " PlayerGoal: " + pg.Value);
+        // Debug.Log("CheckDefendState" + " PlayerGoal: " + pg.Value);
     }
 
     public override TaskStatus OnUpdate()

@@ -406,14 +406,14 @@ public class PlaceBoardManager : MonoBehaviour
     }
 
 
-    public void DrawCommand(string command, int x, int y, int r, int g, int b, int camp = 0)
+    public void DrawCommand(int x, int y, int r, int g, int b, int camp)
     {
         MarkPixels(x, y, camp);
-        DrawPixels(command, x, y, r, g, b);
+        DrawPixels(x, y, r, g, b);
     }
-    public void DrawPixels(string command = "/d", int x = 0, int y = 0, int r = 0, int g = 0, int b = 0)
+    public void DrawPixels(int x, int y , int r , int g , int b )
     {
-        Color aimColor = new Color(r, g, b);
+        Color aimColor = new Color((float)r/255f, (float)g/255f, (float)b/255f);
         if (texture != null && x >= 0 && x < texture.width && y >= 0 && y < texture.height)
         {
             texture.SetPixel(x, y, aimColor);
@@ -425,11 +425,11 @@ public class PlaceBoardManager : MonoBehaviour
         return DrawLine(x: x, y: y, ex: ex, ey: ey, isDraw: false);
     }
 
-    public void LineCommand(string command, int x, int y, int ex, int ey, int r, int g, int b, int camp = 0)
+    public void LineCommand(int x, int y, int ex, int ey, int r, int g, int b, int camp = 0)
     {
-        DrawLine(command, x, y, ex, ey, r, g, b, camp);
+        DrawLine(x, y, ex, ey, r, g, b, camp);
     }
-    private int DrawLine(string command = "/l", int x = 0, int y = 0, int ex = 0, int ey = 0, int r = 0, int g = 0, int b = 0, int camp = 0, bool isDraw = true)
+    private int DrawLine(int x, int y , int ex , int ey , int r = 0, int g = 0, int b = 0, int camp = 0, bool isDraw = true)
     {
         // 使用 Bresenham 算法来计算这两点之间的像素点
         int dx = Math.Abs(ex - x);
@@ -444,7 +444,7 @@ public class PlaceBoardManager : MonoBehaviour
         {
             if (isDraw)
             {
-                DrawCommand(command, x, y, r, g, b, camp); // 绘制像素点
+                DrawCommand(x, y, r, g, b, camp); // 绘制像素点
             }
             else
             {

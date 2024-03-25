@@ -14,6 +14,9 @@ public class TestManager : MonoBehaviour
     public Vector3 position;
     public Vector3 rotation;
 
+    private float minInterval = 0.1f; // 最小时间间隔
+    private float maxInterval = 2.0f; // 最大时间间隔
+
     // Update is called once per frame
     void Update()
     {
@@ -31,7 +34,11 @@ public class TestManager : MonoBehaviour
         // 按下.，执行指令  测试 指令
         if (Input.GetKeyDown(KeyCode.Period))
         {
-            RandomAddTest();
+            // 生成角色
+            GenPlayer();
+            // 不定时 随机生成指令
+            StartCoroutine(GenerateRandomCommand());
+
         }
         
     }
@@ -41,27 +48,27 @@ public class TestManager : MonoBehaviour
         Camera.main.transform.rotation = Quaternion.Euler(rotation);
     }
 
-    public void RandomAddTest(){
+    public void GenPlayer(){
         // 添加player
-        string[] cx1 = { "cx——1", "111" };
-        string[] cx2 = { "cx——2", "111" };
-        string[] cx3 = { "cx——3", "111" };
-        string[] cx4 = { "cx——4", "111" };
+        string[] cx1 = { "cx1", "111" };
+        string[] cx2 = { "cx2", "111" };
+        string[] cx3 = { "cx3", "111" };
+        string[] cx4 = { "cx4", "111" };
 
-        string[] gt1 = { "gt——1", "222" };
-        string[] gt2 = { "gt——2", "222" };
-        string[] gt3 = { "gt——3", "222" };
-        string[] gt4 = { "gt——4", "222" };
+        string[] gt1 = { "gt1", "222" };
+        string[] gt2 = { "gt2", "222" };
+        string[] gt3 = { "gt3", "222" };
+        string[] gt4 = { "gt4", "222" };
 
-        string[] by1 = { "by——1", "333" };
-        string[] by2 = { "by——2", "333" };
-        string[] by3 = { "by——3", "333" };
-        string[] by4 = { "by——4", "333" };
+        string[] by1 = { "by1", "333" };
+        string[] by2 = { "by2", "333" };
+        string[] by3 = { "by3", "333" };
+        string[] by4 = { "by4", "333" };
 
-        string[] hy1 = { "hy——1", "444" };
-        string[] hy2 = { "hy——2", "444" };
-        string[] hy3 = { "hy——3", "444" };
-        string[] hy4 = { "hy——4", "444" };
+        string[] hy1 = { "hy1", "444" };
+        string[] hy2 = { "hy2", "444" };
+        string[] hy3 = { "hy3", "444" };
+        string[] hy4 = { "hy4", "444" };
 
         var combinedListLinq = new[] { cx1, cx2, cx3, cx4, gt1, gt2, gt3, gt4, by1, by2, by3, by4, hy1, hy2, hy3, hy4 }.SelectMany(a => a).ToList();
         
@@ -78,4 +85,105 @@ public class TestManager : MonoBehaviour
             yield return new WaitForSeconds(1f); // 等待1秒
         }
     }
+
+    public string RandomGenDrawIns() {
+        int height = PlaceBoardManager.Instance.height;
+        int width = PlaceBoardManager.Instance.width;
+
+        string drawIns = "";
+
+        // 0-1 random
+        float rand = Random.Range(0f, 1f);
+        if (rand<0.7) {
+            // 生成 画点指令
+            int x = Random.Range(0, width);
+            int y = Random.Range(0, height);
+
+            // 随机生成颜色
+            int r = Random.Range(0, 255);
+            int g = Random.Range(0, 255);
+            int b = Random.Range(0, 255);
+
+            drawIns = "/d " + x + " " + y + " " + r + " " + g + " " + b;
+        }else {
+            // 生成 画线指令
+            int x1 = Random.Range(0, width);
+            int y1 = Random.Range(0, height);
+            int x2 = Random.Range(0, width);
+            int y2 = Random.Range(0, height);
+            
+            // 随机生成颜色
+            int r = Random.Range(0, 255);
+            int g = Random.Range(0, 255);
+            int b = Random.Range(0, 255);
+
+            drawIns = "/l " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + r + " " + g + " " + b;
+
+        }
+
+        return drawIns;
+
+    }
+
+    public string RandomGenGiftIns() {
+
+        string[] gifts = { "0.1", "1", "1.9", "5.2", "9.9", "19.9", "29.9", "52", "66.6", "88.8", "99.9", "120"};
+        int grand = Random.Range(0, gifts.Length);
+        string giftIns = gifts[grand];
+    
+        return giftIns;
+
+    }
+
+    IEnumerator GenerateRandomCommand()
+    {
+        while (PlaceCenter.Instance.gameRuning) // 无限循环生成指令
+        {
+            // 随机等待一段时间
+            float waitTime = Random.Range(minInterval, maxInterval);
+            yield return new WaitForSeconds(waitTime);
+
+            ExecuteCommand();
+        }
+    }
+
+    // 根据需要生成具体的指令
+    string GenerateCommand()
+    {
+        float rand = Random.Range(0f, 1f);
+        if (rand<0.7f) {
+            return RandomGenDrawIns();
+        }else {
+            return RandomGenGiftIns();
+        }
+    }
+
+    // 执行生成的指令
+    void ExecuteCommand()
+    {
+        // 随机选择 用户
+        // string[] users = { "cx1", "cx2", "cx3", "cx4", "gt1", "gt2", "gt3", "gt4", "by1", "by2", "by3", "by4", "hy1", "hy2", "hy3", "hy4" };
+        string[] users = PlaceCenter.Instance.users.Keys.ToArray();
+        int urand = Random.Range(0, users.Length);
+        string user = users[urand];
+
+        float rand = Random.Range(0f, 1f);
+        if (rand<0.9f) {
+            string drawIns = RandomGenDrawIns();
+            Debug.Log($"{user} 执行 ({drawIns}) 指令");
+            PlaceInstructionManager.DefaultRunChatCommand(user,drawIns);
+        }else {
+            string giftIns = RandomGenGiftIns();
+            Debug.Log($"{user} 赠送 ({giftIns}) 颜料");
+            PlaceInstructionManager.DefaultGiftCommand(user,giftIns);
+        }
+    }
 }
+
+
+/*
+    一人充钱，全队享受赐福
+    初始赠予100颜料
+    1. 人员加入队伍
+    2. 人员执行绘画指令
+*/

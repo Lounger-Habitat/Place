@@ -83,33 +83,33 @@ public class PlaceConsoleAreaManager : MonoBehaviour
     }
     
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player")) // 确保触发器有一个特定的标签
-        {
+    // void OnTriggerEnter(Collider other)
+    // {
+    //     if (other.CompareTag("Player")) // 确保触发器有一个特定的标签
+    //     {
 
-            // 角色刚刚进入触发器
-            PlacePlayerController pc = other.transform.root.gameObject.GetComponent<PlacePlayerController>();
-            string name = pc.user.username;
-            Debug.Log(name + " 进入触发器");
+    //         // 角色刚刚进入触发器
+    //         PlacePlayerController pc = other.transform.root.gameObject.GetComponent<PlacePlayerController>();
+    //         string name = pc.user.username;
+    //         Debug.Log(name + " 进入触发器");
 
-            // 检查角色是否在队伍区域内
+    //         // 检查角色是否在队伍区域内
             
-            // PlayerFSM stateMachine = other.transform.root.gameObject.GetComponent<PlayerFSM>();
-            // if (pc.user.currentState == CharacterState.TransportingCommandToConsole)
-            // {
-            //     stateMachine.ChangeState(CharacterState.WaitingForCommandExecutionAtConsole);
-            // }
+    //         // PlayerFSM stateMachine = other.transform.root.gameObject.GetComponent<PlayerFSM>();
+    //         // if (pc.user.currentState == CharacterState.TransportingCommandToConsole)
+    //         // {
+    //         //     stateMachine.ChangeState(CharacterState.WaitingForCommandExecutionAtConsole);
+    //         // }
             
-        }
-    }
+    //     }
+    // }
 
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            // 角色刚刚离开触发器
-            Debug.Log("角色离开触发器");
-        }
-    }
+    // void OnTriggerExit(Collider other)
+    // {
+    //     if (other.CompareTag("Player"))
+    //     {
+    //         // 角色刚刚离开触发器
+    //         Debug.Log("角色离开触发器");
+    //     }
+    // }
 }

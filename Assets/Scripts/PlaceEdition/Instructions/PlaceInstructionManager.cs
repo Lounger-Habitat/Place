@@ -109,7 +109,7 @@ public static class PlaceInstructionManager
                             break;
                         }
                         drawUser.instructionQueue.Enqueue(drawIns);
-                        Debug.Log(username + " : draw " + c + " " + x + " " + y + " " + r + " " + g + " " + b);
+                        // Debug.Log(username + " : draw " + c + " " + x + " " + y + " " + r + " " + g + " " + b);
                     }
                     else if (parts.Length == 6)
                     {
@@ -128,7 +128,7 @@ public static class PlaceInstructionManager
                             break;
                         }
                         drawUser.instructionQueue.Enqueue(drawIns);
-                        Debug.Log(username + " : draw " + c + " " + x + " " + y + " " + r + " " + g + " " + b);
+                        // Debug.Log(username + " : draw " + c + " " + x + " " + y + " " + r + " " + g + " " + b);
                     }
                     else
                     {

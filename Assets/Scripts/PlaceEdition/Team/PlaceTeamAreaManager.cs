@@ -188,56 +188,56 @@ public class PlaceTeamAreaManager : MonoBehaviour
         userList.Clear();
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player")) // 确保触发器有一个特定的标签
-        {
-            PlacePlayerController pc = other.transform.root.gameObject.GetComponent<PlacePlayerController>();
-            // 角色刚刚进入触发器
-            Debug.Log("角色进入触发器");
-            string name = pc.user.username;
-            // 如果角色在此队伍区域内
-            /*
-                1. 检查角色是否在队伍区域内
-                2. 敌对角色进入队伍区域
-                3. 友方角色进入队伍区域
-            */
-            if (IsUserInTeam(name)) // 本队队员进入队伍区域
-            {
-                // 检查角色是否在队伍区域内
-                Debug.Log(name + " 进入队伍区域内");
-                // 判断成员状态
-                // PlayerFSM stateMachine = pc.user.character.GetComponent<PlayerFSM>();
-                // if (pc.user.currentState == CharacterState.MoveToTeamArea)
-                // {
-                //     // Debug.Log("ReturningFromConsoleToGetCommand -> WaitingForCommandInTeamArea");
-                //     stateMachine.ChangeState(CharacterState.Trance);
-                // }
-                // else if (pc.user.currentState == CharacterState.WaitingForCommandInTeamArea)
-                // {
-                //     // 角色在队伍区域内
-                //     Debug.Log("等待指令");
-                // }
-                // else
-                // {
-                //     // 角色不在队伍区域内
-                //     Debug.Log("非法状态");
-                // }
-            }
-            // TODO ： 友方队伍
-            else // 敌对队员进入队伍区域
-            {
-                Debug.Log("敌对队员进入队伍区域");
-            }
-        }
-    }
+    // void OnTriggerEnter(Collider other)
+    // {
+    //     if (other.CompareTag("Player")) // 确保触发器有一个特定的标签
+    //     {
+    //         PlacePlayerController pc = other.transform.root.gameObject.GetComponent<PlacePlayerController>();
+    //         // 角色刚刚进入触发器
+    //         Debug.Log("角色进入触发器");
+    //         string name = pc.user.username;
+    //         // 如果角色在此队伍区域内
+    //         /*
+    //             1. 检查角色是否在队伍区域内
+    //             2. 敌对角色进入队伍区域
+    //             3. 友方角色进入队伍区域
+    //         */
+    //         if (IsUserInTeam(name)) // 本队队员进入队伍区域
+    //         {
+    //             // 检查角色是否在队伍区域内
+    //             Debug.Log(name + " 进入队伍区域内");
+    //             // 判断成员状态
+    //             // PlayerFSM stateMachine = pc.user.character.GetComponent<PlayerFSM>();
+    //             // if (pc.user.currentState == CharacterState.MoveToTeamArea)
+    //             // {
+    //             //     // Debug.Log("ReturningFromConsoleToGetCommand -> WaitingForCommandInTeamArea");
+    //             //     stateMachine.ChangeState(CharacterState.Trance);
+    //             // }
+    //             // else if (pc.user.currentState == CharacterState.WaitingForCommandInTeamArea)
+    //             // {
+    //             //     // 角色在队伍区域内
+    //             //     Debug.Log("等待指令");
+    //             // }
+    //             // else
+    //             // {
+    //             //     // 角色不在队伍区域内
+    //             //     Debug.Log("非法状态");
+    //             // }
+    //         }
+    //         // TODO ： 友方队伍
+    //         else // 敌对队员进入队伍区域
+    //         {
+    //             Debug.Log("敌对队员进入队伍区域");
+    //         }
+    //     }
+    // }
 
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            // 角色刚刚离开触发器
-            Debug.Log("角色离开触发器");
-        }
-    }
+    // void OnTriggerExit(Collider other)
+    // {
+    //     if (other.CompareTag("Player"))
+    //     {
+    //         // 角色刚刚离开触发器
+    //         Debug.Log("角色离开触发器");
+    //     }
+    // }
 }

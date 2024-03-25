@@ -225,13 +225,13 @@ public class WaitingForCommandExecutionAtConsole : IState
                 {
                     case "/draw":
                     case "/d":
-                        PlaceBoardManager.Instance.DrawCommand(ins.mode, ins.x, ins.y, ins.r, ins.g, ins.b, pc.user.camp);
+                        PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, pc.user.camp);
                         pc.user.carryingInkCount -= ins.needInkCount;
                         pc.user.score += ins.needInkCount;
                         break;
                     case "/line":
                     case "/l":
-                        PlaceBoardManager.Instance.LineCommand(ins.mode, ins.x, ins.y, ins.ex, ins.ey, ins.r, ins.g, ins.b, pc.user.camp);
+                        PlaceBoardManager.Instance.LineCommand(ins.x, ins.y, ins.ex, ins.ey, ins.r, ins.g, ins.b, pc.user.camp);
                         pc.user.carryingInkCount -= ins.needInkCount;
                         pc.user.score += ins.needInkCount;
                         break;
