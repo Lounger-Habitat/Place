@@ -19,8 +19,8 @@ namespace AllIn1VfxToolkit.Demo.Scripts
             doImpactSpawn = currentImpactPrefab != null;
             this.impactScaleSize = impactScaleSize;
 
-            ApplyPrecisionOffsetToProjectileDir(ref projectileDir);
-            GetComponent<Rigidbody>().velocity = projectileDir * speed;
+            //ApplyPrecisionOffsetToProjectileDir(ref projectileDir);
+            //GetComponent<Rigidbody>().velocity = projectileDir * speed;
         }
         
         public void AddScreenShakeOnImpact(float projectileImpactShakeAmount)
