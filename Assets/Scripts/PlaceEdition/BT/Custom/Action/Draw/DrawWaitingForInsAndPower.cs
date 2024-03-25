@@ -11,6 +11,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
         pc.playerAnimator.SetBool("isRun", false);
         pc.user.currentState.detailState = DetailState.DrawWaitingForInsAndPower;
         pc.pathIndex = Random.Range(0, pc.totemPath.Count);
+        pc.SetSpeed(pc.user.waitingSpeed);
     }
 
     public override TaskStatus OnUpdate()

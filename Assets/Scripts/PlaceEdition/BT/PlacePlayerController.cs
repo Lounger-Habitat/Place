@@ -4,6 +4,8 @@ using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
 using System;
 using Unity.VisualScripting;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityTransform;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator;
 
 public class PlacePlayerController : MonoBehaviour
 {
@@ -170,8 +172,13 @@ public class PlacePlayerController : MonoBehaviour
         return path;
     }
 
+    public void SetSpeed(float speed){
+        navMeshAgent.speed = speed;
+    }
+
 
     public void Dance(List<Vector3> path) {
+        transform.LookAt(selfTotem);
         navMeshAgent.SetDestination(path[pathIndex]);  // 设置下一个目标点
         pathIndex = (pathIndex + 1) % path.Count;  // 移动到下一个路径点
     }

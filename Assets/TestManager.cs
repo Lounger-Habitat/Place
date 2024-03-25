@@ -94,7 +94,7 @@ public class TestManager : MonoBehaviour
 
         // 0-1 random
         float rand = Random.Range(0f, 1f);
-        if (rand<0.7) {
+        if (rand<1.1f) {
             // 生成 画点指令
             int x = Random.Range(0, width);
             int y = Random.Range(0, height);

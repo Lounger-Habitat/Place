@@ -35,6 +35,7 @@ public class User {
     public int carryingInkCount { get; set; } // 玩家 身上携带的 颜料数量
     public int maxCarryingInsCount; // 玩家 身上携带的 最大指令数量
     public float speed;
+    public float waitingSpeed = 1.0f; // 等待速度
     public Queue<Instruction> instructionQueue = new Queue<Instruction>(); // 玩家 指令队列， 用于保存 玩家弹幕输入的指令，等待被执行
 
     /*
