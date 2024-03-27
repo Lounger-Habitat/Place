@@ -1,9 +1,6 @@
 using AllIn1VfxToolkit.Demo.Scripts;
 using UnityEngine;
 using DG.Tweening;
-using Random = UnityEngine.Random;
-using System.Security.Cryptography.X509Certificates;
-
 public class EffectFire : MonoBehaviour
 {
     [SerializeField] private Transform endPosBottom;
@@ -31,14 +28,14 @@ public class EffectFire : MonoBehaviour
         double pixelWidth = frame.x / boradWidth;
         double pixelHeight = frame.y / boradHeight;
         Vector3 delta = new Vector3((float)(x * pixelWidth), (float)(y * pixelHeight), 0f);
-        Debug.Log("boradWidth: " + boradWidth + " boradHeight: " + boradHeight);
-        Debug.Log("x: " + x + " y: " + y);
-        Debug.Log("frame: " + frame);
-        Debug.Log("pixelWidth: " + pixelWidth + " pixelHeight: " + pixelHeight);
-        Debug.Log("delta: " + delta);
+        // Debug.Log("boradWidth: " + boradWidth + " boradHeight: " + boradHeight);
+        // Debug.Log("x: " + x + " y: " + y);
+        // Debug.Log("frame: " + frame);
+        // Debug.Log("pixelWidth: " + pixelWidth + " pixelHeight: " + pixelHeight);
+        // Debug.Log("delta: " + delta);
 
         Vector3 aimPos = endPosBottom.position + delta;
-        Debug.Log(aimPos);
+        // Debug.Log(aimPos);
         
         Transform tempTransform = null;
         tempTransform = Instantiate(currDemoEffect.muzzleFlashPrefab, projectileSpawnPoint.position, Quaternion.identity).transform;
@@ -64,7 +61,10 @@ public class EffectFire : MonoBehaviour
         AllIn1DemoProjectile tempProjectileInstance = projectileBase.GetComponent<AllIn1DemoProjectile>();
         tempProjectileInstance.Initialize(transform, projectileSpawnPoint.forward, currDemoEffect.projectileSpeed, currDemoEffect.impactPrefab, currDemoEffect.scaleMultiplier);
 
-        projectileBase.DOMove(aimPos, 3.0f).SetEase(Ease.OutQuint);
+        projectileBase.DOMove(aimPos, 2.0f).SetEase(Ease.OutQuint).OnComplete(() =>
+        {
+            Destroy(projectileBase.gameObject);
+        });
     }
 
     private void Update()

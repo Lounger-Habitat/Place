@@ -39,14 +39,14 @@ public class DrawWaitingForInsAndPower : PlaceAction
             for (int i = 0; i < pc.user.instructionQueue.Count; i++)
             {
                 // 如果当前携带的指令数量已经达到最大值
-                if (pc.insList.Count == pc.user.maxCarryingInsCount)
+                if (pc.insQueue.Count == pc.user.maxCarryingInsCount)
                 {
                     return TaskStatus.Success;
                 }
                 // 如果当前已经携带指令，但后续颜料不够了
                 int needInkCount = PlaceCenter.Instance.ComputeInstructionColorCount(pc.user.instructionQueue.Peek());
                 teamInkCount = PlaceCenter.Instance.GetTeamInkCount(pc.user.camp);
-                if (pc.insList.Count > 0 && teamInkCount < needInkCount)
+                if (pc.insQueue.Count > 0 && teamInkCount < needInkCount)
                 {
                     return TaskStatus.Success;
                 }
@@ -64,11 +64,11 @@ public class DrawWaitingForInsAndPower : PlaceAction
 
 
 
-                if (pc.insList.Count == 0 && teamInkCount < needInkCount)
+                if (pc.insQueue.Count == 0 && teamInkCount < needInkCount)
                 {
                     // 颜料不足
                     Debug.Log($"{pc.user.username} : 颜料不足 , 需要: {needInkCount} , 当前: {teamInkCount}");
-                    if (pc.insList.Count > 0) {
+                    if (pc.insQueue.Count > 0) {
                         return TaskStatus.Success;
                     }
 
@@ -86,7 +86,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
                 PlaceCenter.Instance.SetTeamInkCount(pc.user.camp, -needInkCount);
 
 
-                pc.insList.Add(instruction);
+                pc.insQueue.Enqueue(instruction);
 
 
             }

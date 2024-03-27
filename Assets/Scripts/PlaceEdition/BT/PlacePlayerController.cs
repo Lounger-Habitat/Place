@@ -3,9 +3,7 @@ using UnityEngine.AI;
 using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
 using System;
-using Unity.VisualScripting;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityTransform;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator;
+using System.Collections;
 
 public class PlacePlayerController : MonoBehaviour
 {
@@ -36,12 +34,18 @@ public class PlacePlayerController : MonoBehaviour
 
     public List<Instruction> insList = new List<Instruction>();
 
+    // 指令队列
+    public Queue<Instruction> insQueue = new Queue<Instruction>();
+
+    public int batchCount = 0;
+
     // 指令 Cache ，暂时 没用 
     public List<Instruction> insReadyList = new List<Instruction>();
 
 
     // 动画
     public Animator playerAnimator;
+    public int waitingDraw = 0;
 
     // 特效
 
@@ -181,6 +185,33 @@ public class PlacePlayerController : MonoBehaviour
         transform.LookAt(selfTotem);
         navMeshAgent.SetDestination(path[pathIndex]);  // 设置下一个目标点
         pathIndex = (pathIndex + 1) % path.Count;  // 移动到下一个路径点
+    }
+
+    public void DrawPoint(Instruction ins) {
+        PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y);
+        StartCoroutine(IDrawPoint(ins));
+        
+        // yield return new WaitForSeconds(2);
+        // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
+        // user.carryingInkCount -= ins.needInkCount;
+        // user.score += ins.needInkCount;
+
+    }
+
+    // 协程执行绘画
+    private IEnumerator IDrawPoint(Instruction ins) {
+        // 等待两秒执行
+        yield return new WaitForSeconds(3);
+        PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
+        user.carryingInkCount -= ins.needInkCount;
+        user.score += ins.needInkCount;
+        waitingDraw = waitingDraw + 1;
+    }
+
+    
+
+    public void DrawLine() {
+        
     }
     
 }
