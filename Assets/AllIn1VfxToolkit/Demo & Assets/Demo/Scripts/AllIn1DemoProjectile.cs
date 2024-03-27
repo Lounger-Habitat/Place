@@ -38,14 +38,17 @@ namespace AllIn1VfxToolkit.Demo.Scripts
 
         private void OnTriggerEnter(Collider other)
         {
-            if(doImpactSpawn)
+            if (other.CompareTag("Board"))
             {
-                Transform t = Instantiate(currentImpactPrefab, transform.position, Quaternion.identity).transform;
-                t.parent = currentHierarchyParent;
-                t.localScale *= impactScaleSize;
+                if(doImpactSpawn)
+                {
+                    Transform t = Instantiate(currentImpactPrefab, transform.position, Quaternion.identity).transform;
+                    t.parent = currentHierarchyParent;
+                    t.localScale *= impactScaleSize;
+                }
+                if(doShake) AllIn1Shaker.i.DoCameraShake(shakeAmountOnImpact);
+                Destroy(gameObject);
             }
-            if(doShake) AllIn1Shaker.i.DoCameraShake(shakeAmountOnImpact);
-            Destroy(gameObject);
         }
     }
 }

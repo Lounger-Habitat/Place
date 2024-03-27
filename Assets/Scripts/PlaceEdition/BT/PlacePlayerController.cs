@@ -201,7 +201,7 @@ public class PlacePlayerController : MonoBehaviour
     // 协程执行绘画
     private IEnumerator IDrawPoint(Instruction ins) {
         // 等待两秒执行
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2);
         PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
         user.carryingInkCount -= ins.needInkCount;
         user.score += ins.needInkCount;
@@ -214,4 +214,14 @@ public class PlacePlayerController : MonoBehaviour
         
     }
     
+
+    public GameObject levelUpEffect;
+
+    public void LevelUp()
+    {
+        //播放特效相关
+        var effect = Instantiate(levelUpEffect, transform.position+new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
+        //后续可能有音效、UI提示等效果
+    }
+
 }

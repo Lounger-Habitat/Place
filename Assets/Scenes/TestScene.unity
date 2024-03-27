@@ -1755,10 +1755,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5804333102830514313, guid: 06c62e47d56f4694ca903bb12fa7c86d, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6674722496418053374, guid: 06c62e47d56f4694ca903bb12fa7c86d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -18675,6 +18671,10 @@ PrefabInstance:
     - target: {fileID: 5623725239967398623, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
       propertyPath: m_Name
       value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 6784335276810342772, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
+      propertyPath: m_TagString
+      value: Board
       objectReference: {fileID: 0}
     - target: {fileID: 7019890225558554756, guid: 65ca4413bcc734c86ad4dcd52e8ee593, type: 3}
       propertyPath: m_IsActive
