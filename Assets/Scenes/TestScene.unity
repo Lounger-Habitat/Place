@@ -729,7 +729,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &390487308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -747,7 +747,6 @@ MonoBehaviour:
   currDemoEffect: {fileID: 11400000, guid: c9ddd0911b510b6498f5e9a9c8a5b9bb, type: 2}
   projectileBasePrefab: {fileID: 8359660174469939308, guid: 4794fc12a4350014daec6bcfd7b2624e, type: 3}
   projectileSpawnPoint: {fileID: 417088258}
-  lookat: {fileID: 1336731321}
   debugx: 40
   debugy: 40
 --- !u!4 &390487309

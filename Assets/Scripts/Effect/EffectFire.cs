@@ -60,7 +60,7 @@ public class EffectFire : MonoBehaviour
         tempTransform1.parent = projectileBase;
         
         
-        AllIn1DemoProjectile tempProjectileInstance = projectileBase.GetComponent<AllIn1DemoProjectile>();
+        EffectBulletBase tempProjectileInstance = projectileBase.GetComponent<EffectBulletBase>();
         tempProjectileInstance.Initialize(transform, projectileSpawnPoint.forward, currDemoEffect.projectileSpeed, currDemoEffect.impactPrefab, currDemoEffect.scaleMultiplier);
 
         projectileBase.DOMove(aimPos, 2.0f).SetEase(Ease.OutQuint).OnComplete(() =>
