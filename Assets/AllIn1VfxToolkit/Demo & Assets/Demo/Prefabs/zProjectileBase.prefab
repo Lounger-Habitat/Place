@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8359660174469939310}
   - component: {fileID: 8359660174469939311}
   - component: {fileID: 8359660174469939217}
-  - component: {fileID: 8359660174469939216}
+  - component: {fileID: 3255023655124732239}
   m_Layer: 0
   m_Name: zProjectileBase
   m_TagString: Untagged
@@ -82,7 +82,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &8359660174469939216
+--- !u!114 &3255023655124732239
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

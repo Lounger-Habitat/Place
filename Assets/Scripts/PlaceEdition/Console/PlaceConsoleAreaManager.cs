@@ -13,9 +13,10 @@ public class PlaceConsoleAreaManager : MonoBehaviour
     [Header("颜料特效")]
     [SerializeField] private Transform endPosBottom;
     [SerializeField] private Transform endPosTop;
+    [SerializeField] private Transform spawnPoint;
     [SerializeField] private All1VfxDemoEffect currDemoEffect;
     [SerializeField] private GameObject projectileBasePrefab;
-    [SerializeField] private Transform projectileSpawnPoint;
+  
     public int debugx = 0;
     public int debugy = 0;
 
@@ -135,28 +136,28 @@ public class PlaceConsoleAreaManager : MonoBehaviour
 
         
         Transform tempTransform = null;
-        tempTransform = Instantiate(currDemoEffect.muzzleFlashPrefab, projectileSpawnPoint.position, Quaternion.identity).transform;
+        tempTransform = Instantiate(currDemoEffect.muzzleFlashPrefab, spawnPoint.position, Quaternion.identity).transform;
         tempTransform.localRotation = Quaternion.identity;
-        tempTransform.forward = projectileSpawnPoint.forward;
+        tempTransform.forward = spawnPoint.forward;
         tempTransform.parent = transform;
         tempTransform.localScale *= currDemoEffect.scaleMultiplier;
         
         
         
-        Transform projectileBase = Instantiate(projectileBasePrefab, projectileSpawnPoint.position, Quaternion.identity).transform;
+        Transform projectileBase = Instantiate(projectileBasePrefab, spawnPoint.position, Quaternion.identity).transform;
         projectileBase.LookAt(aimPos);
         projectileBase.parent = transform;
         //projectileBase.localRotation = Quaternion.identity;
         
         
-        tempTransform = Instantiate(currDemoEffect.projectilePrefab, projectileSpawnPoint.position, Quaternion.identity).transform;
+        tempTransform = Instantiate(currDemoEffect.projectilePrefab, spawnPoint.position, Quaternion.identity).transform;
         tempTransform.localRotation = Quaternion.identity;
         tempTransform.forward = projectileBase.forward;
         tempTransform.parent = projectileBase;
         
         
         EffectBulletBase tempProjectileInstance = projectileBase.GetComponent<EffectBulletBase>();
-        tempProjectileInstance.Initialize(transform, projectileSpawnPoint.forward, currDemoEffect.projectileSpeed, currDemoEffect.impactPrefab, currDemoEffect.scaleMultiplier);
+        tempProjectileInstance.Initialize(transform, spawnPoint.forward, currDemoEffect.projectileSpeed, currDemoEffect.impactPrefab, currDemoEffect.scaleMultiplier);
 
         projectileBase.DOMove(aimPos, 2.0f).SetEase(Ease.OutQuint).OnComplete(() =>
         {
