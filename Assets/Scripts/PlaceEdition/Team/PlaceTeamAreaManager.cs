@@ -20,6 +20,22 @@ public class PlaceTeamAreaManager : MonoBehaviour
     public Transform totem;
     public Transform door;
 
+    void Start()
+    {
+        // 如果totem 和 door 为空，获取本对象层级下的子物体
+        // 要确保 子物体 顺序 0 是 totem ，1 是 door
+        if (totem == null)
+        {
+            totem = transform.GetChild(0).gameObject.transform;
+        }
+        // 获取本对象层级下的子物体
+        if (door == null)
+        {
+            door = transform.GetChild(1).gameObject.transform;
+        }
+
+    }
+
 
 
     void Update()

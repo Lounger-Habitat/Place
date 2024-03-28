@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AllIn1VfxToolkit.Demo.Scripts;
+
+namespace AllIn1VfxToolkit.Demo.Scripts {
 
 public class EffectBulletBase : MonoBehaviour
 {
@@ -50,4 +53,6 @@ public class EffectBulletBase : MonoBehaviour
             Destroy(gameObject);
         }
     }
+}
+
 }
