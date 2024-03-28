@@ -146,7 +146,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         Transform projectileBase = Instantiate(projectileBasePrefab, projectileSpawnPoint.position, Quaternion.identity).transform;
         projectileBase.LookAt(aimPos);
         projectileBase.parent = transform;
-        projectileBase.localRotation = Quaternion.identity;
+        //projectileBase.localRotation = Quaternion.identity;
         
         
         tempTransform = Instantiate(currDemoEffect.projectilePrefab, projectileSpawnPoint.position, Quaternion.identity).transform;

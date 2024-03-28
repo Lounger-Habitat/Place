@@ -8,6 +8,7 @@ public class EffectFire : MonoBehaviour
     [SerializeField] private All1VfxDemoEffect currDemoEffect;
     [SerializeField] private GameObject projectileBasePrefab;
     [SerializeField] private Transform projectileSpawnPoint;
+    //[SerializeField] private Transform lookat;测试使用
 
     public int debugx = 0;
     public int debugy = 0;
@@ -35,6 +36,7 @@ public class EffectFire : MonoBehaviour
         // Debug.Log("delta: " + delta);
 
         Vector3 aimPos = endPosBottom.position + delta;
+        //lookat.position = aimPos;
         // Debug.Log(aimPos);
         
         Transform tempTransform = null;
@@ -47,15 +49,15 @@ public class EffectFire : MonoBehaviour
         
         
         Transform projectileBase = Instantiate(projectileBasePrefab, projectileSpawnPoint.position, Quaternion.identity).transform;
+        //projectileBase.localRotation = Quaternion.identity;
         projectileBase.LookAt(aimPos);
         projectileBase.parent = transform;
-        projectileBase.localRotation = Quaternion.identity;
         
         
-        tempTransform = Instantiate(currDemoEffect.projectilePrefab, projectileSpawnPoint.position, Quaternion.identity).transform;
-        tempTransform.localRotation = Quaternion.identity;
-        tempTransform.forward = projectileBase.forward;
-        tempTransform.parent = projectileBase;
+        Transform tempTransform1 = Instantiate(currDemoEffect.projectilePrefab, projectileSpawnPoint.position, Quaternion.identity).transform;
+        tempTransform1.localRotation = Quaternion.identity;
+        tempTransform1.forward = projectileBase.forward;
+        tempTransform1.parent = projectileBase;
         
         
         AllIn1DemoProjectile tempProjectileInstance = projectileBase.GetComponent<AllIn1DemoProjectile>();
