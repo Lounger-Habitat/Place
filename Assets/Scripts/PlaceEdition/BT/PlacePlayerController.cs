@@ -51,8 +51,10 @@ public class PlacePlayerController : MonoBehaviour
 
     public User user;
     // user 
-    public int speed = 5;
+    // public int speed = 5;
     public int hp = 100;
+
+    int lastLevel = 0;
 
     public bool isDefending = false;
     public bool isAttacking = false;
@@ -102,6 +104,7 @@ public class PlacePlayerController : MonoBehaviour
         totemPath = GenerateCirclePath(selfTotem.position, 3, 100);
         consolePath = GenerateCirclePath(altar.position, 3, 100);
         navMeshAgent = GetComponent<NavMeshAgent>();
+        lastLevel = user.level;
     }
     public void Update()
     {
@@ -123,6 +126,12 @@ public class PlacePlayerController : MonoBehaviour
             Debug.Log("trans to Attack");
             playerGoal.SetValue(PlayerGoal.Attack);
             playerBT.SetVariable("playerGoal", playerGoal);
+        }
+
+        // 计算贡献，自己升级
+        if (user.level > lastLevel) {
+            LevelUp();
+            lastLevel = user.level;
         }
     }
 
@@ -188,9 +197,25 @@ public class PlacePlayerController : MonoBehaviour
     }
 
     public void DrawPoint(Instruction ins) {
-        PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y);
+        PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y,user.camp);
         StartCoroutine(IDrawPoint(ins));
-        
+        // yield return new WaitForSeconds(2);
+        // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
+        // user.carryingInkCount -= ins.needInkCount;
+        // user.score += ins.needInkCount;
+
+    }
+
+    public void DrawLine(Instruction ins) {
+        List<(int,int)> points = PlaceBoardManager.Instance.GetLinePoints(ins.x, ins.y, ins.ex, ins.ey);
+        points.ForEach(p => {
+            PlaceConsoleAreaManager.Instance.PlayEffect(p.Item1, p.Item2,user.camp);
+            StartCoroutine(IDrawLine(p.Item1, p.Item2, ins.r, ins.g, ins.b, user.camp));
+        });
+        waitingDraw = waitingDraw + 1;
+        // PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y,user.camp);
+        // StartCoroutine(IDrawPoint(ins));
+
         // yield return new WaitForSeconds(2);
         // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
         // user.carryingInkCount -= ins.needInkCount;
@@ -201,11 +226,19 @@ public class PlacePlayerController : MonoBehaviour
     // 协程执行绘画
     private IEnumerator IDrawPoint(Instruction ins) {
         // 等待两秒执行
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
         PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
         user.carryingInkCount -= ins.needInkCount;
         user.score += ins.needInkCount;
         waitingDraw = waitingDraw + 1;
+    }
+    private IEnumerator IDrawLine(int x, int y, int r, int g, int b, int camp) {
+        // 等待两秒执行
+        yield return new WaitForSeconds(1.5f);
+        PlaceBoardManager.Instance.DrawCommand(x, y, r, g, b, user.camp);
+        user.carryingInkCount --;
+        user.score ++;
+        // waitingDraw = waitingDraw + 1;
     }
 
     

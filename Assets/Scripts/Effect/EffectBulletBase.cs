@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AllIn1VfxToolkit.Demo.Scripts;
+using DG.Tweening;
 
 namespace AllIn1VfxToolkit.Demo.Scripts {
 
@@ -50,6 +51,7 @@ public class EffectBulletBase : MonoBehaviour
                 t.localScale *= impactScaleSize;
             }
             //if(doShake) AllIn1Shaker.i.DoCameraShake(shakeAmountOnImpact);//相机震动，目前没有
+            DOTween.Kill(transform);
             Destroy(gameObject);
         }
     }
