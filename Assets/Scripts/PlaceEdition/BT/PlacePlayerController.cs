@@ -254,6 +254,7 @@ public class PlacePlayerController : MonoBehaviour
     {
         //播放特效相关
         var effect = Instantiate(levelUpEffect, transform.position+new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
+        effect.transform.SetParent(this.transform);
         //后续可能有音效、UI提示等效果
     }
 
