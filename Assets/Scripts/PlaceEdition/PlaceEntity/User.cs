@@ -29,6 +29,7 @@ public class User {
     ===============
     */
     public Color lastColor { get; set; } // 玩家 绘画 最后一次 使用的 颜色
+    public (int x,int y) lastPoint { get; set; } // 玩家 绘画 最后一次 使用的 颜色
 	public int level;               // 玩家等级 ， 用来升级
     public PlayerState currentState; // 玩家当前状态
     public int score { get; set; }  // 玩家当前分数
@@ -63,6 +64,7 @@ public class User {
         this.userIcon = null;
         this.speed = 2.0f;
         this.currentState = new PlayerState(HighLevelState.Draw, DetailState.DrawMoveToTotem);
+        this.lastPoint = (0,0);
     }
 
     public string getUsername() {

@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Text.RegularExpressions;
 using System.Linq;
 using Unity.VisualScripting;
+using System;
 
 public static class PlaceInstructionManager
 {
@@ -55,12 +56,66 @@ public static class PlaceInstructionManager
         string[] parts = command.Trim().Split(' ');
         switch (parts[0])
         {
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+            case "6":
+            case "7":
+            case "8":
+            case "9":
+                if (!PlaceCenter.Instance.CheckUser(username))
+                {
+                    break;
+                }
+                User quickDrawUser = PlaceCenter.Instance.FindUser(username);
+                if (parts.Length > 1)
+                {
+                    int x, y, r, g, b;
+                    string c;
+                    c = parts[0]; // /d
+                    x = quickDrawUser.lastPoint.x; // x
+                    y = quickDrawUser.lastPoint.y; // y
+                    (x,y) = ComputeQuickIns(c[0],x,y);
+                    r = int.Parse(parts[1]); // x
+                    g = int.Parse(parts[2]); // y
+                    b = int.Parse(parts[3]); // r
+                    Instruction drawIns = new Instruction("/d", x, y, r: r, g: g, b: b);
+                    if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                        Debug.Log("指令不合法");
+                        break;
+                    }
+                    quickDrawUser.lastColor = new Color(r, g, b);
+                    quickDrawUser.lastPoint = (x, y);
+                    quickDrawUser.instructionQueue.Enqueue(drawIns);
+                }
+                else
+                {
+                    int x, y, r, g, b;
+                    string c;
+                    c = parts[0]; // /d
+                    x = quickDrawUser.lastPoint.x; // x
+                    y = quickDrawUser.lastPoint.y; // y
+                    (x,y) = ComputeQuickIns(c[0],x,y);
+                    Color color = quickDrawUser.lastColor;
+                    r = (int)(color.r * 255); // r
+                    g = (int)(color.g * 255); // g
+                    b = (int)(color.b * 255); // b
+                    Instruction drawIns = new Instruction("/d", x, y, r: r, g: g, b: b);
+                    if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                        Debug.Log("指令不合法");
+                        break;
+                    }
+                    quickDrawUser.lastPoint = (x, y);
+                    quickDrawUser.instructionQueue.Enqueue(drawIns);
+                }
+                break;
             case "111":
             case "222":
             case "333":
             case "444":
                 string ins = parts[0];
-                string teamId = Regex.Replace(ins, @"(.)\1+", "$1");
+                string teamId = Regex.Replace(ins, @"(.)\1+", m => m.Groups[1].Value);
                 PlaceCenter.Instance.JoinTeam(username, teamId);
                 break;
             case "/add":
@@ -108,6 +163,7 @@ public static class PlaceInstructionManager
                             Debug.Log("指令不合法");
                             break;
                         }
+                        drawUser.lastPoint = (x, y);
                         drawUser.instructionQueue.Enqueue(drawIns);
                         // Debug.Log(username + " : draw " + c + " " + x + " " + y + " " + r + " " + g + " " + b);
                     }
@@ -121,12 +177,14 @@ public static class PlaceInstructionManager
                         r = int.Parse(parts[3]); // r
                         g = int.Parse(parts[4]); // g
                         b = int.Parse(parts[5]); // b
-                        drawUser.lastColor = new Color(r, g, b);
+                        
                         Instruction drawIns = new Instruction(c, x, y, r: r, g: g, b: b);
                         if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
                             Debug.Log("指令不合法");
                             break;
                         }
+                        drawUser.lastColor = new Color(r, g, b);
+                        drawUser.lastPoint = (x, y);
                         drawUser.instructionQueue.Enqueue(drawIns);
                         // Debug.Log(username + " : draw " + c + " " + x + " " + y + " " + r + " " + g + " " + b);
                     }
@@ -258,6 +316,64 @@ public static class PlaceInstructionManager
                     Debug.LogError("输入字符串格式不正确");
                 }
                 break;
+            case "/m":
+                if (!PlaceCenter.Instance.CheckUser(username))
+                {
+                    break;
+                }
+                User mUser = PlaceCenter.Instance.FindUser(username);
+                if (parts.Length > 2) // 多颜色
+                {
+                    int x, y, r, g, b;
+                    string c,s;
+                    c = parts[0]; // /d
+                    s = parts[1]; // x
+                    r = int.Parse(parts[2]); // r
+                    g = int.Parse(parts[3]); // g
+                    b = int.Parse(parts[4]); // b
+                    (x,y) = mUser.lastPoint;
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        char digitIns = s[i];
+                        (x,y) = ComputeQuickIns(digitIns,x,y);
+                        Instruction drawIns = new Instruction("/d", x, y, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                            Debug.Log("指令不合法");
+                            continue;
+                        }
+                        mUser.instructionQueue.Enqueue(drawIns);
+                        
+                    }
+                    mUser.lastColor = new Color(r, g, b);
+                    x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
+                    y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
+                    mUser.lastPoint = (x, y);
+                }else{ // 默认颜色
+                    int x, y, r, g, b;
+                    string c,s;
+                    c = parts[0]; // /d
+                    s = parts[1]; // x
+                    (x,y) = mUser.lastPoint;
+                    Color color = mUser.lastColor;
+                    r = (int)(color.r * 255); // r
+                    g = (int)(color.g * 255); // g
+                    b = (int)(color.b * 255); // b
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        char digitIns = s[i];
+                        (x,y) = ComputeQuickIns(digitIns,x,y);
+                        Instruction drawIns = new Instruction("/d", x, y, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                            Debug.Log("指令不合法");
+                            continue;
+                        }
+                        mUser.instructionQueue.Enqueue(drawIns);
+                    }
+                    x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
+                    y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
+                    mUser.lastPoint = (x, y);
+                }
+                break;
             case "/take": // 拿别人颜料 ，谁家
             case "/t":
                 break;
@@ -331,5 +447,39 @@ public static class PlaceInstructionManager
         //         PlaceCenter.Instance.GainPower(username, message);
         //         break;
         // }
+    }
+
+    public static (int x,int y) ComputeQuickIns(char m, int x, int y) {
+        switch (m) {
+            case '1':
+                x -= 1;
+                y -= 1;
+                break;
+            case '2':
+                y -= 1;
+                break;
+            case '3':
+                x += 1;
+                y -= 1;
+                break;
+            case '4':
+                x -= 1;
+                break;
+            case '6':
+                x += 1;
+                break;
+            case '7':
+                x -= 1;
+                y += 1;
+                break;
+            case '8':
+                y += 1;
+                break;
+            case '9':
+                x += 1;
+                y += 1;
+                break;
+        }
+        return (x, y);
     }
 }

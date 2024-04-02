@@ -94,7 +94,7 @@ public class TestManager : MonoBehaviour
 
         // 0-1 random
         float rand = Random.Range(0f, 1f);
-        if (rand<0.9f) {
+        if (rand<0.5f) {
             // 生成 画点指令
             int x = Random.Range(0, width);
             int y = Random.Range(0, height);
@@ -105,7 +105,7 @@ public class TestManager : MonoBehaviour
             int b = Random.Range(0, 255);
 
             drawIns = "/d " + x + " " + y + " " + r + " " + g + " " + b;
-        }else {
+        }else if(rand<0.8f) {
             // 生成 画线指令
             int x1 = Random.Range(0, width);
             int y1 = Random.Range(0, height);
@@ -119,6 +119,24 @@ public class TestManager : MonoBehaviour
 
             drawIns = "/l " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + r + " " + g + " " + b;
 
+        }else {
+            // 生成 画线指令
+            int count = Random.Range(0, 20);
+            char[] gifts = { '1' , '2', '3', '4', '6', '7', '8', '9'};
+            string s = "";
+            for (int i = 0; i < count; i++)
+            {
+                int ci = Random.Range(0, gifts.Length);
+                char c = gifts[ci];
+                s = s + c;
+            }
+
+            // 随机生成颜色
+            int r = Random.Range(0, 255);
+            int g = Random.Range(0, 255);
+            int b = Random.Range(0, 255);
+
+            drawIns = "/m " + s + " " + r + " " + g + " " + b;
         }
 
         return drawIns;
