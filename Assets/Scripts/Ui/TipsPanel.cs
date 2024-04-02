@@ -15,6 +15,12 @@ public class TipsPanel : MonoBehaviour
     private Dictionary<TipsType, TipsBase> tipsPanels = new Dictionary<TipsType, TipsBase>();
 
     private MessageTips tipsleft, tipsright;
+#if UNITY_EDITOR
+    private void Start()
+    {
+        Init();
+    }
+#endif
     public void Init()
     {
         //rectTransform = transform as RectTransform;
@@ -26,6 +32,7 @@ public class TipsPanel : MonoBehaviour
         {
             tipsPanels[item.panelType] = item;
         }
+
         tipsleft = transform.Find("Tips").GetComponent<MessageTips>();
         tipsright = transform.Find("TipsRight").GetComponent<MessageTips>();
         tipsleft.Init(this);
@@ -79,8 +86,6 @@ public class TipsPanel : MonoBehaviour
                 StartCoroutine(ShowTipsAni());
             }
         }
-
-        
     }
 
     WaitForSeconds wait = new(4.6f);
@@ -199,7 +204,7 @@ public class TipsPanel : MonoBehaviour
         AddTips(new TipsItem()
         {
             userName = "金钱帝国",
-            text = "gift giftDrawPanel",
+            text = "颜料增加",
             tipsType = TipsType.giftDrawPanel
         });
     }
