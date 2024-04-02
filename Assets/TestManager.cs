@@ -94,7 +94,7 @@ public class TestManager : MonoBehaviour
 
         // 0-1 random
         float rand = Random.Range(0f, 1f);
-        if (rand<1.1f) {
+        if (rand<0.9f) {
             // 生成 画点指令
             int x = Random.Range(0, width);
             int y = Random.Range(0, height);
@@ -151,7 +151,7 @@ public class TestManager : MonoBehaviour
     string GenerateCommand()
     {
         float rand = Random.Range(0f, 1f);
-        if (rand<0.7f) {
+        if (rand<0.95f) {
             return RandomGenDrawIns();
         }else {
             return RandomGenGiftIns();
@@ -168,7 +168,7 @@ public class TestManager : MonoBehaviour
         string user = users[urand];
 
         float rand = Random.Range(0f, 1f);
-        if (rand<0.9f) {
+        if (rand<0.95f) {
             string drawIns = RandomGenDrawIns();
             Debug.Log($"{user} 执行 ({drawIns}) 指令");
             PlaceInstructionManager.DefaultRunChatCommand(user,drawIns);

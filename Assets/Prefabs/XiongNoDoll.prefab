@@ -310,8 +310,8 @@ MonoBehaviour:
         byteData: 
         byteDataArray: 
       Version: 1.7.8
-  gizmoViewMode: 2
-  showBehaviorDesignerGizmo: 1
+  gizmoViewMode: 0
+  showBehaviorDesignerGizmo: 0
 --- !u!114 &5877330641120409951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,8 +332,10 @@ MonoBehaviour:
   enemyTotem: {fileID: 0}
   enemyDoor: {fileID: 0}
   insList: []
+  batchCount: 0
   insReadyList: []
   playerAnimator: {fileID: 2311344120738502171}
+  waitingDraw: 0
   user:
     username: 
     camp: 0
@@ -342,10 +344,10 @@ MonoBehaviour:
     level: 0
     maxCarryingInsCount: 0
     speed: 0
+    waitingSpeed: 0
     character: {fileID: 0}
     nameTag: {fileID: 0}
     selfTeam: {fileID: 0}
-  speed: 5
   hp: 100
   isDefending: 0
   isAttacking: 0
@@ -353,6 +355,7 @@ MonoBehaviour:
   totemPath: []
   consolePath: []
   pathIndex: 0
+  levelUpEffect: {fileID: 5630033035972994015, guid: fbf7b003351d3cc4da6c1972a822b53c, type: 3}
 --- !u!136 &5821709114818931479
 CapsuleCollider:
   m_ObjectHideFlags: 0

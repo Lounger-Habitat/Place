@@ -420,6 +420,11 @@ public class PlaceBoardManager : MonoBehaviour
             texture.Apply(); // 应用更改到贴图
         }
     }
+
+    public List<(int,int)> GetLinePoints(int x, int y, int ex, int ey)
+    {
+        return ComputeDrawLine(x: x, y: y, ex: ex, ey: ey, isDraw: false);
+    }
     public int GetLineCount(int x, int y, int ex, int ey)
     {
         return DrawLine(x: x, y: y, ex: ex, ey: ey, isDraw: false);
@@ -427,7 +432,53 @@ public class PlaceBoardManager : MonoBehaviour
 
     public void LineCommand(int x, int y, int ex, int ey, int r, int g, int b, int camp = 0)
     {
-        DrawLine(x, y, ex, ey, r, g, b, camp);
+        GetLinePoints(x, y, ex, ey).ForEach(p => {
+            DrawCommand(p.Item1, p.Item2, r, g, b, camp);
+        });
+        // DrawLine(x, y, ex, ey, r, g, b, camp);
+    }
+    private List<(int,int)> ComputeDrawLine(int x, int y , int ex , int ey , int r = 0, int g = 0, int b = 0, int camp = 0, bool isDraw = true) {
+        List<(int,int)> points = new List<(int,int)>();
+        // 使用 Bresenham 算法来计算这两点之间的像素点
+        int dx = Math.Abs(ex - x);
+        int dy = Math.Abs(ey - y);
+        int sx = (x < ex) ? 1 : -1;
+        int sy = (y < ey) ? 1 : -1;
+        int err = dx - dy;
+
+        while (true)
+        {
+            // if (isDraw)
+            // {
+            //     DrawCommand(x, y, r, g, b, camp); // 绘制像素点
+            // }
+            // else
+            // {
+            //     pixelsCount += 1;
+            // }
+
+            points.Add((x,y));
+
+
+            if ((x == ex) && (y == ey))
+                break;
+
+            int e2 = 2 * err;
+
+            if (e2 > -dy)
+            {
+                err = err - dy;
+                x = x + sx;
+            }
+
+            if (e2 < dx)
+            {
+                err = err + dx;
+                y = y + sy;
+            }
+        }
+
+        return points;
     }
     private int DrawLine(int x, int y , int ex , int ey , int r = 0, int g = 0, int b = 0, int camp = 0, bool isDraw = true)
     {

@@ -19,6 +19,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
 
     public Transform totem;
     public Transform door;
+    public GameObject ps;
 
     void Start()
     {
@@ -32,6 +33,11 @@ public class PlaceTeamAreaManager : MonoBehaviour
         if (door == null)
         {
             door = transform.GetChild(1).gameObject.transform;
+        }
+        // 玩家区域
+        if (ps == null)
+        {
+            ps = GameObject.Find("PlayerSpace");
         }
 
     }
@@ -95,12 +101,14 @@ public class PlaceTeamAreaManager : MonoBehaviour
     {
         GameObject go = null;
         User user = null;
+        
         // 检查队伍区域是否已满
         if (teaminfo.currentTeamNumberCount < teaminfo.MaxTeamNumber)
         {
             // 创建角色
             Vector3 spawnPosition = GetRandomPositionInArea();
             go = Instantiate(characterPrefab, spawnPosition, Quaternion.identity);
+            go.transform.SetParent(ps.transform);
             PlacePlayerController PlayerControllerScript = go.GetComponent<PlacePlayerController>();
             GameObject nameTag = PlaceCenter.Instance.CreateNameTag(go.transform, username);
             user = new User(username, go, teaminfo.Id,this);

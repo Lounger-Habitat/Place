@@ -1,7 +1,6 @@
 using AllIn1VfxToolkit.Demo.Scripts;
 using UnityEngine;
 using DG.Tweening;
-using UnityEngine.UI;
 
 public class PlaceConsoleAreaManager : MonoBehaviour
 {
@@ -16,6 +15,10 @@ public class PlaceConsoleAreaManager : MonoBehaviour
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private All1VfxDemoEffect currDemoEffect;
     [SerializeField] private GameObject projectileBasePrefab;
+    [SerializeField] private All1VfxDemoEffect team1DemoEffect;
+    [SerializeField] private All1VfxDemoEffect team2DemoEffect;
+    [SerializeField] private All1VfxDemoEffect team3DemoEffect;
+    [SerializeField] private All1VfxDemoEffect team4DemoEffect;
   
     public int debugx = 0;
     public int debugy = 0;
@@ -75,7 +78,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
 
             // int x = Random.Range(0, 500);
             // int y = Random.Range(0, 500);
-            PlayEffect(debugx,debugy);
+            PlayEffect(debugx,debugy,1);
         }
     }
 
@@ -125,7 +128,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
 
     // }
 
-    public void PlayEffect(int x,int y)
+    public void PlayEffect(int x,int y , int camp)
     {
         // 检测 x,y 小于 width height, 超出部分做截断处理
         x = Mathf.Clamp(x, 0, boradWidth);
@@ -133,6 +136,24 @@ public class PlaceConsoleAreaManager : MonoBehaviour
 
         Vector3 delta = new Vector3((float)(x * pixelWidth), (float)(y * pixelHeight), 0f);
         Vector3 aimPos = endPosBottom.position + delta;
+
+        switch (camp)
+        {
+            case 1:
+                currDemoEffect = team1DemoEffect;
+                break;
+            case 2:
+                currDemoEffect = team2DemoEffect;
+                break;
+            case 3:
+                currDemoEffect = team3DemoEffect;
+                break;
+            case 4:
+                currDemoEffect = team4DemoEffect;
+                break;
+            default:
+                break;
+        }
 
         
         Transform tempTransform = null;
