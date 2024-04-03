@@ -374,6 +374,28 @@ public static class PlaceInstructionManager
                     mUser.lastPoint = (x, y);
                 }
                 break;
+            case "visual":
+            case "/v":
+                if (!PlaceCenter.Instance.CheckUser(username))
+                {
+                    break;
+                }
+                User vUser = PlaceCenter.Instance.FindUser(username);
+                if (parts.Length == 3)
+                {
+                    int x, y;
+                    string c;
+                    c = parts[0]; // /d
+                    x = int.Parse(parts[1]); // x
+                    y = int.Parse(parts[2]); // y
+                    PlaceConsoleAreaManager.Instance.VisualAuxiliaryLine(x, y, vUser.camp);
+                }
+                else
+                {
+                    Debug.LogError("输入字符串格式不正确");
+                }
+                break;
+                
             case "/take": // 拿别人颜料 ，谁家
             case "/t":
                 break;

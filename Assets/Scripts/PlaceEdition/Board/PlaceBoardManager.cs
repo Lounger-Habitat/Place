@@ -90,54 +90,54 @@ public class PlaceBoardManager : MonoBehaviour
         // 例如，将其应用到当前游戏对象的 Renderer 上
         // Renderer renderer = GetComponent<Renderer>();
 
-        MarkEdges(texture);
+        // MarkEdges(texture);
         defaultTexture = texture;
 
-        LoadResources();
+        // LoadResources();
     }
 
     void Update()
     {
         if (mode == "2D")
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-            Vector2 mousePosition = Input.mousePosition;
-            RectTransform rectTransform = canvasImage.rectTransform;
-            Vector2 localPoint;
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, mousePosition, null, out localPoint))
-            {
-                // 在这里处理点击的本地坐标
-                // Vector2 pixelUV = hit.textureCoord;
-                // pixelUV.x *= texture.width;
-                // pixelUV.y *= texture.height;
-                Vector2 uv = new Vector2((localPoint.x + rectTransform.rect.width / 2) / rectTransform.rect.width,
-                                         (localPoint.y + rectTransform.rect.height / 2) / rectTransform.rect.height);
-                uv.x *= texture.width;
-                uv.y *= texture.height;
-                // Vector2Int texCoord = new Vector2Int((int)(localPoint.x + rectTransform.rect.width / 2), (int)(localPoint.y + rectTransform.rect.height / 2));
-                // Debug.Log(uv);
+            // if (Input.GetMouseButtonDown(0))
+            // {
+            //     Vector2 mousePosition = Input.mousePosition;
+            //     RectTransform rectTransform = canvasImage.rectTransform;
+            //     Vector2 localPoint;
+            //     if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, mousePosition, null, out localPoint))
+            //     {
+            //         // 在这里处理点击的本地坐标
+            //         // Vector2 pixelUV = hit.textureCoord;
+            //         // pixelUV.x *= texture.width;
+            //         // pixelUV.y *= texture.height;
+            //         Vector2 uv = new Vector2((localPoint.x + rectTransform.rect.width / 2) / rectTransform.rect.width,
+            //                                 (localPoint.y + rectTransform.rect.height / 2) / rectTransform.rect.height);
+            //         uv.x *= texture.width;
+            //         uv.y *= texture.height;
+            //         // Vector2Int texCoord = new Vector2Int((int)(localPoint.x + rectTransform.rect.width / 2), (int)(localPoint.y + rectTransform.rect.height / 2));
+            //         // Debug.Log(uv);
 
-                UpdateTexture((int)uv.x, (int)uv.y);
-            }
-            }
+            //         UpdateTexture((int)uv.x, (int)uv.y);
+            //     }
+            // }
         }
         else if (mode == "3D")
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                RaycastHit hit;
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            // if (Input.GetMouseButtonDown(0))
+            // {
+            //     RaycastHit hit;
+            //     Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
-                if (Physics.Raycast(ray, out hit))
-                {
-                    Vector2 pixelUV = hit.textureCoord;
-                    pixelUV.x *= texture.width;
-                    pixelUV.y *= texture.height;
+            //     if (Physics.Raycast(ray, out hit))
+            //     {
+            //         Vector2 pixelUV = hit.textureCoord;
+            //         pixelUV.x *= texture.width;
+            //         pixelUV.y *= texture.height;
 
-                    UpdateTexture((int)pixelUV.x, (int)pixelUV.y);
-                }
-            }
+            //         UpdateTexture((int)pixelUV.x, (int)pixelUV.y);
+            //     }
+            // }
         }
         // 按下 d 键
         if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
