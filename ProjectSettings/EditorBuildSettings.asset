@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/BegiinScene.unity
+    guid: b3aa6256f6b205e40a80dde1e4bf85ec
+  - enabled: 1
     path: Assets/Scenes/SampleScene_Radoll.unity
     guid: 8baef2e4975b9284ab2058684c06580c
   m_configObjects: {}
