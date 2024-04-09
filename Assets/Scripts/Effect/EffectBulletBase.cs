@@ -13,8 +13,9 @@ public class EffectBulletBase : MonoBehaviour
     private GameObject currentImpactPrefab;
     private Transform currentHierarchyParent;
     private bool doImpactSpawn;
-    private bool doShake = false;
-    private float shakeAmountOnImpact, impactScaleSize;
+    // private bool doShake = false;
+    // private float shakeAmountOnImpact;
+    private float impactScaleSize;
         
     public void Initialize(Transform hierarchyParent, Vector3 projectileDir, float speed, GameObject impactPrefab, float impactScaleSize)
     {
@@ -27,18 +28,18 @@ public class EffectBulletBase : MonoBehaviour
         //GetComponent<Rigidbody>().velocity = projectileDir * speed;
     }
         
-    public void AddScreenShakeOnImpact(float projectileImpactShakeAmount)
-    {
-        doShake = true;
-        shakeAmountOnImpact = projectileImpactShakeAmount;
-    }
+    // public void AddScreenShakeOnImpact(float projectileImpactShakeAmount)
+    // {
+    //     doShake = true;
+    //     shakeAmountOnImpact = projectileImpactShakeAmount;
+    // }
 
-    private void ApplyPrecisionOffsetToProjectileDir(ref Vector3 projectileDir)
-    {
-        projectileDir.x += Random.Range(-inaccurateAmount, inaccurateAmount);
-        projectileDir.y += Random.Range(-inaccurateAmount, inaccurateAmount);
-        projectileDir.z += Random.Range(-inaccurateAmount, inaccurateAmount);
-    }
+    // private void ApplyPrecisionOffsetToProjectileDir(ref Vector3 projectileDir)
+    // {
+    //     projectileDir.x += Random.Range(-inaccurateAmount, inaccurateAmount);
+    //     projectileDir.y += Random.Range(-inaccurateAmount, inaccurateAmount);
+    //     projectileDir.z += Random.Range(-inaccurateAmount, inaccurateAmount);
+    // }
 
     private void OnTriggerEnter(Collider other)
     {

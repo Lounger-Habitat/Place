@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TestManager : MonoBehaviour
@@ -17,6 +19,32 @@ public class TestManager : MonoBehaviour
     private float minInterval = 0.1f; // 最小时间间隔
     private float maxInterval = 2.0f; // 最大时间间隔
 
+    public List<Texture2D> loadedTextures = new List<Texture2D>();
+    public string directoryPath = "Assets/Images";
+    public int index = 0;
+    public Color[] pixelsImage;
+    public static TestManager Instance { get; private set; }
+
+
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            // DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void Start() {
+        LoadResources();
+        ImageProcessor();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -30,6 +58,16 @@ public class TestManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Comma))
         {
             PlaceInstructionManager.DefaultGiftCommand(playerName,gift);
+        }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            string[] users = PlaceCenter.Instance.users.Keys.ToArray();
+            // 遍历所有用户
+            foreach (var user in users)
+            {
+                PlaceInstructionManager.DefaultGiftCommand(user,gift);
+            }
+            
         }
         // 按下.，执行指令  测试 指令
         if (Input.GetKeyDown(KeyCode.Period))
@@ -94,15 +132,14 @@ public class TestManager : MonoBehaviour
 
         // 0-1 random
         float rand = Random.Range(0f, 1f);
-        if (rand<0.5f) {
+        if (rand<1.1f) {
             // 生成 画点指令
             int x = Random.Range(0, width);
             int y = Random.Range(0, height);
 
             // 随机生成颜色
-            int r = Random.Range(0, 255);
-            int g = Random.Range(0, 255);
-            int b = Random.Range(0, 255);
+            int r,g,b;
+            (r,g,b) = RandomGetPoint(x,y);
 
             drawIns = "/d " + x + " " + y + " " + r + " " + g + " " + b;
         }else if(rand<0.8f) {
@@ -188,12 +225,74 @@ public class TestManager : MonoBehaviour
         float rand = Random.Range(0f, 1f);
         if (rand<0.95f) {
             string drawIns = RandomGenDrawIns();
-            Debug.Log($"{user} 执行 ({drawIns}) 指令");
+            // Debug.Log($"{user} 执行 ({drawIns}) 指令");
             PlaceInstructionManager.DefaultRunChatCommand(user,drawIns);
         }else {
             string giftIns = RandomGenGiftIns();
             Debug.Log($"{user} 赠送 ({giftIns}) 颜料");
             PlaceInstructionManager.DefaultGiftCommand(user,giftIns);
+        }
+    }
+
+    (int, int, int) RandomGetPoint(int x,int y) {
+        int i = y * PlaceBoardManager.Instance.width + x;
+        Color32 c = pixelsImage[i];
+        return (c.r,c.g,c.b);
+    }
+
+    
+    public void ImageProcessor() {
+        Texture2D inputTexture = loadedTextures[index];
+        // 外部引用 
+        Texture2D resizeTexture = PlaceBoardManager.Instance.ScaleTextureProportionally(inputTexture, PlaceBoardManager.Instance.width, PlaceBoardManager.Instance.height);
+        pixelsImage = resizeTexture.GetPixels();
+    }
+
+    void LoadResources()
+    {
+        // 检查目录是否存在
+        if (Directory.Exists(directoryPath))
+        {
+            // 获取目录中的所有文件
+            string[] files = Directory.GetFiles(directoryPath);
+
+            foreach (string filePath in files)
+            {
+                // 检查文件是否是图片
+                if (IsImageFile(filePath))
+                {
+                    // 加载图片资源并添加到List
+                    Texture2D texture = LoadTexture(filePath);
+                    if (texture != null)
+                    {
+                        loadedTextures.Add(texture);
+                    }
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("Directory not found: " + directoryPath);
+        }
+    }
+    bool IsImageFile(string filePath)
+    {
+        string extension = Path.GetExtension(filePath).ToLower();
+        return extension == ".png" || extension == ".jpg" || extension == ".jpeg" || extension == ".gif";
+    }
+
+    Texture2D LoadTexture(string filePath)
+    {
+        byte[] fileData = File.ReadAllBytes(filePath);
+        Texture2D texture = new Texture2D(2, 2); // 创建一个临时Texture2D，稍后会被替换为实际的图像数据
+        if (texture.LoadImage(fileData)) // 加载图像数据
+        {
+            return texture;
+        }
+        else
+        {
+            Debug.LogError("Failed to load texture: " + filePath);
+            return null;
         }
     }
 }

@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.UI;
+using Assets.GifAssets.PowerGif;
+using System.Collections;
 
 public class PlaceBoardManager : MonoBehaviour
 {
@@ -20,14 +23,8 @@ public class PlaceBoardManager : MonoBehaviour
 
     public int height = 500;
     public int width = 500;
-
-    public string directoryPath = "Assets/Images";
-    public List<Texture2D> loadedTextures = new List<Texture2D>();
-
-    public int index = 0;
-
     public Texture2D defaultTexture;
-
+    public int recorderTime = 60;
     public int[] pixelsInfos;
 
     public static PlaceBoardManager Instance { get; private set; }
@@ -148,11 +145,11 @@ public class PlaceBoardManager : MonoBehaviour
                 // Texture2D sourceTexture = LoadTexture("Assets/Images/dog.jpg");
                 // Debug.Log(sourceTexture.name);
 
-                if (loadedTextures == null && loadedTextures.Count == 0)
+                if (TestManager.Instance.loadedTextures == null && TestManager.Instance.loadedTextures.Count == 0)
                 {
                     Debug.Log("没图片！");
                 }
-                Texture2D originalTexture = loadedTextures[index];
+                Texture2D originalTexture = TestManager.Instance.loadedTextures[TestManager.Instance.index];
                 bool ist = CheckForTransparency(texture);
                 Debug.Log(ist);
                 Debug.Log(originalTexture.name);
@@ -165,15 +162,34 @@ public class PlaceBoardManager : MonoBehaviour
                 Reset();
             }
             // 如果按下 . 键，保存图片
-            if (Input.GetKeyDown(KeyCode.Period))
+            if (Input.GetKeyDown(KeyCode.J))
             {
                 SaveImage();
+            }
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                Debug.Log("开始记录gif");
+                StartCoroutine(SaveImagePreMinute());
+            }
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                GenGif($"Assets/Images/test");
             }
         }
     }
 
-    void LoadResources()
+    IEnumerator SaveImagePreMinute()
     {
+        // 持续等待一分钟
+        while (PlaceCenter.Instance.gameRuning) {
+            yield return new WaitForSeconds(recorderTime);
+            SaveImage();
+        }
+    }
+
+    List<Texture2D> LoadResources(string directoryPath)
+    {
+        List<Texture2D> loadedTextures = new List<Texture2D>();
         // 检查目录是否存在
         if (Directory.Exists(directoryPath))
         {
@@ -183,6 +199,7 @@ public class PlaceBoardManager : MonoBehaviour
             foreach (string filePath in files)
             {
                 // 检查文件是否是图片
+                Debug.Log("filePath : " + filePath);
                 if (IsImageFile(filePath))
                 {
                     // 加载图片资源并添加到List
@@ -198,12 +215,15 @@ public class PlaceBoardManager : MonoBehaviour
         {
             Debug.LogError("Directory not found: " + directoryPath);
         }
+        return loadedTextures;
     }
+
     bool IsImageFile(string filePath)
     {
         string extension = Path.GetExtension(filePath).ToLower();
         return extension == ".png" || extension == ".jpg" || extension == ".jpeg" || extension == ".gif";
     }
+
     Texture2D LoadTexture(string filePath)
     {
         byte[] fileData = File.ReadAllBytes(filePath);
@@ -390,12 +410,28 @@ public class PlaceBoardManager : MonoBehaviour
         return false;
     }
 
-    void SaveImage()
+    public void SaveImage()
     {
         byte[] bytes = texture.EncodeToPNG();
-        string path = $"Assets/Images/save_{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
+        // 检测文件夹是否存在
+        if (!Directory.Exists($"Assets/Images/test"))
+        {
+            Directory.CreateDirectory($"Assets/Images/test");
+        }
+        string path = $"Assets/Images/test/save_{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
         System.IO.File.WriteAllBytes(path, bytes);
         Debug.Log("Saved Image to: " + path);
+    }
+
+    public void GenGif(string gifPath) {
+        List<Texture2D> f =  LoadResources(gifPath);
+        var frames = f.Select(f => new GifFrame(f, 0.1f)).ToList();
+	    var gif = new Gif(frames);
+		var bytes = gif.Encode();
+        var path = Path.Combine(gifPath, "test.gif");
+		if (path == "") return;
+		File.WriteAllBytes(path, bytes);
+		Debug.Log($"Saved to: {path}");
     }
 
     public void Reset()

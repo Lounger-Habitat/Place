@@ -395,7 +395,8 @@ public static class PlaceInstructionManager
                     Debug.LogError("输入字符串格式不正确");
                 }
                 break;
-                
+            case "gs":
+                 
             case "/take": // 拿别人颜料 ，谁家
             case "/t":
                 break;
