@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -63,6 +64,8 @@ public class TeamPanel : MonoBehaviour
         teamItem.Find("Data").GetComponent<TMP_Text>().text = $"{team.score}";
     }
 
+    private Dictionary<string,User> currentUserList = new Dictionary<string, User>();//当前在排行榜上的玩家，不在排行榜上第一次上榜可以通知
+
     public void UpdateTeamUI(PlaceTeamAreaManager teamArae)
     {
         teamItem = transform.GetChild(teamArae.teaminfo.Id-1);
@@ -90,7 +93,29 @@ public class TeamPanel : MonoBehaviour
                 rankItem.Find("Name").GetComponent<TMP_Text>().text = item.username;
                 rankItem.Find("Data").GetComponent<TMP_Text>().text = $"贡献:{item.score}";
                 //rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = item.userIcon;//TODO:需要对接user头像，目前没有，所以我的遮罩就没了
+                
+                
+                //检测当前玩家是否在榜
+                if (!currentUserList.Values.Contains(item))
+                {
+                    //不在榜，上榜的进行通知 TODO：可以通知UI进行通知
+                }
+                string onlyId = $"{teamArae.teaminfo.Id}-{i}";//id是队伍id与排名的组合
+                //检测玩家是否是第一,降序排序，第一个就是排行第一玩家
+                if (i.Equals(0))
+                {
+                    if (currentUserList.ContainsKey(onlyId)&&!currentUserList[onlyId].Equals(item))
+                    {
+                        //第一不是当前玩家，此玩家夺得第一 TODO:进行UI通知，争榜一
+                    }
+                }
+                //将当前玩家存到缓存中
+                currentUserList[onlyId] = item;
             }
+            
+            
         }
+
+        Debug.Log($"刷新-{teamArae.teaminfo.Id}-队伍");
     }
 }
