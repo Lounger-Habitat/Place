@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using Unity.VisualScripting;
 using System;
+using System.Data.Common;
 
 public static class PlaceInstructionManager
 {
@@ -110,14 +111,14 @@ public static class PlaceInstructionManager
                     quickDrawUser.instructionQueue.Enqueue(drawIns);
                 }
                 break;
-            case "111":
-            case "222":
-            case "333":
-            case "444":
-                string ins = parts[0];
-                string teamId = Regex.Replace(ins, @"(.)\1+", m => m.Groups[1].Value);
-                PlaceCenter.Instance.JoinTeam(username, teamId);
-                break;
+            // case "111":
+            // case "222":
+            // case "333":
+            // case "444":
+            //     string ins = parts[0];
+            //     string teamId = Regex.Replace(ins, @"(.)\1+", m => m.Groups[1].Value);
+            //     PlaceCenter.Instance.JoinTeam(username, teamId);
+            //  break;
             case "/add":
             case "/a":
                 if (parts.Length >= 2)
@@ -166,6 +167,31 @@ public static class PlaceInstructionManager
                         drawUser.lastPoint = (x, y);
                         drawUser.instructionQueue.Enqueue(drawIns);
                         // Debug.Log(username + " : draw " + c + " " + x + " " + y + " " + r + " " + g + " " + b);
+                    }else if (parts.Length == 4)
+                    {
+                        int x, y, r, g, b;
+                        string c,dc;
+                        c = parts[0]; // /d
+                        x = int.Parse(parts[1]); // x
+                        y = int.Parse(parts[2]); // y
+                        dc = parts[3];
+                        if (colorDict.ContainsKey(dc)) {
+                            Color32 color = colorDict[dc];
+                            r = color.r; // r
+                            g = color.g; // g
+                            b = color.b; // b
+                        }else {
+                            Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
+                            // UI 提示
+                            break;
+                        }
+                        Instruction drawIns = new Instruction(c, x, y, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                            Debug.Log("指令不合法");
+                            break;
+                        }
+                        drawUser.lastPoint = (x, y);
+                        drawUser.instructionQueue.Enqueue(drawIns);
                     }
                     else if (parts.Length == 6)
                     {
@@ -223,6 +249,33 @@ public static class PlaceInstructionManager
                         Instruction ins_l = new Instruction(c, x, y, ex: ex, ey: ey, r: r, g: g, b: b);
                         if (!PlaceBoardManager.Instance.CheckIns(ins_l)){
                             Debug.Log("指令不合法");
+                            break;
+                        }
+                        lineUser.instructionQueue.Enqueue(ins_l);
+                    }else if (parts.Length == 6)
+                    {
+                        int x, y, ex, ey, r, g, b;
+                        string c,dc;
+                        c = parts[0]; // /l
+                        x = int.Parse(parts[1]); // x
+                        y = int.Parse(parts[2]); // y
+                        ex = int.Parse(parts[3]); // ex
+                        ey = int.Parse(parts[4]); // ey
+                        dc = parts[5];
+                        if (colorDict.ContainsKey(dc)) {
+                            Color32 color = colorDict[dc];
+                            r = color.r; // r
+                            g = color.g; // g
+                            b = color.b; // b
+                        }else {
+                            Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
+                            // UI 提示
+                            break;
+                        }
+                        Instruction ins_l = new Instruction(c, x, y, ex: ex, ey: ey, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(ins_l)){
+                            Debug.Log("指令不合法");
+                            // UI 提示
                             break;
                         }
                         lineUser.instructionQueue.Enqueue(ins_l);
@@ -322,8 +375,63 @@ public static class PlaceInstructionManager
                     break;
                 }
                 User mUser = PlaceCenter.Instance.FindUser(username);
-                if (parts.Length > 2) // 多颜色
+                if (parts.Length == 2) // 默认颜色
                 {
+                    int x, y, r, g, b;
+                    string c,s;
+                    c = parts[0]; // /d
+                    s = parts[1]; // x
+                    (x,y) = mUser.lastPoint;
+                    Color color = mUser.lastColor;
+                    r = (int)(color.r * 255); // r
+                    g = (int)(color.g * 255); // g
+                    b = (int)(color.b * 255); // b
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        char digitIns = s[i];
+                        (x,y) = ComputeQuickIns(digitIns,x,y);
+                        Instruction drawIns = new Instruction("/d", x, y, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                            Debug.Log("指令不合法");
+                            continue;
+                        }
+                        mUser.instructionQueue.Enqueue(drawIns);
+                    }
+                    x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
+                    y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
+                    mUser.lastPoint = (x, y);
+                }else if (parts.Length == 3) {
+                    int x, y, r, g, b;
+                    string c,s,dc;
+                    c = parts[0]; // /d
+                    s = parts[1]; // seq
+                    dc = parts[2];
+                    (x,y) = mUser.lastPoint;
+                    if (colorDict.ContainsKey(dc)) {
+                        Color32 color = colorDict[dc];
+                        r = color.r; // r
+                        g = color.g; // g
+                        b = color.b; // b
+                    }else {
+                        Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
+                        // UI 提示
+                        break;
+                    }
+                    for (int i = 0; i < s.Length; i++)
+                    {
+                        char digitIns = s[i];
+                        (x,y) = ComputeQuickIns(digitIns,x,y);
+                        Instruction drawIns = new Instruction("/d", x, y, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                            Debug.Log("指令不合法");
+                            continue;
+                        }
+                        mUser.instructionQueue.Enqueue(drawIns);
+                    }
+                    x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
+                    y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
+                    mUser.lastPoint = (x, y);
+                }else if (parts.Length == 5){ // 多颜色
                     int x, y, r, g, b;
                     string c,s;
                     c = parts[0]; // /d
@@ -345,30 +453,6 @@ public static class PlaceInstructionManager
                         
                     }
                     mUser.lastColor = new Color(r, g, b);
-                    x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
-                    y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
-                    mUser.lastPoint = (x, y);
-                }else{ // 默认颜色
-                    int x, y, r, g, b;
-                    string c,s;
-                    c = parts[0]; // /d
-                    s = parts[1]; // x
-                    (x,y) = mUser.lastPoint;
-                    Color color = mUser.lastColor;
-                    r = (int)(color.r * 255); // r
-                    g = (int)(color.g * 255); // g
-                    b = (int)(color.b * 255); // b
-                    for (int i = 0; i < s.Length; i++)
-                    {
-                        char digitIns = s[i];
-                        (x,y) = ComputeQuickIns(digitIns,x,y);
-                        Instruction drawIns = new Instruction("/d", x, y, r: r, g: g, b: b);
-                        if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
-                            Debug.Log("指令不合法");
-                            continue;
-                        }
-                        mUser.instructionQueue.Enqueue(drawIns);
-                    }
                     x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
                     y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
                     mUser.lastPoint = (x, y);
@@ -396,7 +480,7 @@ public static class PlaceInstructionManager
                 }
                 break;
             case "gs":
-                 
+                 break;
             case "/take": // 拿别人颜料 ，谁家
             case "/t":
                 break;
@@ -488,6 +572,8 @@ public static class PlaceInstructionManager
             case '4':
                 x -= 1;
                 break;
+            case '5':
+                break;
             case '6':
                 x += 1;
                 break;
@@ -505,4 +591,22 @@ public static class PlaceInstructionManager
         }
         return (x, y);
     }
+
+    // 颜色字典
+    public static Dictionary<string, Color32> colorDict = new Dictionary<string, Color32>(){
+        {"白", new Color32(255, 255, 255, 255)},
+        {"黑", new Color32(0, 0, 0, 255)},
+        {"红", new Color32(255, 0, 0, 255)},
+        {"绿", new Color32(0, 255, 0, 255)},
+        {"蓝", new Color32(0, 0, 255, 255)},
+        {"黄", new Color32(255, 255, 0, 255)},
+        {"紫", new Color32(255, 0, 255, 255)},
+        {"青", new Color32(0, 255, 255, 255)},
+        {"橙", new Color32(255, 165, 0, 255)},
+        {"粉", new Color32(255, 192, 203, 255)},
+        {"灰", new Color32(128, 128, 128, 255)},
+        {"棕", new Color32(165, 42, 42, 255)},
+        {"金", new Color32(255, 215, 0, 255)},
+        {"银", new Color32(192, 192, 192, 255)}
+    };
 }

@@ -8,7 +8,7 @@ namespace AllIn1VfxToolkit.Demo.Scripts {
 
 public class EffectBulletBase : MonoBehaviour
 {
-    [SerializeField] private float inaccurateAmount = 0.05f;
+    // [SerializeField] private float inaccurateAmount = 0.05f;
         
     private GameObject currentImpactPrefab;
     private Transform currentHierarchyParent;

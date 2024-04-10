@@ -116,6 +116,6 @@ public class TeamPanel : MonoBehaviour
             
         }
 
-        Debug.Log($"刷新-{teamArae.teaminfo.Id}-队伍");
+        // Debug.Log($"刷新-{teamArae.teaminfo.Id}-队伍");
     }
 }

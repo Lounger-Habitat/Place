@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -51,8 +52,39 @@ public class TestManager : MonoBehaviour
         // 按下/，执行指令  接受 指令
         if (Input.GetKeyDown(KeyCode.Slash))
         {
-            PlaceInstructionManager.DefaultRunChatCommand(playerName,ins);
+            ins = ins.Trim();
+            if (ins.StartsWith("/"))
+            {
+                PlaceInstructionManager.DefaultRunChatCommand(playerName,ins);
+            }
+            // PlaceInstructionManager.DefaultRunChatCommand(playerName,ins);
             // ChatCommandManager.Instance.RunChatCommand("test",ins);
+            if (Regex.IsMatch(ins, PlaceBiliNetManager.FAST_DRAW_PATTERN)) { // 快速画点
+                PlaceInstructionManager.DefaultRunChatCommand(playerName,"/d " + ins);
+            }else if (Regex.IsMatch(ins, PlaceBiliNetManager.FAST_LINE_PATTERN)) { // 快速画线
+                PlaceInstructionManager.DefaultRunChatCommand(playerName,"/l " + ins);
+            }else if (Regex.IsMatch(ins, PlaceBiliNetManager.FAST_DRAW_DIY_PATTERN)) { // 快速画自定义线
+                PlaceInstructionManager.DefaultRunChatCommand(playerName,"/m " + ins);
+            }else {
+                // 加入
+                switch (ins)
+                {
+                    case "蓝":
+                        PlaceInstructionManager.DefaultRunChatCommand(playerName,"/a 1");
+                        break;
+                    case "绿":
+                        PlaceInstructionManager.DefaultRunChatCommand(playerName,"/a 2");
+                        break;
+                    case "黄":
+                        PlaceInstructionManager.DefaultRunChatCommand(playerName,"/a 3");
+                        break;
+                    case "紫":
+                        PlaceInstructionManager.DefaultRunChatCommand(playerName,"/a 4");
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
         // 按下,，执行指令  接受 指令
         if (Input.GetKeyDown(KeyCode.Comma))

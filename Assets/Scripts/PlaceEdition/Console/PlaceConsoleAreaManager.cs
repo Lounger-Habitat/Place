@@ -62,8 +62,12 @@ public class PlaceConsoleAreaManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // 沿sin曲线上下浮动
-        transform.position = new Vector3(transform.position.x, transform.position.y + Mathf.Sin(Time.time) * 0.001f, transform.position.z);
+        // 沿sin曲线上下浮动 (No) Just 自转
+        // transform.position = new Vector3(transform.position.x, transform.position.y + Mathf.Sin(Time.time) * 0.001f, transform.position.z);
+
+        // 缓慢自转
+        // transform.Rotate(Vector3.up, 0.1f);
+        
 
         // Vector2 mousePosition = Input.mousePosition;
         // 按下 E 键
@@ -193,6 +197,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
     }
 
     public void VisualAuxiliaryLine(int x,int y , int camp) {
+        float offset = 1f;
         float fadeTime = 3f;
         Vector3 aimPos = CalAimPos(x,y);
         // 实例化 ALine
@@ -224,10 +229,10 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         XAxis.endWidth = 0.1f;
 
         // 设置 Text 位置
-        X1AxisText.transform.position = new Vector3(endPosBottom.position.x, aimPos.y, aimPos.z);
-        X2AxisText.transform.position = new Vector3(endPosTop.position.x, aimPos.y, aimPos.z);
-        Y1AxisText.transform.position = new Vector3(aimPos.x, endPosBottom.position.y, aimPos.z);
-        Y2AxisText.transform.position = new Vector3(aimPos.x, endPosTop.position.y, aimPos.z);
+        X1AxisText.transform.position = new Vector3(endPosBottom.position.x - offset, aimPos.y, aimPos.z);
+        X2AxisText.transform.position = new Vector3(endPosTop.position.x + offset , aimPos.y, aimPos.z);
+        Y1AxisText.transform.position = new Vector3(aimPos.x, endPosBottom.position.y - 0.5f, aimPos.z);
+        Y2AxisText.transform.position = new Vector3(aimPos.x, endPosTop.position.y + 0.5f, aimPos.z);
         // 设置 Text 文字
         X1AxisText.text = "" + x;
         X2AxisText.text = "" + x;
