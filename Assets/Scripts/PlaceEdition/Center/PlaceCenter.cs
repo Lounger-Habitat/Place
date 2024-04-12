@@ -1,9 +1,6 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlaceCenter : MonoBehaviour
@@ -116,23 +113,19 @@ public class PlaceCenter : MonoBehaviour
     }
 
     // add player
-    public void AddPlayer(string username, int t)
+    public void AddPlayer(User user)
     {
         // 检查用户是否已经存在
-        if (users.ContainsKey(username))
-        {
-            Debug.Log("用户已存在");
-            return;
-        }
+        // if (users.ContainsKey(user.username))
+        // {
+        //     Debug.Log("用户已存在");
+        //     return;
+        // }
 
         // 创建角色
-        User character = PlaceTeamManager.Instance.teamAreas[t - 1].CreateCharacterInTeamArea(username);
-        if (character == null)
-        {
-            Debug.Log("创建角色失败");
-            return;
-        }
-        users.Add(username, character);
+        int t = user.Camp;
+        PlaceTeamManager.Instance.teamAreas[t - 1].CreateCharacterInTeamArea(user);
+        users.Add(user.Name, user);
     }
 
     public GameObject CreateMessageBubble(Transform characterTransform, string message)
@@ -156,20 +149,20 @@ public class PlaceCenter : MonoBehaviour
         return bubblTagObj;
     }
 
-    public void SayMessage(string username, string message)
+    public void SayMessage(User user, string message)
     {
-        // 检查用户是否已经存在
-        if (!users.ContainsKey(username))
-        {
-            Debug.Log("用户不存在");
-            return;
-        }
+        // // 检查用户是否已经存在
+        // if (!users.ContainsKey(username))
+        // {
+        //     Debug.Log("用户不存在");
+        //     return;
+        // }
 
-        int teamId = users[username].camp;
+        int teamId = users[user.Name].Camp;
 
 
         // 创建气泡
-        GameObject bubble = PlaceTeamManager.Instance.teamAreas[teamId - 1].CreateMessageBubbleOnPlayer(username, message);
+        GameObject bubble = PlaceTeamManager.Instance.teamAreas[teamId - 1].CreateMessageBubbleOnPlayer(user.Name, message);
 
     }
 
@@ -194,15 +187,15 @@ public class PlaceCenter : MonoBehaviour
         return u;
     }
 
-    public void JoinTeam(string username, string teamId)
+    public void JoinGame(User user, string teamId)
     {
         int t = int.Parse(teamId);
         // 检查用户是否已经存在
-        if (users.ContainsKey(username))
-        {
-            Debug.Log("用户已存在");
-            return;
-        }
+        // if (users.ContainsKey(username))
+        // {
+        //     Debug.Log("用户已存在");
+        //     return;
+        // }
         // 检查队伍是否已经存在
         // if (!teams.ContainsKey(teamId))
         // {
@@ -215,7 +208,9 @@ public class PlaceCenter : MonoBehaviour
             Debug.Log("队伍已满");
             return;
         }
-        AddPlayer(username, t);
+        // 创建 用户
+
+        AddPlayer(user);
         // 将用户加入队伍区域
     }
 
@@ -433,10 +428,19 @@ public class PlaceCenter : MonoBehaviour
             case 120f:
                 normalPower = 12000;
                 break;
+            case 166.6f:
+                normalPower = 16666;
+                break;
+            case 188.8f:
+                normalPower = 18888;
+                break;
+            case 300f:
+                normalPower = 30000;
+                break;
         }
         u.score += normalPower;
         u.Update(u.score);
-        PlaceTeamManager.Instance.teamAreas[u.camp - 1].teaminfo.ink += normalPower;
+        PlaceTeamManager.Instance.teamAreas[u.Camp - 1].teaminfo.ink += normalPower;
         //在这通知UI？还得要状态切换啊，先检查状态再通知
         PlaceUIManager.Instance.AddTips(new TipsItem()
         {

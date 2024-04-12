@@ -63,9 +63,9 @@ public class RankPanel : MonoBehaviour
             else
             {
                 var item = userList[i];
-                rankItem.Find("Name").GetComponent<TMP_Text>().text = item.username;
+                rankItem.Find("Name").GetComponent<TMP_Text>().text = item.Name;
                 rankItem.Find("Data").GetComponent<TMP_Text>().text = $"贡献:{item.score}";
-                //rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = item.userIcon;//TODO:需要对接user头像，目前没有，所以我的遮罩就没了
+                rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = item.userIcon;//TODO:需要对接user头像，目前没有，所以我的遮罩就没了
             }
         }
     }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using OpenBLive.Runtime;
 using OpenBLive.Runtime.Data;
@@ -10,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System;
 using System.Text.RegularExpressions;
+
 
 public class PlaceBiliNetManager : MonoBehaviour
 {
@@ -63,6 +62,7 @@ public class PlaceBiliNetManager : MonoBehaviour
         m_WebSocketBLiveClient.OnGift += WebSocketBLiveClientOnGift;
         m_WebSocketBLiveClient.OnGuardBuy += WebSocketBLiveClientOnGuardBuy;
         m_WebSocketBLiveClient.OnSuperChat += WebSocketBLiveClientOnSuperChat;
+        m_WebSocketBLiveClient.OnLike += WebSocketBliveClientOnLike;
 
         try
         {
@@ -144,53 +144,20 @@ public class PlaceBiliNetManager : MonoBehaviour
         sb.Append(dm.msg);
         Debug.Log(sb);
 
-        string msg = dm.msg.Trim();
-        string username = dm.userName;
-        
-        // 指令 - 传统指令
-        if (msg.StartsWith("/"))
-        {
-            PlaceInstructionManager.DefaultRunChatCommand(username,msg);
-        }
-        
-        // 指令 - 快捷指令
-        /*
-            快速加入
-            快速画点
-            快速画线
-            快速画自定义线
-            快速画圆、方块、三角、星星
-        */
+        PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
 
-        // 快速画点
-        if (Regex.IsMatch(msg, FAST_DRAW_PATTERN)) { // 快速画点
-            PlaceInstructionManager.DefaultRunChatCommand(username,"/d " + msg);
-        }else if (Regex.IsMatch(msg, FAST_LINE_PATTERN)) { // 快速画线
-            PlaceInstructionManager.DefaultRunChatCommand(username,"/l " + msg);
-        }else if (Regex.IsMatch(msg, FAST_DRAW_DIY_PATTERN)) { // 快速画自定义线
-            PlaceInstructionManager.DefaultRunChatCommand(username,"/m " + msg);
-        }else {
-            // 加入
-            switch (msg)
-            {
-                case "蓝":
-                    PlaceInstructionManager.DefaultRunChatCommand(username,"/a 1");
-                    // UI 信息 创建
-                    break;
-                case "绿":
-                    PlaceInstructionManager.DefaultRunChatCommand(username,"/a 2");
-                    break;
-                case "黄":
-                    PlaceInstructionManager.DefaultRunChatCommand(username,"/a 3");
-                    break;
-                case "紫":
-                    PlaceInstructionManager.DefaultRunChatCommand(username,"/a 4");
-                    break;
-                default:
-                    break;
-            }
-        }
 
+
+    }
+
+    private void WebSocketBliveClientOnLike(Like like)
+    {
+        StringBuilder sb = new StringBuilder("收到点赞!");
+        sb.AppendLine();
+        sb.Append("用户：");
+        sb.AppendLine(like.uname);
+        Debug.Log(sb);
+        PlaceInstructionManager.Instance.DefaultLikeCommand(like);
     }
 
     // 心跳
@@ -224,14 +191,5 @@ public class PlaceBiliNetManager : MonoBehaviour
         m_PlayHeartBeat.Dispose();
         m_WebSocketBLiveClient.Dispose();
     }
-
-
-    // PATTERN
-    private const string FAST_DRAW_POINT_PATTERN = @"^\d{1,3} \d{1,3} \d{1,3} \d{1,3} \d{1,3}$";
-    private const string FAST_DRAW_POINT_WITH_DEFAULT_COLOR_PATTERN = @"^\d{1,3} \d{1,3} [\u4E00-\u9FFF]+$";
-    private const string FAST_DRAW_POINT_WITH_LAST_COLOR_PATTERN = @"^\d{1,3} \d{1,3}$";
-    public const string FAST_DRAW_PATTERN = @"(^\d{1,3} \d{1,3}$)|(^\d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
-    public const string FAST_LINE_PATTERN = @"(^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)|(^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)";
-    public const string FAST_DRAW_DIY_PATTERN = @"(^[1-9]\d*$)|(^[1-9]\d* [\u4E00-\u9FFF]+$)";
 
 }

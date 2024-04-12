@@ -182,7 +182,7 @@ namespace OpenBLive.Runtime
             }
             catch (Exception e)
             {
-                Utilities.Logger.LogError("json数据解析异常 rawMessage: " + rawMessage + e.Message);
+                Logger.LogError("json数据解析异常 rawMessage: " + rawMessage + e.Message);
             }
         }
     }

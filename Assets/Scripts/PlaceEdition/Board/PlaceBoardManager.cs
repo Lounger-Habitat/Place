@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Animations;
 using UnityEngine.UI;
 using Assets.GifAssets.PowerGif;
 using System.Collections;
@@ -590,7 +589,7 @@ public class PlaceBoardManager : MonoBehaviour
 
     public void GenerateImage(int sx, int sy, string prompt)
     {
-        DiffusionManager.Instance.GenerateImage(sx, sy, prompt);
+        // DiffusionManager.Instance.GenerateImage(sx, sy, prompt);
         Debug.Log("正在生成,wait ...");
     }
 

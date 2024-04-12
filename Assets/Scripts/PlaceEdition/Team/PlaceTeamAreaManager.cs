@@ -1,7 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
 using UnityEngine;
-using UnityEngine.Purchasing;
 
 public class PlaceTeamAreaManager : MonoBehaviour
 {
@@ -71,7 +70,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         foreach (User u in userList)
         {
             //  额外 墨水
-            exInkRate += (u.getLevel() - 1)  / 100;
+            exInkRate += (u.Level - 1)  / 100;
         }
         inkRate = (teaminfo.currentTeamNumberCount / defaultInkTime) + exInkRate;
         teaminfo.ink += inkRate ;
@@ -97,10 +96,9 @@ public class PlaceTeamAreaManager : MonoBehaviour
     }
 
     // 在队伍区域里创建角色
-    public User CreateCharacterInTeamArea(string username)
+    public void CreateCharacterInTeamArea(User user)
     {
         GameObject go = null;
-        User user = null;
         
         // 检查队伍区域是否已满
         if (teaminfo.currentTeamNumberCount < teaminfo.MaxTeamNumber)
@@ -110,8 +108,10 @@ public class PlaceTeamAreaManager : MonoBehaviour
             go = Instantiate(characterPrefab, spawnPosition, Quaternion.identity);
             go.transform.SetParent(ps.transform);
             PlacePlayerController PlayerControllerScript = go.GetComponent<PlacePlayerController>();
-            GameObject nameTag = PlaceCenter.Instance.CreateNameTag(go.transform, username);
-            user = new User(username, go, teaminfo.Id,this);
+            GameObject nameTag = PlaceCenter.Instance.CreateNameTag(go.transform, user.Name);
+            // user = new User(username, go, teaminfo.Id,this);
+            user.character = go;
+            user.selfTeam = this;
             user.nameTag = nameTag;
             if (PlayerControllerScript != null)
             {
@@ -123,7 +123,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
             teaminfo.currentTeamNumberCount += 1;
             // 可以在这里设置角色的其他属性，比如所属队伍等
             PlaceUIManager.Instance.AddTips(new TipsItem(){
-                userName=username,
+                userName=user.Name,
                 text =$"加入{teaminfo.Name}队伍！",
                 tipsType = TipsType.messagePanel
             });
@@ -132,7 +132,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         {
             Debug.Log("队伍区域已满");
         }
-        return user;
+        // return user;
 
     }
 
@@ -193,7 +193,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
 
         foreach (User user in userList)
         {
-            if (user.username == username)
+            if (user.Name == username)
             {
                 return user;
             }
@@ -264,4 +264,5 @@ public class PlaceTeamAreaManager : MonoBehaviour
     //         Debug.Log("角色离开触发器");
     //     }
     // }
+
 }

@@ -118,7 +118,7 @@ public class WaitingForCommandInTeamArea : IState
     public void OnExit() { /* 清理逻辑 */ }
     public void Update()
     {
-        int teamInkCount = PlaceCenter.Instance.GetTeamInkCount(pc.user.camp);
+        int teamInkCount = PlaceCenter.Instance.GetTeamInkCount(pc.user.Camp);
         if (pc.user.instructionQueue.Count > 0 && teamInkCount > 0)
         {
             // 遍历instructionQueue ，取出全部 Instruction
@@ -147,7 +147,7 @@ public class WaitingForCommandInTeamArea : IState
 
                 pc.user.carryingInkCount += needInkCount;
 
-                PlaceCenter.Instance.SetTeamInkCount(pc.user.camp, -needInkCount);
+                PlaceCenter.Instance.SetTeamInkCount(pc.user.Camp, -needInkCount);
 
 
                 manager.insList.Add(instruction);
@@ -225,19 +225,19 @@ public class WaitingForCommandExecutionAtConsole : IState
                 {
                     case "/draw":
                     case "/d":
-                        PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, pc.user.camp);
+                        PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, pc.user.Camp);
                         pc.user.carryingInkCount -= ins.needInkCount;
                         pc.user.score += ins.needInkCount;
                         break;
                     case "/line":
                     case "/l":
-                        PlaceBoardManager.Instance.LineCommand(ins.x, ins.y, ins.ex, ins.ey, ins.r, ins.g, ins.b, pc.user.camp);
+                        PlaceBoardManager.Instance.LineCommand(ins.x, ins.y, ins.ex, ins.ey, ins.r, ins.g, ins.b, pc.user.Camp);
                         pc.user.carryingInkCount -= ins.needInkCount;
                         pc.user.score += ins.needInkCount;
                         break;
                     case "/paint":
                     case "/p":
-                        PlaceBoardManager.Instance.PaintCommand(ins.mode, ins.x, ins.y, ins.dx, ins.dy, ins.r, ins.g, ins.b, pc.user.camp);
+                        PlaceBoardManager.Instance.PaintCommand(ins.mode, ins.x, ins.y, ins.dx, ins.dy, ins.r, ins.g, ins.b, pc.user.Camp);
                         pc.user.carryingInkCount -= ins.needInkCount;
                         pc.user.score += ins.needInkCount;
                         break;

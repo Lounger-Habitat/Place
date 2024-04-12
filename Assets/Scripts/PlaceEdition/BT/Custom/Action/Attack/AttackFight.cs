@@ -48,15 +48,15 @@ public class AttackFight : PlaceAction
         base.OnTriggerEnter(other);
         if (!other.CompareTag("Player")) { };
         PlacePlayerController epc = other.transform.root.gameObject.GetComponent<PlacePlayerController>();
-        if (pc.isFriend(epc.user.camp))
+        if (pc.isFriend(epc.user.Camp))
         {
             return;
         }
-        if (pc.enemies.ContainsKey(epc.user.username))
+        if (pc.enemies.ContainsKey(epc.user.Name))
         {
             return;
         }
-        pc.enemies.Add(epc.user.username,epc);
+        pc.enemies.Add(epc.user.Name,epc);
 
 
 

@@ -40,7 +40,7 @@ public class DrawSomePattern : PlaceAction
                     break;
                 case "/paint":
                 case "/p":
-                    PlaceBoardManager.Instance.PaintCommand(ins.mode, ins.x, ins.y, ins.dx, ins.dy, ins.r, ins.g, ins.b, pc.user.camp);
+                    PlaceBoardManager.Instance.PaintCommand(ins.mode, ins.x, ins.y, ins.dx, ins.dy, ins.r, ins.g, ins.b, pc.user.Camp);
                     pc.user.carryingInkCount -= ins.needInkCount;
                     pc.user.score += ins.needInkCount;
                     break;

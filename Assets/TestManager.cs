@@ -53,43 +53,11 @@ public class TestManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Slash))
         {
             ins = ins.Trim();
-            if (ins.StartsWith("/"))
-            {
-                PlaceInstructionManager.DefaultRunChatCommand(playerName,ins);
-            }
-            // PlaceInstructionManager.DefaultRunChatCommand(playerName,ins);
-            // ChatCommandManager.Instance.RunChatCommand("test",ins);
-            if (Regex.IsMatch(ins, PlaceBiliNetManager.FAST_DRAW_PATTERN)) { // 快速画点
-                PlaceInstructionManager.DefaultRunChatCommand(playerName,"/d " + ins);
-            }else if (Regex.IsMatch(ins, PlaceBiliNetManager.FAST_LINE_PATTERN)) { // 快速画线
-                PlaceInstructionManager.DefaultRunChatCommand(playerName,"/l " + ins);
-            }else if (Regex.IsMatch(ins, PlaceBiliNetManager.FAST_DRAW_DIY_PATTERN)) { // 快速画自定义线
-                PlaceInstructionManager.DefaultRunChatCommand(playerName,"/m " + ins);
-            }else {
-                // 加入
-                switch (ins)
-                {
-                    case "蓝":
-                        PlaceInstructionManager.DefaultRunChatCommand(playerName,"/a 1");
-                        break;
-                    case "绿":
-                        PlaceInstructionManager.DefaultRunChatCommand(playerName,"/a 2");
-                        break;
-                    case "黄":
-                        PlaceInstructionManager.DefaultRunChatCommand(playerName,"/a 3");
-                        break;
-                    case "紫":
-                        PlaceInstructionManager.DefaultRunChatCommand(playerName,"/a 4");
-                        break;
-                    default:
-                        break;
-                }
-            }
         }
         // 按下,，执行指令  接受 指令
         if (Input.GetKeyDown(KeyCode.Comma))
         {
-            PlaceInstructionManager.DefaultGiftCommand(playerName,gift);
+            PlaceInstructionManager.Instance.DefaultGiftCommand(playerName,gift);
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -97,7 +65,7 @@ public class TestManager : MonoBehaviour
             // 遍历所有用户
             foreach (var user in users)
             {
-                PlaceInstructionManager.DefaultGiftCommand(user,gift);
+                PlaceInstructionManager.Instance.DefaultGiftCommand(user,gift);
             }
             
         }
@@ -120,25 +88,25 @@ public class TestManager : MonoBehaviour
 
     public void GenPlayer(){
         // 添加player
-        string[] cx1 = { "cx1", "111" };
-        string[] cx2 = { "cx2", "111" };
-        string[] cx3 = { "cx3", "111" };
-        string[] cx4 = { "cx4", "111" };
+        string[] cx1 = { "cx1", "蓝" };
+        string[] cx2 = { "cx2", "蓝" };
+        string[] cx3 = { "cx3", "蓝" };
+        string[] cx4 = { "cx4", "蓝" };
 
-        string[] gt1 = { "gt1", "222" };
-        string[] gt2 = { "gt2", "222" };
-        string[] gt3 = { "gt3", "222" };
-        string[] gt4 = { "gt4", "222" };
+        string[] gt1 = { "gt1", "绿" };
+        string[] gt2 = { "gt2", "绿" };
+        string[] gt3 = { "gt3", "绿" };
+        string[] gt4 = { "gt4", "绿" };
 
-        string[] by1 = { "by1", "333" };
-        string[] by2 = { "by2", "333" };
-        string[] by3 = { "by3", "333" };
-        string[] by4 = { "by4", "333" };
+        string[] by1 = { "by1", "黄" };
+        string[] by2 = { "by2", "黄" };
+        string[] by3 = { "by3", "黄" };
+        string[] by4 = { "by4", "黄" };
 
-        string[] hy1 = { "hy1", "444" };
-        string[] hy2 = { "hy2", "444" };
-        string[] hy3 = { "hy3", "444" };
-        string[] hy4 = { "hy4", "444" };
+        string[] hy1 = { "hy1", "紫" };
+        string[] hy2 = { "hy2", "紫" };
+        string[] hy3 = { "hy3", "紫" };
+        string[] hy4 = { "hy4", "紫" };
 
         var combinedListLinq = new[] { cx1, cx2, cx3, cx4, gt1, gt2, gt3, gt4, by1, by2, by3, by4, hy1, hy2, hy3, hy4 }.SelectMany(a => a).ToList();
         
@@ -151,7 +119,8 @@ public class TestManager : MonoBehaviour
     {
         for (int i = 0; i < combinedListLinq.Count; i=i+2) // 循环
         {
-            PlaceInstructionManager.DefaultRunChatCommand(combinedListLinq[i],combinedListLinq[i+1]); // 调用你的函数
+            User u = PlaceCenter.Instance.users[combinedListLinq[i]];
+            PlaceInstructionManager.Instance.DefaultRunChatCommand(u,combinedListLinq[i+1]); // 调用你的函数
             yield return new WaitForSeconds(1f); // 等待1秒
         }
     }
@@ -253,16 +222,18 @@ public class TestManager : MonoBehaviour
         string[] users = PlaceCenter.Instance.users.Keys.ToArray();
         int urand = Random.Range(0, users.Length);
         string user = users[urand];
+        User u = PlaceCenter.Instance.users[user];
+
 
         float rand = Random.Range(0f, 1f);
         if (rand<0.95f) {
             string drawIns = RandomGenDrawIns();
             // Debug.Log($"{user} 执行 ({drawIns}) 指令");
-            PlaceInstructionManager.DefaultRunChatCommand(user,drawIns);
+            PlaceInstructionManager.Instance.DefaultRunChatCommand(u,drawIns);
         }else {
             string giftIns = RandomGenGiftIns();
             Debug.Log($"{user} 赠送 ({giftIns}) 颜料");
-            PlaceInstructionManager.DefaultGiftCommand(user,giftIns);
+            PlaceInstructionManager.Instance.DefaultGiftCommand(user,giftIns);
         }
     }
 

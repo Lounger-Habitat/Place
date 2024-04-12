@@ -1,13 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using OpenBLive.Runtime.Data;
+using UnityEngine.Networking;
+using System.Collections;
 using System.Text.RegularExpressions;
-using System.Linq;
-using Unity.VisualScripting;
 using System;
-using System.Data.Common;
 
-public static class PlaceInstructionManager
+public class PlaceInstructionManager : MonoBehaviour
 {
     // 解析字符串，生成指令
     /*
@@ -52,7 +51,19 @@ public static class PlaceInstructionManager
     // 快捷指令
 
     // 带有 指令 符号/
-    public static void DefaultRunChatCommand(string username, string command)
+    private static PlaceInstructionManager instance;
+    public static PlaceInstructionManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<PlaceInstructionManager>();
+            }
+            return instance;
+        }
+    }
+    public void DefaultRunChatCommand(User user, string command)
     {
         string[] parts = command.Trim().Split(' ');
         switch (parts[0])
@@ -65,18 +76,18 @@ public static class PlaceInstructionManager
             case "7":
             case "8":
             case "9":
-                if (!PlaceCenter.Instance.CheckUser(username))
-                {
-                    break;
-                }
-                User quickDrawUser = PlaceCenter.Instance.FindUser(username);
+                // if (!PlaceCenter.Instance.CheckUser(username))
+                // {
+                //     break;
+                // }
+                // User quickDrawUser = PlaceCenter.Instance.FindUser(username);
                 if (parts.Length > 1)
                 {
                     int x, y, r, g, b;
                     string c;
                     c = parts[0]; // /d
-                    x = quickDrawUser.lastPoint.x; // x
-                    y = quickDrawUser.lastPoint.y; // y
+                    x = user.lastPoint.x; // x
+                    y = user.lastPoint.y; // y
                     (x,y) = ComputeQuickIns(c[0],x,y);
                     r = int.Parse(parts[1]); // x
                     g = int.Parse(parts[2]); // y
@@ -86,19 +97,19 @@ public static class PlaceInstructionManager
                         Debug.Log("指令不合法");
                         break;
                     }
-                    quickDrawUser.lastColor = new Color(r, g, b);
-                    quickDrawUser.lastPoint = (x, y);
-                    quickDrawUser.instructionQueue.Enqueue(drawIns);
+                    user.lastColor = new Color(r, g, b);
+                    user.lastPoint = (x, y);
+                    user.instructionQueue.Enqueue(drawIns);
                 }
                 else
                 {
                     int x, y, r, g, b;
                     string c;
                     c = parts[0]; // /d
-                    x = quickDrawUser.lastPoint.x; // x
-                    y = quickDrawUser.lastPoint.y; // y
+                    x = user.lastPoint.x; // x
+                    y = user.lastPoint.y; // y
                     (x,y) = ComputeQuickIns(c[0],x,y);
-                    Color color = quickDrawUser.lastColor;
+                    Color color = user.lastColor;
                     r = (int)(color.r * 255); // r
                     g = (int)(color.g * 255); // g
                     b = (int)(color.b * 255); // b
@@ -107,8 +118,8 @@ public static class PlaceInstructionManager
                         Debug.Log("指令不合法");
                         break;
                     }
-                    quickDrawUser.lastPoint = (x, y);
-                    quickDrawUser.instructionQueue.Enqueue(drawIns);
+                    user.lastPoint = (x, y);
+                    user.instructionQueue.Enqueue(drawIns);
                 }
                 break;
             // case "111":
@@ -124,7 +135,7 @@ public static class PlaceInstructionManager
                 if (parts.Length >= 2)
                 {
                     // 这里调用加入队伍的逻辑
-                    PlaceCenter.Instance.JoinTeam(username, parts[1]);
+                    PlaceCenter.Instance.JoinGame(user, parts[1]);
                 }
                 break;
             case "/say":
@@ -135,17 +146,17 @@ public static class PlaceInstructionManager
                     // SayMessage(string.Join(" ", parts, 1, parts.Length - 1));
                     Debug.Log(parts[1]);
                     string message = parts[1];
-                    PlaceCenter.Instance.SayMessage(username, message);
+                    PlaceCenter.Instance.SayMessage(user, message);
                 }
                 break;
             // 可以在这里添加其他命令的处理
             case "/draw":
             case "/d":
-                if (!PlaceCenter.Instance.CheckUser(username))
-                {
-                    break;
-                }
-                User drawUser = PlaceCenter.Instance.FindUser(username);
+                // if (!PlaceCenter.Instance.CheckUser(username))
+                // {
+                //     break;
+                // }
+                // User drawUser = PlaceCenter.Instance.FindUser(username);
                 if (parts.Length >= 3)
                 {
                     if (parts.Length == 3)
@@ -155,7 +166,7 @@ public static class PlaceInstructionManager
                         c = parts[0]; // /d
                         x = int.Parse(parts[1]); // x
                         y = int.Parse(parts[2]); // y
-                        Color color = drawUser.lastColor;
+                        Color color = user.lastColor;
                         r = (int)(color.r * 255); // r
                         g = (int)(color.g * 255); // g
                         b = (int)(color.b * 255); // b
@@ -164,8 +175,8 @@ public static class PlaceInstructionManager
                             Debug.Log("指令不合法");
                             break;
                         }
-                        drawUser.lastPoint = (x, y);
-                        drawUser.instructionQueue.Enqueue(drawIns);
+                        user.lastPoint = (x, y);
+                        user.instructionQueue.Enqueue(drawIns);
                         // Debug.Log(username + " : draw " + c + " " + x + " " + y + " " + r + " " + g + " " + b);
                     }else if (parts.Length == 4)
                     {
@@ -190,8 +201,8 @@ public static class PlaceInstructionManager
                             Debug.Log("指令不合法");
                             break;
                         }
-                        drawUser.lastPoint = (x, y);
-                        drawUser.instructionQueue.Enqueue(drawIns);
+                        user.lastPoint = (x, y);
+                        user.instructionQueue.Enqueue(drawIns);
                     }
                     else if (parts.Length == 6)
                     {
@@ -209,9 +220,9 @@ public static class PlaceInstructionManager
                             Debug.Log("指令不合法");
                             break;
                         }
-                        drawUser.lastColor = new Color(r, g, b);
-                        drawUser.lastPoint = (x, y);
-                        drawUser.instructionQueue.Enqueue(drawIns);
+                        user.lastColor = new Color(r, g, b);
+                        user.lastPoint = (x, y);
+                        user.instructionQueue.Enqueue(drawIns);
                         // Debug.Log(username + " : draw " + c + " " + x + " " + y + " " + r + " " + g + " " + b);
                     }
                     else
@@ -226,11 +237,11 @@ public static class PlaceInstructionManager
                 break;
             case "/line":
             case "/l":
-                if (!PlaceCenter.Instance.CheckUser(username))
-                {
-                    break;
-                }
-                User lineUser = PlaceCenter.Instance.FindUser(username);
+                // if (!PlaceCenter.Instance.CheckUser(username))
+                // {
+                //     break;
+                // }
+                // User lineUser = PlaceCenter.Instance.FindUser(username);
                 if (parts.Length >= 5)
                 {
                     if (parts.Length == 5)
@@ -242,7 +253,7 @@ public static class PlaceInstructionManager
                         y = int.Parse(parts[2]); // y
                         ex = int.Parse(parts[3]); // ex
                         ey = int.Parse(parts[4]); // ey
-                        Color color = lineUser.lastColor;
+                        Color color = user.lastColor;
                         r = (int)(color.r * 255); // r
                         g = (int)(color.g * 255); // g
                         b = (int)(color.b * 255); // b
@@ -251,7 +262,7 @@ public static class PlaceInstructionManager
                             Debug.Log("指令不合法");
                             break;
                         }
-                        lineUser.instructionQueue.Enqueue(ins_l);
+                        user.instructionQueue.Enqueue(ins_l);
                     }else if (parts.Length == 6)
                     {
                         int x, y, ex, ey, r, g, b;
@@ -278,7 +289,7 @@ public static class PlaceInstructionManager
                             // UI 提示
                             break;
                         }
-                        lineUser.instructionQueue.Enqueue(ins_l);
+                        user.instructionQueue.Enqueue(ins_l);
                     }
                     else if (parts.Length == 8)
                     {
@@ -292,13 +303,13 @@ public static class PlaceInstructionManager
                         r = int.Parse(parts[5]); // r
                         g = int.Parse(parts[6]); // g
                         b = int.Parse(parts[7]); // b
-                        lineUser.lastColor = new Color(r, g, b);
+                        user.lastColor = new Color(r, g, b);
                         Instruction ins_l = new Instruction(c, x, y, ex: ex, ey: ey, r: r, g: g, b: b);
                         if (!PlaceBoardManager.Instance.CheckIns(ins_l)){
                             Debug.Log("指令不合法");
                             break;
                         }
-                        lineUser.instructionQueue.Enqueue(ins_l);
+                        user.instructionQueue.Enqueue(ins_l);
                     }
                     else
                     {
@@ -312,11 +323,11 @@ public static class PlaceInstructionManager
                 break;
             case "/paint":
             case "/p":
-                if (!PlaceCenter.Instance.CheckUser(username))
-                {
-                    break;
-                }
-                User paintUser = PlaceCenter.Instance.FindUser(username);
+                // if (!PlaceCenter.Instance.CheckUser(username))
+                // {
+                //     break;
+                // }
+                // User paintUser = PlaceCenter.Instance.FindUser(username);
                 if (parts.Length >= 5)
                 {
                     if (parts.Length == 5)
@@ -328,7 +339,7 @@ public static class PlaceInstructionManager
                         y = int.Parse(parts[2]); // y
                         dx = int.Parse(parts[3]); // dx
                         dy = int.Parse(parts[4]); // dy
-                        Color color = paintUser.lastColor;
+                        Color color = user.lastColor;
                         r = (int)(color.r * 255); // r
                         g = (int)(color.g * 255); // g
                         b = (int)(color.b * 255); // b
@@ -337,7 +348,7 @@ public static class PlaceInstructionManager
                             Debug.Log("指令不合法");
                             break;
                         }
-                        paintUser.instructionQueue.Enqueue(ins_p);
+                        user.instructionQueue.Enqueue(ins_p);
                     }
                     else if (parts.Length == 8)
                     {
@@ -351,13 +362,13 @@ public static class PlaceInstructionManager
                         r = int.Parse(parts[5]); // r
                         g = int.Parse(parts[6]); // g
                         b = int.Parse(parts[7]); // b
-                        paintUser.lastColor = new Color(r, g, b);
+                        user.lastColor = new Color(r, g, b);
                         Instruction ins_p = new Instruction(c, x, y, dx, dy, r: r, g: g, b: b);
                         if (!PlaceBoardManager.Instance.CheckIns(ins_p)){
                             Debug.Log("指令不合法");
                             break;
                         }
-                        paintUser.instructionQueue.Enqueue(ins_p);
+                        user.instructionQueue.Enqueue(ins_p);
                     }
                     else
                     {
@@ -370,19 +381,19 @@ public static class PlaceInstructionManager
                 }
                 break;
             case "/m":
-                if (!PlaceCenter.Instance.CheckUser(username))
-                {
-                    break;
-                }
-                User mUser = PlaceCenter.Instance.FindUser(username);
+                // if (!PlaceCenter.Instance.CheckUser(username))
+                // {
+                //     break;
+                // }
+                // User mUser = PlaceCenter.Instance.FindUser(username);
                 if (parts.Length == 2) // 默认颜色
                 {
                     int x, y, r, g, b;
                     string c,s;
                     c = parts[0]; // /d
                     s = parts[1]; // x
-                    (x,y) = mUser.lastPoint;
-                    Color color = mUser.lastColor;
+                    (x,y) = user.lastPoint;
+                    Color color = user.lastColor;
                     r = (int)(color.r * 255); // r
                     g = (int)(color.g * 255); // g
                     b = (int)(color.b * 255); // b
@@ -395,18 +406,18 @@ public static class PlaceInstructionManager
                             Debug.Log("指令不合法");
                             continue;
                         }
-                        mUser.instructionQueue.Enqueue(drawIns);
+                        user.instructionQueue.Enqueue(drawIns);
                     }
                     x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
                     y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
-                    mUser.lastPoint = (x, y);
+                    user.lastPoint = (x, y);
                 }else if (parts.Length == 3) {
                     int x, y, r, g, b;
                     string c,s,dc;
                     c = parts[0]; // /d
                     s = parts[1]; // seq
                     dc = parts[2];
-                    (x,y) = mUser.lastPoint;
+                    (x,y) = user.lastPoint;
                     if (colorDict.ContainsKey(dc)) {
                         Color32 color = colorDict[dc];
                         r = color.r; // r
@@ -426,11 +437,11 @@ public static class PlaceInstructionManager
                             Debug.Log("指令不合法");
                             continue;
                         }
-                        mUser.instructionQueue.Enqueue(drawIns);
+                        user.instructionQueue.Enqueue(drawIns);
                     }
                     x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
                     y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
-                    mUser.lastPoint = (x, y);
+                    user.lastPoint = (x, y);
                 }else if (parts.Length == 5){ // 多颜色
                     int x, y, r, g, b;
                     string c,s;
@@ -439,7 +450,7 @@ public static class PlaceInstructionManager
                     r = int.Parse(parts[2]); // r
                     g = int.Parse(parts[3]); // g
                     b = int.Parse(parts[4]); // b
-                    (x,y) = mUser.lastPoint;
+                    (x,y) = user.lastPoint;
                     for (int i = 0; i < s.Length; i++)
                     {
                         char digitIns = s[i];
@@ -449,22 +460,22 @@ public static class PlaceInstructionManager
                             Debug.Log("指令不合法");
                             continue;
                         }
-                        mUser.instructionQueue.Enqueue(drawIns);
+                        user.instructionQueue.Enqueue(drawIns);
                         
                     }
-                    mUser.lastColor = new Color(r, g, b);
+                    user.lastColor = new Color(r, g, b);
                     x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
                     y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
-                    mUser.lastPoint = (x, y);
+                    user.lastPoint = (x, y);
                 }
                 break;
             case "visual":
             case "/v":
-                if (!PlaceCenter.Instance.CheckUser(username))
-                {
-                    break;
-                }
-                User vUser = PlaceCenter.Instance.FindUser(username);
+                // if (!PlaceCenter.Instance.CheckUser(username))
+                // {
+                //     break;
+                // }
+                // User vUser = PlaceCenter.Instance.FindUser(username);
                 if (parts.Length == 3)
                 {
                     int x, y;
@@ -472,7 +483,7 @@ public static class PlaceInstructionManager
                     c = parts[0]; // /d
                     x = int.Parse(parts[1]); // x
                     y = int.Parse(parts[2]); // y
-                    PlaceConsoleAreaManager.Instance.VisualAuxiliaryLine(x, y, vUser.camp);
+                    PlaceConsoleAreaManager.Instance.VisualAuxiliaryLine(x, y, user.Camp);
                 }
                 else
                 {
@@ -522,7 +533,7 @@ public static class PlaceInstructionManager
                 //     break;
         }
     }
-    public static void DefaultGiftCommand(string username, string command) {
+    public void DefaultGiftCommand(string username, string command) {
         // 找到 对应 的 礼物
         string parts = command.Trim();
         float message = float.Parse(parts);
@@ -555,8 +566,16 @@ public static class PlaceInstructionManager
         //         break;
         // }
     }
+    public void DefaultLikeCommand(Like like) {
+        string username = like.uname;
+        string uface = like.uface;
+        Debug.Log($"uface : {uface}");
+        
 
-    public static (int x,int y) ComputeQuickIns(char m, int x, int y) {
+        // PlaceCenter.Instance.GainPower(username, 1);
+    }
+
+    public (int x,int y) ComputeQuickIns(char m, int x, int y) {
         switch (m) {
             case '1':
                 x -= 1;
@@ -592,8 +611,103 @@ public static class PlaceInstructionManager
         return (x, y);
     }
 
+
+
+
+    // 弹幕
+    public void DefaultDanmuCommand(Dm dm) {
+        string username = dm.userName;
+        string msg = dm.msg.Trim();
+        if (PlaceCenter.Instance.users.ContainsKey(username))
+        {
+            // 获取用户
+            User user = PlaceCenter.Instance.users[username];
+            // 指令 - 传统指令
+            if (msg.StartsWith("/"))
+            {
+                DefaultRunChatCommand(user,msg);
+            }
+            
+            // 指令 - 快捷指令
+            /*
+                快速加入
+                快速画点
+                快速画线
+                快速画自定义线
+                快速画圆、方块、三角、星星
+            */
+
+            // 快速画点
+            if (Regex.IsMatch(msg, FAST_DRAW_PATTERN)) { // 快速画点
+                DefaultRunChatCommand(user,"/d " + msg);
+            }else if (Regex.IsMatch(msg, FAST_LINE_PATTERN)) { // 快速画线
+                DefaultRunChatCommand(user,"/l " + msg);
+            }else if (Regex.IsMatch(msg, FAST_DRAW_DIY_PATTERN)) { // 快速画自定义线
+                DefaultRunChatCommand(user,"/m " + msg);
+            }
+        }
+
+        List<string> selectList = new List<string>(){
+            "蓝",
+            "绿",
+            "黄",
+            "紫"
+        };
+
+        if (selectList.Contains(msg)) {
+            string userFace = dm.userFace;
+            User user = new User(username);
+            StartCoroutine(DownloadImage(user, userFace));
+            // 加入
+            switch (msg)
+            {
+                case "蓝":
+                    user.Camp = 1;
+                    DefaultRunChatCommand(user,"/a 1");
+                    // 需要下载资源
+                    // UI 信息 创建
+                    break;
+                case "绿":
+                    user.Camp = 2;
+                    DefaultRunChatCommand(user,"/a 2");
+                    break;
+                case "黄":
+                    user.Camp = 3;
+                    DefaultRunChatCommand(user,"/a 3");
+                    break;
+                case "紫":
+                    user.Camp = 4;
+                    DefaultRunChatCommand(user,"/a 4");
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+
+
+    }
+
+
+    /*
+        ========= 协程 ========
+    */
+    IEnumerator DownloadImage(User user, string url) {
+        UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
+        yield return www.SendWebRequest();
+        if (www.result == UnityWebRequest.Result.ConnectionError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            Texture2D myTexture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+            user.userIcon = Sprite.Create(myTexture, new Rect(0, 0, myTexture.width, myTexture.height), new Vector2(0.5f, 0.5f));
+        }
+    }
+
     // 颜色字典
-    public static Dictionary<string, Color32> colorDict = new Dictionary<string, Color32>(){
+    public Dictionary<string, Color32> colorDict = new Dictionary<string, Color32>(){
         {"白", new Color32(255, 255, 255, 255)},
         {"黑", new Color32(0, 0, 0, 255)},
         {"红", new Color32(255, 0, 0, 255)},
@@ -609,4 +723,13 @@ public static class PlaceInstructionManager
         {"金", new Color32(255, 215, 0, 255)},
         {"银", new Color32(192, 192, 192, 255)}
     };
+
+
+    // PATTERN
+    private const string FAST_DRAW_POINT_PATTERN = @"^\d{1,3} \d{1,3} \d{1,3} \d{1,3} \d{1,3}$";
+    private const string FAST_DRAW_POINT_WITH_DEFAULT_COLOR_PATTERN = @"^\d{1,3} \d{1,3} [\u4E00-\u9FFF]+$";
+    private const string FAST_DRAW_POINT_WITH_LAST_COLOR_PATTERN = @"^\d{1,3} \d{1,3}$";
+    public const string FAST_DRAW_PATTERN = @"(^\d{1,3} \d{1,3}$)|(^\d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_LINE_PATTERN = @"(^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)|(^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)";
+    public const string FAST_DRAW_DIY_PATTERN = @"(^[1-9]\d*$)|(^[1-9]\d* [\u4E00-\u9FFF]+$)";
 }
