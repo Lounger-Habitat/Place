@@ -88,28 +88,27 @@ public class TestManager : MonoBehaviour
 
     public void GenPlayer(){
         // 添加player
-        string[] cx1 = { "cx1", "蓝" };
-        string[] cx2 = { "cx2", "蓝" };
-        string[] cx3 = { "cx3", "蓝" };
-        string[] cx4 = { "cx4", "蓝" };
+        string[] cx1 = { "cx1", "/a 1" };
+        string[] cx2 = { "cx2", "/a 1" };
+        string[] cx3 = { "cx3", "/a 1" };
+        string[] cx4 = { "cx4", "/a 1" };
 
-        string[] gt1 = { "gt1", "绿" };
-        string[] gt2 = { "gt2", "绿" };
-        string[] gt3 = { "gt3", "绿" };
-        string[] gt4 = { "gt4", "绿" };
+        string[] gt1 = { "gt1", "/a 2" };
+        string[] gt2 = { "gt2", "/a 2" };
+        string[] gt3 = { "gt3", "/a 2" };
+        string[] gt4 = { "gt4", "/a 2" };
 
-        string[] by1 = { "by1", "黄" };
-        string[] by2 = { "by2", "黄" };
-        string[] by3 = { "by3", "黄" };
-        string[] by4 = { "by4", "黄" };
+        string[] by1 = { "by1", "/a 3" };
+        string[] by2 = { "by2", "/a 3" };
+        string[] by3 = { "by3", "/a 3" };
+        string[] by4 = { "by4", "/a 3" };
 
-        string[] hy1 = { "hy1", "紫" };
-        string[] hy2 = { "hy2", "紫" };
-        string[] hy3 = { "hy3", "紫" };
-        string[] hy4 = { "hy4", "紫" };
+        string[] hy1 = { "hy1", "/a 4" };
+        string[] hy2 = { "hy2", "/a 4" };
+        string[] hy3 = { "hy3", "/a 4" };
+        string[] hy4 = { "hy4", "/a 4" };
 
         var combinedListLinq = new[] { cx1, cx2, cx3, cx4, gt1, gt2, gt3, gt4, by1, by2, by3, by4, hy1, hy2, hy3, hy4 }.SelectMany(a => a).ToList();
-        
         StartCoroutine(RepeatFunctionCall(combinedListLinq));
         
         //执行指令
@@ -119,8 +118,11 @@ public class TestManager : MonoBehaviour
     {
         for (int i = 0; i < combinedListLinq.Count; i=i+2) // 循环
         {
-            User u = PlaceCenter.Instance.users[combinedListLinq[i]];
-            PlaceInstructionManager.Instance.DefaultRunChatCommand(u,combinedListLinq[i+1]); // 调用你的函数
+            string uname = combinedListLinq[i];
+            string ins = combinedListLinq[i+1];
+            User u = new User(uname);
+            u.Camp = int.Parse(Regex.Match(ins, @"\d+").Value);
+            PlaceInstructionManager.Instance.DefaultRunChatCommand(u,ins); // 调用你的函数
             yield return new WaitForSeconds(1f); // 等待1秒
         }
     }

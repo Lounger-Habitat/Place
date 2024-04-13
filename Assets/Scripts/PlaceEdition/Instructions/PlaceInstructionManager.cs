@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Text.RegularExpressions;
 using System;
+using System.Linq;
 
 public class PlaceInstructionManager : MonoBehaviour
 {
@@ -132,7 +133,7 @@ public class PlaceInstructionManager : MonoBehaviour
             //  break;
             case "/add":
             case "/a":
-                if (parts.Length >= 2)
+                if (parts.Length == 2)
                 {
                     // 这里调用加入队伍的逻辑
                     PlaceCenter.Instance.JoinGame(user, parts[1]);
