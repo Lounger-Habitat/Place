@@ -452,6 +452,17 @@ public class PlaceCenter : MonoBehaviour
         });
     }
 
+    public void GainLikePower(User user, long power)
+    {
+        // B 站 每人 每天 点赞上限 1000
+        int p = (int)power;
+        user.score += p;
+        user.Update(user.score);
+        PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
+        // 限时加速
+        StartCoroutine(TimeLimitSpeedUp(user,p));
+    }
+
 
     // 重新开始游戏
     void RestartGame()
@@ -470,5 +481,15 @@ public class PlaceCenter : MonoBehaviour
         users.Clear();
         top8.Clear();
 
+    }
+
+
+    //  ===== 协程 =====
+    IEnumerator TimeLimitSpeedUp(User u ,float time)
+    {
+        u.speed += 1.0f;
+        u.character.GetComponent<PlacePlayerController>().PlayRunEffect_1(time);
+        yield return new WaitForSeconds(time);
+        u.speed -= 1.0f;
     }
 }

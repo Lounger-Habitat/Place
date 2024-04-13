@@ -569,8 +569,14 @@ public class PlaceInstructionManager : MonoBehaviour
     }
     public void DefaultLikeCommand(Like like) {
         string username = like.uname;
-        string uface = like.uface;
-        Debug.Log($"uface : {uface}");
+        if (PlaceCenter.Instance.users.ContainsKey(username))
+        {
+            // 获取用户
+            User user = PlaceCenter.Instance.users[username];
+            long count = like.unamelike_count;
+            // 指令 - 传统指令
+            PlaceCenter.Instance.GainLikePower(user, count);
+        }
         
 
         // PlaceCenter.Instance.GainPower(username, 1);

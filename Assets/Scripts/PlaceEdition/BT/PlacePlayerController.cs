@@ -4,6 +4,7 @@ using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
 using System;
 using System.Collections;
+using DG.Tweening;
 
 public class PlacePlayerController : MonoBehaviour
 {
@@ -63,6 +64,18 @@ public class PlacePlayerController : MonoBehaviour
     public List<Vector3> totemPath = new List<Vector3>();
     public List<Vector3> consolePath = new List<Vector3>();
     public int pathIndex = 0;  // 当前路径点的索引
+
+    [Header("玩家特效")]
+    public GameObject slowEffect;
+    public GameObject runEffect_1;
+    public GameObject runEffect_2;
+    public GameObject shieldsEffect_1;
+    public GameObject shieldsEffect_2;
+    public GameObject shieldsEffect_3;
+    public GameObject tornadoEffect;
+    public GameObject electricityEffect;
+    public GameObject strikeEffect;
+    public GameObject levelUpEffect;
 
     public void Start()
     {
@@ -240,15 +253,7 @@ public class PlacePlayerController : MonoBehaviour
         user.score ++;
         // waitingDraw = waitingDraw + 1;
     }
-
     
-
-    public void DrawLine() {
-        
-    }
-    
-
-    public GameObject levelUpEffect;
 
     public void LevelUp()
     {
@@ -256,6 +261,124 @@ public class PlacePlayerController : MonoBehaviour
         var effect = Instantiate(levelUpEffect, transform.position+new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
         effect.transform.SetParent(this.transform);
         //后续可能有音效、UI提示等效果
+    }
+
+    public void PlaySlowEffect()
+    {
+        slowEffect.SetActive(true);
+        Invoke("CloseSlowEffect",2f);
+    }
+
+    public void CloseSlowEffect()
+    {
+        slowEffect.SetActive(false);
+    }
+
+    public void PlayRunEffect_1(float time)
+    {
+        runEffect_1.SetActive(true);
+        Invoke("CloseRunEffect_1", time);
+    }
+
+    public void CloseRunEffect_1()
+    {
+        runEffect_1.SetActive(false);
+    }
+
+    public void PlayRunEffect_2(float time)
+    {
+        runEffect_2.SetActive(true);
+        Invoke("CloseRunEffect_2", time);
+    }
+
+    public void CloseRunEffect_2()
+    {
+        runEffect_2.SetActive(false);
+    }
+
+    public void PlayShieldsEffect_1()
+    {
+        shieldsEffect_1.SetActive(true);
+        Invoke("CloseShieldsEffect_1", 2f);
+    }
+
+    public void CloseShieldsEffect_1()
+    {
+        shieldsEffect_1.SetActive(false);
+    }
+
+    public void PlayShieldsEffect_2()
+    {
+        shieldsEffect_2.SetActive(true);
+        Invoke("CloseShieldsEffect_2", 2f);
+    }
+
+    public void CloseShieldsEffect_2()
+    {
+        shieldsEffect_2.SetActive(false);
+    }
+
+    public void PlayShieldsEffect_3()
+    {
+        shieldsEffect_3.SetActive(true);
+        Invoke("CloseShieldsEffect_3", 2f);  //测试时自动关闭
+    }
+
+    public void CloseShieldsEffect_3()
+    {
+        shieldsEffect_3.SetActive(false);
+    }
+
+    /// ////////////////////////////////////////////////////////////////////////////////////龙卷风效果不是单纯的开启关闭
+
+    public float tornadoRange = 5f;
+    public void PlayTornadoEffect()
+    {
+        //tornadoEffect.SetActive(true);
+        //Invoke("CloseTornadoEffect", 2f);  //测试时自动关闭
+        
+        //首先知道要生成几股龙卷风 随机获得
+        int num = 4;
+        for (int i = 0; i < num; i++)
+        {
+            float dur = UnityEngine.Random.Range(3f, 3.8f);//获得持续时间
+            float xdir = UnityEngine.Random.Range(-1f, 1f);
+            float zdir = UnityEngine.Random.Range(-1f, 1f);//分别获得两个方向的
+            Vector3 targetPos = transform.position + new Vector3(xdir, 0, zdir).normalized * tornadoRange; //当前位置加上目标方向乘以距离就是目标位置
+            GameObject tornado = Instantiate(tornadoEffect, transform.position, Quaternion.identity);
+            tornado.SetActive(true);
+            tornado.transform.DOMove(targetPos, dur).OnComplete(() =>
+            {
+               Destroy(tornado.gameObject); 
+            });
+        }
+    }
+
+    public void CloseTornadoEffect()
+    {
+        tornadoEffect.SetActive(false);
+    }
+    /// ////////////////////////////////////////////////////////////////////////////////////
+    public void PlayElectricityEffect()
+    {
+        electricityEffect.SetActive(true);
+        Invoke("CloseElectricityEffect", 2f);  //测试时自动关闭
+    }
+
+    public void CloseElectricityEffect()
+    {
+        electricityEffect.SetActive(false);
+    }
+
+    public void PlayStrikeEffect()
+    {
+        strikeEffect.SetActive(true);
+        Invoke("CloseStrikeEffect", 2f);  //测试时自动关闭
+    }
+
+    public void CloseStrikeEffect()
+    {
+        strikeEffect.SetActive(false);
     }
 
 }
