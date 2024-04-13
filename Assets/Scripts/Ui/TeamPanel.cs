@@ -66,6 +66,8 @@ public class TeamPanel : MonoBehaviour
 
     private Dictionary<string,User> currentUserList = new Dictionary<string, User>();//当前在排行榜上的玩家，不在排行榜上第一次上榜可以通知
 
+    
+    
     public void UpdateTeamUI(PlaceTeamAreaManager teamArae)
     {
         teamItem = transform.GetChild(teamArae.teaminfo.Id-1);
@@ -82,17 +84,20 @@ public class TeamPanel : MonoBehaviour
             var rankItem = teamItem.Find($"RankItem_{i}");
             if (list.Count <= i)
             {
+                //直接隐藏
+                rankItem.gameObject.SetActive(false);
                 //没有数据了 需要自动填充
-                rankItem.Find("Name").GetComponent<TMP_Text>().text = "虚位以待";
-                rankItem.Find("Data").GetComponent<TMP_Text>().text = $"贡献:";
-                //rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = null;
+                // rankItem.Find("Name").GetComponent<TMP_Text>().text = "虚位以待";
+                // rankItem.Find("Data").GetComponent<TMP_Text>().text = $"贡献:";
+                // rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = null;
             }
             else
             {
+                rankItem.gameObject.SetActive(true);
                 var item = list[i];
                 rankItem.Find("Name").GetComponent<TMP_Text>().text = item.Name;
                 rankItem.Find("Data").GetComponent<TMP_Text>().text = $"贡献:{item.score}";
-                //rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = item.userIcon;//TODO:需要对接user头像，目前没有，所以我的遮罩就没了
+                rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = item.userIcon;//TODO:需要对接user头像，目前没有，所以我的遮罩就没了
                 
                 
                 //检测当前玩家是否在榜
