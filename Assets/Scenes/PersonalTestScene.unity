@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.13791493, g: 0.14393407, b: 0.16944179, a: 1}
+  m_IndirectSpecularColor: {r: 0.14985508, g: 0.15562779, b: 0.18272686, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -753,10 +753,8 @@ MonoBehaviour:
   canvasImage: {fileID: 0}
   height: 200
   width: 200
-  directoryPath: Assets/Images
-  loadedTextures: []
-  index: 0
   defaultTexture: {fileID: 0}
+  recorderTime: 60
   pixelsInfos: 
 --- !u!114 &652830716
 MonoBehaviour:
@@ -966,7 +964,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5995fd8a86f77445d902211ae1a68dab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  danmakuManager: {fileID: 0}
 --- !u!1 &863909437
 GameObject:
   m_ObjectHideFlags: 0
@@ -2328,14 +2325,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7947d1517721b4a0bb806d0ca4bfa913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
-  canvasMaterial: {fileID: 0}
-  uiImage: {fileID: 1318404530}
-  height: 500
-  width: 500
-  directoryPath: Assets/Images
-  loadedTextures: []
-  index: 0
 --- !u!114 &1318404530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2420,6 +2409,10 @@ MonoBehaviour:
   gift: 20
   position: {x: 2, y: 7, z: -17}
   rotation: {x: 45, y: -20, z: 0}
+  loadedTextures: []
+  directoryPath: Assets/Images
+  index: 0
+  pixelsImage: []
 --- !u!1 &1358070115
 GameObject:
   m_ObjectHideFlags: 0
@@ -2688,7 +2681,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8868c783e450d4847bd1458c6f32ff14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isRuning: 0
 --- !u!1 &1769357424
 GameObject:
   m_ObjectHideFlags: 0

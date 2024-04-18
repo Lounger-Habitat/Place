@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using OpenBLive.Runtime.Data;
 using UnityEngine;
 
 public class TestManager : MonoBehaviour
@@ -52,14 +53,14 @@ public class TestManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Slash))
         {
             ins = ins.Trim();
+            
             if (PlaceCenter.Instance.users.ContainsKey(playerName))
             {
-                User u = PlaceCenter.Instance.users[playerName];
-                PlaceInstructionManager.Instance.DefaultRunChatCommand(u,ins);
+                Dm dm = MakeDm(playerName,ins);
+                PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
             }else {
-                User u = new User(playerName);
-                u.Camp = int.Parse(Regex.Match(ins, @"\d+").Value);
-                PlaceInstructionManager.Instance.DefaultRunChatCommand(u,ins);
+                Dm dm = MakeDm(playerName,ins);
+                PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
             }
         }
         // 按下,，执行指令  接受 指令
@@ -81,7 +82,8 @@ public class TestManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Period))
         {
             // 生成角色
-            GenPlayer();
+            // GenPlayer();
+            GenBiliPlayer();
             // 不定时 随机生成指令
             StartCoroutine(GenerateRandomCommand());
 
@@ -92,6 +94,14 @@ public class TestManager : MonoBehaviour
     public void CameraView() {
         Camera.main.transform.position = position;
         Camera.main.transform.rotation = Quaternion.Euler(rotation);
+    }
+
+    public Dm MakeDm(string name,string ins) {
+        Dm dm = new Dm();
+        dm.userName = name;
+        dm.userFace = "https://unsplash.com/photos/EGJVpJr_r3w/download?ixid=M3wxMjA3fDB8MXxhbGx8MTR8fHx8fHwyfHwxNzEzMjUyNjAyfA&force=true&w=640";
+        dm.msg = ins;
+        return dm;
     }
 
     public void GenPlayer(){
@@ -122,6 +132,37 @@ public class TestManager : MonoBehaviour
         //执行指令
     }
 
+    public void GenBiliPlayer() {
+        Dictionary<string, string> myDictionary = new Dictionary<string, string>
+        {
+            { "cx1", "蓝" },
+            { "cx2", "蓝" },
+            { "cx3", "蓝" },
+            { "cx4", "蓝" },
+            { "gt1", "绿" },
+            { "gt2", "绿" },
+            { "gt3", "绿" },
+            { "gt4", "绿" },
+            { "by1", "黄" },
+            { "by2", "黄" },
+            { "by3", "黄" },
+            { "by4", "黄" },
+            { "hy1", "紫" },
+            { "hy2", "紫" },
+            { "hy3", "紫" },
+            { "hy4", "紫" },
+        };
+
+        // 制作 dm
+        List<Dm> dms = myDictionary.Keys.ToList().Select(k => MakeDm(k, myDictionary[k])).ToList();
+
+        // 执行指令
+        StartCoroutine(RepeatDmCall(dms));
+
+
+
+    }
+
     IEnumerator RepeatFunctionCall(List<string> combinedListLinq)
     {
         for (int i = 0; i < combinedListLinq.Count; i=i+2) // 循环
@@ -131,6 +172,18 @@ public class TestManager : MonoBehaviour
             User u = new User(uname);
             u.Camp = int.Parse(Regex.Match(ins, @"\d+").Value);
             PlaceInstructionManager.Instance.DefaultRunChatCommand(u,ins); // 调用你的函数
+            yield return new WaitForSeconds(1f); // 等待1秒
+        }
+    }
+
+    IEnumerator RepeatDmCall(List<Dm> dms)
+    {
+        foreach (var dm in dms) {// 循环
+            // string uname = dm.userName;
+            // string ins = dm.msg;
+            // User u = new User(uname);
+            // u.Camp = int.Parse(Regex.Match(ins, @"\d+").Value);
+            PlaceInstructionManager.Instance.DefaultDanmuCommand(dm); // 调用你的函数
             yield return new WaitForSeconds(1f); // 等待1秒
         }
     }
@@ -207,7 +260,7 @@ public class TestManager : MonoBehaviour
         {
             // 随机等待一段时间
             float waitTime = Random.Range(minInterval, maxInterval);
-            yield return new WaitForSeconds(waitTime);
+            yield return new WaitForSeconds(minInterval);
 
             ExecuteCommand();
         }
@@ -323,4 +376,15 @@ public class TestManager : MonoBehaviour
     初始赠予100颜料
     1. 人员加入队伍
     2. 人员执行绘画指令
+*/
+
+/*
+    准备一些user数据，符合dm结构
+
+    开始游戏
+
+    结束游戏
+
+    评选统计
+
 */

@@ -108,7 +108,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
             go = Instantiate(characterPrefab, spawnPosition, Quaternion.identity);
             go.transform.SetParent(ps.transform);
             PlacePlayerController PlayerControllerScript = go.GetComponent<PlacePlayerController>();
-            GameObject nameTag = PlaceCenter.Instance.CreateNameTag(go.transform, user.Name);
+            GameObject nameTag = PlaceCenter.Instance.CreateNameTag(go.transform, user);
             // user = new User(username, go, teaminfo.Id,this);
             user.character = go;
             user.selfTeam = this;

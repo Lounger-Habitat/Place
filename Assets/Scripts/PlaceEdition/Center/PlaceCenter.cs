@@ -93,7 +93,7 @@ public class PlaceCenter : MonoBehaviour
     }
 
     // 绘制 ui
-    public GameObject CreateNameTag(Transform characterTransform, string name)
+    public GameObject CreateNameTag(Transform characterTransform, User u)
     {
         GameObject canvasObj = GameObject.Find("SpaceCanvas");
 
@@ -102,18 +102,37 @@ public class PlaceCenter : MonoBehaviour
 
         // 设置NameTag UI的位置和属性
         // 假设NameTag UI有一个脚本用于定位和显示
-        NameTag nameTagScript = nameTagObj.GetComponent<NameTag>();
-        if (nameTagScript != null)
+        IconNameTag tagScript = nameTagObj.GetComponent<IconNameTag>();
+        if (tagScript != null)
         {
-            nameTagScript.target = characterTransform;
-            nameTagScript.go_name = name;
+            tagScript.target = characterTransform;
+            tagScript.user = u;
             // 设置其他必要的属性，如偏移量等
         }
         return nameTagObj;
     }
 
+    // public GameObject CreateIconTag(Transform characterTransform, Sprite icon)
+    // {
+    //     GameObject canvasObj = GameObject.Find("SpaceCanvas");
+
+    //     // 在Canvas下生成NameTag UI
+    //     GameObject nameTagObj = Instantiate(nameUI, canvasObj.transform);
+
+    //     // 设置NameTag UI的位置和属性
+    //     // 假设NameTag UI有一个脚本用于定位和显示
+    //     NameTag nameTagScript = nameTagObj.GetComponent<NameTag>();
+    //     if (nameTagScript != null)
+    //     {
+    //         nameTagScript.target = characterTransform;
+    //         nameTagScript.icon.sprite = icon;
+    //         // 设置其他必要的属性，如偏移量等
+    //     }
+    //     return nameTagObj;
+    // }
+
     // add player
-    public void AddPlayer(User user)
+    public void AddPlayer(User user,int t)
     {
         // 检查用户是否已经存在
         // if (users.ContainsKey(user.username))
@@ -123,7 +142,7 @@ public class PlaceCenter : MonoBehaviour
         // }
 
         // 创建角色
-        int t = user.Camp;
+        // int t = user.Camp;
         PlaceTeamManager.Instance.teamAreas[t - 1].CreateCharacterInTeamArea(user);
         users.Add(user.Name, user);
     }
@@ -210,7 +229,7 @@ public class PlaceCenter : MonoBehaviour
         }
         // 创建 用户
 
-        AddPlayer(user);
+        AddPlayer(user,t);
         // 将用户加入队伍区域
     }
 
