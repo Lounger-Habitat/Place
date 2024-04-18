@@ -261,7 +261,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 1
-  m_Acceleration: 10
+  m_Acceleration: 60
   avoidancePriority: 50
   m_AngularSpeed: 240
   m_StoppingDistance: 0.2
@@ -352,7 +352,17 @@ MonoBehaviour:
   totemPath: []
   consolePath: []
   pathIndex: 0
+  slowEffect: {fileID: 0}
+  runEffect_1: {fileID: 0}
+  runEffect_2: {fileID: 0}
+  shieldsEffect_1: {fileID: 0}
+  shieldsEffect_2: {fileID: 0}
+  shieldsEffect_3: {fileID: 0}
+  tornadoEffect: {fileID: 0}
+  electricityEffect: {fileID: 0}
+  strikeEffect: {fileID: 0}
   levelUpEffect: {fileID: 5630033035972994015, guid: fbf7b003351d3cc4da6c1972a822b53c, type: 3}
+  tornadoRange: 5
 --- !u!136 &5821709114818931479
 CapsuleCollider:
   m_ObjectHideFlags: 0

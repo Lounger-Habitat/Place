@@ -19,7 +19,7 @@ public class IconNameTag : MonoBehaviour
     {
         rectTransform = GetComponent<RectTransform>(); // 获取RectTransform组件
         tmp_text = GetComponentInChildren<TMP_Text>(); // 获取TextMeshPro组件
-        icon = GetComponentInChildren<Image>(); // 获取TextMeshPro组件
+        icon =transform.Find("Image").GetChild(0).GetComponent<Image>(); // 获取TextMeshPro组件
 
         tmp_text.text = userName; // 设置文本
         icon.sprite = userIcon;
