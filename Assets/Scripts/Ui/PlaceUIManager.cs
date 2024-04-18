@@ -94,6 +94,10 @@ public class PlaceUIManager : MonoBehaviour
     public void StartGame(Action action)
     {
         countDown.Init(action);
+        countDown.Init(() =>
+        {
+            endUI.Init();
+        });
         countDown.StartTimeDown();
     }
 
