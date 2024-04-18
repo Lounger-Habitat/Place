@@ -653,45 +653,52 @@ public class PlaceInstructionManager : MonoBehaviour
                 DefaultRunChatCommand(user,"/m " + msg);
             }
         }
+        // List<string> selectList = new List<string>(){
+        //     "蓝",
+        //     "绿",
+        //     "黄",
+        //     "紫",
+        // };
 
-        List<string> selectList = new List<string>(){
-            "蓝",
-            "绿",
-            "黄",
-            "紫"
-        };
+        // 第一次 加入游戏
+        string firstJoinFormat = @"蓝|绿|黄|紫|/a \d";
 
-        if (selectList.Contains(msg)) {
+        if (Regex.IsMatch(msg, firstJoinFormat)){
             string userFace = dm.userFace;
             User user = new User(username);
             StartCoroutine(DownloadImage(user, userFace));
             // 加入
-            switch (msg)
+            if (msg.StartsWith("/a"))
             {
-                case "蓝":
-                    user.Camp = 1;
-                    DefaultRunChatCommand(user,"/a 1");
-                    // 需要下载资源
-                    // UI 信息 创建
-                    break;
-                case "绿":
-                    user.Camp = 2;
-                    DefaultRunChatCommand(user,"/a 2");
-                    break;
-                case "黄":
-                    user.Camp = 3;
-                    DefaultRunChatCommand(user,"/a 3");
-                    break;
-                case "紫":
-                    user.Camp = 4;
-                    DefaultRunChatCommand(user,"/a 4");
-                    break;
-                default:
-                    break;
+                user.Camp = int.Parse(Regex.Match(msg, @"\d+").Value);
+                DefaultRunChatCommand(user,msg);
+            }else {
+                switch (msg)
+                {
+                    case "蓝":
+                        user.Camp = 1;
+                        DefaultRunChatCommand(user,"/a 1");
+                        // 需要下载资源
+                        // UI 信息 创建
+                        break;
+                    case "绿":
+                        user.Camp = 2;
+                        DefaultRunChatCommand(user,"/a 2");
+                        break;
+                    case "黄":
+                        user.Camp = 3;
+                        DefaultRunChatCommand(user,"/a 3");
+                        break;
+                    case "紫":
+                        user.Camp = 4;
+                        DefaultRunChatCommand(user,"/a 4");
+                        break;
+                    default:
+                        break;
+                }
             }
-        }
-        
 
+        }
 
     }
 
