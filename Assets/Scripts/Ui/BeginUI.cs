@@ -14,6 +14,7 @@ public class BeginUI : MonoBehaviour
     {
         //通知游戏开始了
         PlaceCenter.Instance.StartGame();
+        PlaceCenter.Instance.RecordImage();
         //把自己整个移出显示区域
         (transform as RectTransform).anchoredPosition = new Vector2(3000, 0);
     }

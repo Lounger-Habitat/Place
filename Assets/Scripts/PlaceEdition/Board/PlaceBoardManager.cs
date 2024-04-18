@@ -26,6 +26,9 @@ public class PlaceBoardManager : MonoBehaviour
     public int recorderTime = 60;
     public int[] pixelsInfos;
 
+    // 画作唯一id
+    public static int UniqueId = 0;
+
     public static PlaceBoardManager Instance { get; private set; }
 
     void Awake()
@@ -90,6 +93,8 @@ public class PlaceBoardManager : MonoBehaviour
         defaultTexture = texture;
 
         // LoadResources();
+        UniqueId = GenerateUniqueId();
+        
     }
 
     void Update()
@@ -165,11 +170,6 @@ public class PlaceBoardManager : MonoBehaviour
             {
                 SaveImage();
             }
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                Debug.Log("开始记录gif");
-                StartCoroutine(SaveImagePreMinute());
-            }
             if (Input.GetKeyDown(KeyCode.H))
             {
                 GenGif($"Assets/Images/test");
@@ -177,13 +177,9 @@ public class PlaceBoardManager : MonoBehaviour
         }
     }
 
-    IEnumerator SaveImagePreMinute()
+    public static int GenerateUniqueId()
     {
-        // 持续等待一分钟
-        while (PlaceCenter.Instance.gameRuning) {
-            yield return new WaitForSeconds(recorderTime);
-            SaveImage();
-        }
+        return UniqueId++;
     }
 
     List<Texture2D> LoadResources(string directoryPath)
@@ -413,11 +409,11 @@ public class PlaceBoardManager : MonoBehaviour
     {
         byte[] bytes = texture.EncodeToPNG();
         // 检测文件夹是否存在
-        if (!Directory.Exists($"Assets/Images/test"))
+        if (!Directory.Exists($"Assets/Images/{UniqueId}"))
         {
-            Directory.CreateDirectory($"Assets/Images/test");
+            Directory.CreateDirectory($"Assets/Images/{UniqueId}");
         }
-        string path = $"Assets/Images/test/save_{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
+        string path = $"Assets/Images/{UniqueId}/save_{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
         System.IO.File.WriteAllBytes(path, bytes);
         Debug.Log("Saved Image to: " + path);
     }

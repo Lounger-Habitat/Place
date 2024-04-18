@@ -48,6 +48,8 @@ public class PlaceCenter : MonoBehaviour
 
     int[] lastTeamScore = new int[5] {0,0,0,0,0};
 
+    public int recorderTime = 60;
+
     public void Start()
     {
         // 初始化用户信息
@@ -502,6 +504,12 @@ public class PlaceCenter : MonoBehaviour
 
     }
 
+    // 记录图像
+    public void RecordImage()
+    {
+        StartCoroutine(SaveImagePreRecorderTime(recorderTime));
+    }
+
 
     //  ===== 协程 =====
     IEnumerator TimeLimitSpeedUp(User u ,float time)
@@ -510,5 +518,14 @@ public class PlaceCenter : MonoBehaviour
         u.character.GetComponent<PlacePlayerController>().PlayRunEffect_1(time);
         yield return new WaitForSeconds(time);
         u.speed -= 1.0f;
+    }
+
+    IEnumerator SaveImagePreRecorderTime(int time = 60)
+    {
+        // 持续等待一分钟
+        while (gameRuning) {
+            yield return new WaitForSeconds(time);
+            PlaceBoardManager.Instance.SaveImage();
+        }
     }
 }
