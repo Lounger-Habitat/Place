@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Assets.GifAssets.PowerGif;
 using System.Collections;
+using UnityEngine.Assertions;
 
 public class PlaceBoardManager : MonoBehaviour
 {
@@ -172,7 +173,7 @@ public class PlaceBoardManager : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.H))
             {
-                GenGif($"Assets/Images/test");
+                GenGif();
             }
         }
     }
@@ -418,15 +419,49 @@ public class PlaceBoardManager : MonoBehaviour
         Debug.Log("Saved Image to: " + path);
     }
 
-    public void GenGif(string gifPath) {
+    public void GenGif() {
+        string gifPath = $"Assets/Images/{UniqueId}";
         List<Texture2D> f =  LoadResources(gifPath);
-        var frames = f.Select(f => new GifFrame(f, 0.1f)).ToList();
+        f = Select20(f.ToArray());
+        var frames = f.Select(f => new GifFrame(f, 0.5f)).ToList();
 	    var gif = new Gif(frames);
 		var bytes = gif.Encode();
         var path = Path.Combine(gifPath, "test.gif");
 		if (path == "") return;
 		File.WriteAllBytes(path, bytes);
 		Debug.Log($"Saved to: {path}");
+    }
+
+    private List<Texture2D> Select20(Texture2D[] fa)
+    {
+        int len = fa.Length;
+        List<Texture2D> res = new List<Texture2D>();
+         // 始终选择第一个元素
+        if (len > 20)
+        {
+            res.Add(fa[0]);
+            // 选择最后一个元素
+            
+            
+            // 计算间隔
+            int interval = (len - 2) / 18; // 18是因为我们要选20个，已经选了2个
+
+            // 从第二个元素之后开始选择，直到倒数第二个元素之前
+            for (int i = 2; i < len - 1; i += interval)
+            {
+                res.Add(fa[i]);
+            }
+            res.Add(fa[len-1]);
+
+            // 断言 res 一个20个
+            Assert.IsTrue(res.Count == 20);
+        }
+        else
+        {
+            // 如果列表元素少于或等于20个，则选择所有元素
+            res = fa.ToList();
+        }
+        return res;
     }
 
     public void Reset()

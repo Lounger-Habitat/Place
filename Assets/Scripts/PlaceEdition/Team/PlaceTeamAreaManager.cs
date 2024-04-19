@@ -18,7 +18,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
 
     public Transform totem;
     public Transform door;
-    public GameObject ps;
+    GameObject ps;
 
     void Start()
     {

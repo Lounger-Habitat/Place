@@ -504,10 +504,15 @@ public class PlaceCenter : MonoBehaviour
 
     }
 
-    // 记录图像
+    // 开始记录图像
     public void RecordImage()
     {
         StartCoroutine(SaveImagePreRecorderTime(recorderTime));
+    }
+    // 结束 生成 gif
+    public void GenGif()
+    {
+        PlaceBoardManager.Instance.GenGif();
     }
 
 
