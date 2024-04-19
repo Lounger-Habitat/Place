@@ -66,7 +66,7 @@ public class PlaceUIManager : MonoBehaviour
         // Event
         UIEvent.OnTeamUpdateEvent += UpdateTeam;//
         UIEvent.OnRankUpdateEvent += UpdateRank;
-        UIEvent.OnTeamAreaUpdateEvent += UpdateTeamArea;
+        //UIEvent.OnTeamAreaUpdateEvent += UpdateTeamArea;
 
     }
 

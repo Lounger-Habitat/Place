@@ -11,10 +11,22 @@ public class TeamPanel : MonoBehaviour
     private Transform teamItem;
     private List<Transform> useList = new List<Transform>();
     private List<Transform> poolList = new List<Transform>();
+
+    public bool isPc = false;
+
+    private int numMax;
     public void Init()
     {
         teamItem = transform.GetChild(0);
         //teamItem.gameObject.SetActive(false);
+        if (isPc)
+        {
+            numMax = 5;
+        }
+        else
+        {
+            numMax = 3;
+        }
     }
 
     //必须传递四个队伍，如果不传递四个队伍会将不存在队伍清除（目前是报错）
@@ -62,12 +74,63 @@ public class TeamPanel : MonoBehaviour
     public void UpdateTeamUI(Team team){
         teamItem = transform.GetChild(team.Id-1);
         teamItem.Find("Data").GetComponent<TMP_Text>().text = $"{team.score}";
+        //数据全部通过team获取
+        var list = PlaceTeamManager.Instance.teamAreas[team.Id - 1].userList;
+        teamItem = transform.GetChild(team.Id-1);
+        teamItem.Find("TeamName").GetComponent<TMP_Text>().text = team.Name;//名字起的太随便，先用现有的
+        teamItem.Find("Data").GetComponent<TMP_Text>().text = $"{list.Count}/{team.MaxTeamNumber}";
+        teamItem.Find("TeamScore").GetChild(0).GetComponent<TMP_Text>().text = $"{team.score}";
+        
+        //更新排行
+        list.Sort((a, b) => b.score - a.score);
+        //list.Sort((a, b) => b.score.CompareTo(a.score));
+        for (int i = 0; i < numMax; i++)
+        {
+            var rankItem = teamItem.Find($"RankItem_{i}");
+            if (list.Count <= i)
+            {
+                //直接隐藏
+                rankItem.gameObject.SetActive(false);
+                //没有数据了 需要自动填充
+                // rankItem.Find("Name").GetComponent<TMP_Text>().text = "虚位以待";
+                // rankItem.Find("Data").GetComponent<TMP_Text>().text = $"贡献:";
+                // rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = null;
+            }
+            else
+            {
+                rankItem.gameObject.SetActive(true);
+                var item = list[i];
+                rankItem.Find("Name").GetComponent<TMP_Text>().text = item.Name;
+                rankItem.Find("Data").GetComponent<TMP_Text>().text = $"贡献:{item.score}";
+                rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = item.userIcon;//TODO:需要对接user头像，目前没有，所以我的遮罩就没了
+                
+                
+                //检测当前玩家是否在榜
+                if (!currentUserList.Values.Contains(item))
+                {
+                    //不在榜，上榜的进行通知 TODO：可以通知UI进行通知
+                }
+                string onlyId = $"{team.Id}-{i}";//id是队伍id与排名的组合
+                //检测玩家是否是第一,降序排序，第一个就是排行第一玩家
+                if (i.Equals(0))
+                {
+                    if (currentUserList.ContainsKey(onlyId)&&!currentUserList[onlyId].Equals(item))
+                    {
+                        //第一不是当前玩家，此玩家夺得第一 TODO:进行UI通知，争榜一
+                    }
+                }
+                //将当前玩家存到缓存中
+                currentUserList[onlyId] = item;
+            }
+            
+            
+        }
     }
 
     private Dictionary<string,User> currentUserList = new Dictionary<string, User>();//当前在排行榜上的玩家，不在排行榜上第一次上榜可以通知
 
     
-    
+    //舍弃，不会再调用
     public void UpdateTeamUI(PlaceTeamAreaManager teamArae)
     {
         teamItem = transform.GetChild(teamArae.teaminfo.Id-1);
@@ -79,7 +142,7 @@ public class TeamPanel : MonoBehaviour
         var list = teamArae.userList;
         list.Sort((a, b) => b.score - a.score);
         //list.Sort((a, b) => b.score.CompareTo(a.score));
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < numMax; i++)
         {
             var rankItem = teamItem.Find($"RankItem_{i}");
             if (list.Count <= i)

@@ -92,7 +92,8 @@ public class PlaceTeamAreaManager : MonoBehaviour
     //更新UI数据，包含队伍中包含的User排行数据
     void UpDateTeamUI()
     {
-        UIEvent.OnTeamAreaUIUpdate(this);
+        //UIEvent.OnTeamAreaUIUpdate(this);
+        UIEvent.OnTeamUIUpdate(teaminfo);
     }
 
     // 在队伍区域里创建角色
