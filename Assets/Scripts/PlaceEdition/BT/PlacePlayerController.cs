@@ -154,7 +154,8 @@ public class PlacePlayerController : MonoBehaviour
     // }
     public void MoveToTarget()
     {
-        navMeshAgent.destination=target.position;
+        var des = target.GetChild(0);
+        navMeshAgent.destination=des.position;
         navMeshAgent.speed = user.speed;
     }
 
