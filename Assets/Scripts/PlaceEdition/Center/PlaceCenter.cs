@@ -81,17 +81,21 @@ public class PlaceCenter : MonoBehaviour
 
     void CreateTeam()
     {
-        teams.Add("A", PlaceTeamManager.Instance.teamAreas[0].teaminfo);
-        teams.Add("B", PlaceTeamManager.Instance.teamAreas[1].teaminfo);
-        teams.Add("C", PlaceTeamManager.Instance.teamAreas[2].teaminfo);
-        teams.Add("D", PlaceTeamManager.Instance.teamAreas[3].teaminfo);
-        var teamList = new List<Team>(){
-            PlaceTeamManager.Instance.teamAreas[0].teaminfo,
-            PlaceTeamManager.Instance.teamAreas[1].teaminfo,
-            PlaceTeamManager.Instance.teamAreas[2].teaminfo,
-            PlaceTeamManager.Instance.teamAreas[3].teaminfo
-        };
-        PlaceUIManager.Instance.SetTeamData(teamList);
+        // List<Team> teamList = new List<Team>();
+        for (int i = 0; i < teams.Count; i++)
+        {
+            teams.Add($"Team{i+1}", PlaceTeamManager.Instance.teamAreas[0].teaminfo);
+            // teamList.Add(PlaceTeamManager.Instance.teamAreas[0].teaminfo);
+        }
+
+        // var teamList = new List<Team>(){
+        //     PlaceTeamManager.Instance.teamAreas[0].teaminfo,
+        //     PlaceTeamManager.Instance.teamAreas[1].teaminfo,
+        //     PlaceTeamManager.Instance.teamAreas[2].teaminfo,
+        //     PlaceTeamManager.Instance.teamAreas[3].teaminfo
+        // };
+        // 不知道为什么成为空函数了
+        // PlaceUIManager.Instance.SetTeamData(teamList);
     }
 
     // 绘制 ui
@@ -345,8 +349,8 @@ public class PlaceCenter : MonoBehaviour
             }
         }
 
-        // UI显示
-        PlaceUIManager.Instance.SetTeamData(teams.Values.ToList());
+        // UI显示 , 不知道为什么成为空函数了
+        // PlaceUIManager.Instance.SetTeamData(teams.Values.ToList());
 
     }
 

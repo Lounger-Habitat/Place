@@ -93,7 +93,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
 
             return TaskStatus.Success;
         }
-        pc.Dance(pc.totemPath);
+        // pc.Dance(pc.totemPath);
         return TaskStatus.Running;
     }
 }

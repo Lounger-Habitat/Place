@@ -32,7 +32,6 @@ public class PlacePlayerController : MonoBehaviour
     
     
     // 身上指令
-
     public List<Instruction> insList = new List<Instruction>();
 
     // 指令队列
@@ -86,7 +85,9 @@ public class PlacePlayerController : MonoBehaviour
         playerGoal.SetValue(PlayerGoal.Draw);
         playerBT.SetVariable("playerGoal", playerGoal);
 
-        for (int i = 0; i < 4; i++)
+        int campNum = PlaceTeamManager.Instance.teamAreas.Count;
+
+        for (int i = 0; i < campNum; i++)
         {
             buildings.Add($"Totem{i+1}", PlaceTeamManager.Instance.teamAreas[i].totem);
             buildings.Add($"Door{i+1}", PlaceTeamManager.Instance.teamAreas[i].door);
@@ -97,7 +98,6 @@ public class PlacePlayerController : MonoBehaviour
         {
             altar = GameObject.Find("Console").transform;
         }
-
         if (selfTotem == null)
         {
             selfTotem = GameObject.Find($"TeamArea{user.Camp}").transform;
