@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
 public class PlaceTeamAreaManager : MonoBehaviour
 {
     // 队伍区域当前容纳的人数
@@ -97,7 +97,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
     }
 
     // 在队伍区域里创建角色
-    public void CreateCharacterInTeamArea(User user)
+    public User CreateCharacterInTeamArea(User user)
     {
         GameObject go = null;
         
@@ -133,7 +133,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         {
             Debug.Log("队伍区域已满");
         }
-        // return user;
+        return user;
 
     }
 

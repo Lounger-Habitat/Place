@@ -1,7 +1,9 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlaceCenter : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class PlaceCenter : MonoBehaviour
         5. 负责界面更新
         6. 负责调度模块
     */
+
     public static PlaceCenter Instance { get; private set; }
 
     void Awake()
@@ -27,11 +30,9 @@ public class PlaceCenter : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    #nullable enable
     // 用户信息
-#nullable enable
-
-    public Dictionary<string, User> users = new Dictionary<string, User>();
+    public PlcaeUserDict users = new PlcaeUserDict();
     // 队伍信息
     public Dictionary<string, Team> teams = new Dictionary<string, Team>();
 
@@ -140,6 +141,7 @@ public class PlaceCenter : MonoBehaviour
     // add player
     public void AddPlayer(User user,int t)
     {
+        Debug.Log("AddPlayer");
         // 检查用户是否已经存在
         // if (users.ContainsKey(user.username))
         // {
@@ -149,8 +151,14 @@ public class PlaceCenter : MonoBehaviour
 
         // 创建角色
         // int t = user.Camp;
-        PlaceTeamManager.Instance.teamAreas[t - 1].CreateCharacterInTeamArea(user);
-        users.Add(user.Name, user);
+        User u = PlaceTeamManager.Instance.teamAreas[t - 1].CreateCharacterInTeamArea(user);
+        users.Add(u.Name, u);
+        Debug.Log("Now users :");
+        foreach (var item in users)
+        {
+            Debug.Log(item.Key);
+        } 
+        
     }
 
     public GameObject CreateMessageBubble(Transform characterTransform, string message)
@@ -216,11 +224,11 @@ public class PlaceCenter : MonoBehaviour
     {
         int t = int.Parse(teamId);
         // 检查用户是否已经存在
-        // if (users.ContainsKey(username))
-        // {
-        //     Debug.Log("用户已存在");
-        //     return;
-        // }
+        if (users.ContainsKey(user.Name))
+        {
+            Debug.Log("用户已存在");
+            return;
+        }
         // 检查队伍是否已经存在
         // if (!teams.ContainsKey(teamId))
         // {

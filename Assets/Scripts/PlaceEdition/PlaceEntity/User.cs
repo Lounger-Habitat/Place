@@ -44,7 +44,8 @@ public class User
     public int maxCarryingInsCount; // 玩家 身上携带的 最大指令数量
     public float speed;
     public float waitingSpeed = 1.0f; // 等待速度
-    public Queue<Instruction> instructionQueue = new Queue<Instruction>(); // 玩家 指令队列， 用于保存 玩家弹幕输入的指令，等待被执行
+    
+    public PlaceInsQueue instructionQueue = new PlaceInsQueue(); // 玩家 指令队列， 用于保存 玩家弹幕输入的指令，等待被执行
 
     /*
         资源
@@ -65,7 +66,6 @@ public class User
         this.camp = 0;
         this.character = null;
         this.selfTeam = null;
-        this.instructionQueue = new Queue<Instruction>();
         this.lastColor = Color.white;
         this.score = 0;
         this.carryingInkCount = 0;
@@ -115,7 +115,7 @@ public class User
     }
 }
 
-
+[System.Serializable]
 public struct PlayerState
 {
     public HighLevelState topState;
@@ -127,7 +127,7 @@ public struct PlayerState
         this.detailState = detailState;
     }
 }
-
+[System.Serializable]
 public enum HighLevelState
 {
     Draw,
@@ -135,6 +135,7 @@ public enum HighLevelState
     Defend,
 }
 
+[System.Serializable]
 public enum DetailState
 {
     DrawMoveToTotem,
@@ -154,4 +155,9 @@ public enum DetailState
     AttackCharge,
     AttackGoHome
 
+}
+
+[System.Serializable]
+public class PlaceInsQueue : Queue<Instruction>
+{
 }
