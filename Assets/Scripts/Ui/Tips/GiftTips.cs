@@ -10,6 +10,8 @@ public class GiftTips : TipsBase
 
     public RectTransform dataRectTransform;
     public RectTransform iconRectTransform;
+
+    public float openPos,closePos;
     
    public override void SetData(TipsItem tips)
     {
@@ -19,7 +21,7 @@ public class GiftTips : TipsBase
 
     public override void MoveTipsPanel(bool isOn = true)
     {
-        if (panelType == TipsType.giftDrawPanel)
+        if (panelType is TipsType.giftDrawPanel or TipsType.giftDrawPanelRight)
         {
             MoveTipsGiftDraw(isOn);
             return;
@@ -55,7 +57,7 @@ public class GiftTips : TipsBase
         }
         else
         {
-            (transform as RectTransform).DOAnchorPosX(-950, 0.5f);
+            (transform as RectTransform).DOAnchorPosX(closePos, 0.5f);
         }
     }
 }

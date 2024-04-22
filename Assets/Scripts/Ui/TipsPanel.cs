@@ -56,40 +56,74 @@ public class TipsPanel : MonoBehaviour
     }
 
     private Queue<TipsItem> tipsQueue = new Queue<TipsItem>();
+    private Queue<TipsItem> tipsQueueright = new Queue<TipsItem>();
     public Queue<TipsItem> tipsMessageQueue = new Queue<TipsItem>();
+    public Queue<TipsItem> tipsMessageQueueright = new Queue<TipsItem>();
 
     public void AddTips(TipsItem tip)
     {
         if (tip.tipsType == TipsType.messagePanel)
         {
-            lock (tipsMessageQueue)
+            if (tip.isLeft)
             {
-                //首先入列
-                tipsMessageQueue.Enqueue(tip);
+                lock (tipsMessageQueue)
+                {
+                    //首先入列
+                    tipsMessageQueue.Enqueue(tip);
+                }
             }
+            else
+            {
+                lock (tipsMessageQueueright)
+                {
+                    //首先入列
+                    tipsMessageQueueright.Enqueue(tip);
+                }
+            }
+            
 
             tipsleft.ShowTips();
             tipsright.ShowTips();
         }
         else
         {
-            lock (tipsQueue)
+            if (tip.isLeft)
             {
-                //首先入列
-                tipsQueue.Enqueue(tip);
-            }
+                lock (tipsQueue)
+                {
+                    //首先入列
+                    tipsQueue.Enqueue(tip);
+                }
 
-            //检查是否在进行弹出提示，如果在进行弹出提示就不用管了
-            if (!isShowTips)
-            {
-                //否则就要启动弹出动画
-                StartCoroutine(ShowTipsAni());
+                //检查是否在进行弹出提示，如果在进行弹出提示就不用管了
+                if (!isShowTips)
+                {
+                    //否则就要启动弹出动画
+                    StartCoroutine(ShowTipsAni());
+                }
             }
+            else
+            {
+                lock (tipsQueueright)
+                {
+                    //首先入列
+                    tipsQueueright.Enqueue(tip);
+                }
+
+                //检查是否在进行弹出提示，如果在进行弹出提示就不用管了
+                if (!isShowTipsright)
+                {
+                    //否则就要启动弹出动画
+                    StartCoroutine(ShowTipsAniRight());
+                }
+            }
+            
         }
     }
 
     WaitForSeconds wait = new(4.6f);
     private bool isShowTips = false;
+    private bool isShowTipsright = false;
     private TipsItem nowData;
 
     IEnumerator ShowTipsAni()
@@ -114,33 +148,30 @@ public class TipsPanel : MonoBehaviour
 
         isShowTips = false;
     }
-
-    private void MoveTipsPanel(bool isShow = true)
+    
+    IEnumerator ShowTipsAniRight()
     {
-        if (isShow) //如果是打开移动到打开位置
+        //将标志位置为true
+        isShowTipsright = true;
+        //检查队列中是否还有元素
+        while (tipsQueueright.Any())
         {
-            messageTipsPanel.DOAnchorPosX(60, 1f);
-        }
-        else
-        {
-            messageTipsPanel.DOAnchorPosX(-280, 0.7f);
-        }
-    }
+            lock (tipsQueueright)
+            {
+                nowData = tipsQueueright.Dequeue();
+            }
 
-    private void MoveGiftPanel(bool isShow = true)
-    {
-        if (isShow)
-        {
-            giftTipsPanel.DOAnchorPosX(0, 0.7f);
-            giftTipsPanel.DOLocalRotate(new Vector3(0, 0, 8.5f), 3.5f);
+            var panel = tipsPanels[nowData.tipsType];
+            panel.SetData(nowData);
+            panel.MoveTipsPanel();
+            yield return wait;
+            panel.MoveTipsPanel(false);
+            yield return new WaitForSeconds(0.8f);
         }
-        else
-        {
-            giftTipsPanel.DOAnchorPosX(-900, 0.6f);
-            giftTipsPanel.DOLocalRotate(new Vector3(0, 0, 0), 0.8f);
-        }
-    }
 
+        isShowTipsright = false;
+    }
+    
     [ContextMenu("message")]
     public void Test()
     {
@@ -218,6 +249,7 @@ public class TipsItem
     public Sprite icon;
     public TipsType tipsType;
     public string value;
+    public bool isLeft = true;
 }
 
 //这是提示的类型，
@@ -226,5 +258,6 @@ public enum TipsType
     messagePanel,
     giftAttackPanel,
     giftDefensePanel,
-    giftDrawPanel
+    giftDrawPanel,
+    giftDrawPanelRight,
 }
