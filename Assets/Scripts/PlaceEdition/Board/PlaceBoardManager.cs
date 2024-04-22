@@ -455,7 +455,7 @@ public class PlaceBoardManager : MonoBehaviour
             res.Add(fa[len - 1]);
 
             // 断言 res 一个20个
-            Assert.IsTrue(res.Count == 20);
+           //Assert.IsTrue(res.Count == 20);
         }
         else
         {

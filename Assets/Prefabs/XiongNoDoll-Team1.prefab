@@ -355,15 +355,15 @@ MonoBehaviour:
   totemPath: []
   consolePath: []
   pathIndex: 0
-  slowEffect: {fileID: 0}
-  runEffect_1: {fileID: 0}
+  slowEffect: {fileID: 8274854561089743264, guid: d8f22a2799756bf49a19e5dbad71a8c0, type: 3}
+  runEffect_1: {fileID: 6235330434594640082, guid: cae4dfd42d9704f4886582d63cff2e26, type: 3}
   runSmokeEffect: {fileID: 5498650703651248160, guid: d68df64639bb84698858ffd67d3ca56f, type: 3}
-  shieldsEffect_1: {fileID: 0}
-  shieldsEffect_2: {fileID: 0}
-  shieldsEffect_3: {fileID: 0}
-  tornadoEffect: {fileID: 0}
-  electricityEffect: {fileID: 0}
-  strikeEffect: {fileID: 0}
+  shieldsEffect_1: {fileID: 9204203178013580127, guid: 261623abc591286449ff69193d63e856, type: 3}
+  shieldsEffect_2: {fileID: 7943073472474586687, guid: d9cffe1112a6e0e48a2bd2349b74c3dc, type: 3}
+  shieldsEffect_3: {fileID: 8135410873488547764, guid: e67b7660612219f4f8a6f4b9c49e1d28, type: 3}
+  tornadoEffect: {fileID: 3907058778016234382, guid: 050cd12ad35bf824aaf5e63668124672, type: 3}
+  electricityEffect: {fileID: 1157595341244220102, guid: 5788b552fc8dbb943be5aa65f2ed1e70, type: 3}
+  strikeEffect: {fileID: 8316546506534294775, guid: 9935065b872f1af47aa6cfec52cbf812, type: 3}
   levelUpEffect: {fileID: 5630033035972994015, guid: fbf7b003351d3cc4da6c1972a822b53c, type: 3}
   tornadoRange: 5
 --- !u!136 &5821709114818931479
