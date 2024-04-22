@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +5,6 @@ public class PlaceTeamManager : MonoBehaviour
 {
     // Start is called before the first frame update
     public static PlaceTeamManager Instance { get; private set; }
-
     void Awake()
     {
         if (Instance == null)

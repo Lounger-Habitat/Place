@@ -339,6 +339,9 @@ MonoBehaviour:
   user:
     defendingIns: 0
     attckingIns: 0
+    currentState:
+      topState: 0
+      detailState: 0
     maxCarryingInsCount: 0
     speed: 0
     waitingSpeed: 0
@@ -354,7 +357,7 @@ MonoBehaviour:
   pathIndex: 0
   slowEffect: {fileID: 0}
   runEffect_1: {fileID: 0}
-  runEffect_2: {fileID: 0}
+  runEffect_2: {fileID: 5498650703651248160, guid: d68df64639bb84698858ffd67d3ca56f, type: 3}
   shieldsEffect_1: {fileID: 0}
   shieldsEffect_2: {fileID: 0}
   shieldsEffect_3: {fileID: 0}

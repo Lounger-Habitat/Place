@@ -32,7 +32,7 @@ public class PlaceCenter : MonoBehaviour
     }
     #nullable enable
     // 用户信息
-    public PlcaeUserDict users = new PlcaeUserDict();
+    public Dictionary<string, User> users = new Dictionary<string, User>();
     // 队伍信息
     public Dictionary<string, Team> teams = new Dictionary<string, Team>();
 
@@ -64,6 +64,7 @@ public class PlaceCenter : MonoBehaviour
         // 游戏计时
         
         CreateTeam();
+        
     }
 
     void Update() {
@@ -141,7 +142,6 @@ public class PlaceCenter : MonoBehaviour
     // add player
     public void AddPlayer(User user,int t)
     {
-        Debug.Log("AddPlayer");
         // 检查用户是否已经存在
         // if (users.ContainsKey(user.username))
         // {
@@ -153,11 +153,6 @@ public class PlaceCenter : MonoBehaviour
         // int t = user.Camp;
         User u = PlaceTeamManager.Instance.teamAreas[t - 1].CreateCharacterInTeamArea(user);
         users.Add(u.Name, u);
-        Debug.Log("Now users :");
-        foreach (var item in users)
-        {
-            Debug.Log(item.Key);
-        } 
         
     }
 
@@ -531,10 +526,10 @@ public class PlaceCenter : MonoBehaviour
     //  ===== 协程 =====
     IEnumerator TimeLimitSpeedUp(User u ,float time)
     {
-        u.speed += 1.0f;
-        u.character.GetComponent<PlacePlayerController>().PlayRunEffect_1(time);
+        u.speed += 20.0f;
+        u.character.GetComponent<PlacePlayerController>().SpeedlUp(time);
         yield return new WaitForSeconds(time);
-        u.speed -= 1.0f;
+        u.speed -= 20.0f;
     }
 
     IEnumerator SaveImagePreRecorderTime(int time = 60)

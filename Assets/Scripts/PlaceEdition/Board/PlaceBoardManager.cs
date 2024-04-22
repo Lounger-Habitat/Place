@@ -51,7 +51,7 @@ public class PlaceBoardManager : MonoBehaviour
         // DiffusionManager.Instance.OnImageLoaded += OnImageLoaded;
         // 假设平面使用的是材质的第一个贴图
         // 生成一个新的贴图
-        Texture2D myTexture = GenerateTexture(height, width, new Color(64/255f,64/255f,64/255f)); // 可以根据需要调整尺寸和颜色
+        Texture2D myTexture = GenerateTexture(width, height, new Color(64 / 255f, 64 / 255f, 64 / 255f)); // 可以根据需要调整尺寸和颜色
 
         if (mode == "2D")
         {
@@ -95,7 +95,7 @@ public class PlaceBoardManager : MonoBehaviour
 
         // LoadResources();
         UniqueId = GenerateUniqueId();
-        
+
     }
 
     void Update()
@@ -419,30 +419,31 @@ public class PlaceBoardManager : MonoBehaviour
         Debug.Log("Saved Image to: " + path);
     }
 
-    public void GenGif() {
+    public void GenGif()
+    {
         string gifPath = $"Assets/Images/{UniqueId}";
-        List<Texture2D> f =  LoadResources(gifPath);
+        List<Texture2D> f = LoadResources(gifPath);
         f = Select20(f.ToArray());
         var frames = f.Select(f => new GifFrame(f, 0.5f)).ToList();
-	    var gif = new Gif(frames);
-		var bytes = gif.Encode();
+        var gif = new Gif(frames);
+        var bytes = gif.Encode();
         var path = Path.Combine(gifPath, "test.gif");
-		if (path == "") return;
-		File.WriteAllBytes(path, bytes);
-		Debug.Log($"Saved to: {path}");
+        if (path == "") return;
+        File.WriteAllBytes(path, bytes);
+        Debug.Log($"Saved to: {path}");
     }
 
     private List<Texture2D> Select20(Texture2D[] fa)
     {
         int len = fa.Length;
         List<Texture2D> res = new List<Texture2D>();
-         // 始终选择第一个元素
+        // 始终选择第一个元素
         if (len > 20)
         {
             res.Add(fa[0]);
             // 选择最后一个元素
-            
-            
+
+
             // 计算间隔
             int interval = (len - 2) / 18; // 18是因为我们要选20个，已经选了2个
 
@@ -451,7 +452,7 @@ public class PlaceBoardManager : MonoBehaviour
             {
                 res.Add(fa[i]);
             }
-            res.Add(fa[len-1]);
+            res.Add(fa[len - 1]);
 
             // 断言 res 一个20个
             Assert.IsTrue(res.Count == 20);
@@ -477,9 +478,9 @@ public class PlaceBoardManager : MonoBehaviour
         MarkPixels(x, y, camp);
         DrawPixels(x, y, r, g, b);
     }
-    public void DrawPixels(int x, int y , int r , int g , int b )
+    public void DrawPixels(int x, int y, int r, int g, int b)
     {
-        Color aimColor = new Color((float)r/255f, (float)g/255f, (float)b/255f);
+        Color aimColor = new Color((float)r / 255f, (float)g / 255f, (float)b / 255f);
         if (texture != null && x >= 0 && x < texture.width && y >= 0 && y < texture.height)
         {
             texture.SetPixel(x, y, aimColor);
@@ -487,7 +488,7 @@ public class PlaceBoardManager : MonoBehaviour
         }
     }
 
-    public List<(int,int)> GetLinePoints(int x, int y, int ex, int ey)
+    public List<(int, int)> GetLinePoints(int x, int y, int ex, int ey)
     {
         return ComputeDrawLine(x: x, y: y, ex: ex, ey: ey, isDraw: false);
     }
@@ -498,13 +499,15 @@ public class PlaceBoardManager : MonoBehaviour
 
     public void LineCommand(int x, int y, int ex, int ey, int r, int g, int b, int camp = 0)
     {
-        GetLinePoints(x, y, ex, ey).ForEach(p => {
+        GetLinePoints(x, y, ex, ey).ForEach(p =>
+        {
             DrawCommand(p.Item1, p.Item2, r, g, b, camp);
         });
         // DrawLine(x, y, ex, ey, r, g, b, camp);
     }
-    private List<(int,int)> ComputeDrawLine(int x, int y , int ex , int ey , int r = 0, int g = 0, int b = 0, int camp = 0, bool isDraw = true) {
-        List<(int,int)> points = new List<(int,int)>();
+    private List<(int, int)> ComputeDrawLine(int x, int y, int ex, int ey, int r = 0, int g = 0, int b = 0, int camp = 0, bool isDraw = true)
+    {
+        List<(int, int)> points = new List<(int, int)>();
         // 使用 Bresenham 算法来计算这两点之间的像素点
         int dx = Math.Abs(ex - x);
         int dy = Math.Abs(ey - y);
@@ -523,7 +526,7 @@ public class PlaceBoardManager : MonoBehaviour
             //     pixelsCount += 1;
             // }
 
-            points.Add((x,y));
+            points.Add((x, y));
 
 
             if ((x == ex) && (y == ey))
@@ -546,7 +549,7 @@ public class PlaceBoardManager : MonoBehaviour
 
         return points;
     }
-    private int DrawLine(int x, int y , int ex , int ey , int r = 0, int g = 0, int b = 0, int camp = 0, bool isDraw = true)
+    private int DrawLine(int x, int y, int ex, int ey, int r = 0, int g = 0, int b = 0, int camp = 0, bool isDraw = true)
     {
         // 使用 Bresenham 算法来计算这两点之间的像素点
         int dx = Math.Abs(ex - x);
@@ -634,7 +637,7 @@ public class PlaceBoardManager : MonoBehaviour
     }
 
 
-    public void MarkPixels(int x, int y, int camp=0)
+    public void MarkPixels(int x, int y, int camp = 0)
     {
         // 对x,y 处理ß
         // 记录
@@ -643,7 +646,8 @@ public class PlaceBoardManager : MonoBehaviour
 
     }
 
-    public bool CheckIns(Instruction ins) {
+    public bool CheckIns(Instruction ins)
+    {
         if (ins.mode == "/draw" || ins.mode == "/d")
         {
             return ins.x < width && ins.y < height && ins.x >= 0 && ins.y >= 0;

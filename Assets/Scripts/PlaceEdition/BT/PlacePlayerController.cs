@@ -67,7 +67,7 @@ public class PlacePlayerController : MonoBehaviour
     [Header("玩家特效")]
     public GameObject slowEffect;
     public GameObject runEffect_1;
-    public GameObject runEffect_2;
+    public GameObject runSmokeEffect;
     public GameObject shieldsEffect_1;
     public GameObject shieldsEffect_2;
     public GameObject shieldsEffect_3;
@@ -96,7 +96,7 @@ public class PlacePlayerController : MonoBehaviour
 
         if (altar == null)
         {
-            altar = GameObject.Find("Console").transform;
+            altar = GameObject.Find("ConsoleTarget").transform;
         }
         if (selfTotem == null)
         {
@@ -154,8 +154,7 @@ public class PlacePlayerController : MonoBehaviour
     // }
     public void MoveToTarget()
     {
-        var des = target.GetChild(0);
-        navMeshAgent.destination=des.position;
+        navMeshAgent.destination=target.position;
         navMeshAgent.speed = user.speed;
     }
 
@@ -264,6 +263,15 @@ public class PlacePlayerController : MonoBehaviour
         //后续可能有音效、UI提示等效果
     }
 
+    public void SpeedlUp(float time)
+    {
+        //播放特效相关
+        var effect = Instantiate(runSmokeEffect, transform.position+new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
+        effect.transform.SetParent(this.transform);
+        effect.GetComponent<EffectAutoDelete>().destroyTime = time;
+        //后续可能有音效、UI提示等效果
+    }
+
     public void PlaySlowEffect()
     {
         slowEffect.SetActive(true);
@@ -288,13 +296,13 @@ public class PlacePlayerController : MonoBehaviour
 
     public void PlayRunEffect_2(float time)
     {
-        runEffect_2.SetActive(true);
+        runSmokeEffect.SetActive(true);
         Invoke("CloseRunEffect_2", time);
     }
 
     public void CloseRunEffect_2()
     {
-        runEffect_2.SetActive(false);
+        runSmokeEffect.SetActive(false);
     }
 
     public void PlayShieldsEffect_1()
