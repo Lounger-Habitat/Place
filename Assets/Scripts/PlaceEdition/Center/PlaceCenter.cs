@@ -519,8 +519,12 @@ public class PlaceCenter : MonoBehaviour
     // 结束 生成 gif
     public void GenGif()
     {
-        PlaceBoardManager.Instance.GenGif();
+        PlaceBoardManager.Instance.ConvertTex2DToGIF();
     }
+
+    // public void ShowGif(string path) {
+    //     PlaceUIManager.Instance.endUI.ShowGIF(path);
+    // }
 
 
     //  ===== 协程 =====

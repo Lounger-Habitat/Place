@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements.Experimental;
 
 public class PlaceUIManager : MonoBehaviour
 {
@@ -111,6 +112,7 @@ public class PlaceUIManager : MonoBehaviour
     [ContextMenu("EndGame")]
     public void EndGameUI(/*调用这个方法应该把最后的画作，排行榜前三玩家传递进来*/)
     {
-        endUI.Init();
+            PlaceCenter.Instance.GenGif();
+            // endUI.Init()
     }
 }

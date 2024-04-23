@@ -30,6 +30,8 @@ public class PlaceBoardManager : MonoBehaviour
     // 画作唯一id
     public static int UniqueId = 0;
 
+    public string gifPath = "";
+
     public static PlaceBoardManager Instance { get; private set; }
 
     void Awake()
@@ -662,6 +664,115 @@ public class PlaceBoardManager : MonoBehaviour
         }
         return false;
     }
+    
+    
+    // ========= gif part =========
+    // pro gif lib
+    private ProGifTexturesToGIF tex2Gif = null;
+    private List<Texture2D> tex2DList = null;
+    public Image dpImage;
+    void Clear()
+	{
+		if(tex2Gif != null) tex2Gif.Clear();
 
+		if(dpImage != null && dpImage.sprite != null && dpImage.sprite.texture != null)
+		{
+			Texture2D.Destroy(dpImage.sprite.texture);
+			dpImage.sprite = null;
+		}
+
+		//Clear texture
+		if(tex2DList != null)
+		{
+			foreach(Texture2D tex in tex2DList)
+			{
+				if(tex != null)
+				{
+					Destroy(tex);
+				}
+			}
+			tex2DList = null;
+		}
+	}
+    public void ConvertTex2DToGIF()
+	{
+        Clear();
+
+		tex2Gif = ProGifTexturesToGIF.Instance;
+
+		//Set file extensions for loading images
+		tex2Gif.SetFileExtension(new List<string>{".jpg", ".png"});
+		//tex2Gif.SetFileExtension(new List<string>{".jpg"});
+
+		// string loadImagePath = Application.streamingAssetsPath;
+		string loadImagePath = $"Assets/Images/{UniqueId}";
+
+		//Load images as texture2D list from target directory
+		tex2DList = tex2Gif.LoadImages(loadImagePath);
+        tex2Gif.LoadImagesFromResourcesFolder();
+
+        if (tex2DList != null && tex2DList.Count > 0)
+		{
+			//Save the provided texture2Ds to a GIF file with settings
+
+			// tex2Gif.m_Rotation = m_Rotation; // no rotation
+
+			//Set auto detect transparent pixels for imported images
+			tex2Gif.SetTransparent(true);
+
+            //tex2Gif.m_MaxNumberOfThreads = 6;
+            tex2Gif.Save(tex2DList, width, height, 1, 0, 50, OnFileSaved, OnFileSaveProgress, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear:true);
+			Debug.Log("Load images and start convert/save GIF..");
+		}
+		else
+		{
+			Debug.LogWarning("No image/texture found at: " + loadImagePath);
+		}
+	}
+
+    private void OnFileSaved(int id, string path)
+	{
+		Debug.Log("On file saved: " + path);
+		// text1.text = "GIF saved: " + path;
+        // string sourceFolder = Application.dataPath;;
+            // 目标文件夹路径
+        // string destinationFolder = $"Assets/Images/{UniqueId}";
+
+        //     // 获取源文件夹中所有的 .txt 文件
+        // // string txtFile = Directory.GetFiles(sourceFolder, "*.gif").FirstOrDefault();
+
+        // string fileName = Path.GetFileName(path);
+
+        // string destinationFile = Path.Combine(destinationFolder, fileName);
+        
+        // gifPath = destinationFile;
+
+        // File.Move(path, destinationFile);
+
+        // 显示
+        ShowGIF(path);
+
+		dpImage.sprite = tex2Gif.GetSprite(0);
+		// dpImage.SetNativeSize();
+	}
+
+    private void OnFileSaveProgress(int id, float progress)
+	{
+		Debug.Log("On file save progress: " + progress);
+		// text1.text = "Save progress: " + Mathf.CeilToInt(progress * 100) + "%";
+	}
+
+    void ShowGIF(string path)
+	{
+		ProGifManager.Instance.m_OptimizeMemoryUsage = true;
+
+		//Open the Pro GIF player to show the converted GIF
+		ProGifManager.Instance.PlayGif(path, dpImage, (loadProgress)=>{
+			// if(loadProgress < 1f)
+			// {
+			// 	dpImage.SetNativeSize();
+			// }
+		});
+	}
 
 }
