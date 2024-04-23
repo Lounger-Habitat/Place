@@ -16,6 +16,7 @@ public class MessageTips : TipsBase
 
     public float closePos, openPos;
 
+    public bool isLeft;
     public void Init(TipsPanel parent)
     {
         parentPanel = parent;
@@ -44,20 +45,41 @@ public class MessageTips : TipsBase
         //将标志位置为true
         isShowTips = true;
         //检查队列中是否还有元素
-        while (parentPanel.tipsMessageQueue.Any())
+        if (isLeft)
         {
-            lock (parentPanel.tipsMessageQueue)
+            while (parentPanel.tipsMessageQueue.Any())
             {
-                nowData = parentPanel.tipsMessageQueue.Dequeue();
-            }
+                lock (parentPanel.tipsMessageQueue)
+                {
+                    nowData = parentPanel.tipsMessageQueue.Dequeue();
+                }
 
-            var panel = this;
-            panel.SetData(nowData);
-            panel.MoveTipsPanel();
-            yield return new WaitForSeconds(waitTime);
-            panel.MoveTipsPanel(false);
-            yield return new WaitForSeconds(0.8f);
+                var panel = this;
+                panel.SetData(nowData);
+                panel.MoveTipsPanel();
+                yield return new WaitForSeconds(waitTime);
+                panel.MoveTipsPanel(false);
+                yield return new WaitForSeconds(0.8f);
+            }
         }
+        else
+        {
+            while (parentPanel.tipsMessageQueueright.Any())
+            {
+                lock (parentPanel.tipsMessageQueueright)
+                {
+                    nowData = parentPanel.tipsMessageQueueright.Dequeue();
+                }
+
+                var panel = this;
+                panel.SetData(nowData);
+                panel.MoveTipsPanel();
+                yield return new WaitForSeconds(waitTime);
+                panel.MoveTipsPanel(false);
+                yield return new WaitForSeconds(0.8f);
+            }
+        }
+       
 
         isShowTips = false;
     }

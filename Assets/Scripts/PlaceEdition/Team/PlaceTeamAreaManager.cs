@@ -126,8 +126,10 @@ public class PlaceTeamAreaManager : MonoBehaviour
             PlaceUIManager.Instance.AddTips(new TipsItem(){
                 userName=user.Name,
                 text =$"加入{teaminfo.Name}队伍！",
-                tipsType = TipsType.messagePanel
+                tipsType = TipsType.messagePanel,
+                isLeft = user.Camp == 1
             });
+            
         }
         else
         {

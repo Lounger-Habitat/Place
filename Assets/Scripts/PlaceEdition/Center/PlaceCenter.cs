@@ -402,7 +402,7 @@ public class PlaceCenter : MonoBehaviour
         switch (u.currentState.topState)
         {
             case HighLevelState.Draw:
-                messageType = TipsType.giftDrawPanel;
+                messageType = u.Camp == 1? TipsType.giftDrawPanel:TipsType.giftDrawPanelRight;
                 break;
             case HighLevelState.Attack:
                 messageType = TipsType.giftAttackPanel;
@@ -476,7 +476,8 @@ public class PlaceCenter : MonoBehaviour
             text = message,
             icon = null,//玩家头像
             tipsType = messageType,
-            value =$"X{normalPower:D}"
+            value =$"X{normalPower:D}",
+            isLeft = u.Camp == 1
         });
     }
 
