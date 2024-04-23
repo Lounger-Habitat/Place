@@ -492,6 +492,17 @@ public class PlaceCenter : MonoBehaviour
         StartCoroutine(TimeLimitSpeedUp(user,p));
     }
 
+    public void GainGiftPower(User user, float power)
+    {
+        // B 站 每人 每天 点赞上限 1000
+        int p = (int)power;
+        user.score += p;
+        user.Update(user.score);
+        PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
+        // 限时加速
+        user.character.GetComponent<PlacePlayerController>().Tornado((int)power);
+    }
+
 
     // 重新开始游戏
     void RestartGame()
@@ -536,6 +547,11 @@ public class PlaceCenter : MonoBehaviour
         yield return new WaitForSeconds(time);
         u.speed -= 20.0f;
     }
+
+    // IEnumerator CallTornado(User u ,int num)
+    // {
+    //     u.character.GetComponent<PlacePlayerController>().Tornado(num);
+    // }
 
     IEnumerator SaveImagePreRecorderTime(int time = 60)
     {

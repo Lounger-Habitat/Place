@@ -292,11 +292,11 @@ public class TestManager : MonoBehaviour
         float rand = Random.Range(0f, 1f);
         if (rand<0.95f) {
             string drawIns = RandomGenDrawIns();
-            Debug.Log($"{u.Name} 执行 ({drawIns}) 指令");
+            // Debug.Log($"{u.Name} 执行 ({drawIns}) 指令");
             PlaceInstructionManager.Instance.DefaultRunChatCommand(u,drawIns);
         }else {
             string giftIns = RandomGenGiftIns();
-            Debug.Log($"{u.Name} 赠送 ({giftIns}) 颜料");
+            // Debug.Log($"{u.Name} 赠送 ({giftIns}) 颜料");
             PlaceInstructionManager.Instance.DefaultGiftCommand(user,giftIns);
         }
     }
@@ -374,6 +374,18 @@ public class TestManager : MonoBehaviour
         User u = PlaceCenter.Instance.users[playerName];
         int count = Random.Range(1, 10);
         PlaceCenter.Instance.GainLikePower(u, count);
+    }
+
+    public void SendGift(float gift)
+    {
+        // 用户存在
+        if (!PlaceCenter.Instance.users.ContainsKey(playerName))
+        {
+            Debug.LogError("用户不存在");
+            return;
+        }
+        User u = PlaceCenter.Instance.users[playerName];
+        PlaceCenter.Instance.GainGiftPower(u, gift);
     }
 }
 

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Board
+  - Tornado
   layers:
   - Default
   - TransparentFX

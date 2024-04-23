@@ -14555,8 +14555,9 @@ GameObject:
   - component: {fileID: 4949320882862592637}
   - component: {fileID: 6544042428361221346}
   - component: {fileID: 698551315118840457}
+  - component: {fileID: -6974473132774787218}
   m_Layer: 0
-  m_Name: RunSmoke2
+  m_Name: RunMagic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14571,7 +14572,7 @@ Transform:
   m_GameObject: {fileID: 6235330434594640082}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.002998352, y: 0.18, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -19389,3 +19390,16 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-6974473132774787218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6235330434594640082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fcc41ef37291604d9854403a607be82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyTime: 3

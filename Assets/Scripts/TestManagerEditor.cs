@@ -34,11 +34,13 @@ public class TestManagerEditor : Editor
         {
            // 调用MyScript中的DoSomething方法
            //
+           ((TestManager)target).SendGift(1);
         }
         if (GUILayout.Button("¥1"))
         {
            // 调用MyScript中的DoSomething方法
            //
+           ((TestManager)target).SendGift(10);
         }
         if (GUILayout.Button("¥5.2"))
         {
@@ -80,6 +82,7 @@ public class TestManagerEditor : Editor
         {
            // 调用MyScript中的DoSomething方法
            //
+           
         }
         GUILayout.EndHorizontal();
         // 结束水平布局组

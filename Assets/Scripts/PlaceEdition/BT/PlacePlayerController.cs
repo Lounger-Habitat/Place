@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System;
 using System.Collections;
 using DG.Tweening;
+using UnityEngine.UI.Extensions.Tweens;
+using Unity.VisualScripting;
 
 public class PlacePlayerController : MonoBehaviour
 {
@@ -66,7 +68,7 @@ public class PlacePlayerController : MonoBehaviour
 
     [Header("玩家特效")]
     public GameObject slowEffect;
-    public GameObject runEffect_1;
+    public GameObject runMagicEffect;
     public GameObject runSmokeEffect;
     public GameObject shieldsEffect_1;
     public GameObject shieldsEffect_2;
@@ -258,7 +260,7 @@ public class PlacePlayerController : MonoBehaviour
     public void LevelUp()
     {
         //播放特效相关
-        var effect = Instantiate(levelUpEffect, transform.position+new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
+        var effect = Instantiate(levelUpEffect, transform.position + new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
         effect.transform.SetParent(this.transform);
         //后续可能有音效、UI提示等效果
     }
@@ -266,128 +268,81 @@ public class PlacePlayerController : MonoBehaviour
     public void SpeedlUp(float time)
     {
         //播放特效相关
-        var effect = Instantiate(runSmokeEffect, transform.position+new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
+        var effect = Instantiate(runSmokeEffect, transform.position + new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
         effect.transform.SetParent(this.transform);
         effect.GetComponent<EffectAutoDelete>().destroyTime = time;
         //后续可能有音效、UI提示等效果
     }
 
-    public void PlaySlowEffect()
+    public void SpeedlUpMagic(float time)
     {
-        slowEffect.SetActive(true);
-        Invoke("CloseSlowEffect",2f);
+        //播放特效相关
+        var effect = Instantiate(runMagicEffect, transform.position + new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
+        effect.transform.SetParent(this.transform);
+        effect.GetComponent<EffectAutoDelete>().destroyTime = time;
+        //后续可能有音效、UI提示等效果
     }
 
-    public void CloseSlowEffect()
-    {
-        slowEffect.SetActive(false);
+    public void Tornado(int num) {
+        PlayTornadoEffect(num);
     }
 
-    public void PlayRunEffect_1(float time)
-    {
-        runEffect_1.SetActive(true);
-        Invoke("CloseRunEffect_1", time);
+    public void Stuck() {
+        var effect = Instantiate(slowEffect, transform.position + new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
+        effect.transform.SetParent(this.transform);
     }
 
-    public void CloseRunEffect_1()
-    {
-        runEffect_1.SetActive(false);
-    }
-
-    public void PlayRunEffect_2(float time)
-    {
-        runSmokeEffect.SetActive(true);
-        Invoke("CloseRunEffect_2", time);
-    }
-
-    public void CloseRunEffect_2()
-    {
-        runSmokeEffect.SetActive(false);
-    }
-
-    public void PlayShieldsEffect_1()
-    {
-        shieldsEffect_1.SetActive(true);
-        Invoke("CloseShieldsEffect_1", 2f);
-    }
-
-    public void CloseShieldsEffect_1()
-    {
-        shieldsEffect_1.SetActive(false);
-    }
-
-    public void PlayShieldsEffect_2()
-    {
-        shieldsEffect_2.SetActive(true);
-        Invoke("CloseShieldsEffect_2", 2f);
-    }
-
-    public void CloseShieldsEffect_2()
-    {
-        shieldsEffect_2.SetActive(false);
-    }
-
-    public void PlayShieldsEffect_3()
-    {
-        shieldsEffect_3.SetActive(true);
-        Invoke("CloseShieldsEffect_3", 2f);  //测试时自动关闭
-    }
-
-    public void CloseShieldsEffect_3()
-    {
-        shieldsEffect_3.SetActive(false);
-    }
-
-    /// ////////////////////////////////////////////////////////////////////////////////////龙卷风效果不是单纯的开启关闭
+    ///////////////////////////////////////////////////////////////////////////////////////龙卷风效果不是单纯的开启关闭
 
     public float tornadoRange = 5f;
-    public void PlayTornadoEffect()
+    public void PlayTornadoEffect(int num)
     {
         //tornadoEffect.SetActive(true);
         //Invoke("CloseTornadoEffect", 2f);  //测试时自动关闭
-        
+        float range = tornadoRange + num * 0.5f;
         //首先知道要生成几股龙卷风 随机获得
-        int num = 4;
         for (int i = 0; i < num; i++)
         {
             float dur = UnityEngine.Random.Range(3f, 3.8f);//获得持续时间
             float xdir = UnityEngine.Random.Range(-1f, 1f);
             float zdir = UnityEngine.Random.Range(-1f, 1f);//分别获得两个方向的
-            Vector3 targetPos = transform.position + new Vector3(xdir, 0, zdir).normalized * tornadoRange; //当前位置加上目标方向乘以距离就是目标位置
+            Vector3 targetPos = transform.position + new Vector3(xdir, 0, zdir).normalized * range; //当前位置加上目标方向乘以距离就是目标位置
             GameObject tornado = Instantiate(tornadoEffect, transform.position, Quaternion.identity);
-            tornado.SetActive(true);
+            tornado.name = $"Tornado - {user.Camp}";
+            // tornado.SetActive(true);
             tornado.transform.DOMove(targetPos, dur).OnComplete(() =>
             {
                Destroy(tornado.gameObject); 
             });
         }
     }
-
-    public void CloseTornadoEffect()
+    
+    void OnTriggerEnter(Collider other)
     {
-        tornadoEffect.SetActive(false);
+        if (other.tag == "Tornado")
+        {
+            if (other.name.Contains(user.Camp.ToString()))
+            {
+                StartCoroutine(SpeedUpCoroutine(user));
+            }else {
+                StartCoroutine(StuckCoroutine(user));
+            }
+            
+        }
     }
-    /// ////////////////////////////////////////////////////////////////////////////////////
-    public void PlayElectricityEffect()
+    // === 协程 ===
+    IEnumerator StuckCoroutine(User u)
     {
-        electricityEffect.SetActive(true);
-        Invoke("CloseElectricityEffect", 2f);  //测试时自动关闭
+        u.speed -= 10;
+        Stuck();
+        yield return new WaitForSeconds(3f);
+        u.speed += 10;
     }
-
-    public void CloseElectricityEffect()
+    IEnumerator SpeedUpCoroutine(User u)
     {
-        electricityEffect.SetActive(false);
+        u.speed += 10;
+        SpeedlUpMagic(3);
+        yield return new WaitForSeconds(3f);
+        u.speed -= 10;
     }
-
-    public void PlayStrikeEffect()
-    {
-        strikeEffect.SetActive(true);
-        Invoke("CloseStrikeEffect", 2f);  //测试时自动关闭
-    }
-
-    public void CloseStrikeEffect()
-    {
-        strikeEffect.SetActive(false);
-    }
-
 }

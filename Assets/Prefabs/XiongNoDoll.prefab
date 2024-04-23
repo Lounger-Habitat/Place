@@ -356,7 +356,7 @@ MonoBehaviour:
   consolePath: []
   pathIndex: 0
   slowEffect: {fileID: 8274854561089743264, guid: d8f22a2799756bf49a19e5dbad71a8c0, type: 3}
-  runEffect_1: {fileID: 6235330434594640082, guid: cae4dfd42d9704f4886582d63cff2e26, type: 3}
+  runMagicEffect: {fileID: 6235330434594640082, guid: cae4dfd42d9704f4886582d63cff2e26, type: 3}
   runSmokeEffect: {fileID: 5498650703651248160, guid: d68df64639bb84698858ffd67d3ca56f, type: 3}
   shieldsEffect_1: {fileID: 9204203178013580127, guid: 261623abc591286449ff69193d63e856, type: 3}
   shieldsEffect_2: {fileID: 7943073472474586687, guid: d9cffe1112a6e0e48a2bd2349b74c3dc, type: 3}
