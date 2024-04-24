@@ -5,6 +5,8 @@ using UnityEngine;
 [TaskCategory("Custom/Draw")]
 public class DrawWaitingForInsAndPower : PlaceAction
 {
+    private int danceIndex;
+    private string[] danceName = new[] { "TwistDance", "BreakDacne", "SillyDance", "HipHopDance" };
     public override void OnStart()
     {
         base.OnStart();
@@ -12,6 +14,10 @@ public class DrawWaitingForInsAndPower : PlaceAction
         pc.user.currentState.detailState = DetailState.DrawWaitingForInsAndPower;
         pc.pathIndex = Random.Range(0, pc.totemPath.Count);
         pc.SetSpeed(pc.user.waitingSpeed);
+        //播放随机舞蹈动画
+        Debug.Log("开始Dance！！！");
+        danceIndex = Random.Range(0, 5);
+        pc.playerAnimator.SetBool(danceName[danceIndex],true);
     }
 
     public override TaskStatus OnUpdate()
