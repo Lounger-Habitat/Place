@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class IconNameTag : MonoBehaviour
 {
@@ -15,11 +16,16 @@ public class IconNameTag : MonoBehaviour
     TMP_Text tmp_text;
     Image icon;
 
+    RectTransform maskRect;
+
+    
+
     void Start()
     {
         rectTransform = GetComponent<RectTransform>(); // 获取RectTransform组件
         tmp_text = GetComponentInChildren<TMP_Text>(); // 获取TextMeshPro组件
-        icon =transform.Find("Image").GetChild(0).GetComponent<Image>(); // 获取TextMeshPro组件
+        maskRect = transform.GetChild(0).GetComponent<RectTransform>();
+        icon = transform.GetChild(0).GetChild(0).GetComponent<Image>(); // 获取TextMeshPro组件
 
         tmp_text.text = userName; // 设置文本
         icon.sprite = userIcon;
@@ -38,6 +44,13 @@ public class IconNameTag : MonoBehaviour
             }
             yield return new WaitForSeconds(1);
         }
+    }
+
+    public void UpdateIconRect(float sizeDelta)
+    {
+        //maskrect width height
+        maskRect.sizeDelta = new Vector2(1+sizeDelta, 1+sizeDelta);
+        maskRect.anchoredPosition = new Vector2(0, sizeDelta/2);
     }
 
     void Update()

@@ -101,7 +101,7 @@ public class TeamPanel : MonoBehaviour
                 rankItem.gameObject.SetActive(true);
                 var item = list[i];
                 rankItem.Find("Name").GetComponent<TMP_Text>().text = item.Name;
-                rankItem.Find("Data").GetComponent<TMP_Text>().text = $"贡献:{item.score}";
+                rankItem.Find("Data").GetComponent<TMP_Text>().text = $"{item.score}";
                 rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = item.userIcon;//TODO:需要对接user头像，目前没有，所以我的遮罩就没了
                 
                 
@@ -159,7 +159,7 @@ public class TeamPanel : MonoBehaviour
                 rankItem.gameObject.SetActive(true);
                 var item = list[i];
                 rankItem.Find("Name").GetComponent<TMP_Text>().text = item.Name;
-                rankItem.Find("Data").GetComponent<TMP_Text>().text = $"贡献:{item.score}";
+                rankItem.Find("Data").GetComponent<TMP_Text>().text = $"{item.score}";
                 rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = item.userIcon;//TODO:需要对接user头像，目前没有，所以我的遮罩就没了
                 
                 

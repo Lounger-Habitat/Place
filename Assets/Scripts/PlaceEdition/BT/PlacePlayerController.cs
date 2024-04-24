@@ -157,7 +157,7 @@ public class PlacePlayerController : MonoBehaviour
     public void MoveToTarget()
     {
         navMeshAgent.destination=target.position;
-        navMeshAgent.speed = user.speed;
+        navMeshAgent.speed = user.speed + user.exSpeed;
     }
 
     public void TransToDefend() {
@@ -274,6 +274,12 @@ public class PlacePlayerController : MonoBehaviour
         //后续可能有音效、UI提示等效果
     }
 
+    public void Invincible(float time = 30) {
+        var effect = Instantiate(shieldsEffect_1, transform.position + new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
+        effect.transform.SetParent(this.transform);
+        effect.GetComponent<EffectAutoDelete>().destroyTime = time;
+    }
+
     public void SpeedlUpMagic(float time)
     {
         //播放特效相关
@@ -333,16 +339,16 @@ public class PlacePlayerController : MonoBehaviour
     // === 协程 ===
     IEnumerator StuckCoroutine(User u)
     {
-        u.speed -= 10;
+        u.exSpeed -= 10;
         Stuck();
         yield return new WaitForSeconds(3f);
-        u.speed += 10;
+        u.exSpeed += 10;
     }
     IEnumerator SpeedUpCoroutine(User u)
     {
-        u.speed += 10;
+        u.exSpeed += 10;
         SpeedlUpMagic(3);
         yield return new WaitForSeconds(3f);
-        u.speed -= 10;
+        u.exSpeed += 10;
     }
 }
