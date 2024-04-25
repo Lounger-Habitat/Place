@@ -84,9 +84,10 @@ public class PlaceTeamAreaManager : MonoBehaviour
 
     void UpdateTeamAreaName()
     {
-        string nameTemplate = "{0} - {1}";
-        string formattedString = string.Format(nameTemplate, teaminfo.Name, (int)System.Math.Round(teaminfo.ink));
-        teamAreaName.GetComponent<NameTag>().go_name = formattedString;
+        // string nameTemplate = "{0} - {1}";
+        // string formattedString = string.Format(nameTemplate, teaminfo.Name, (int)System.Math.Round(teaminfo.ink));
+        string nameTemplate = $"{(int)System.Math.Round(teaminfo.ink)}";
+        teamAreaName.GetComponent<NameTag>().go_name = nameTemplate;
     }
 
     //更新UI数据，包含队伍中包含的User排行数据

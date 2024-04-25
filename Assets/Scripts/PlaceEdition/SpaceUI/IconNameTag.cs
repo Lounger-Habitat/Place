@@ -8,8 +8,8 @@ public class IconNameTag : MonoBehaviour
 {
     public Transform target; // 角色的Transform
     public Vector3 offset = new Vector3(0, 2.0f, 0); // 名字标签的偏移量
-    public string userName;
-    public Sprite userIcon;
+    public string go_Name;
+    public Sprite go_Icon;
     public User user;
     private RectTransform rectTransform;
 
@@ -27,8 +27,8 @@ public class IconNameTag : MonoBehaviour
         maskRect = transform.GetChild(0).GetComponent<RectTransform>();
         icon = transform.GetChild(0).GetChild(0).GetComponent<Image>(); // 获取TextMeshPro组件
 
-        tmp_text.text = userName; // 设置文本
-        icon.sprite = userIcon;
+        tmp_text.text = go_Name; // 设置文本
+        icon.sprite = go_Icon;
         StartCoroutine(UpdateName());
     }
 
