@@ -14,6 +14,7 @@ public class PlaceUIManager : MonoBehaviour
     private RankPanel rankPanel;
     private TeamPanel teamPanel;
     private TipsPanel tipsPanel;
+    private PlaceTeamPanel placeTeamPanel;
     private BeginUI beginUI;
     private EndUI endUI;
 
@@ -57,16 +58,25 @@ public class PlaceUIManager : MonoBehaviour
         tipsPanel = GetComponentInChildren<TipsPanel>();
         rankPanel  = GetComponentInChildren<RankPanel>();
         teamPanel = GetComponentInChildren<TeamPanel>();
+        placeTeamPanel = GetComponentInChildren<PlaceTeamPanel>();
         countDown = GetComponentInChildren<CountdownPanel>();
         beginUI = GetComponentInChildren<BeginUI>();
         endUI = GetComponentInChildren<EndUI>();
         tipsPanel.Init();
-        //rankPanel.Init();
-        teamPanel.Init();
+        
         beginUI.Init();
         // Event
-        UIEvent.OnTeamUpdateEvent += UpdateTeam;//
-        UIEvent.OnRankUpdateEvent += UpdateRank;
+        if (teamPanel!=null)
+        {
+            UIEvent.OnTeamUpdateEvent += UpdateTeam;
+            teamPanel.Init();
+        }
+        if (placeTeamPanel!=null)
+        {
+            placeTeamPanel.Init();
+        }
+        
+        //UIEvent.OnRankUpdateEvent += UpdateRank;
         //UIEvent.OnTeamAreaUpdateEvent += UpdateTeamArea;
 
     }
