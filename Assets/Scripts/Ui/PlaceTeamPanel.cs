@@ -12,7 +12,7 @@ public class PlaceTeamPanel : MonoBehaviour
     private Dictionary<string,User> currentUserList = new Dictionary<string, User>();//当前在排行榜上的玩家，不在排行榜上第一次上榜可以通知
     private int numMax;
 
-    public TMP_Text leftTeamScore, rightTeamScore;
+    public PlaceTeamSlider leftTeamScore, rightTeamScore;
     public void Init()
     {
         numMax = 5;
@@ -31,7 +31,8 @@ public class PlaceTeamPanel : MonoBehaviour
         var list = PlaceTeamManager.Instance.teamAreas[team.Id - 1].userList;
         teamItem.Find(teamPanel).Find("TeamName").GetComponent<TMP_Text>().text = team.Name;//名字起的太随便，先用现有的
         teamItem.Find(teamPanel).Find("PalyerNum").GetComponent<TMP_Text>().text = $"{list.Count}/{team.MaxTeamNumber}";
-        teamScore.text = team.score.ToString();//队伍分数更新
+        teamScore.valueText.text = $"{team.score}/{PlaceBoardManager.Instance.pixelsInfos.Length}";//队伍分数更新
+        teamScore.UpdateSlider(team.score);
         //teamItem.Find("TeamScore").GetChild(0).GetComponent<TMP_Text>().text = $"{team.score}";//队伍分数被拆分出去了
 
         var rankContent = teamItem.Find(ranklist).Find("RankContent");

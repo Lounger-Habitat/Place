@@ -15,7 +15,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
         pc.pathIndex = Random.Range(0, pc.totemPath.Count);
         pc.SetSpeed(pc.user.waitingSpeed);
         //播放随机舞蹈动画
-        Debug.Log("开始Dance！！！");
+        // Debug.Log("开始Dance");
         danceIndex = Random.Range(0, 4);
         pc.playerAnimator.SetBool(danceName[danceIndex],true);
     }

@@ -22,13 +22,13 @@ public class User
 
     /*
     ===============
-        属性
+        状态
     ===============
     */
     // 考虑 是否 能与 玩家状态合并？？ FIXME！
     public bool defendingIns = false; // bool 判断是否进入防守
     public int attckingIns = 0;       // 0 表示没有攻击目标 ，1234，分别代表队伍
-
+    public bool invincible = false; // 无敌状态
     /*
     ===============
         变量
@@ -96,7 +96,7 @@ public class User
     public void Update()
     {
         this.level = CalLevel(score);
-        this.speed = 2 + (level - 1) * 0.1f;
+        this.speed = 2 + (level - 1) * 0.05f;
         this.maxCarryingInsCount = (int)(1 + (level - 1) * 0.2f);
         if (nameTag != null)
         {

@@ -246,7 +246,8 @@ public class TestManager : MonoBehaviour
 
     public string RandomGenGiftIns() {
 
-        string[] gifts = { "0.1", "1", "1.9", "5.2", "9.9", "19.9", "29.9", "52", "66.6", "88.8", "99.9", "120"};
+        // string[] gifts = { "0.1", "1", "1.9", "5.2", "9.9", "19.9", "29.9", "52", "66.6", "88.8", "99.9", "120"};
+        string[] gifts = { "0.1", "1", "5.2", "9.9", "19.9"};
         int grand = Random.Range(0, gifts.Length);
         string giftIns = gifts[grand];
     
@@ -260,7 +261,7 @@ public class TestManager : MonoBehaviour
         {
             // 随机等待一段时间
             float waitTime = Random.Range(minInterval, maxInterval);
-            yield return new WaitForSeconds(minInterval);
+            yield return new WaitForSeconds(waitTime);
 
             ExecuteCommand();
         }
@@ -290,7 +291,7 @@ public class TestManager : MonoBehaviour
 
 
         float rand = Random.Range(0f, 1f);
-        if (rand<0.95f) {
+        if (rand<0.99f) {
             string drawIns = RandomGenDrawIns();
             // Debug.Log($"{u.Name} 执行 ({drawIns}) 指令");
             PlaceInstructionManager.Instance.DefaultRunChatCommand(u,drawIns);
@@ -385,7 +386,7 @@ public class TestManager : MonoBehaviour
             return;
         }
         User u = PlaceCenter.Instance.users[playerName];
-        PlaceCenter.Instance.GainGiftPower(u, gift);
+        PlaceCenter.Instance.GainPower(u.Name, gift);
     }
 }
 

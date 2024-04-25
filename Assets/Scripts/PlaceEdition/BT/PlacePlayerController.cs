@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System;
 using System.Collections;
 using DG.Tweening;
-using UnityEngine.UI.Extensions.Tweens;
-using Unity.VisualScripting;
+
+using System.Linq;
 
 public class PlacePlayerController : MonoBehaviour
 {
@@ -30,9 +30,9 @@ public class PlacePlayerController : MonoBehaviour
     private NavMeshAgent navMeshAgent;
 
     // 遇到的敌人
-    public Dictionary<string,PlacePlayerController> enemies = new Dictionary<string,PlacePlayerController>();
-    
-    
+    public Dictionary<string, PlacePlayerController> enemies = new Dictionary<string, PlacePlayerController>();
+
+
     // 身上指令
     public List<Instruction> insList = new List<Instruction>();
 
@@ -91,8 +91,8 @@ public class PlacePlayerController : MonoBehaviour
 
         for (int i = 0; i < campNum; i++)
         {
-            buildings.Add($"Totem{i+1}", PlaceTeamManager.Instance.teamAreas[i].totem);
-            buildings.Add($"Door{i+1}", PlaceTeamManager.Instance.teamAreas[i].door);
+            buildings.Add($"Totem{i + 1}", PlaceTeamManager.Instance.teamAreas[i].totem);
+            buildings.Add($"Door{i + 1}", PlaceTeamManager.Instance.teamAreas[i].door);
         }
 
 
@@ -144,7 +144,8 @@ public class PlacePlayerController : MonoBehaviour
         }
 
         // 计算贡献，自己升级
-        if (user.Level > lastLevel) {
+        if (user.Level > lastLevel)
+        {
             LevelUp();
             lastLevel = user.Level;
         }
@@ -156,41 +157,47 @@ public class PlacePlayerController : MonoBehaviour
     // }
     public void MoveToTarget()
     {
-        navMeshAgent.destination=target.position;
+        navMeshAgent.destination = target.position;
         navMeshAgent.speed = user.speed + user.exSpeed;
     }
 
-    public void TransToDefend() {
+    public void TransToDefend()
+    {
         isDefending = true;
         Debug.Log("TransToDefend");
     }
 
-    public void TransToAttack() {
+    public void TransToAttack()
+    {
         isAttacking = true;
         Debug.Log("TransToAttack");
     }
-    public void Resurgence(){
+    public void Resurgence()
+    {
         hp = 100;
         // 重新生成 任务 ，特效 动画
         transform.position = selfTotem.position;
         Debug.Log("Resurgence");
     }
 
-    public bool isFriend(int c){
+    public bool isFriend(int c)
+    {
         return user.Camp == c;
     }
 
     public void AttackTarget()
     {
-        
+
         Debug.Log("AttackTarget");
     }
 
-    public List<Vector3> GenerateCirclePath(Vector3 center, float radius, int numberOfPoints) {
+    public List<Vector3> GenerateCirclePath(Vector3 center, float radius, int numberOfPoints)
+    {
         List<Vector3> path = new List<Vector3>();
         double angleIncrement = 2 * Math.PI / numberOfPoints;  // 计算角度间隔
 
-        for (int i = 0; i < numberOfPoints; i++) {
+        for (int i = 0; i < numberOfPoints; i++)
+        {
             double angle = i * angleIncrement;  // 当前点的角度
             float x = (float)(center.x + radius * Math.Cos(angle));  // 计算X坐标
             float z = (float)(center.z + radius * Math.Sin(angle));  // 计算Y坐标
@@ -200,19 +207,22 @@ public class PlacePlayerController : MonoBehaviour
         return path;
     }
 
-    public void SetSpeed(float speed){
+    public void SetSpeed(float speed)
+    {
         navMeshAgent.speed = speed;
     }
 
 
-    public void Dance(List<Vector3> path) {
+    public void Dance(List<Vector3> path)
+    {
         transform.LookAt(selfTotem);
         navMeshAgent.SetDestination(path[pathIndex]);  // 设置下一个目标点
         pathIndex = (pathIndex + 1) % path.Count;  // 移动到下一个路径点
     }
 
-    public void DrawPoint(Instruction ins) {
-        PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y,user.Camp);
+    public void DrawPoint(Instruction ins)
+    {
+        PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y, user.Camp);
         StartCoroutine(IDrawPoint(ins));
         // yield return new WaitForSeconds(2);
         // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
@@ -221,10 +231,12 @@ public class PlacePlayerController : MonoBehaviour
 
     }
 
-    public void DrawLine(Instruction ins) {
-        List<(int,int)> points = PlaceBoardManager.Instance.GetLinePoints(ins.x, ins.y, ins.ex, ins.ey);
-        points.ForEach(p => {
-            PlaceConsoleAreaManager.Instance.PlayEffect(p.Item1, p.Item2,user.Camp);
+    public void DrawLine(Instruction ins)
+    {
+        List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(ins.x, ins.y, ins.ex, ins.ey);
+        points.ForEach(p =>
+        {
+            PlaceConsoleAreaManager.Instance.PlayEffect(p.Item1, p.Item2, user.Camp);
             StartCoroutine(IDrawLine(p.Item1, p.Item2, ins.r, ins.g, ins.b, user.Camp));
         });
         waitingDraw = waitingDraw + 1;
@@ -239,7 +251,8 @@ public class PlacePlayerController : MonoBehaviour
     }
 
     // 协程执行绘画
-    private IEnumerator IDrawPoint(Instruction ins) {
+    private IEnumerator IDrawPoint(Instruction ins)
+    {
         // 等待两秒执行
         yield return new WaitForSeconds(1.5f);
         PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.Camp);
@@ -247,20 +260,21 @@ public class PlacePlayerController : MonoBehaviour
         user.score += ins.needInkCount;
         waitingDraw = waitingDraw + 1;
     }
-    private IEnumerator IDrawLine(int x, int y, int r, int g, int b, int camp) {
+    private IEnumerator IDrawLine(int x, int y, int r, int g, int b, int camp)
+    {
         // 等待两秒执行
         yield return new WaitForSeconds(1.5f);
         PlaceBoardManager.Instance.DrawCommand(x, y, r, g, b, user.Camp);
-        user.carryingInkCount --;
-        user.score ++;
+        user.carryingInkCount--;
+        user.score++;
         // waitingDraw = waitingDraw + 1;
     }
-    
+
 
     public void LevelUp()
     {
         //播放特效相关
-        var effect = Instantiate(levelUpEffect, transform.position + new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
+        var effect = Instantiate(levelUpEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
         effect.transform.SetParent(this.transform);
         //后续可能有音效、UI提示等效果
     }
@@ -268,33 +282,49 @@ public class PlacePlayerController : MonoBehaviour
     public void SpeedlUp(float time)
     {
         //播放特效相关
-        var effect = Instantiate(runSmokeEffect, transform.position + new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
+        var effect = Instantiate(runSmokeEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
         effect.transform.SetParent(this.transform);
         effect.GetComponent<EffectAutoDelete>().destroyTime = time;
         //后续可能有音效、UI提示等效果
     }
 
-    public void Invincible(float time = 30) {
-        var effect = Instantiate(shieldsEffect_1, transform.position + new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
+    public void Invincible(float time = 30)
+    {
+        var effect = Instantiate(shieldsEffect_1, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
         effect.transform.SetParent(this.transform);
-        effect.GetComponent<EffectAutoDelete>().destroyTime = time;
+        var auto = effect.GetComponent<EffectAutoDelete>();
+        auto.scale = 1.0f;
+        auto.destroyTime = time;
     }
+
+    public void BallThunder(float time=10)
+    {
+        var effect = Instantiate(electricityEffect, transform.position + new Vector3(0f, 3f, 0f), Quaternion.identity, transform.parent);//
+        effect.transform.SetParent(this.transform);
+        var auto = effect.GetComponent<EffectAutoDelete>();
+        auto.scale = 1.0f;
+        auto.destroyTime = time;
+    }
+
+
 
     public void SpeedlUpMagic(float time)
     {
         //播放特效相关
-        var effect = Instantiate(runMagicEffect, transform.position + new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
+        var effect = Instantiate(runMagicEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
         effect.transform.SetParent(this.transform);
         effect.GetComponent<EffectAutoDelete>().destroyTime = time;
         //后续可能有音效、UI提示等效果
     }
 
-    public void Tornado(int num) {
+    public void Tornado(int num)
+    {
         PlayTornadoEffect(num);
     }
 
-    public void Stuck() {
-        var effect = Instantiate(slowEffect, transform.position + new Vector3(0f,0.1f,0f),Quaternion.identity,transform.parent);//
+    public void Stuck()
+    {
+        var effect = Instantiate(slowEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
         effect.transform.SetParent(this.transform);
     }
 
@@ -309,46 +339,126 @@ public class PlacePlayerController : MonoBehaviour
         //首先知道要生成几股龙卷风 随机获得
         for (int i = 0; i < num; i++)
         {
-            float dur = UnityEngine.Random.Range(3f, 3.8f);//获得持续时间
+            float dur = UnityEngine.Random.Range(3f, 4f);//获得持续时间
             float xdir = UnityEngine.Random.Range(-1f, 1f);
             float zdir = UnityEngine.Random.Range(-1f, 1f);//分别获得两个方向的
             Vector3 targetPos = transform.position + new Vector3(xdir, 0, zdir).normalized * range; //当前位置加上目标方向乘以距离就是目标位置
             GameObject tornado = Instantiate(tornadoEffect, transform.position, Quaternion.identity);
+            tornado.transform.SetParent(this.transform);
             tornado.name = $"Tornado - {user.Camp}";
             // tornado.SetActive(true);
             tornado.transform.DOMove(targetPos, dur).OnComplete(() =>
             {
-               Destroy(tornado.gameObject); 
+                Destroy(tornado.gameObject);
             });
         }
     }
-    
+
+    public void PlayThunder(Transform t=null)
+    {
+        // float range = 10;
+        float xdir = UnityEngine.Random.Range(-5f, 5f);
+        float zdir = UnityEngine.Random.Range(-5f, 5f);//分别获得两个方向的
+        Vector3 targetPos = t!=null ? t.position : transform.position + new Vector3(xdir, 0, zdir); //当前位置加上目标方向乘以距离就是目标位置
+        GameObject thunder = Instantiate(strikeEffect, targetPos, Quaternion.identity);
+        var auto = thunder.GetComponent<EffectAutoDelete>();
+        auto.scale = 2.0f;
+        auto.destroyTime = 5;
+        // thunder.transform.SetParent(this.transform);
+        thunder.name = $"Thunder - {user.Camp}";
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Tornado")
         {
             if (other.name.Contains(user.Camp.ToString()))
             {
-                StartCoroutine(SpeedUpCoroutine(user));
-            }else {
-                StartCoroutine(StuckCoroutine(user));
+                StartCoroutine(SpeedUpCoroutine());
             }
-            
+            else
+            {
+                if (user.invincible == false)
+                {
+                    StartCoroutine(StuckCoroutine());
+                }
+            }
+
+        }
+        if (other.tag == "Thunder")
+        {
+            if (!other.name.Contains(user.Camp.ToString()))
+            {
+                if (user.invincible == false)
+                {
+                    StartCoroutine(StuckCoroutine());
+                }
+            }
+
         }
     }
     // === 协程 ===
-    IEnumerator StuckCoroutine(User u)
+
+    // 困住 5秒
+    IEnumerator StuckCoroutine()
     {
-        u.exSpeed -= 10;
+        user.exSpeed -= 5;
         Stuck();
-        yield return new WaitForSeconds(3f);
-        u.exSpeed += 10;
+        yield return new WaitForSeconds(5f);
+        user.exSpeed += 5;
     }
-    IEnumerator SpeedUpCoroutine(User u)
+
+    // 魔法跑 加速 3秒
+    IEnumerator SpeedUpCoroutine()
     {
-        u.exSpeed += 10;
+        user.exSpeed += 5;
         SpeedlUpMagic(3);
         yield return new WaitForSeconds(3f);
-        u.exSpeed += 10;
+        user.exSpeed -= 5;
+    }
+    // 加速跑 加速 自定义时间
+    public IEnumerator TimeLimitSpeedUp(float time)
+    {
+        user.speed += 10.0f;
+        SpeedlUp(time);
+        yield return new WaitForSeconds(time);
+        user.speed -= 10.0f;
+    }
+
+    // 无敌 自定义时间
+    public IEnumerator TimeLimitInvincible(float time = 30)
+    {
+        user.exSpeed += 10.0f;
+        user.invincible = true;
+        Invincible(time);
+        yield return new WaitForSeconds(time);
+        user.exSpeed -= 10.0f;
+        user.invincible = false;
+    }
+
+    // ⚡️雷电
+    public IEnumerator Thunder(float time = 10)
+    {
+        float cd = time;
+        BallThunder(time);
+        yield return new WaitForSeconds(1f);
+        cd -= 1;
+        while (cd > 1) {
+            yield return new WaitForSeconds(0.2f);
+            Collider[] cs = Physics.OverlapSphere(transform.position, 5f).ToList().Where(c => c.CompareTag("Player") && c.gameObject.GetComponent<PlacePlayerController>().user.Camp != user.Camp).ToArray();
+            
+
+            if (cs.Length > 0)
+            {
+                // 随机数
+                int index = UnityEngine.Random.Range(0, cs.Length);
+                PlayThunder(cs[index].transform);
+            }
+            else
+            {
+                PlayThunder();
+            }
+            cd -= 0.2f;
+        }
     }
 }

@@ -420,7 +420,7 @@ public class PlaceCenter : MonoBehaviour
                 // PlaceTeamManager.Instance.teamAreas[u.camp - 1].teaminfo.ink += normalPower * 10;
                 // 特效 动画
                 // UI 更新
-                u.character.GetComponent<PlacePlayerController>().Tornado((int)(power*10));
+                StartCoroutine(u.character.GetComponent<PlacePlayerController>().Thunder());
                 break;
             case 1:
                 normalPower = 100;//固定是加颜料
@@ -432,14 +432,17 @@ public class PlaceCenter : MonoBehaviour
                 break;
             case 5.2f:
                 normalPower = 520;//固定是防御
-                StartCoroutine(TimeLimitInvincible(u));
+                StartCoroutine(u.character.GetComponent<PlacePlayerController>().TimeLimitInvincible());
                 break;
             case 9.9f:
                 normalPower = 999;
+                // 随机自动画一个图案
                 break;
             case 19.9f:
                 normalPower = 1999;
                 message = "颜料核弹";
+                // 全屏攻击
+
                 break;
             case 29.9f:
                 normalPower = 2990;
@@ -492,12 +495,11 @@ public class PlaceCenter : MonoBehaviour
         user.Update();
         PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
         // 限时加速
-        StartCoroutine(TimeLimitSpeedUp(user,p));
+        StartCoroutine(user.character.GetComponent<PlacePlayerController>().TimeLimitSpeedUp(p));
     }
 
     public void GainGiftPower(User user, float power)
     {
-        // B 站 每人 每天 点赞上限 1000
         int p = (int)power;
         user.score += p;
         user.Update();
@@ -543,21 +545,7 @@ public class PlaceCenter : MonoBehaviour
 
 
     //  ===== 协程 =====
-    IEnumerator TimeLimitSpeedUp(User u ,float time)
-    {
-        u.speed += 20.0f;
-        u.character.GetComponent<PlacePlayerController>().SpeedlUp(time);
-        yield return new WaitForSeconds(time);
-        u.speed -= 20.0f;
-    }
 
-    IEnumerator TimeLimitInvincible(User u ,float time = 30)
-    {
-        u.exSpeed += 20.0f;
-        u.character.GetComponent<PlacePlayerController>().Invincible(time);
-        yield return new WaitForSeconds(time);
-        u.exSpeed -= 20.0f;
-    }
 
     // IEnumerator CallTornado(User u ,int num)
     // {

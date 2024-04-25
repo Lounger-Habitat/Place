@@ -34,31 +34,28 @@ public class TestManagerEditor : Editor
         {
            // 调用MyScript中的DoSomething方法
            //
-           ((TestManager)target).SendGift(1);
+           ((TestManager)target).SendGift(0.1f);
         }
         if (GUILayout.Button("¥1"))
         {
            // 调用MyScript中的DoSomething方法
            //
-           ((TestManager)target).SendGift(10);
+           ((TestManager)target).SendGift(1f);
         }
         if (GUILayout.Button("¥5.2"))
         {
-           // 调用MyScript中的DoSomething方法
-           //
+           ((TestManager)target).SendGift(5.2f);
         }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         // 如果按钮被点击
         if (GUILayout.Button("¥9.9"))
         {
-           // 调用MyScript中的DoSomething方法
-           //
+           ((TestManager)target).SendGift(9.9f);
         }
         if (GUILayout.Button("¥52"))
         {
-           // 调用MyScript中的DoSomething方法
-           //
+            ((TestManager)target).SendGift(52f);
         }
         if (GUILayout.Button("¥88.8"))
         {

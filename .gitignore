@@ -184,3 +184,6 @@ Assets/3rd/_Creepy_Cat/_3D Showroom Free/_Meshes/Materials/Hard_Surface_01_Alpha
 Assets/Images/0/
 Assets/Images/test01/
 Assets/Starfield Skybox/Skybox.mat
+
+*.gif
+*.gif.meta
