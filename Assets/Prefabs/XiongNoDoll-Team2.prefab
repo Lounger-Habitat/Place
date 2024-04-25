@@ -261,10 +261,10 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 1
-  m_Acceleration: 60
+  m_Acceleration: 80
   avoidancePriority: 50
-  m_AngularSpeed: 240
-  m_StoppingDistance: 0.2
+  m_AngularSpeed: 800
+  m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
   m_AutoRepath: 1
@@ -337,13 +337,16 @@ MonoBehaviour:
   playerAnimator: {fileID: 2311344120738502171}
   waitingDraw: 0
   user:
+    name: 
     defendingIns: 0
     attckingIns: 0
+    level: 0
     currentState:
       topState: 0
       detailState: 0
     maxCarryingInsCount: 0
     speed: 0
+    exSpeed: 0
     waitingSpeed: 0
     character: {fileID: 0}
     nameTag: {fileID: 0}
@@ -356,7 +359,7 @@ MonoBehaviour:
   consolePath: []
   pathIndex: 0
   slowEffect: {fileID: 8274854561089743264, guid: d8f22a2799756bf49a19e5dbad71a8c0, type: 3}
-  runEffect_1: {fileID: 6235330434594640082, guid: cae4dfd42d9704f4886582d63cff2e26, type: 3}
+  runMagicEffect: {fileID: 0}
   runSmokeEffect: {fileID: 5498650703651248160, guid: d68df64639bb84698858ffd67d3ca56f, type: 3}
   shieldsEffect_1: {fileID: 9204203178013580127, guid: 261623abc591286449ff69193d63e856, type: 3}
   shieldsEffect_2: {fileID: 7943073472474586687, guid: d9cffe1112a6e0e48a2bd2349b74c3dc, type: 3}

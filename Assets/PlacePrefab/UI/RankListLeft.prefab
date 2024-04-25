@@ -56,16 +56,16 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 0
+    m_Top: 15
     m_Bottom: 0
-  m_ChildAlignment: 4
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_ChildAlignment: 1
+  m_Spacing: 20
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
+  m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
 --- !u!1 &3170273953389052523
 GameObject:
@@ -366,6 +366,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RankItem_2
       objectReference: {fileID: 0}
+    - target: {fileID: 2372997517132557863, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -392,11 +396,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 325
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -468,6 +472,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RankItem_4
       objectReference: {fileID: 0}
+    - target: {fileID: 2372997517132557863, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -494,11 +502,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 325
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -596,11 +604,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 325
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -672,6 +680,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RankItem_5
       objectReference: {fileID: 0}
+    - target: {fileID: 2372997517132557863, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -698,11 +710,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 325
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -774,6 +786,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RankItem_3
       objectReference: {fileID: 0}
+    - target: {fileID: 2372997517132557863, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -800,11 +816,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 325
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: 063fcb804cefe4b0381cb98c5da5eb6e, type: 3}
       propertyPath: m_LocalPosition.x
