@@ -122,8 +122,6 @@ public class TeamPanel : MonoBehaviour
                 //将当前玩家存到缓存中
                 currentUserList[onlyId] = item;
             }
-            
-            
         }
     }
 

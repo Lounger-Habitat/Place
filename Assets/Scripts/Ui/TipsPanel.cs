@@ -260,4 +260,8 @@ public enum TipsType
     giftDefensePanel,
     giftDrawPanel,
     giftDrawPanelRight,
+    likeTipsPanel,
+    likeTipsPanelRight,
+    levelUpPanel,
+    levelUpPanelRight
 }
