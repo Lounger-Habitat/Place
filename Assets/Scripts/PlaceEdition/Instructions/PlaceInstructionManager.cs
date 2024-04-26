@@ -89,12 +89,13 @@ public class PlaceInstructionManager : MonoBehaviour
                     c = parts[0]; // /d
                     x = user.lastPoint.x; // x
                     y = user.lastPoint.y; // y
-                    (x,y) = ComputeQuickIns(c[0],x,y);
+                    (x, y) = ComputeQuickIns(c[0], x, y);
                     r = int.Parse(parts[1]); // x
                     g = int.Parse(parts[2]); // y
                     b = int.Parse(parts[3]); // r
                     Instruction drawIns = new Instruction("/d", x, y, r: r, g: g, b: b);
-                    if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                    if (!PlaceBoardManager.Instance.CheckIns(drawIns))
+                    {
                         Debug.Log("指令不合法");
                         break;
                     }
@@ -109,13 +110,14 @@ public class PlaceInstructionManager : MonoBehaviour
                     c = parts[0]; // /d
                     x = user.lastPoint.x; // x
                     y = user.lastPoint.y; // y
-                    (x,y) = ComputeQuickIns(c[0],x,y);
+                    (x, y) = ComputeQuickIns(c[0], x, y);
                     Color color = user.lastColor;
                     r = (int)(color.r * 255); // r
                     g = (int)(color.g * 255); // g
                     b = (int)(color.b * 255); // b
                     Instruction drawIns = new Instruction("/d", x, y, r: r, g: g, b: b);
-                    if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                    if (!PlaceBoardManager.Instance.CheckIns(drawIns))
+                    {
                         Debug.Log("指令不合法");
                         break;
                     }
@@ -172,33 +174,39 @@ public class PlaceInstructionManager : MonoBehaviour
                         g = (int)(color.g * 255); // g
                         b = (int)(color.b * 255); // b
                         Instruction drawIns = new Instruction(c, x, y, r: r, g: g, b: b);
-                        if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                        if (!PlaceBoardManager.Instance.CheckIns(drawIns))
+                        {
                             Debug.Log("指令不合法");
                             break;
                         }
                         user.lastPoint = (x, y);
                         user.instructionQueue.Enqueue(drawIns);
                         // Debug.Log(username + " : draw " + c + " " + x + " " + y + " " + r + " " + g + " " + b);
-                    }else if (parts.Length == 4)
+                    }
+                    else if (parts.Length == 4)
                     {
                         int x, y, r, g, b;
-                        string c,dc;
+                        string c, dc;
                         c = parts[0]; // /d
                         x = int.Parse(parts[1]); // x
                         y = int.Parse(parts[2]); // y
                         dc = parts[3];
-                        if (colorDict.ContainsKey(dc)) {
+                        if (colorDict.ContainsKey(dc))
+                        {
                             Color32 color = colorDict[dc];
                             r = color.r; // r
                             g = color.g; // g
                             b = color.b; // b
-                        }else {
+                        }
+                        else
+                        {
                             Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
                             // UI 提示
                             break;
                         }
                         Instruction drawIns = new Instruction(c, x, y, r: r, g: g, b: b);
-                        if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                        if (!PlaceBoardManager.Instance.CheckIns(drawIns))
+                        {
                             Debug.Log("指令不合法");
                             break;
                         }
@@ -215,9 +223,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         r = int.Parse(parts[3]); // r
                         g = int.Parse(parts[4]); // g
                         b = int.Parse(parts[5]); // b
-                        
+
                         Instruction drawIns = new Instruction(c, x, y, r: r, g: g, b: b);
-                        if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                        if (!PlaceBoardManager.Instance.CheckIns(drawIns))
+                        {
                             Debug.Log("指令不合法");
                             break;
                         }
@@ -259,33 +268,39 @@ public class PlaceInstructionManager : MonoBehaviour
                         g = (int)(color.g * 255); // g
                         b = (int)(color.b * 255); // b
                         Instruction ins_l = new Instruction(c, x, y, ex: ex, ey: ey, r: r, g: g, b: b);
-                        if (!PlaceBoardManager.Instance.CheckIns(ins_l)){
+                        if (!PlaceBoardManager.Instance.CheckIns(ins_l))
+                        {
                             Debug.Log("指令不合法");
                             break;
                         }
                         user.instructionQueue.Enqueue(ins_l);
-                    }else if (parts.Length == 6)
+                    }
+                    else if (parts.Length == 6)
                     {
                         int x, y, ex, ey, r, g, b;
-                        string c,dc;
+                        string c, dc;
                         c = parts[0]; // /l
                         x = int.Parse(parts[1]); // x
                         y = int.Parse(parts[2]); // y
                         ex = int.Parse(parts[3]); // ex
                         ey = int.Parse(parts[4]); // ey
                         dc = parts[5];
-                        if (colorDict.ContainsKey(dc)) {
+                        if (colorDict.ContainsKey(dc))
+                        {
                             Color32 color = colorDict[dc];
                             r = color.r; // r
                             g = color.g; // g
                             b = color.b; // b
-                        }else {
+                        }
+                        else
+                        {
                             Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
                             // UI 提示
                             break;
                         }
                         Instruction ins_l = new Instruction(c, x, y, ex: ex, ey: ey, r: r, g: g, b: b);
-                        if (!PlaceBoardManager.Instance.CheckIns(ins_l)){
+                        if (!PlaceBoardManager.Instance.CheckIns(ins_l))
+                        {
                             Debug.Log("指令不合法");
                             // UI 提示
                             break;
@@ -306,7 +321,8 @@ public class PlaceInstructionManager : MonoBehaviour
                         b = int.Parse(parts[7]); // b
                         user.lastColor = new Color(r, g, b);
                         Instruction ins_l = new Instruction(c, x, y, ex: ex, ey: ey, r: r, g: g, b: b);
-                        if (!PlaceBoardManager.Instance.CheckIns(ins_l)){
+                        if (!PlaceBoardManager.Instance.CheckIns(ins_l))
+                        {
                             Debug.Log("指令不合法");
                             break;
                         }
@@ -345,7 +361,8 @@ public class PlaceInstructionManager : MonoBehaviour
                         g = (int)(color.g * 255); // g
                         b = (int)(color.b * 255); // b
                         Instruction ins_p = new Instruction(c, x, y, dx, dy, r: r, g: g, b: b);
-                        if (!PlaceBoardManager.Instance.CheckIns(ins_p)){
+                        if (!PlaceBoardManager.Instance.CheckIns(ins_p))
+                        {
                             Debug.Log("指令不合法");
                             break;
                         }
@@ -365,7 +382,8 @@ public class PlaceInstructionManager : MonoBehaviour
                         b = int.Parse(parts[7]); // b
                         user.lastColor = new Color(r, g, b);
                         Instruction ins_p = new Instruction(c, x, y, dx, dy, r: r, g: g, b: b);
-                        if (!PlaceBoardManager.Instance.CheckIns(ins_p)){
+                        if (!PlaceBoardManager.Instance.CheckIns(ins_p))
+                        {
                             Debug.Log("指令不合法");
                             break;
                         }
@@ -390,10 +408,10 @@ public class PlaceInstructionManager : MonoBehaviour
                 if (parts.Length == 2) // 默认颜色
                 {
                     int x, y, r, g, b;
-                    string c,s;
+                    string c, s;
                     c = parts[0]; // /d
                     s = parts[1]; // x
-                    (x,y) = user.lastPoint;
+                    (x, y) = user.lastPoint;
                     Color color = user.lastColor;
                     r = (int)(color.r * 255); // r
                     g = (int)(color.g * 255); // g
@@ -401,9 +419,10 @@ public class PlaceInstructionManager : MonoBehaviour
                     for (int i = 0; i < s.Length; i++)
                     {
                         char digitIns = s[i];
-                        (x,y) = ComputeQuickIns(digitIns,x,y);
+                        (x, y) = ComputeQuickIns(digitIns, x, y);
                         Instruction drawIns = new Instruction("/d", x, y, r: r, g: g, b: b);
-                        if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                        if (!PlaceBoardManager.Instance.CheckIns(drawIns))
+                        {
                             Debug.Log("指令不合法");
                             continue;
                         }
@@ -412,19 +431,24 @@ public class PlaceInstructionManager : MonoBehaviour
                     x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
                     y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
                     user.lastPoint = (x, y);
-                }else if (parts.Length == 3) {
+                }
+                else if (parts.Length == 3)
+                {
                     int x, y, r, g, b;
-                    string c,s,dc;
+                    string c, s, dc;
                     c = parts[0]; // /d
                     s = parts[1]; // seq
                     dc = parts[2];
-                    (x,y) = user.lastPoint;
-                    if (colorDict.ContainsKey(dc)) {
+                    (x, y) = user.lastPoint;
+                    if (colorDict.ContainsKey(dc))
+                    {
                         Color32 color = colorDict[dc];
                         r = color.r; // r
                         g = color.g; // g
                         b = color.b; // b
-                    }else {
+                    }
+                    else
+                    {
                         Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
                         // UI 提示
                         break;
@@ -432,9 +456,10 @@ public class PlaceInstructionManager : MonoBehaviour
                     for (int i = 0; i < s.Length; i++)
                     {
                         char digitIns = s[i];
-                        (x,y) = ComputeQuickIns(digitIns,x,y);
+                        (x, y) = ComputeQuickIns(digitIns, x, y);
                         Instruction drawIns = new Instruction("/d", x, y, r: r, g: g, b: b);
-                        if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                        if (!PlaceBoardManager.Instance.CheckIns(drawIns))
+                        {
                             Debug.Log("指令不合法");
                             continue;
                         }
@@ -443,26 +468,29 @@ public class PlaceInstructionManager : MonoBehaviour
                     x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
                     y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
                     user.lastPoint = (x, y);
-                }else if (parts.Length == 5){ // 多颜色
+                }
+                else if (parts.Length == 5)
+                { // 多颜色
                     int x, y, r, g, b;
-                    string c,s;
+                    string c, s;
                     c = parts[0]; // /d
                     s = parts[1]; // x
                     r = int.Parse(parts[2]); // r
                     g = int.Parse(parts[3]); // g
                     b = int.Parse(parts[4]); // b
-                    (x,y) = user.lastPoint;
+                    (x, y) = user.lastPoint;
                     for (int i = 0; i < s.Length; i++)
                     {
                         char digitIns = s[i];
-                        (x,y) = ComputeQuickIns(digitIns,x,y);
+                        (x, y) = ComputeQuickIns(digitIns, x, y);
                         Instruction drawIns = new Instruction("/d", x, y, r: r, g: g, b: b);
-                        if (!PlaceBoardManager.Instance.CheckIns(drawIns)){
+                        if (!PlaceBoardManager.Instance.CheckIns(drawIns))
+                        {
                             Debug.Log("指令不合法");
                             continue;
                         }
                         user.instructionQueue.Enqueue(drawIns);
-                        
+
                     }
                     user.lastColor = new Color(r, g, b);
                     x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
@@ -492,7 +520,7 @@ public class PlaceInstructionManager : MonoBehaviour
                 }
                 break;
             case "gs":
-                 break;
+                break;
             case "/take": // 拿别人颜料 ，谁家
             case "/t":
                 break;
@@ -534,7 +562,8 @@ public class PlaceInstructionManager : MonoBehaviour
                 //     break;
         }
     }
-    public void DefaultGiftCommand(string username, string command) {
+    public void DefaultGiftCommand(string username, string command)
+    {
         // 找到 对应 的 礼物
         string parts = command.Trim();
         float message = float.Parse(parts);
@@ -567,7 +596,8 @@ public class PlaceInstructionManager : MonoBehaviour
         //         break;
         // }
     }
-    public void DefaultLikeCommand(Like like) {
+    public void DefaultLikeCommand(Like like)
+    {
         string username = like.uname;
         if (PlaceCenter.Instance.users.ContainsKey(username))
         {
@@ -577,13 +607,15 @@ public class PlaceInstructionManager : MonoBehaviour
             // 指令 - 传统指令
             PlaceCenter.Instance.GainLikePower(user, count);
         }
-        
+
 
         // PlaceCenter.Instance.GainPower(username, 1);
     }
 
-    public (int x,int y) ComputeQuickIns(char m, int x, int y) {
-        switch (m) {
+    public (int x, int y) ComputeQuickIns(char m, int x, int y)
+    {
+        switch (m)
+        {
             case '1':
                 x -= 1;
                 y -= 1;
@@ -622,7 +654,8 @@ public class PlaceInstructionManager : MonoBehaviour
 
 
     // 弹幕
-    public void DefaultDanmuCommand(Dm dm) {
+    public void DefaultDanmuCommand(Dm dm)
+    {
         string username = dm.userName;
         string msg = dm.msg.Trim();
         if (PlaceCenter.Instance.users.ContainsKey(username))
@@ -632,9 +665,9 @@ public class PlaceInstructionManager : MonoBehaviour
             // 指令 - 传统指令
             if (msg.StartsWith("/"))
             {
-                DefaultRunChatCommand(user,msg);
+                DefaultRunChatCommand(user, msg);
             }
-            
+
             // 指令 - 快捷指令
             /*
                 快速加入
@@ -645,12 +678,17 @@ public class PlaceInstructionManager : MonoBehaviour
             */
 
             // 快速画点
-            if (Regex.IsMatch(msg, FAST_DRAW_PATTERN)) { // 快速画点
-                DefaultRunChatCommand(user,"/d " + msg);
-            }else if (Regex.IsMatch(msg, FAST_LINE_PATTERN)) { // 快速画线
-                DefaultRunChatCommand(user,"/l " + msg);
-            }else if (Regex.IsMatch(msg, FAST_DRAW_DIY_PATTERN)) { // 快速画自定义线
-                DefaultRunChatCommand(user,"/m " + msg);
+            if (Regex.IsMatch(msg, FAST_DRAW_PATTERN))
+            { // 快速画点
+                DefaultRunChatCommand(user, "/d " + msg);
+            }
+            else if (Regex.IsMatch(msg, FAST_LINE_PATTERN))
+            { // 快速画线
+                DefaultRunChatCommand(user, "/l " + msg);
+            }
+            else if (Regex.IsMatch(msg, FAST_DRAW_DIY_PATTERN))
+            { // 快速画自定义线
+                DefaultRunChatCommand(user, "/m " + msg);
             }
         }
         // List<string> selectList = new List<string>(){
@@ -663,7 +701,8 @@ public class PlaceInstructionManager : MonoBehaviour
         // 第一次 加入游戏
         string firstJoinFormat = @"蓝|绿|黄|紫|/a \d";
 
-        if (Regex.IsMatch(msg, firstJoinFormat)){
+        if (Regex.IsMatch(msg, firstJoinFormat))
+        {
             string userFace = dm.userFace;
             User user = new User(username);
             StartCoroutine(DownloadImage(user, userFace));
@@ -671,27 +710,29 @@ public class PlaceInstructionManager : MonoBehaviour
             if (msg.StartsWith("/a"))
             {
                 user.Camp = int.Parse(Regex.Match(msg, @"\d+").Value);
-                DefaultRunChatCommand(user,msg);
-            }else {
+                DefaultRunChatCommand(user, msg);
+            }
+            else
+            {
                 switch (msg)
                 {
                     case "蓝":
                         user.Camp = 1;
-                        DefaultRunChatCommand(user,"/a 1");
+                        DefaultRunChatCommand(user, "/a 1");
                         // 需要下载资源
                         // UI 信息 创建
                         break;
                     case "绿":
                         user.Camp = 2;
-                        DefaultRunChatCommand(user,"/a 2");
+                        DefaultRunChatCommand(user, "/a 2");
                         break;
                     case "黄":
                         user.Camp = 3;
-                        DefaultRunChatCommand(user,"/a 3");
+                        DefaultRunChatCommand(user, "/a 3");
                         break;
                     case "紫":
                         user.Camp = 4;
-                        DefaultRunChatCommand(user,"/a 4");
+                        DefaultRunChatCommand(user, "/a 4");
                         break;
                     default:
                         break;
@@ -706,7 +747,8 @@ public class PlaceInstructionManager : MonoBehaviour
     /*
         ========= 协程 ========
     */
-    IEnumerator DownloadImage(User user, string url) {
+    IEnumerator DownloadImage(User user, string url)
+    {
         UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
         yield return www.SendWebRequest();
         if (www.result == UnityWebRequest.Result.ConnectionError)
@@ -721,21 +763,44 @@ public class PlaceInstructionManager : MonoBehaviour
     }
 
     // 颜色字典
+    // 常用 - 14色 +3 +2
     public Dictionary<string, Color32> colorDict = new Dictionary<string, Color32>(){
+        // 无色彩系
         {"白", new Color32(255, 255, 255, 255)},
-        {"黑", new Color32(0, 0, 0, 255)},
-        {"红", new Color32(255, 0, 0, 255)},
-        {"绿", new Color32(0, 255, 0, 255)},
-        {"蓝", new Color32(0, 0, 255, 255)},
-        {"黄", new Color32(255, 255, 0, 255)},
-        {"紫", new Color32(255, 0, 255, 255)},
-        {"青", new Color32(0, 255, 255, 255)},
-        {"橙", new Color32(255, 165, 0, 255)},
-        {"粉", new Color32(255, 192, 203, 255)},
+        {"银", new Color32(192, 192, 192, 255)},
         {"灰", new Color32(128, 128, 128, 255)},
+        {"黑", new Color32(0, 0, 0, 255)},
+
+        // 红
+        {"红", new Color32(255, 0, 0, 255)},
+        {"洋红", new Color32(255, 0, 255, 255)},
+        {"橙", new Color32(255, 102, 0, 255)},
+        {"粉", new Color32(255, 192, 203, 255)},
+
+        // 绿
+        {"绿", new Color32(0, 128, 0, 255)},
+        {"浅绿", new Color32(144, 238, 144, 255)},
+        {"鲜绿", new Color32(0, 255, 0, 255)},
+
+        // 蓝
+        {"蓝", new Color32(0, 0, 255, 255)},
+        {"浅蓝", new Color32(173, 216, 230, 255)},
+        {"蔚蓝", new Color32(0, 123, 167, 255)},
+        {"天蓝", new Color32(0, 127, 255, 255)},
+
+        {"黄", new Color32(255, 255, 0, 255)},
+        {"紫", new Color32(106,  13  ,173, 255)},
+        {"青", new Color32(0, 255, 255, 255)},
+
+
         {"棕", new Color32(165, 42, 42, 255)},
         {"金", new Color32(255, 215, 0, 255)},
-        {"银", new Color32(192, 192, 192, 255)}
+
+    };
+
+    // 中国色 - 526色
+    public Dictionary<string, Color32> chineseColorDict = new Dictionary<string, Color32>(){
+        {"白", new Color32(255, 255, 255, 255)},
     };
 
 
