@@ -39,19 +39,18 @@ public class TestManagerEditor : Editor
         if (GUILayout.Button("¥1"))
         {
            // 调用MyScript中的DoSomething方法
-           //
            ((TestManager)target).SendGift(1f);
         }
-        if (GUILayout.Button("¥5.2"))
+        if (GUILayout.Button("¥1.9"))
         {
-           ((TestManager)target).SendGift(5.2f);
+           ((TestManager)target).SendGift(1.9f);
         }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         // 如果按钮被点击
-        if (GUILayout.Button("¥9.9"))
+        if (GUILayout.Button("¥5.2"))
         {
-           ((TestManager)target).SendGift(9.9f);
+           ((TestManager)target).SendGift(5.2f);
         }
         if (GUILayout.Button("¥52"))
         {
