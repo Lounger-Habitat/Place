@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/BegiinScene.unity
     guid: b3aa6256f6b205e40a80dde1e4bf85ec
   - enabled: 1
+    path: Assets/Scenes/1920-1080Scene.unity
+    guid: 597fb3c08567f1542a72f7c9e4612cca
+  - enabled: 1
     path: Assets/Scenes/TestScene.unity
     guid: 4708b0405f871447caff29dc964784f0
   - enabled: 1
