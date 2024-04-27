@@ -12,7 +12,7 @@ public class TestManager : MonoBehaviour
     public string playerName;
     // Start is called before the first frame update
 
-    public string gift="20";
+    public string gift = "20";
 
     public Vector3 position;
     public Vector3 rotation;
@@ -41,7 +41,8 @@ public class TestManager : MonoBehaviour
         }
     }
 
-    void Start() {
+    void Start()
+    {
         LoadResources();
         ImageProcessor();
     }
@@ -53,20 +54,22 @@ public class TestManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Slash))
         {
             ins = ins.Trim();
-            
+
             if (PlaceCenter.Instance.users.ContainsKey(playerName))
             {
-                Dm dm = MakeDm(playerName,ins);
+                Dm dm = MakeDm(playerName, ins);
                 PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
-            }else {
-                Dm dm = MakeDm(playerName,ins);
+            }
+            else
+            {
+                Dm dm = MakeDm(playerName, ins);
                 PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
             }
         }
         // 按下,，执行指令  接受 指令
         if (Input.GetKeyDown(KeyCode.Comma))
         {
-            PlaceInstructionManager.Instance.DefaultGiftCommand(playerName,gift);
+            PlaceInstructionManager.Instance.DefaultGiftCommand(playerName, gift);
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -74,9 +77,9 @@ public class TestManager : MonoBehaviour
             // 遍历所有用户
             foreach (var user in users)
             {
-                PlaceInstructionManager.Instance.DefaultGiftCommand(user,gift);
+                PlaceInstructionManager.Instance.DefaultGiftCommand(user, gift);
             }
-            
+
         }
         // 按下.，执行指令  测试 指令
         if (Input.GetKeyDown(KeyCode.Period))
@@ -88,15 +91,17 @@ public class TestManager : MonoBehaviour
             StartCoroutine(GenerateRandomCommand());
 
         }
-        
+
     }
 
-    public void CameraView() {
+    public void CameraView()
+    {
         Camera.main.transform.position = position;
         Camera.main.transform.rotation = Quaternion.Euler(rotation);
     }
 
-    public Dm MakeDm(string name,string ins) {
+    public Dm MakeDm(string name, string ins)
+    {
         Dm dm = new Dm();
         dm.userName = name;
         dm.userFace = "https://unsplash.com/photos/EGJVpJr_r3w/download?ixid=M3wxMjA3fDB8MXxhbGx8MTR8fHx8fHwyfHwxNzEzMjUyNjAyfA&force=true&w=640";
@@ -104,7 +109,8 @@ public class TestManager : MonoBehaviour
         return dm;
     }
 
-    public void GenPlayer(){
+    public void GenPlayer()
+    {
         // 添加player
         string[] cx1 = { "cx1", "/a 1" };
         string[] cx2 = { "cx2", "/a 1" };
@@ -128,11 +134,12 @@ public class TestManager : MonoBehaviour
 
         var combinedListLinq = new[] { cx1, cx2, cx3, cx4, gt1, gt2, gt3, gt4, by1, by2, by3, by4, hy1, hy2, hy3, hy4 }.SelectMany(a => a).ToList();
         StartCoroutine(RepeatFunctionCall(combinedListLinq));
-        
+
         //执行指令
     }
 
-    public void GenBiliPlayer() {
+    public void GenBiliPlayer()
+    {
         Dictionary<string, string> myDictionary = new Dictionary<string, string>
         {
             { "cx1", "蓝" },
@@ -165,20 +172,22 @@ public class TestManager : MonoBehaviour
 
     IEnumerator RepeatFunctionCall(List<string> combinedListLinq)
     {
-        for (int i = 0; i < combinedListLinq.Count; i=i+2) // 循环
+        for (int i = 0; i < combinedListLinq.Count; i = i + 2) // 循环
         {
             string uname = combinedListLinq[i];
-            string ins = combinedListLinq[i+1];
+            string ins = combinedListLinq[i + 1];
             User u = new User(uname);
             u.Camp = int.Parse(Regex.Match(ins, @"\d+").Value);
-            PlaceInstructionManager.Instance.DefaultRunChatCommand(u,ins); // 调用你的函数
+            u.Id = PlaceCenter.Instance.GenId();
+            PlaceInstructionManager.Instance.DefaultRunChatCommand(u, ins); // 调用你的函数
             yield return new WaitForSeconds(1f); // 等待1秒
         }
     }
 
     IEnumerator RepeatDmCall(List<Dm> dms)
     {
-        foreach (var dm in dms) {// 循环
+        foreach (var dm in dms)
+        {// 循环
             // string uname = dm.userName;
             // string ins = dm.msg;
             // User u = new User(uname);
@@ -188,7 +197,8 @@ public class TestManager : MonoBehaviour
         }
     }
 
-    public string RandomGenDrawIns() {
+    public string RandomGenDrawIns()
+    {
         int height = PlaceBoardManager.Instance.height;
         int width = PlaceBoardManager.Instance.width;
 
@@ -196,23 +206,26 @@ public class TestManager : MonoBehaviour
 
         // 0-1 random
         float rand = Random.Range(0f, 1f);
-        if (rand<1.1f) {
+        if (rand < 1.1f)
+        {
             // 生成 画点指令
             int x = Random.Range(0, width);
             int y = Random.Range(0, height);
 
             // 随机生成颜色
-            int r,g,b;
-            (r,g,b) = RandomGetPoint(x,y);
+            int r, g, b;
+            (r, g, b) = RandomGetPoint(x, y);
 
             drawIns = "/d " + x + " " + y + " " + r + " " + g + " " + b;
-        }else if(rand<0.8f) {
+        }
+        else if (rand < 0.8f)
+        {
             // 生成 画线指令
             int x1 = Random.Range(0, width);
             int y1 = Random.Range(0, height);
             int x2 = Random.Range(0, width);
             int y2 = Random.Range(0, height);
-            
+
             // 随机生成颜色
             int r = Random.Range(0, 255);
             int g = Random.Range(0, 255);
@@ -220,10 +233,12 @@ public class TestManager : MonoBehaviour
 
             drawIns = "/l " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + r + " " + g + " " + b;
 
-        }else {
+        }
+        else
+        {
             // 生成 画线指令
             int count = Random.Range(0, 20);
-            char[] gifts = { '1' , '2', '3', '4', '6', '7', '8', '9'};
+            char[] gifts = { '1', '2', '3', '4', '6', '7', '8', '9' };
             string s = "";
             for (int i = 0; i < count; i++)
             {
@@ -244,13 +259,14 @@ public class TestManager : MonoBehaviour
 
     }
 
-    public string RandomGenGiftIns() {
+    public string RandomGenGiftIns()
+    {
 
         // string[] gifts = { "0.1", "1", "1.9", "5.2", "9.9", "19.9", "29.9", "52", "66.6", "88.8", "99.9", "120"};
-        string[] gifts = { "0.1", "1", "5.2", "9.9", "19.9"};
+        string[] gifts = { "0.1", "1", "1.9", "5.2"};
         int grand = Random.Range(0, gifts.Length);
         string giftIns = gifts[grand];
-    
+
         return giftIns;
 
     }
@@ -271,9 +287,12 @@ public class TestManager : MonoBehaviour
     string GenerateCommand()
     {
         float rand = Random.Range(0f, 1f);
-        if (rand<0.95f) {
+        if (rand < 0.95f)
+        {
             return RandomGenDrawIns();
-        }else {
+        }
+        else
+        {
             return RandomGenGiftIns();
         }
     }
@@ -287,29 +306,34 @@ public class TestManager : MonoBehaviour
         int urand = Random.Range(0, users.Length);
         string user = users[urand];
         User u = PlaceCenter.Instance.users[user];
-        
+
 
 
         float rand = Random.Range(0f, 1f);
-        if (rand<0.99f) {
+        if (rand < 0.99f)
+        {
             string drawIns = RandomGenDrawIns();
             // Debug.Log($"{u.Name} 执行 ({drawIns}) 指令");
-            PlaceInstructionManager.Instance.DefaultRunChatCommand(u,drawIns);
-        }else {
+            PlaceInstructionManager.Instance.DefaultRunChatCommand(u, drawIns);
+        }
+        else
+        {
             string giftIns = RandomGenGiftIns();
             // Debug.Log($"{u.Name} 赠送 ({giftIns}) 颜料");
-            PlaceInstructionManager.Instance.DefaultGiftCommand(user,giftIns);
+            PlaceInstructionManager.Instance.DefaultGiftCommand(user, giftIns);
         }
     }
 
-    (int, int, int) RandomGetPoint(int x,int y) {
+    (int, int, int) RandomGetPoint(int x, int y)
+    {
         int i = y * PlaceBoardManager.Instance.width + x;
         Color32 c = pixelsImage[i];
-        return (c.r,c.g,c.b);
+        return (c.r, c.g, c.b);
     }
 
-    
-    public void ImageProcessor() {
+
+    public void ImageProcessor()
+    {
         Texture2D inputTexture = loadedTextures[index];
         // 外部引用 
         Texture2D resizeTexture = PlaceBoardManager.Instance.ScaleTextureProportionally(inputTexture, PlaceBoardManager.Instance.width, PlaceBoardManager.Instance.height);

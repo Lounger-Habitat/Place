@@ -340,6 +340,7 @@ MonoBehaviour:
     name: 
     defendingIns: 0
     attckingIns: 0
+    invincible: 0
     level: 0
     currentState:
       topState: 0
@@ -350,6 +351,11 @@ MonoBehaviour:
     waitingSpeed: 0
     character: {fileID: 0}
     nameTag: {fileID: 0}
+    drawTimes: 0
+    useTotalInkCount: 0
+    effectiveInkCount: 0
+    usePowerCount: 0
+    genInkCount: 0
     selfTeam: {fileID: 0}
   hp: 100
   isDefending: 0
@@ -368,6 +374,7 @@ MonoBehaviour:
   electricityEffect: {fileID: 1157595341244220102, guid: 5788b552fc8dbb943be5aa65f2ed1e70, type: 3}
   strikeEffect: {fileID: 8316546506534294775, guid: 9935065b872f1af47aa6cfec52cbf812, type: 3}
   levelUpEffect: {fileID: 5630033035972994015, guid: fbf7b003351d3cc4da6c1972a822b53c, type: 3}
+  inkUpIcon: {fileID: 6764000743443325766, guid: 91c56989ed3ef4aca9af79bf124aa37a, type: 3}
   tornadoRange: 5
 --- !u!136 &5821709114818931479
 CapsuleCollider:

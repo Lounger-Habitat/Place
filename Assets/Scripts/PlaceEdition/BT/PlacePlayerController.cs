@@ -7,6 +7,8 @@ using System.Collections;
 using DG.Tweening;
 
 using System.Linq;
+using UnityEngine.Analytics;
+using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
 
 public class PlacePlayerController : MonoBehaviour
 {
@@ -77,6 +79,7 @@ public class PlacePlayerController : MonoBehaviour
     public GameObject electricityEffect;
     public GameObject strikeEffect;
     public GameObject levelUpEffect;
+    public GameObject inkUpIcon;
 
     public void Start()
     {
@@ -120,6 +123,7 @@ public class PlacePlayerController : MonoBehaviour
         consolePath = GenerateCirclePath(altar.position, 3, 100);
         navMeshAgent = GetComponent<NavMeshAgent>();
         lastLevel = user.Level;
+        StartLevelUp();
     }
     public void Update()
     {
@@ -141,13 +145,6 @@ public class PlacePlayerController : MonoBehaviour
             Debug.Log("trans to Attack");
             playerGoal.SetValue(PlayerGoal.Attack);
             playerBT.SetVariable("playerGoal", playerGoal);
-        }
-
-        // 计算贡献，自己升级
-        if (user.Level > lastLevel)
-        {
-            LevelUp();
-            lastLevel = user.Level;
         }
     }
 
@@ -255,23 +252,27 @@ public class PlacePlayerController : MonoBehaviour
     {
         // 等待两秒执行
         yield return new WaitForSeconds(1.5f);
-        PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.Camp);
+        PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.Camp, user.Id);
         user.carryingInkCount -= ins.needInkCount;
         user.score += ins.needInkCount;
+        user.useTotalInkCount += ins.needInkCount;
         waitingDraw = waitingDraw + 1;
     }
     private IEnumerator IDrawLine(int x, int y, int r, int g, int b, int camp)
     {
         // 等待两秒执行
         yield return new WaitForSeconds(1.5f);
-        PlaceBoardManager.Instance.DrawCommand(x, y, r, g, b, user.Camp);
+        PlaceBoardManager.Instance.DrawCommand(x, y, r, g, b, user.Camp, user.Id);
         user.carryingInkCount--;
         user.score++;
         // waitingDraw = waitingDraw + 1;
     }
 
 
-    public void LevelUp()
+    public void StartLevelUp () {
+        StartCoroutine(LevelUpCoroutine());
+    }
+    public void PlaylevelUpEffect()
     {
         //播放特效相关
         var effect = Instantiate(levelUpEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
@@ -279,16 +280,37 @@ public class PlacePlayerController : MonoBehaviour
         //后续可能有音效、UI提示等效果
     }
 
-    public void SpeedlUp(float time)
+    public void ActiveSpeedlUp(float time)
+    {
+        StartCoroutine(SmokeSpeedUpCoroutine(time));
+    }
+
+    public void PassiveSpeedUp(float time=3)
+    {
+        StartCoroutine(MagicSpeedUpCoroutine(time));
+    }
+
+    public void PlaySmokeSpeedlUp(float time)
     {
         //播放特效相关
         var effect = Instantiate(runSmokeEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
         effect.transform.SetParent(this.transform);
         effect.GetComponent<EffectAutoDelete>().destroyTime = time;
-        //后续可能有音效、UI提示等效果
     }
 
-    public void Invincible(float time = 30)
+    public void PlayMagicSpeedlUp(float time)
+    {
+        //播放特效相关
+        var effect = Instantiate(runMagicEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+        effect.transform.SetParent(transform);
+        effect.GetComponent<EffectAutoDelete>().destroyTime = time;
+    }
+
+    public void Invincible(float time=30) {
+        StartCoroutine(InvincibleCoroutine(time));
+    }
+
+    public void PlayInvincibleEffect(float time = 30)
     {
         var effect = Instantiate(shieldsEffect_1, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
         effect.transform.SetParent(this.transform);
@@ -297,7 +319,7 @@ public class PlacePlayerController : MonoBehaviour
         auto.destroyTime = time;
     }
 
-    public void BallThunder(float time=10)
+    public void BallThunder(float time = 10)
     {
         var effect = Instantiate(electricityEffect, transform.position + new Vector3(0f, 3f, 0f), Quaternion.identity, transform.parent);//
         effect.transform.SetParent(this.transform);
@@ -306,26 +328,44 @@ public class PlacePlayerController : MonoBehaviour
         auto.destroyTime = time;
     }
 
-
-
-    public void SpeedlUpMagic(float time)
-    {
-        //播放特效相关
-        var effect = Instantiate(runMagicEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
-        effect.transform.SetParent(this.transform);
-        effect.GetComponent<EffectAutoDelete>().destroyTime = time;
-        //后续可能有音效、UI提示等效果
-    }
-
     public void Tornado(int num)
     {
         PlayTornadoEffect(num);
     }
 
-    public void Stuck()
+    public void Stuck() {
+        StartCoroutine(StuckCoroutine());
+    }
+
+    public void PlayStuckEffect()
     {
         var effect = Instantiate(slowEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
         effect.transform.SetParent(this.transform);
+
+    }
+
+    public void InkUp(int p) {
+        PlayInkUpEffect(p);
+    }
+
+    public void PlayInkUpEffect(int p) {
+        var effect = Instantiate(levelUpEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+        effect.transform.SetParent(this.transform);
+        var icon = Instantiate(inkUpIcon, user.nameTag.transform.position + new Vector3(0f, 2, 0f), Quaternion.identity, transform.parent);//
+        icon.GetComponent<InkTag>().countText.text = $"X {p}";
+        icon.transform.SetParent(user.nameTag.transform);
+        icon.transform.DOMoveY(icon.transform.position.y + 2, 1).OnComplete(() =>
+        {
+            Destroy(icon.gameObject);
+        });
+    }
+
+    public void PlayInkUpEffect() {
+        //播放特效相关
+        // var effect = Instantiate(runMagicEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+        // effect.transform.SetParent(this.transform);
+        // effect.GetComponent<EffectAutoDelete>().destroyTime = time;
+        //后续可能有音效、UI提示等效果
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////龙卷风效果不是单纯的开启关闭
@@ -344,7 +384,7 @@ public class PlacePlayerController : MonoBehaviour
             float zdir = UnityEngine.Random.Range(-1f, 1f);//分别获得两个方向的
             Vector3 targetPos = transform.position + new Vector3(xdir, 0, zdir).normalized * range; //当前位置加上目标方向乘以距离就是目标位置
             GameObject tornado = Instantiate(tornadoEffect, transform.position, Quaternion.identity);
-            tornado.transform.SetParent(this.transform);
+            // tornado.transform.SetParent(this.transform);
             tornado.name = $"Tornado - {user.Camp}";
             // tornado.SetActive(true);
             tornado.transform.DOMove(targetPos, dur).OnComplete(() =>
@@ -354,12 +394,16 @@ public class PlacePlayerController : MonoBehaviour
         }
     }
 
-    public void PlayThunder(Transform t=null)
+    public void Thunder(float time = 10) {
+        StartCoroutine(ThunderCoroutine(time));
+    }
+
+    public void PlayThunder(Transform t = null)
     {
         // float range = 10;
         float xdir = UnityEngine.Random.Range(-5f, 5f);
         float zdir = UnityEngine.Random.Range(-5f, 5f);//分别获得两个方向的
-        Vector3 targetPos = t!=null ? t.position : transform.position + new Vector3(xdir, 0, zdir); //当前位置加上目标方向乘以距离就是目标位置
+        Vector3 targetPos = t != null ? t.position : transform.position + new Vector3(xdir, 0, zdir); //当前位置加上目标方向乘以距离就是目标位置
         GameObject thunder = Instantiate(strikeEffect, targetPos, Quaternion.identity);
         var auto = thunder.GetComponent<EffectAutoDelete>();
         auto.scale = 2.0f;
@@ -374,13 +418,13 @@ public class PlacePlayerController : MonoBehaviour
         {
             if (other.name.Contains(user.Camp.ToString()))
             {
-                StartCoroutine(SpeedUpCoroutine());
+                PassiveSpeedUp(3);
             }
             else
             {
                 if (user.invincible == false)
                 {
-                    StartCoroutine(StuckCoroutine());
+                    Stuck();
                 }
             }
 
@@ -391,7 +435,7 @@ public class PlacePlayerController : MonoBehaviour
             {
                 if (user.invincible == false)
                 {
-                    StartCoroutine(StuckCoroutine());
+                    Stuck();
                 }
             }
 
@@ -399,54 +443,69 @@ public class PlacePlayerController : MonoBehaviour
     }
     // === 协程 ===
 
+    // 升级
+    IEnumerator LevelUpCoroutine()
+    {
+        while (true)
+        {
+            if (user.Level > lastLevel)
+            {
+                PlaylevelUpEffect();
+                lastLevel = user.Level;
+            }
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
     // 困住 5秒
     IEnumerator StuckCoroutine()
     {
         user.exSpeed -= 5;
-        Stuck();
+        PlayStuckEffect();
         yield return new WaitForSeconds(5f);
         user.exSpeed += 5;
     }
 
     // 魔法跑 加速 3秒
-    IEnumerator SpeedUpCoroutine()
+    IEnumerator MagicSpeedUpCoroutine(float time=3)
     {
         user.exSpeed += 5;
-        SpeedlUpMagic(3);
-        yield return new WaitForSeconds(3f);
+        PlayMagicSpeedlUp(time);
+        yield return new WaitForSeconds(time);
         user.exSpeed -= 5;
     }
     // 加速跑 加速 自定义时间
-    public IEnumerator TimeLimitSpeedUp(float time)
+    public IEnumerator SmokeSpeedUpCoroutine(float time)
     {
-        user.speed += 10.0f;
-        SpeedlUp(time);
+        user.exSpeed += 10.0f;
+        PlaySmokeSpeedlUp(time);
         yield return new WaitForSeconds(time);
-        user.speed -= 10.0f;
+        user.exSpeed -= 10.0f;
     }
 
     // 无敌 自定义时间
-    public IEnumerator TimeLimitInvincible(float time = 30)
+    public IEnumerator InvincibleCoroutine(float time = 30)
     {
         user.exSpeed += 10.0f;
         user.invincible = true;
-        Invincible(time);
+        PlayInvincibleEffect(time);
         yield return new WaitForSeconds(time);
         user.exSpeed -= 10.0f;
         user.invincible = false;
     }
 
     // ⚡️雷电
-    public IEnumerator Thunder(float time = 10)
+    public IEnumerator ThunderCoroutine(float time = 10)
     {
         float cd = time;
         BallThunder(time);
         yield return new WaitForSeconds(1f);
         cd -= 1;
-        while (cd > 1) {
+        while (cd > 1)
+        {
             yield return new WaitForSeconds(0.2f);
             Collider[] cs = Physics.OverlapSphere(transform.position, 5f).ToList().Where(c => c.CompareTag("Player") && c.gameObject.GetComponent<PlacePlayerController>().user.Camp != user.Camp).ToArray();
-            
+
 
             if (cs.Length > 0)
             {

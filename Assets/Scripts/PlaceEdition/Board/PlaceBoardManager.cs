@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Assets.GifAssets.PowerGif;
 using System.Collections;
 using UnityEngine.Assertions;
+using System.Data.Common;
 
 public class PlaceBoardManager : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class PlaceBoardManager : MonoBehaviour
     public Texture2D defaultTexture;
     public int recorderTime = 60;
     public int[] pixelsInfos;
+    public int[] pixelsUserInfos;
 
     // 画作唯一id
     public static int UniqueId = 0;
@@ -252,10 +254,12 @@ public class PlaceBoardManager : MonoBehaviour
         // 填充贴图
         Color[] fillPixels = new Color[width * height];
         pixelsInfos = new int[width * height];
+        pixelsUserInfos = new int[width * height];
         for (int i = 0; i < fillPixels.Length; i++)
         {
             fillPixels[i] = fillColor;
             pixelsInfos[i] = 0;
+            pixelsUserInfos[i] = 0;
         }
         newTexture.SetPixels(fillPixels);
         newTexture.Apply();
@@ -457,7 +461,7 @@ public class PlaceBoardManager : MonoBehaviour
             res.Add(fa[len - 1]);
 
             // 断言 res 一个20个
-           //Assert.IsTrue(res.Count == 20);
+            //Assert.IsTrue(res.Count == 20);
         }
         else
         {
@@ -471,13 +475,14 @@ public class PlaceBoardManager : MonoBehaviour
     {
         texture.SetPixels(defaultTexture.GetPixels());
         Array.Clear(pixelsInfos, 0, pixelsInfos.Length);
+        Array.Clear(pixelsUserInfos, 0, pixelsUserInfos.Length);
         texture.Apply();
     }
 
 
-    public void DrawCommand(int x, int y, int r, int g, int b, int camp)
+    public void DrawCommand(int x, int y, int r, int g, int b, int camp, int id = 0)
     {
-        MarkPixels(x, y, camp);
+        MarkPixels(x, y, camp, id);
         DrawPixels(x, y, r, g, b);
     }
     public void DrawPixels(int x, int y, int r, int g, int b)
@@ -499,11 +504,11 @@ public class PlaceBoardManager : MonoBehaviour
         return DrawLine(x: x, y: y, ex: ex, ey: ey, isDraw: false);
     }
 
-    public void LineCommand(int x, int y, int ex, int ey, int r, int g, int b, int camp = 0)
+    public void LineCommand(int x, int y, int ex, int ey, int r, int g, int b, int camp = 0, int id = 0)
     {
         GetLinePoints(x, y, ex, ey).ForEach(p =>
         {
-            DrawCommand(p.Item1, p.Item2, r, g, b, camp);
+            DrawCommand(p.Item1, p.Item2, r, g, b, camp, id);
         });
         // DrawLine(x, y, ex, ey, r, g, b, camp);
     }
@@ -639,12 +644,13 @@ public class PlaceBoardManager : MonoBehaviour
     }
 
 
-    public void MarkPixels(int x, int y, int camp = 0)
+    public void MarkPixels(int x, int y, int camp = 0, int id = 0)
     {
         // 对x,y 处理ß
         // 记录
         int index = x + (y * width);
         pixelsInfos[index] = camp;
+        pixelsUserInfos[index] = id;
 
     }
 
@@ -664,78 +670,78 @@ public class PlaceBoardManager : MonoBehaviour
         }
         return false;
     }
-    
-    
+
+
     // ========= gif part =========
     // pro gif lib
     private ProGifTexturesToGIF tex2Gif = null;
     private List<Texture2D> tex2DList = null;
     public Image dpImage;
     void Clear()
-	{
-		if(tex2Gif != null) tex2Gif.Clear();
+    {
+        if (tex2Gif != null) tex2Gif.Clear();
 
-		if(dpImage != null && dpImage.sprite != null && dpImage.sprite.texture != null)
-		{
-			Texture2D.Destroy(dpImage.sprite.texture);
-			dpImage.sprite = null;
-		}
+        if (dpImage != null && dpImage.sprite != null && dpImage.sprite.texture != null)
+        {
+            Texture2D.Destroy(dpImage.sprite.texture);
+            dpImage.sprite = null;
+        }
 
-		//Clear texture
-		if(tex2DList != null)
-		{
-			foreach(Texture2D tex in tex2DList)
-			{
-				if(tex != null)
-				{
-					Destroy(tex);
-				}
-			}
-			tex2DList = null;
-		}
-	}
+        //Clear texture
+        if (tex2DList != null)
+        {
+            foreach (Texture2D tex in tex2DList)
+            {
+                if (tex != null)
+                {
+                    Destroy(tex);
+                }
+            }
+            tex2DList = null;
+        }
+    }
     public void ConvertTex2DToGIF()
-	{
+    {
         Clear();
 
-		tex2Gif = ProGifTexturesToGIF.Instance;
+        tex2Gif = ProGifTexturesToGIF.Instance;
 
-		//Set file extensions for loading images
-		tex2Gif.SetFileExtension(new List<string>{".jpg", ".png"});
-		//tex2Gif.SetFileExtension(new List<string>{".jpg"});
+        //Set file extensions for loading images
+        tex2Gif.SetFileExtension(new List<string> { ".jpg", ".png" });
+        //tex2Gif.SetFileExtension(new List<string>{".jpg"});
 
-		// string loadImagePath = Application.streamingAssetsPath;
-		string loadImagePath = $"Assets/Images/{UniqueId}";
+        // string loadImagePath = Application.streamingAssetsPath;
+        string loadImagePath = $"Assets/Images/{UniqueId}";
 
-		//Load images as texture2D list from target directory
-		tex2DList = tex2Gif.LoadImages(loadImagePath);
+        //Load images as texture2D list from target directory
+        tex2DList = tex2Gif.LoadImages(loadImagePath);
         tex2Gif.LoadImagesFromResourcesFolder();
 
         if (tex2DList != null && tex2DList.Count > 0)
-		{
-			//Save the provided texture2Ds to a GIF file with settings
+        {
+            //Save the provided texture2Ds to a GIF file with settings
 
-			// tex2Gif.m_Rotation = m_Rotation; // no rotation
+            // tex2Gif.m_Rotation = m_Rotation; // no rotation
 
-			//Set auto detect transparent pixels for imported images
-			tex2Gif.SetTransparent(true);
+            //Set auto detect transparent pixels for imported images
+            tex2Gif.SetTransparent(true);
 
             //tex2Gif.m_MaxNumberOfThreads = 6;
-            tex2Gif.Save(tex2DList, width, height, 1, 0, 50, OnFileSaved, OnFileSaveProgress, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear:true);
-			Debug.Log("Load images and start convert/save GIF..");
-		}
-		else
-		{
-			Debug.LogWarning("No image/texture found at: " + loadImagePath);
-		}
-	}
+            tex2Gif.Save(tex2DList, width, height, 1, 0, 50, OnFileSaved, OnFileSaveProgress, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear: true);
+            Debug.Log("Load images and start convert/save GIF..");
+        }
+        else
+        {
+            Debug.LogWarning("No image/texture found at: " + loadImagePath);
+        }
+    }
 
     private void OnFileSaved(int id, string path)
-	{
-		Debug.Log("On file saved: " + path);
-		// text1.text = "GIF saved: " + path;
+    {
+        Debug.Log("On file saved: " + path);
+        // text1.text = "GIF saved: " + path;
         // string sourceFolder = Application.dataPath;;
-            // 目标文件夹路径
+        // 目标文件夹路径
         // string destinationFolder = $"Assets/Images/{UniqueId}";
 
         //     // 获取源文件夹中所有的 .txt 文件
@@ -744,7 +750,7 @@ public class PlaceBoardManager : MonoBehaviour
         // string fileName = Path.GetFileName(path);
 
         // string destinationFile = Path.Combine(destinationFolder, fileName);
-        
+
         // gifPath = destinationFile;
 
         // File.Move(path, destinationFile);
@@ -752,27 +758,28 @@ public class PlaceBoardManager : MonoBehaviour
         // 显示
         ShowGIF(path);
 
-		dpImage.sprite = tex2Gif.GetSprite(0);
-		// dpImage.SetNativeSize();
-	}
+        dpImage.sprite = tex2Gif.GetSprite(0);
+        // dpImage.SetNativeSize();
+    }
 
     private void OnFileSaveProgress(int id, float progress)
-	{
-		Debug.Log("On file save progress: " + progress);
-		// text1.text = "Save progress: " + Mathf.CeilToInt(progress * 100) + "%";
-	}
+    {
+        Debug.Log("On file save progress: " + progress);
+        // text1.text = "Save progress: " + Mathf.CeilToInt(progress * 100) + "%";
+    }
 
     void ShowGIF(string path)
-	{
-		ProGifManager.Instance.m_OptimizeMemoryUsage = true;
+    {
+        ProGifManager.Instance.m_OptimizeMemoryUsage = true;
 
-		//Open the Pro GIF player to show the converted GIF
-		ProGifManager.Instance.PlayGif(path, dpImage, (loadProgress)=>{
-			// if(loadProgress < 1f)
-			// {
-			// 	dpImage.SetNativeSize();
-			// }
-		});
-	}
+        //Open the Pro GIF player to show the converted GIF
+        ProGifManager.Instance.PlayGif(path, dpImage, (loadProgress) =>
+        {
+            // if(loadProgress < 1f)
+            // {
+            // 	dpImage.SetNativeSize();
+            // }
+        });
+    }
 
 }

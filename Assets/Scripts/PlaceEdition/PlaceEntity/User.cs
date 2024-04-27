@@ -56,6 +56,15 @@ public class User
     public Sprite userIcon { get; set; }     // 玩家 头像
     // 资源
 
+    // 统计信息
+    // 用户绘画次数
+    public int drawTimes = 0;
+    public int useTotalInkCount = 0;
+    public int effectiveInkCount = 0;
+    public float usePowerCount = 0;
+    public int genInkCount = 0;
+
+
 
     public PlaceTeamAreaManager selfTeam;
 

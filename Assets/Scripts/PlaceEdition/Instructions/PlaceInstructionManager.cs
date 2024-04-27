@@ -64,6 +64,7 @@ public class PlaceInstructionManager : MonoBehaviour
             return instance;
         }
     }
+
     public void DefaultRunChatCommand(User user, string command)
     {
         string[] parts = command.Trim().Split(' ');
@@ -710,6 +711,7 @@ public class PlaceInstructionManager : MonoBehaviour
             if (msg.StartsWith("/a"))
             {
                 user.Camp = int.Parse(Regex.Match(msg, @"\d+").Value);
+                user.Id = PlaceCenter.Instance.GenId();
                 DefaultRunChatCommand(user, msg);
             }
             else

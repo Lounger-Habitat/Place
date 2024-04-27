@@ -51,6 +51,8 @@ public class PlaceCenter : MonoBehaviour
 
     public int recorderTime = 60;
 
+    int baseId = 0;
+
     public void Start()
     {
         // 初始化用户信息
@@ -215,6 +217,20 @@ public class PlaceCenter : MonoBehaviour
         return u;
     }
 
+    
+    public int GenId() {
+        baseId += 1;
+        return baseId;
+    }
+
+    public int GenPUID() {
+        // 多少位？
+        // 平台 + 时间 + 主播 + 人数 + 价值 + ？？
+        // TODO
+        int puid = 0;
+        return puid;
+    }
+
     public void JoinGame(User user, string teamId)
     {
         int t = int.Parse(teamId);
@@ -356,38 +372,6 @@ public class PlaceCenter : MonoBehaviour
         // PlaceUIManager.Instance.SetTeamData(teams.Values.ToList());
 
     }
-
-    // public void OnUserUIUpdate(User user)
-    // {
-
-    //     // 如果 top 8 数量为 小于8
-    //     if (top8.Count < 8 && user.score > 0)
-    //     {
-    //         top8.Add(user);
-    //     }
-    //     else
-    //     {
-    //         // top8 数量已经达到8个
-    //         // 比较当前用户的分数和top8中最小的分数
-    //         int minScore = top8.Min(u => u.score);
-    //         if (user.score > minScore)
-    //         {
-    //             // 替换最小分数的用户
-    //             User minUser = top8.Find(u => u.score == minScore);
-    //             top8.Remove(minUser);
-    //             top8.Add(user);
-    //         }
-    //     }
-
-    //     // top8 里的元素按照 u.score 由大到小排序
-
-    //     top8.Sort((u1, u2) => u2.score.CompareTo(u1.score));
-
-    //     // --------------------  stop ----------------
-
-    //     UIEvent.OnUserUIUpdate(user);
-    // }
-    //
     public void GainPower(string username, float power)
     {
         if (!users.ContainsKey(username))
@@ -420,29 +404,30 @@ public class PlaceCenter : MonoBehaviour
                 // PlaceTeamManager.Instance.teamAreas[u.camp - 1].teaminfo.ink += normalPower * 10;
                 // 特效 动画
                 // UI 更新
-                StartCoroutine(u.character.GetComponent<PlacePlayerController>().Thunder());
+                u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                 break;
             case 1:
                 normalPower = 100;//固定是加颜料
                 message = "颜料爆发";
-                u.character.GetComponent<PlacePlayerController>().Tornado((int)(power*10));
+                u.character.GetComponent<PlacePlayerController>().Thunder();
                 break;
             case 1.9f:
                 normalPower = 199;//固定是攻击
+                u.character.GetComponent<PlacePlayerController>().Tornado((int)(power*10));
                 break;
             case 5.2f:
                 normalPower = 520;//固定是防御
-                StartCoroutine(u.character.GetComponent<PlacePlayerController>().TimeLimitInvincible());
+                u.character.GetComponent<PlacePlayerController>().Invincible(60);
                 break;
             case 9.9f:
                 normalPower = 999;
+                message = "颜料核弹";
                 // 随机自动画一个图案
                 break;
             case 19.9f:
                 normalPower = 1999;
-                message = "颜料核弹";
+                
                 // 全屏攻击
-
                 break;
             case 29.9f:
                 normalPower = 2990;
@@ -472,7 +457,9 @@ public class PlaceCenter : MonoBehaviour
                 normalPower = 30000;
                 break;
         }
+        u.character.GetComponent<PlacePlayerController>().InkUp(normalPower);
         u.score += normalPower;
+        u.genInkCount += normalPower;
         u.Update();
         PlaceTeamManager.Instance.teamAreas[u.Camp - 1].teaminfo.ink += normalPower;
         //在这通知UI？还得要状态切换啊，先检查状态再通知
@@ -494,8 +481,10 @@ public class PlaceCenter : MonoBehaviour
         user.score += p;
         user.Update();
         PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
+        // 颜料增加的特效
+        user.character.GetComponent<PlacePlayerController>().InkUp(p);
         // 限时加速
-        StartCoroutine(user.character.GetComponent<PlacePlayerController>().TimeLimitSpeedUp(p));
+        // StartCoroutine(user.character.GetComponent<PlacePlayerController>().TimeLimitSpeedUp(p));
     }
 
     public void GainGiftPower(User user, float power)
