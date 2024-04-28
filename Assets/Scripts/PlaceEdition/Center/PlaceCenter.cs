@@ -404,6 +404,7 @@ public class PlaceCenter : MonoBehaviour
                 // PlaceTeamManager.Instance.teamAreas[u.camp - 1].teaminfo.ink += normalPower * 10;
                 // 特效 动画
                 // UI 更新
+                message = "急速神行";
                 u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                 break;
             case 1:
@@ -414,10 +415,12 @@ public class PlaceCenter : MonoBehaviour
             case 1.9f:
                 normalPower = 199;//固定是攻击
                 u.character.GetComponent<PlacePlayerController>().Tornado((int)(power*10));
+                message = "风之束缚";
                 break;
             case 5.2f:
                 normalPower = 520;//固定是防御
                 u.character.GetComponent<PlacePlayerController>().Invincible(60);
+                message = "绝对防御";
                 break;
             case 9.9f:
                 normalPower = 999;
@@ -426,7 +429,7 @@ public class PlaceCenter : MonoBehaviour
                 break;
             case 19.9f:
                 normalPower = 1999;
-                
+                message = "掌控雷电";
                 // 全屏攻击
                 break;
             case 29.9f:
@@ -467,9 +470,9 @@ public class PlaceCenter : MonoBehaviour
         {
             userName = username,
             text = message,
-            icon = null,//玩家头像
+            icon = u.userIcon,//玩家头像
             tipsType = messageType,
-            value =$"X{normalPower:D}",
+            value =$"+{normalPower:D}",
             isLeft = u.Camp == 1
         });
     }
