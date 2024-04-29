@@ -19,8 +19,19 @@ public class GiftTips : TipsBase
     public float openPos,closePos;
 
     private bool needRotation =false;
+
+    public GameObject[] starts;
    public override void SetData(TipsItem tips)
     {
+        for (int i = 0; i < starts.Length; i++)
+        {
+            starts[i].SetActive(false);
+        }
+        int start = tips.level / 10;
+        for (int i = 0; i < start; i++)
+        {
+            starts[i].SetActive(true);
+        }
         transform.Find("Background").Find("Text_Name").GetComponent<TMP_Text>().text = tips.userName;
         transform.Find("Background").Find("ListFrame05_Light_Green").Find("Text").GetComponent<TMP_Text>().text = tips.text;
         transform.Find("Background").Find("ListFrame05_Light_Green").Find("Text_Value").GetComponent<TMP_Text>().text = tips.value;

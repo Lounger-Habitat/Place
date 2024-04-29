@@ -12,12 +12,25 @@ public class LevelUpTips : TipsBase
     public TMP_Text userNameText,tipsText;
 
     public Image userIcon;
-    //点赞面板
+    
+    public GameObject[] starts;
+    
     public override void SetData(TipsItem tips)
     {
+        for (int i = 0; i < starts.Length; i++)
+        {
+            starts[i].SetActive(false);
+        }
+        int level = int.Parse(tips.value);
+        int start = level / 10;
+        for (int i = 0; i < start; i++)
+        {
+            starts[i].SetActive(true);
+        }
         userNameText.text = tips.userName;
         tipsText.text = tips.text;
         userIcon.sprite = tips.icon;
+        
     }
 
     public override void MoveTipsPanel(bool isOn = true)

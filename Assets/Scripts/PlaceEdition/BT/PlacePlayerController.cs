@@ -451,6 +451,16 @@ public class PlacePlayerController : MonoBehaviour
             if (user.Level > lastLevel)
             {
                 PlaylevelUpEffect();
+                var messageType = user.Camp == 1? TipsType.levelUpPanel:TipsType.levelUpPanelRight;
+                PlaceUIManager.Instance.AddTips(new TipsItem()
+                {
+                    userName = user.Name,
+                    text =$"Lv. {lastLevel}  ->  Lv. {user.level}",
+                    icon = user.userIcon,//玩家头像
+                    tipsType = messageType,
+                    value =user.Level.ToString(),
+                    isLeft = user.Camp == 1
+                });
                 lastLevel = user.Level;
             }
             yield return new WaitForSeconds(1f);

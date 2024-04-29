@@ -473,7 +473,8 @@ public class PlaceCenter : MonoBehaviour
             icon = u.userIcon,//玩家头像
             tipsType = messageType,
             value =$"+{normalPower:D}",
-            isLeft = u.Camp == 1
+            isLeft = u.Camp == 1,
+            level = u.level
         });
     }
 
@@ -486,6 +487,28 @@ public class PlaceCenter : MonoBehaviour
         PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
         // 颜料增加的特效
         user.character.GetComponent<PlacePlayerController>().InkUp(p);
+        var messageType = user.Camp == 1? TipsType.likeTipsPanel:TipsType.likeTipsPanelRight;
+        string message = "";
+        if (p<5)
+        {
+            message = $"点赞！颜料x{p}";
+        }
+
+        if (p>5)
+        {
+            message = $"点赞手速突破天际！！颜料x{p}";
+        }
+        
+        
+        PlaceUIManager.Instance.AddTips(new TipsItem()
+        {
+            userName = user.Name,
+            text =message,
+            icon = user.userIcon,//玩家头像
+            tipsType = messageType,
+            value =$"+{1}",
+            isLeft = user.Camp == 1
+        });
         // 限时加速
         // StartCoroutine(user.character.GetComponent<PlacePlayerController>().TimeLimitSpeedUp(p));
     }

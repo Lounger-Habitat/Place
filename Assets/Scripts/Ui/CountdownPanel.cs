@@ -7,7 +7,7 @@ using UnityEngine;
 public class CountdownPanel : MonoBehaviour
 {
     public TMP_Text countdownText; // 用于引用UI中的Text组件  
-    private int startTime = 15*60; // 20分钟转换为秒是1200秒  
+    private int startTime = 1*60; // 20分钟转换为秒是1200秒  
     //private float countdownTime;
     private Coroutine handle;
 

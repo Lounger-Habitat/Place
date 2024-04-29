@@ -29,7 +29,7 @@ public class EndUI : MonoBehaviour
             item.Find("Score").GetComponent<TMP_Text>().text = $"{userList[i].score}";
             item.Find("Picture").Find("InnerFrame").Find("Image").GetComponent<Image>().sprite = userList[i].userIcon;
         }
-        userList.Sort((a,b)=>b.carryingInkCount.CompareTo(a.carryingInkCount));//降序排行有效颜料数 TODO:当前carryingInkCount不是颜料参数
+        userList.Sort((a,b)=>b.drawTimes.CompareTo(a.drawTimes));//降序排行颜料数 
         for (int i = 0; i < rankItem[1].childCount; i++)
         {
 	        var item = rankItem[1].GetChild(i);//获取当前排行物体，分别赋值
@@ -39,7 +39,7 @@ public class EndUI : MonoBehaviour
 		        continue;
 	        }
             item.Find("Name").GetComponent<TMP_Text>().text = userList[i].Name;
-            item.Find("Score").GetComponent<TMP_Text>().text = $"{userList[i].carryingInkCount}";
+            item.Find("Score").GetComponent<TMP_Text>().text = $"{userList[i].drawTimes}";
             item.Find("Picture").Find("InnerFrame").Find("Image").GetComponent<Image>().sprite = userList[i].userIcon;
         }
     }
