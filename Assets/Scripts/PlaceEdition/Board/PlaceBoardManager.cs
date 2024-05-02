@@ -686,7 +686,7 @@ public class PlaceBoardManager : MonoBehaviour
 
         if (dpImage != null && dpImage.sprite != null && dpImage.sprite.texture != null)
         {
-            Texture2D.Destroy(dpImage.sprite.texture);
+            // Texture2D.Destroy(dpImage.sprite.texture);
             dpImage.sprite = null;
         }
 

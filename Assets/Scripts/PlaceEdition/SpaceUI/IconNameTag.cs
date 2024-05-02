@@ -62,7 +62,7 @@ public class IconNameTag : MonoBehaviour
 
             // 可选：使UI元素始终朝向摄像机
             // rectTransform.LookAt(Camera.main.transform);
-            rectTransform.rotation = Camera.main.transform.rotation;
+            // rectTransform.rotation = Camera.main.transform.rotation;
 
         }
     }

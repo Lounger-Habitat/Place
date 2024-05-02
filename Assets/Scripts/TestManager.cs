@@ -12,7 +12,7 @@ public class TestManager : MonoBehaviour
     public string playerName;
     // Start is called before the first frame update
 
-    public string gift = "20";
+    public string gift = "1";
 
     public Vector3 position;
     public Vector3 rotation;
