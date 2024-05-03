@@ -5567,6 +5567,7 @@ MonoBehaviour:
   dataRectTransform: {fileID: 6320311627185941123}
   iconRectTransform: {fileID: 4909973712208662762}
   iconImage: {fileID: 3003132337520155517}
+  userImage: {fileID: 1319695163354448157}
   sprites:
   - {fileID: 21300000, guid: 3399428f735e545cc8c29721d4631114, type: 3}
   - {fileID: 21300000, guid: 37b235823006c499d915c13924b61e2e, type: 3}
@@ -8704,6 +8705,7 @@ MonoBehaviour:
   dataRectTransform: {fileID: 0}
   iconRectTransform: {fileID: 0}
   iconImage: {fileID: 0}
+  userImage: {fileID: 0}
   sprites: []
   openPos: 0
   closePos: 0
@@ -14889,6 +14891,7 @@ MonoBehaviour:
   dataRectTransform: {fileID: 855180660859080707}
   iconRectTransform: {fileID: 380819676389234845}
   iconImage: {fileID: 9007268534310749892}
+  userImage: {fileID: 2107104071377730548}
   sprites:
   - {fileID: 21300000, guid: 3399428f735e545cc8c29721d4631114, type: 3}
   - {fileID: 21300000, guid: 37b235823006c499d915c13924b61e2e, type: 3}
