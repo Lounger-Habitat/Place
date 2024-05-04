@@ -20,11 +20,14 @@ public class TestManager : MonoBehaviour
     private float minInterval = 0.1f; // 最小时间间隔
     private float maxInterval = 2.0f; // 最大时间间隔
 
-    public List<Texture2D> loadedTextures = new List<Texture2D>();
+    public List<Texture2D> loadedTextures;
     public string directoryPath = "Assets/Images";
     public int index = 0;
     public Color[] pixelsImage;
     public static TestManager Instance { get; private set; }
+
+
+    public int teamCount = 5;
 
 
 
@@ -43,8 +46,8 @@ public class TestManager : MonoBehaviour
 
     void Start()
     {
-        LoadResources();
-        ImageProcessor();
+        loadedTextures = PlaceCenter.Instance.LoadResources(directoryPath);
+        pixelsImage = PlaceCenter.Instance.ImageFitBoardProcessor(loadedTextures, index).GetPixels();
     }
 
     // Update is called once per frame
@@ -89,7 +92,16 @@ public class TestManager : MonoBehaviour
             GenBiliPlayer();
             // 不定时 随机生成指令
             StartCoroutine(GenerateRandomCommand());
+            // StartCoroutine(GenerateRandomCommand());
+            // StartCoroutine(GenerateRandomCommand());
+            // StartCoroutine(GenerateRandomCommand());
 
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            string coolIns = RandomGenCoolIns();
+            User u = PlaceCenter.Instance.users[playerName];
+            PlaceInstructionManager.Instance.DefaultRunChatCommand(u, coolIns);
         }
 
     }
@@ -140,25 +152,17 @@ public class TestManager : MonoBehaviour
 
     public void GenBiliPlayer()
     {
-        Dictionary<string, string> myDictionary = new Dictionary<string, string>
+        Dictionary<string, string> myDictionary = new Dictionary<string, string>();
+
+        for (int i = 0; i < teamCount; i++)
         {
-            { "cx1", "蓝" },
-            { "cx2", "蓝" },
-            { "cx3", "蓝" },
-            { "cx4", "蓝" },
-            { "gt1", "绿" },
-            { "gt2", "绿" },
-            { "gt3", "绿" },
-            { "gt4", "绿" },
-            // { "by1", "黄" },
-            // { "by2", "黄" },
-            // { "by3", "黄" },
-            // { "by4", "黄" },
-            // { "hy1", "紫" },
-            // { "hy2", "紫" },
-            // { "hy3", "紫" },
-            // { "hy4", "紫" },
-        };
+            string cxname = "cx" + (i + 1);
+            string cxins = "蓝";
+            string gtname = "gt" + (i + 1);
+            string gtins = "绿";
+            myDictionary.Add(cxname, cxins);
+            myDictionary.Add(gtname, gtins);
+        }
 
         // 制作 dm
         List<Dm> dms = myDictionary.Keys.ToList().Select(k => MakeDm(k, myDictionary[k])).ToList();
@@ -259,16 +263,34 @@ public class TestManager : MonoBehaviour
 
     }
 
-    public string RandomGenGiftIns()
+    string RandomGenGiftIns()
     {
 
         // string[] gifts = { "0.1", "1", "1.9", "5.2", "9.9", "19.9", "29.9", "52", "66.6", "88.8", "99.9", "120"};
-        string[] gifts = { "0.1", "1", "1.9", "5.2"};
+        string[] gifts = { "0.1", "1", "1.9", "5.2" };
         int grand = Random.Range(0, gifts.Length);
         string giftIns = gifts[grand];
 
         return giftIns;
 
+    }
+
+    string RandomGenCoolIns()
+    {
+        int height = PlaceBoardManager.Instance.height;
+        int width = PlaceBoardManager.Instance.width;
+
+        string coolIns = "";
+
+        // 0-1 random
+        float rand = Random.Range(0f, 1f);
+
+        // 生成 画点指令
+        int x = Random.Range(0, width - 50);
+        int y = Random.Range(0, height - 50);
+
+        coolIns = "/r " + x + " " + y;
+        return coolIns;
     }
 
     IEnumerator GenerateRandomCommand()
@@ -310,12 +332,17 @@ public class TestManager : MonoBehaviour
 
 
         float rand = Random.Range(0f, 1f);
-        if (rand < 0.99f)
+        if (rand < 0.95f)
         {
             string drawIns = RandomGenDrawIns();
             // Debug.Log($"{u.Name} 执行 ({drawIns}) 指令");
             PlaceInstructionManager.Instance.DefaultRunChatCommand(u, drawIns);
         }
+        // else if (rand < 0.99f)
+        // {
+        //     string coolIns = RandomGenCoolIns();
+        //     PlaceInstructionManager.Instance.DefaultRunChatCommand(u, coolIns);
+        // }
         else
         {
             string giftIns = RandomGenGiftIns();
@@ -332,61 +359,7 @@ public class TestManager : MonoBehaviour
     }
 
 
-    public void ImageProcessor()
-    {
-        Texture2D inputTexture = loadedTextures[index];
-        // 外部引用 
-        Texture2D resizeTexture = PlaceBoardManager.Instance.ScaleTextureProportionally(inputTexture, PlaceBoardManager.Instance.width, PlaceBoardManager.Instance.height);
-        pixelsImage = resizeTexture.GetPixels();
-    }
 
-    void LoadResources()
-    {
-        // 检查目录是否存在
-        if (Directory.Exists(directoryPath))
-        {
-            // 获取目录中的所有文件
-            string[] files = Directory.GetFiles(directoryPath);
-
-            foreach (string filePath in files)
-            {
-                // 检查文件是否是图片
-                if (IsImageFile(filePath))
-                {
-                    // 加载图片资源并添加到List
-                    Texture2D texture = LoadTexture(filePath);
-                    if (texture != null)
-                    {
-                        loadedTextures.Add(texture);
-                    }
-                }
-            }
-        }
-        else
-        {
-            Debug.LogError("Directory not found: " + directoryPath);
-        }
-    }
-    bool IsImageFile(string filePath)
-    {
-        string extension = Path.GetExtension(filePath).ToLower();
-        return extension == ".png" || extension == ".jpg" || extension == ".jpeg" || extension == ".gif";
-    }
-
-    Texture2D LoadTexture(string filePath)
-    {
-        byte[] fileData = File.ReadAllBytes(filePath);
-        Texture2D texture = new Texture2D(2, 2); // 创建一个临时Texture2D，稍后会被替换为实际的图像数据
-        if (texture.LoadImage(fileData)) // 加载图像数据
-        {
-            return texture;
-        }
-        else
-        {
-            Debug.LogError("Failed to load texture: " + filePath);
-            return null;
-        }
-    }
 
     public void DoLike()
     {

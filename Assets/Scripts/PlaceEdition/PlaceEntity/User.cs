@@ -79,7 +79,7 @@ public class User
         this.lastColor = Color.white;
         this.score = 0;
         this.carryingInkCount = 0;
-        this.maxCarryingInsCount = 1;
+        this.maxCarryingInsCount = 10;
         this.userIcon = null;
         this.speed = 2.0f;
         this.currentState = new PlayerState(HighLevelState.Draw, DetailState.DrawMoveToTotem);
@@ -106,7 +106,7 @@ public class User
     {
         this.level = CalLevel(score);
         this.speed = 2 + (level - 1) * 0.05f;
-        this.maxCarryingInsCount = (int)(1 + (level - 1) * 0.2f);
+        this.maxCarryingInsCount = (int)(10 + (level - 1) * 0.5f);
         if (nameTag != null)
         {
             nameTag.GetComponent<IconNameTag>().UpdateIconRect(level*0.05f);

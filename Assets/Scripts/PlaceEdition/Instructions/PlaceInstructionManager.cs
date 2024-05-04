@@ -6,6 +6,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using System;
 using System.Linq;
+using UnityEngine.SocialPlatforms;
 
 public class PlaceInstructionManager : MonoBehaviour
 {
@@ -530,6 +531,22 @@ public class PlaceInstructionManager : MonoBehaviour
                 break;
             case "/kill": // 除掉守护者，谁家
             case "/k":
+                break;
+            case "/r":
+                if (parts.Length == 3)
+                {
+                    int x, y;
+                    string c;
+                    c = parts[0]; // /d
+                    x = int.Parse(parts[1]); // x
+                    y = int.Parse(parts[2]); // y
+                    List<Instruction> IL = PlaceCenter.Instance.GenerateRandomImage(x,y);
+                    IL.ForEach( i=>user.instructionQueue.Enqueue(i));
+                }
+                // 从 已有的 图集 中 找一个
+
+                // 把 图 -> 指令
+                // 给到 player
                 break;
                 // case "/generate": // diffusion
                 // case "/g":

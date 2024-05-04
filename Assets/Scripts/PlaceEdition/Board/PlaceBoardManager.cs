@@ -27,7 +27,7 @@ public class PlaceBoardManager : MonoBehaviour
     public int height = 500;
     public int width = 500;
     public Texture2D defaultTexture;
-    public int recorderTime = 60;
+    public int recorderTime = 6;
     public int[] pixelsInfos;
     public int[] pixelsUserInfos;
 
@@ -253,6 +253,7 @@ public class PlaceBoardManager : MonoBehaviour
     {
         // 创建一个新的空白贴图
         Texture2D newTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+        newTexture.filterMode = FilterMode.Point;
 
         // 填充贴图
         Color[] fillPixels = new Color[width * height];
@@ -730,7 +731,7 @@ public class PlaceBoardManager : MonoBehaviour
             tex2Gif.SetTransparent(true);
 
             //tex2Gif.m_MaxNumberOfThreads = 6;
-            tex2Gif.Save(tex2DList, width, height, 1, 0, 50, OnFileSaved, OnFileSaveProgress, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear: true);
+            tex2Gif.Save(tex2DList, width, height, 10, 0, 50, OnFileSaved, OnFileSaveProgress, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear: true);
             Debug.Log("Load images and start convert/save GIF..");
         }
         else

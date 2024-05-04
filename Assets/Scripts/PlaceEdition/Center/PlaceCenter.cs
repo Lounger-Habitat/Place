@@ -1,8 +1,11 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UIElements;
 
 public class PlaceCenter : MonoBehaviour
@@ -30,7 +33,7 @@ public class PlaceCenter : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    #nullable enable
+#nullable enable
     // 用户信息
     public Dictionary<string, User> users = new Dictionary<string, User>();
     // 队伍信息
@@ -47,11 +50,13 @@ public class PlaceCenter : MonoBehaviour
     // 游戏开始标志
     public bool gameRuning = false;
 
-    int[] lastTeamScore = new int[5] {0,0,0,0,0};
+    int[] lastTeamScore = new int[5] { 0, 0, 0, 0, 0 };
 
     public int recorderTime = 60;
 
     int baseId = 0;
+
+    List<Texture2D> demoTextures;
 
     public void Start()
     {
@@ -64,20 +69,24 @@ public class PlaceCenter : MonoBehaviour
         // 界面初始化
         PlaceUIManager.Instance.Init();
         // 游戏计时
-        
+
         CreateTeam();
-        
+        demoTextures = LoadResources("Assets/Images/Demo");
+
     }
 
-    void Update() {
+    void Update()
+    {
         if (gameRuning)
         {
             CalculateTeamScore();
         }
-        if (Input.GetKeyDown(KeyCode.R)) {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
             StartGame();
         }
-        if (Input.GetKeyDown(KeyCode.T)) {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
             ResetGame();
         }
     }
@@ -88,7 +97,7 @@ public class PlaceCenter : MonoBehaviour
         // List<Team> teamList = new List<Team>();
         for (int i = 0; i < teams.Count; i++)
         {
-            teams.Add($"Team{i+1}", PlaceTeamManager.Instance.teamAreas[0].teaminfo);
+            teams.Add($"Team{i + 1}", PlaceTeamManager.Instance.teamAreas[0].teaminfo);
             // teamList.Add(PlaceTeamManager.Instance.teamAreas[0].teaminfo);
         }
 
@@ -142,7 +151,7 @@ public class PlaceCenter : MonoBehaviour
     // }
 
     // add player
-    public void AddPlayer(User user,int t)
+    public void AddPlayer(User user, int t)
     {
         // 检查用户是否已经存在
         // if (users.ContainsKey(user.username))
@@ -155,7 +164,7 @@ public class PlaceCenter : MonoBehaviour
         // int t = user.Camp;
         User u = PlaceTeamManager.Instance.teamAreas[t - 1].CreateCharacterInTeamArea(user);
         users.Add(u.Name, u);
-        
+
     }
 
     public GameObject CreateMessageBubble(Transform characterTransform, string message)
@@ -217,13 +226,15 @@ public class PlaceCenter : MonoBehaviour
         return u;
     }
 
-    
-    public int GenId() {
+
+    public int GenId()
+    {
         baseId += 1;
         return baseId;
     }
 
-    public int GenPUID() {
+    public int GenPUID()
+    {
         // 多少位？
         // 平台 + 时间 + 主播 + 人数 + 价值 + ？？
         // TODO
@@ -254,7 +265,7 @@ public class PlaceCenter : MonoBehaviour
         }
         // 创建 用户
 
-        AddPlayer(user,t);
+        AddPlayer(user, t);
         // 将用户加入队伍区域
     }
 
@@ -351,7 +362,7 @@ public class PlaceCenter : MonoBehaviour
     // 计算 队伍分数
     public void CalculateTeamScore()
     {
-        int[] newTeamScore  = new int[5];
+        int[] newTeamScore = new int[5];
         foreach (int c in PlaceBoardManager.Instance.pixelsInfos)
         {
             newTeamScore[c]++;
@@ -359,11 +370,11 @@ public class PlaceCenter : MonoBehaviour
 
         for (int i = 0; i < newTeamScore.Length; i++)
         {
-            if (i!=0 && lastTeamScore[i] != newTeamScore[i]  )
+            if (i != 0 && lastTeamScore[i] != newTeamScore[i])
             {
                 int score = newTeamScore[i];
                 // 如果不相等，调用其他函数或执行其他逻辑
-                PlaceTeamManager.Instance.teamAreas[i-1].teaminfo.score = score;
+                PlaceTeamManager.Instance.teamAreas[i - 1].teaminfo.score = score;
                 // OnTeamUIUpdate(PlaceTeamManager.Instance.teamAreas[i-1].teaminfo);
             }
         }
@@ -386,7 +397,7 @@ public class PlaceCenter : MonoBehaviour
         switch (u.currentState.topState)
         {
             case HighLevelState.Draw:
-                messageType = u.Camp == 1? TipsType.giftDrawPanel:TipsType.giftDrawPanelRight;
+                messageType = u.Camp == 1 ? TipsType.giftDrawPanel : TipsType.giftDrawPanelRight;
                 break;
             case HighLevelState.Attack:
                 messageType = TipsType.giftAttackPanel;
@@ -414,7 +425,7 @@ public class PlaceCenter : MonoBehaviour
                 break;
             case 1.9f:
                 normalPower = 199;//固定是攻击
-                u.character.GetComponent<PlacePlayerController>().Tornado((int)(power*10));
+                u.character.GetComponent<PlacePlayerController>().Tornado((int)(power * 10));
                 message = "风之束缚";
                 break;
             case 5.2f:
@@ -472,7 +483,7 @@ public class PlaceCenter : MonoBehaviour
             text = message,
             icon = u.userIcon,//玩家头像
             tipsType = messageType,
-            value =$"+{normalPower:D}",
+            value = $"+{normalPower:D}",
             isLeft = u.Camp == 1,
             level = u.level
         });
@@ -487,26 +498,26 @@ public class PlaceCenter : MonoBehaviour
         PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
         // 颜料增加的特效
         user.character.GetComponent<PlacePlayerController>().InkUp(p);
-        var messageType = user.Camp == 1? TipsType.likeTipsPanel:TipsType.likeTipsPanelRight;
+        var messageType = user.Camp == 1 ? TipsType.likeTipsPanel : TipsType.likeTipsPanelRight;
         string message = "";
-        if (p<5)
+        if (p < 5)
         {
             message = $"点赞！颜料x{p}";
         }
 
-        if (p>5)
+        if (p > 5)
         {
             message = $"点赞手速突破天际！！颜料x{p}";
         }
-        
-        
+
+
         PlaceUIManager.Instance.AddTips(new TipsItem()
         {
             userName = user.Name,
-            text =message,
+            text = message,
             icon = user.userIcon,//玩家头像
             tipsType = messageType,
-            value =$"+{1}",
+            value = $"+{1}",
             isLeft = user.Camp == 1
         });
         // 限时加速
@@ -558,21 +569,141 @@ public class PlaceCenter : MonoBehaviour
     //     PlaceUIManager.Instance.endUI.ShowGIF(path);
     // }
 
-
-    //  ===== 协程 =====
-
-
-    // IEnumerator CallTornado(User u ,int num)
-    // {
-    //     u.character.GetComponent<PlacePlayerController>().Tornado(num);
-    // }
-
-    IEnumerator SaveImagePreRecorderTime(int time = 60)
+    public List<Instruction> GenerateRandomImage(int ox, int oy)
     {
-        // 持续等待一分钟
-        while (gameRuning) {
-            yield return new WaitForSeconds(time);
-            PlaceBoardManager.Instance.SaveImage();
-        }
+        // 图库
+        // 获取index 
+        int index = Random.Range(0, demoTextures.Count);
+
+        Texture2D tex = demoTextures[index];
+        // texture 2d
+        // Texture2D tex = Resources.Load<Texture2D>($"Images/{index}");
+        Texture2D retex = PlaceBoardManager.Instance.ScaleTextureProportionally(tex, 50, 50);
+
+        // 转换成 instruction
+        return Image2Instruction(retex, ox, oy);
     }
-}
+
+    List<Instruction> Image2Instruction(Texture2D tex, int ox, int oy)
+    {
+        // 读取 颜色
+        Color32[] imageData = tex.GetPixels32();
+        // 宽高
+        int width = tex.width;
+        int height = tex.height;
+        int boardwidth = PlaceBoardManager.Instance.width;
+        int boardheight = PlaceBoardManager.Instance.height;
+
+        List<Instruction> insList = new List<Instruction>();
+        // 确认没有出界
+        if (ox + width > boardwidth || oy + height > boardheight)
+        {
+            Debug.Log("图片超出边界");
+            // 裁剪
+            for (int i = 0; i < imageData.Length; i++)
+            {
+                if (ox + i % width > width) continue;
+                if (oy + i / width > height) continue;
+                // c, x, y, r: r, g: g, b: b
+                Color32 c = imageData[i];
+                Instruction ins = new Instruction("/draw", ox + i % width, oy + i / width, r: c.r, g: c.g, b: c.b);
+                insList.Add(ins);
+            }
+        }
+        else // 高频
+        {
+            for (int i = 0; i < imageData.Length; i++)
+            {
+                // c, x, y, r: r, g: g, b: b
+                Color32 c = imageData[i];
+                Instruction ins = new Instruction("/draw", ox + i % width, oy + i / width, r: c.r, g: c.g, b: c.b);
+                insList.Add(ins);
+            }
+        }
+
+
+
+        return insList;
+    }
+
+
+
+
+    public Texture2D ImageFitBoardProcessor(List<Texture2D> texlist , int texindex)
+    {
+        Texture2D inputTexture = texlist[texindex];
+        // 外部引用 
+        Texture2D resizeTexture = PlaceBoardManager.Instance.ScaleTextureProportionally(inputTexture, PlaceBoardManager.Instance.width, PlaceBoardManager.Instance.height);
+        // pixelsImage = resizeTexture.GetPixels();
+        return resizeTexture;
+    }
+
+    public List<Texture2D> LoadResources(string imagePath)
+    {
+        List<Texture2D> texlist = new List<Texture2D>();
+        // 检查目录是否存在
+        if (Directory.Exists(imagePath))
+        {
+            // 获取目录中的所有文件
+            string[] files = Directory.GetFiles(imagePath);
+
+            foreach (string filePath in files)
+            {
+                // 检查文件是否是图片
+                if (IsImageFile(filePath))
+                {
+                    // 加载图片资源并添加到List
+                    Texture2D texture = LoadTexture(filePath);
+                    if (texture != null)
+                    {
+                        texlist.Add(texture);
+                    }
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("Directory not found: " + imagePath);
+        }
+
+        return texlist;
+    }
+    bool IsImageFile(string filePath)
+    {
+        string extension = Path.GetExtension(filePath).ToLower();
+        return extension == ".png" || extension == ".jpg" || extension == ".jpeg" || extension == ".gif";
+    }
+
+    Texture2D LoadTexture(string filePath)
+    {
+        byte[] fileData = File.ReadAllBytes(filePath);
+        Texture2D texture = new Texture2D(1,1); // 创建一个临时Texture2D，稍后会被替换为实际的图像数据
+        if (!texture.LoadImage(fileData)) // 加载图像数据
+        {
+            Debug.LogError("Failed to load texture: " + filePath);
+        }
+        return texture;
+    }
+
+
+
+        //  ===== 协程 =====
+
+
+        // IEnumerator CallTornado(User u ,int num)
+        // {
+        //     u.character.GetComponent<PlacePlayerController>().Tornado(num);
+        // }
+
+        IEnumerator SaveImagePreRecorderTime(int time = 60)
+        {
+            // 持续等待一分钟
+            while (gameRuning)
+            {
+                yield return new WaitForSeconds(time);
+                PlaceBoardManager.Instance.SaveImage();
+            }
+        }
+
+
+    }
