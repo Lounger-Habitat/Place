@@ -1,4 +1,5 @@
 using UnityEditor;
+#if UNITY_EDITOR // => Ignore from here to next endif if not in editor
 using UnityEngine;
 
 [CustomEditor(typeof(TestManager))]
@@ -87,3 +88,4 @@ public class TestManagerEditor : Editor
 
     }
 }
+#endif

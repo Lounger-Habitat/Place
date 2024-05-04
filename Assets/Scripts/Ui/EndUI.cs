@@ -46,7 +46,7 @@ public class EndUI : MonoBehaviour
 
     public void OnClickNextBtn()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
     }
 
     public void ShowGIF(string path)
