@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.Animations;
 using UnityEngine.UI;
+using Assets.GifAssets.PowerGif;
+using System.Collections;
+using UnityEngine.Assertions;
+using System.Data.Common;
 
 public class PlaceBoardManager : MonoBehaviour
 {
@@ -11,6 +15,8 @@ public class PlaceBoardManager : MonoBehaviour
     public Renderer canvasRenderer;
 
     public string mode = "3D"; // or 2D
+
+    public bool darkMode = false;
 
     // for 2d canvas use
     public RawImage canvasImage;
@@ -20,15 +26,15 @@ public class PlaceBoardManager : MonoBehaviour
 
     public int height = 500;
     public int width = 500;
-
-    public string directoryPath = "Assets/Images";
-    public List<Texture2D> loadedTextures = new List<Texture2D>();
-
-    public int index = 0;
-
     public Texture2D defaultTexture;
-
+    public int recorderTime = 6;
     public int[] pixelsInfos;
+    public int[] pixelsUserInfos;
+
+    // 画作唯一id
+    public static int UniqueId = 0;
+
+    public string gifPath = "";
 
     public static PlaceBoardManager Instance { get; private set; }
 
@@ -51,7 +57,8 @@ public class PlaceBoardManager : MonoBehaviour
         // DiffusionManager.Instance.OnImageLoaded += OnImageLoaded;
         // 假设平面使用的是材质的第一个贴图
         // 生成一个新的贴图
-        Texture2D myTexture = GenerateTexture(height, width, new Color(64/255f,64/255f,64/255f)); // 可以根据需要调整尺寸和颜色
+        Color bgColor = darkMode ? new Color(64 / 255f, 64 / 255f, 64 / 255f) : Color.white;
+        Texture2D myTexture = GenerateTexture(width, height, bgColor); // 可以根据需要调整尺寸和颜色
 
         if (mode == "2D")
         {
@@ -90,54 +97,56 @@ public class PlaceBoardManager : MonoBehaviour
         // 例如，将其应用到当前游戏对象的 Renderer 上
         // Renderer renderer = GetComponent<Renderer>();
 
-        MarkEdges(texture);
+        // MarkEdges(texture);
         defaultTexture = texture;
 
-        LoadResources();
+        // LoadResources();
+        UniqueId = GenerateUniqueId();
+
     }
 
     void Update()
     {
         if (mode == "2D")
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-            Vector2 mousePosition = Input.mousePosition;
-            RectTransform rectTransform = canvasImage.rectTransform;
-            Vector2 localPoint;
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, mousePosition, null, out localPoint))
-            {
-                // 在这里处理点击的本地坐标
-                // Vector2 pixelUV = hit.textureCoord;
-                // pixelUV.x *= texture.width;
-                // pixelUV.y *= texture.height;
-                Vector2 uv = new Vector2((localPoint.x + rectTransform.rect.width / 2) / rectTransform.rect.width,
-                                         (localPoint.y + rectTransform.rect.height / 2) / rectTransform.rect.height);
-                uv.x *= texture.width;
-                uv.y *= texture.height;
-                // Vector2Int texCoord = new Vector2Int((int)(localPoint.x + rectTransform.rect.width / 2), (int)(localPoint.y + rectTransform.rect.height / 2));
-                // Debug.Log(uv);
+            // if (Input.GetMouseButtonDown(0))
+            // {
+            //     Vector2 mousePosition = Input.mousePosition;
+            //     RectTransform rectTransform = canvasImage.rectTransform;
+            //     Vector2 localPoint;
+            //     if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, mousePosition, null, out localPoint))
+            //     {
+            //         // 在这里处理点击的本地坐标
+            //         // Vector2 pixelUV = hit.textureCoord;
+            //         // pixelUV.x *= texture.width;
+            //         // pixelUV.y *= texture.height;
+            //         Vector2 uv = new Vector2((localPoint.x + rectTransform.rect.width / 2) / rectTransform.rect.width,
+            //                                 (localPoint.y + rectTransform.rect.height / 2) / rectTransform.rect.height);
+            //         uv.x *= texture.width;
+            //         uv.y *= texture.height;
+            //         // Vector2Int texCoord = new Vector2Int((int)(localPoint.x + rectTransform.rect.width / 2), (int)(localPoint.y + rectTransform.rect.height / 2));
+            //         // Debug.Log(uv);
 
-                UpdateTexture((int)uv.x, (int)uv.y);
-            }
-            }
+            //         UpdateTexture((int)uv.x, (int)uv.y);
+            //     }
+            // }
         }
         else if (mode == "3D")
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                RaycastHit hit;
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            // if (Input.GetMouseButtonDown(0))
+            // {
+            //     RaycastHit hit;
+            //     Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
-                if (Physics.Raycast(ray, out hit))
-                {
-                    Vector2 pixelUV = hit.textureCoord;
-                    pixelUV.x *= texture.width;
-                    pixelUV.y *= texture.height;
+            //     if (Physics.Raycast(ray, out hit))
+            //     {
+            //         Vector2 pixelUV = hit.textureCoord;
+            //         pixelUV.x *= texture.width;
+            //         pixelUV.y *= texture.height;
 
-                    UpdateTexture((int)pixelUV.x, (int)pixelUV.y);
-                }
-            }
+            //         UpdateTexture((int)pixelUV.x, (int)pixelUV.y);
+            //     }
+            // }
         }
         // 按下 d 键
         if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
@@ -148,11 +157,11 @@ public class PlaceBoardManager : MonoBehaviour
                 // Texture2D sourceTexture = LoadTexture("Assets/Images/dog.jpg");
                 // Debug.Log(sourceTexture.name);
 
-                if (loadedTextures == null && loadedTextures.Count == 0)
+                if (TestManager.Instance.loadedTextures == null && TestManager.Instance.loadedTextures.Count == 0)
                 {
                     Debug.Log("没图片！");
                 }
-                Texture2D originalTexture = loadedTextures[index];
+                Texture2D originalTexture = TestManager.Instance.loadedTextures[TestManager.Instance.index];
                 bool ist = CheckForTransparency(texture);
                 Debug.Log(ist);
                 Debug.Log(originalTexture.name);
@@ -165,15 +174,25 @@ public class PlaceBoardManager : MonoBehaviour
                 Reset();
             }
             // 如果按下 . 键，保存图片
-            if (Input.GetKeyDown(KeyCode.Period))
+            if (Input.GetKeyDown(KeyCode.J))
             {
                 SaveImage();
+            }
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                GenGif();
             }
         }
     }
 
-    void LoadResources()
+    public static int GenerateUniqueId()
     {
+        return UniqueId++;
+    }
+
+    List<Texture2D> LoadResources(string directoryPath)
+    {
+        List<Texture2D> loadedTextures = new List<Texture2D>();
         // 检查目录是否存在
         if (Directory.Exists(directoryPath))
         {
@@ -183,6 +202,7 @@ public class PlaceBoardManager : MonoBehaviour
             foreach (string filePath in files)
             {
                 // 检查文件是否是图片
+                Debug.Log("filePath : " + filePath);
                 if (IsImageFile(filePath))
                 {
                     // 加载图片资源并添加到List
@@ -198,12 +218,15 @@ public class PlaceBoardManager : MonoBehaviour
         {
             Debug.LogError("Directory not found: " + directoryPath);
         }
+        return loadedTextures;
     }
+
     bool IsImageFile(string filePath)
     {
         string extension = Path.GetExtension(filePath).ToLower();
         return extension == ".png" || extension == ".jpg" || extension == ".jpeg" || extension == ".gif";
     }
+
     Texture2D LoadTexture(string filePath)
     {
         byte[] fileData = File.ReadAllBytes(filePath);
@@ -230,14 +253,17 @@ public class PlaceBoardManager : MonoBehaviour
     {
         // 创建一个新的空白贴图
         Texture2D newTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+        newTexture.filterMode = FilterMode.Point;
 
         // 填充贴图
         Color[] fillPixels = new Color[width * height];
         pixelsInfos = new int[width * height];
+        pixelsUserInfos = new int[width * height];
         for (int i = 0; i < fillPixels.Length; i++)
         {
             fillPixels[i] = fillColor;
             pixelsInfos[i] = 0;
+            pixelsUserInfos[i] = 0;
         }
         newTexture.SetPixels(fillPixels);
         newTexture.Apply();
@@ -390,30 +416,82 @@ public class PlaceBoardManager : MonoBehaviour
         return false;
     }
 
-    void SaveImage()
+    public void SaveImage()
     {
         byte[] bytes = texture.EncodeToPNG();
-        string path = $"Assets/Images/save_{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
+        // 检测文件夹是否存在
+        if (!Directory.Exists($"Assets/Images/{UniqueId}"))
+        {
+            Directory.CreateDirectory($"Assets/Images/{UniqueId}");
+        }
+        string path = $"Assets/Images/{UniqueId}/save_{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
         System.IO.File.WriteAllBytes(path, bytes);
         Debug.Log("Saved Image to: " + path);
+    }
+
+    public void GenGif()
+    {
+        string gifPath = $"Assets/Images/{UniqueId}";
+        List<Texture2D> f = LoadResources(gifPath);
+        f = Select20(f.ToArray());
+        var frames = f.Select(f => new GifFrame(f, 0.5f)).ToList();
+        var gif = new Gif(frames);
+        var bytes = gif.Encode();
+        var path = Path.Combine(gifPath, "test.gif");
+        if (path == "") return;
+        File.WriteAllBytes(path, bytes);
+        Debug.Log($"Saved to: {path}");
+    }
+
+    private List<Texture2D> Select20(Texture2D[] fa)
+    {
+        int len = fa.Length;
+        List<Texture2D> res = new List<Texture2D>();
+        // 始终选择第一个元素
+        if (len > 20)
+        {
+            res.Add(fa[0]);
+            // 选择最后一个元素
+
+
+            // 计算间隔
+            int interval = (len - 2) / 18; // 18是因为我们要选20个，已经选了2个
+
+            // 从第二个元素之后开始选择，直到倒数第二个元素之前
+            for (int i = 2; i < len - 1; i += interval)
+            {
+                res.Add(fa[i]);
+            }
+            res.Add(fa[len - 1]);
+
+            // 断言 res 一个20个
+            //Assert.IsTrue(res.Count == 20);
+        }
+        else
+        {
+            // 如果列表元素少于或等于20个，则选择所有元素
+            res = fa.ToList();
+        }
+        return res;
     }
 
     public void Reset()
     {
         texture.SetPixels(defaultTexture.GetPixels());
         Array.Clear(pixelsInfos, 0, pixelsInfos.Length);
+        Array.Clear(pixelsUserInfos, 0, pixelsUserInfos.Length);
         texture.Apply();
     }
 
 
-    public void DrawCommand(int x, int y, int r, int g, int b, int camp)
+    public void DrawCommand(int x, int y, int r, int g, int b, int camp, int id = 0)
     {
-        MarkPixels(x, y, camp);
+        MarkPixels(x, y, camp, id);
         DrawPixels(x, y, r, g, b);
     }
-    public void DrawPixels(int x, int y , int r , int g , int b )
+    public void DrawPixels(int x, int y, int r, int g, int b)
     {
-        Color aimColor = new Color((float)r/255f, (float)g/255f, (float)b/255f);
+        Color aimColor = new Color((float)r / 255f, (float)g / 255f, (float)b / 255f);
         if (texture != null && x >= 0 && x < texture.width && y >= 0 && y < texture.height)
         {
             texture.SetPixel(x, y, aimColor);
@@ -421,7 +499,7 @@ public class PlaceBoardManager : MonoBehaviour
         }
     }
 
-    public List<(int,int)> GetLinePoints(int x, int y, int ex, int ey)
+    public List<(int, int)> GetLinePoints(int x, int y, int ex, int ey)
     {
         return ComputeDrawLine(x: x, y: y, ex: ex, ey: ey, isDraw: false);
     }
@@ -430,15 +508,17 @@ public class PlaceBoardManager : MonoBehaviour
         return DrawLine(x: x, y: y, ex: ex, ey: ey, isDraw: false);
     }
 
-    public void LineCommand(int x, int y, int ex, int ey, int r, int g, int b, int camp = 0)
+    public void LineCommand(int x, int y, int ex, int ey, int r, int g, int b, int camp = 0, int id = 0)
     {
-        GetLinePoints(x, y, ex, ey).ForEach(p => {
-            DrawCommand(p.Item1, p.Item2, r, g, b, camp);
+        GetLinePoints(x, y, ex, ey).ForEach(p =>
+        {
+            DrawCommand(p.Item1, p.Item2, r, g, b, camp, id);
         });
         // DrawLine(x, y, ex, ey, r, g, b, camp);
     }
-    private List<(int,int)> ComputeDrawLine(int x, int y , int ex , int ey , int r = 0, int g = 0, int b = 0, int camp = 0, bool isDraw = true) {
-        List<(int,int)> points = new List<(int,int)>();
+    private List<(int, int)> ComputeDrawLine(int x, int y, int ex, int ey, int r = 0, int g = 0, int b = 0, int camp = 0, bool isDraw = true)
+    {
+        List<(int, int)> points = new List<(int, int)>();
         // 使用 Bresenham 算法来计算这两点之间的像素点
         int dx = Math.Abs(ex - x);
         int dy = Math.Abs(ey - y);
@@ -457,7 +537,7 @@ public class PlaceBoardManager : MonoBehaviour
             //     pixelsCount += 1;
             // }
 
-            points.Add((x,y));
+            points.Add((x, y));
 
 
             if ((x == ex) && (y == ey))
@@ -480,7 +560,7 @@ public class PlaceBoardManager : MonoBehaviour
 
         return points;
     }
-    private int DrawLine(int x, int y , int ex , int ey , int r = 0, int g = 0, int b = 0, int camp = 0, bool isDraw = true)
+    private int DrawLine(int x, int y, int ex, int ey, int r = 0, int g = 0, int b = 0, int camp = 0, bool isDraw = true)
     {
         // 使用 Bresenham 算法来计算这两点之间的像素点
         int dx = Math.Abs(ex - x);
@@ -554,7 +634,7 @@ public class PlaceBoardManager : MonoBehaviour
 
     public void GenerateImage(int sx, int sy, string prompt)
     {
-        DiffusionManager.Instance.GenerateImage(sx, sy, prompt);
+        // DiffusionManager.Instance.GenerateImage(sx, sy, prompt);
         Debug.Log("正在生成,wait ...");
     }
 
@@ -568,16 +648,18 @@ public class PlaceBoardManager : MonoBehaviour
     }
 
 
-    public void MarkPixels(int x, int y, int camp=0)
+    public void MarkPixels(int x, int y, int camp = 0, int id = 0)
     {
         // 对x,y 处理ß
         // 记录
         int index = x + (y * width);
         pixelsInfos[index] = camp;
+        pixelsUserInfos[index] = id;
 
     }
 
-    public bool CheckIns(Instruction ins) {
+    public bool CheckIns(Instruction ins)
+    {
         if (ins.mode == "/draw" || ins.mode == "/d")
         {
             return ins.x < width && ins.y < height && ins.x >= 0 && ins.y >= 0;
@@ -593,5 +675,115 @@ public class PlaceBoardManager : MonoBehaviour
         return false;
     }
 
+
+    // ========= gif part =========
+    // pro gif lib
+    private ProGifTexturesToGIF tex2Gif = null;
+    private List<Texture2D> tex2DList = null;
+    public Image dpImage;
+    void Clear()
+    {
+        if (tex2Gif != null) tex2Gif.Clear();
+
+        if (dpImage != null && dpImage.sprite != null && dpImage.sprite.texture != null)
+        {
+            // Texture2D.Destroy(dpImage.sprite.texture);
+            dpImage.sprite = null;
+        }
+
+        //Clear texture
+        if (tex2DList != null)
+        {
+            foreach (Texture2D tex in tex2DList)
+            {
+                if (tex != null)
+                {
+                    Destroy(tex);
+                }
+            }
+            tex2DList = null;
+        }
+    }
+    public void ConvertTex2DToGIF()
+    {
+        Clear();
+
+        tex2Gif = ProGifTexturesToGIF.Instance;
+
+        //Set file extensions for loading images
+        tex2Gif.SetFileExtension(new List<string> { ".jpg", ".png" });
+        //tex2Gif.SetFileExtension(new List<string>{".jpg"});
+
+        // string loadImagePath = Application.streamingAssetsPath;
+        string loadImagePath = $"Assets/Images/{UniqueId}";
+
+        //Load images as texture2D list from target directory
+        tex2DList = tex2Gif.LoadImages(loadImagePath);
+        tex2Gif.LoadImagesFromResourcesFolder();
+
+        if (tex2DList != null && tex2DList.Count > 0)
+        {
+            //Save the provided texture2Ds to a GIF file with settings
+
+            // tex2Gif.m_Rotation = m_Rotation; // no rotation
+
+            //Set auto detect transparent pixels for imported images
+            tex2Gif.SetTransparent(true);
+
+            //tex2Gif.m_MaxNumberOfThreads = 6;
+            tex2Gif.Save(tex2DList, width, height, 10, 0, 50, OnFileSaved, OnFileSaveProgress, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear: true);
+            Debug.Log("Load images and start convert/save GIF..");
+        }
+        else
+        {
+            Debug.LogWarning("No image/texture found at: " + loadImagePath);
+        }
+    }
+
+    private void OnFileSaved(int id, string path)
+    {
+        Debug.Log("On file saved: " + path);
+        // text1.text = "GIF saved: " + path;
+        // string sourceFolder = Application.dataPath;;
+        // 目标文件夹路径
+        // string destinationFolder = $"Assets/Images/{UniqueId}";
+
+        //     // 获取源文件夹中所有的 .txt 文件
+        // // string txtFile = Directory.GetFiles(sourceFolder, "*.gif").FirstOrDefault();
+
+        // string fileName = Path.GetFileName(path);
+
+        // string destinationFile = Path.Combine(destinationFolder, fileName);
+
+        // gifPath = destinationFile;
+
+        // File.Move(path, destinationFile);
+
+        // 显示
+        ShowGIF(path);
+
+        dpImage.sprite = tex2Gif.GetSprite(0);
+        // dpImage.SetNativeSize();
+    }
+
+    private void OnFileSaveProgress(int id, float progress)
+    {
+        Debug.Log("On file save progress: " + progress);
+        // text1.text = "Save progress: " + Mathf.CeilToInt(progress * 100) + "%";
+    }
+
+    void ShowGIF(string path)
+    {
+        ProGifManager.Instance.m_OptimizeMemoryUsage = true;
+
+        //Open the Pro GIF player to show the converted GIF
+        ProGifManager.Instance.PlayGif(path, dpImage, (loadProgress) =>
+        {
+            // if(loadProgress < 1f)
+            // {
+            // 	dpImage.SetNativeSize();
+            // }
+        });
+    }
 
 }

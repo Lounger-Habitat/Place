@@ -15,6 +15,12 @@ public class TipsPanel : MonoBehaviour
     private Dictionary<TipsType, TipsBase> tipsPanels = new Dictionary<TipsType, TipsBase>();
 
     private MessageTips tipsleft, tipsright;
+#if UNITY_EDITOR
+    private void Start()
+    {
+        Init();
+    }
+#endif
     public void Init()
     {
         //rectTransform = transform as RectTransform;
@@ -26,6 +32,7 @@ public class TipsPanel : MonoBehaviour
         {
             tipsPanels[item.panelType] = item;
         }
+
         tipsleft = transform.Find("Tips").GetComponent<MessageTips>();
         tipsright = transform.Find("TipsRight").GetComponent<MessageTips>();
         tipsleft.Init(this);
@@ -49,42 +56,116 @@ public class TipsPanel : MonoBehaviour
     }
 
     private Queue<TipsItem> tipsQueue = new Queue<TipsItem>();
+    private Queue<TipsItem> tipsQueueright = new Queue<TipsItem>();
     public Queue<TipsItem> tipsMessageQueue = new Queue<TipsItem>();
+    public Queue<TipsItem> tipsMessageQueueright = new Queue<TipsItem>();
+    public Queue<TipsItem> tipsLikeQueue = new Queue<TipsItem>();
+    public Queue<TipsItem> tipsLikeQueueright = new Queue<TipsItem>();
+    public Queue<TipsItem> tipsLevelUpQueue = new Queue<TipsItem>();
+    public Queue<TipsItem> tipsLevelUpQueueright = new Queue<TipsItem>();
 
     public void AddTips(TipsItem tip)
     {
         if (tip.tipsType == TipsType.messagePanel)
         {
-            lock (tipsMessageQueue)
+            if (tip.isLeft)
             {
-                //首先入列
-                tipsMessageQueue.Enqueue(tip);
+                lock (tipsMessageQueue)
+                {
+                    //首先入列
+                    tipsMessageQueue.Enqueue(tip);
+                }
             }
+            else
+            {
+                lock (tipsMessageQueueright)
+                {
+                    //首先入列
+                    tipsMessageQueueright.Enqueue(tip);
+                }
+            }
+
 
             tipsleft.ShowTips();
             tipsright.ShowTips();
         }
         else
         {
-            lock (tipsQueue)
+            if (tip.isLeft)
             {
-                //首先入列
-                tipsQueue.Enqueue(tip);
+                if (tip.tipsType == TipsType.levelUpPanel)
+                {
+                    tipsLevelUpQueue.Enqueue(tip);
+                    if (!isShowLevel)
+                    {
+                        //否则就要启动弹出动画
+                        StartCoroutine(ShowTipsLevelUp());
+                    }
+                }
+                else if (tip.tipsType == TipsType.likeTipsPanel)
+                {
+                    tipsLikeQueue.Enqueue(tip);
+                    if (!isShowlike)
+                    {
+                        //否则就要启动弹出动画
+                        StartCoroutine(ShowTipslikeAni());
+                    }
+                }
+                else
+                {
+                    //首先入列
+                    tipsQueue.Enqueue(tip);
+                    //检查是否在进行弹出提示，如果在进行弹出提示就不用管了
+                    if (!isShowTips)
+                    {
+                        //否则就要启动弹出动画
+                        StartCoroutine(ShowTipsAni());
+                    }
+                }
             }
-
-            //检查是否在进行弹出提示，如果在进行弹出提示就不用管了
-            if (!isShowTips)
+            else
             {
-                //否则就要启动弹出动画
-                StartCoroutine(ShowTipsAni());
+                if (tip.tipsType == TipsType.levelUpPanelRight)
+                {
+                    tipsLevelUpQueueright.Enqueue(tip);
+                    if (!isShowLevelRight)
+                    {
+                        //否则就要启动弹出动画
+                        StartCoroutine(ShowTipsLevelUpRight());
+                    }
+                }
+                else if (tip.tipsType == TipsType.likeTipsPanelRight)
+                {
+                    tipsLikeQueueright.Enqueue(tip);
+                    if (!isShowLikeRight)
+                    {
+                        //否则就要启动弹出动画
+                        StartCoroutine(ShowTipslikeRight());
+                    }
+                }
+                else
+                {
+                    //首先入列
+                    tipsQueueright.Enqueue(tip);
+
+                    //检查是否在进行弹出提示，如果在进行弹出提示就不用管了
+                    if (!isShowTipsright)
+                    {
+                        //否则就要启动弹出动画
+                        StartCoroutine(ShowTipsAniRight());
+                    }
+                }
             }
         }
-
-        
     }
 
     WaitForSeconds wait = new(4.6f);
     private bool isShowTips = false;
+    private bool isShowTipsright = false;
+    private bool isShowlike = false;
+    private bool isShowLikeRight = false;
+    private bool isShowLevel = false;
+    private bool isShowLevelRight = false;
     private TipsItem nowData;
 
     IEnumerator ShowTipsAni()
@@ -94,11 +175,7 @@ public class TipsPanel : MonoBehaviour
         //检查队列中是否还有元素
         while (tipsQueue.Any())
         {
-            lock (tipsQueue)
-            {
-                nowData = tipsQueue.Dequeue();
-            }
-
+            nowData = tipsQueue.Dequeue();
             var panel = tipsPanels[nowData.tipsType];
             panel.SetData(nowData);
             panel.MoveTipsPanel();
@@ -110,30 +187,95 @@ public class TipsPanel : MonoBehaviour
         isShowTips = false;
     }
 
-    private void MoveTipsPanel(bool isShow = true)
+    IEnumerator ShowTipsAniRight()
     {
-        if (isShow) //如果是打开移动到打开位置
+        //将标志位置为true
+        isShowTipsright = true;
+        //检查队列中是否还有元素
+        while (tipsQueueright.Any())
         {
-            messageTipsPanel.DOAnchorPosX(60, 1f);
+            nowData = tipsQueueright.Dequeue();
+            var panel = tipsPanels[nowData.tipsType];
+            panel.SetData(nowData);
+            panel.MoveTipsPanel();
+            yield return wait;
+            panel.MoveTipsPanel(false);
+            yield return new WaitForSeconds(0.8f);
         }
-        else
-        {
-            messageTipsPanel.DOAnchorPosX(-280, 0.7f);
-        }
-    }
 
-    private void MoveGiftPanel(bool isShow = true)
+        isShowTipsright = false;
+    }
+    
+    IEnumerator ShowTipslikeAni()
     {
-        if (isShow)
+        //将标志位置为true
+        isShowlike = true;
+        //检查队列中是否还有元素
+        while (tipsLikeQueue.Any())
         {
-            giftTipsPanel.DOAnchorPosX(0, 0.7f);
-            giftTipsPanel.DOLocalRotate(new Vector3(0, 0, 8.5f), 3.5f);
+            nowData = tipsLikeQueue.Dequeue();
+            var panel = tipsPanels[nowData.tipsType];
+            panel.SetData(nowData);
+            panel.MoveTipsPanel();
+            yield return wait;
+            panel.MoveTipsPanel(false);
+            yield return new WaitForSeconds(0.8f);
         }
-        else
+
+        isShowlike = false;
+    }
+    IEnumerator ShowTipslikeRight()
+    {
+        //将标志位置为true
+        isShowLikeRight = true;
+        //检查队列中是否还有元素
+        while (tipsLikeQueueright.Any())
         {
-            giftTipsPanel.DOAnchorPosX(-900, 0.6f);
-            giftTipsPanel.DOLocalRotate(new Vector3(0, 0, 0), 0.8f);
+            nowData = tipsLikeQueueright.Dequeue();
+            var panel = tipsPanels[nowData.tipsType];
+            panel.SetData(nowData);
+            panel.MoveTipsPanel();
+            yield return wait;
+            panel.MoveTipsPanel(false);
+            yield return new WaitForSeconds(0.8f);
         }
+
+        isShowLikeRight = false;
+    }
+    IEnumerator ShowTipsLevelUp()
+    {
+        //将标志位置为true
+        isShowLevel = true;
+        //检查队列中是否还有元素
+        while (tipsLevelUpQueue.Any())
+        {
+            nowData = tipsLevelUpQueue.Dequeue();
+            var panel = tipsPanels[nowData.tipsType];
+            panel.SetData(nowData);
+            panel.MoveTipsPanel();
+            yield return wait;
+            panel.MoveTipsPanel(false);
+            yield return new WaitForSeconds(0.8f);
+        }
+
+        isShowLevel = false;
+    }
+    IEnumerator ShowTipsLevelUpRight()
+    {
+        //将标志位置为true
+        isShowLevelRight = true;
+        //检查队列中是否还有元素
+        while (tipsLevelUpQueueright.Any())
+        {
+            nowData = tipsLevelUpQueueright.Dequeue();
+            var panel = tipsPanels[nowData.tipsType];
+            panel.SetData(nowData);
+            panel.MoveTipsPanel();
+            yield return wait;
+            panel.MoveTipsPanel(false);
+            yield return new WaitForSeconds(0.8f);
+        }
+        isShowLevelRight = false;
     }
 
     [ContextMenu("message")]
@@ -199,7 +341,7 @@ public class TipsPanel : MonoBehaviour
         AddTips(new TipsItem()
         {
             userName = "金钱帝国",
-            text = "gift giftDrawPanel",
+            text = "颜料增加",
             tipsType = TipsType.giftDrawPanel
         });
     }
@@ -213,6 +355,8 @@ public class TipsItem
     public Sprite icon;
     public TipsType tipsType;
     public string value;
+    public bool isLeft = true;
+    public int level;
 }
 
 //这是提示的类型，
@@ -221,5 +365,10 @@ public enum TipsType
     messagePanel,
     giftAttackPanel,
     giftDefensePanel,
-    giftDrawPanel
+    giftDrawPanel,
+    giftDrawPanelRight,
+    likeTipsPanel,
+    likeTipsPanelRight,
+    levelUpPanel,
+    levelUpPanelRight
 }

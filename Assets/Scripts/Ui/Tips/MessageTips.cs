@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using System.Linq;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class MessageTips : TipsBase
 {
@@ -16,6 +17,9 @@ public class MessageTips : TipsBase
 
     public float closePos, openPos;
 
+    public bool isLeft;
+
+    public Image userIcon;
     public void Init(TipsPanel parent)
     {
         parentPanel = parent;
@@ -24,6 +28,7 @@ public class MessageTips : TipsBase
     {
         transform.Find("UserName").GetComponent<TMP_Text>().text = tips.userName;
         transform.Find("Text").GetComponent<TMP_Text>().text = tips.text;
+        userIcon.sprite = tips.icon;
     }
 
     public override void MoveTipsPanel(bool isOn = true)
@@ -44,20 +49,41 @@ public class MessageTips : TipsBase
         //将标志位置为true
         isShowTips = true;
         //检查队列中是否还有元素
-        while (parentPanel.tipsMessageQueue.Any())
+        if (isLeft)
         {
-            lock (parentPanel.tipsMessageQueue)
+            while (parentPanel.tipsMessageQueue.Any())
             {
-                nowData = parentPanel.tipsMessageQueue.Dequeue();
-            }
+                lock (parentPanel.tipsMessageQueue)
+                {
+                    nowData = parentPanel.tipsMessageQueue.Dequeue();
+                }
 
-            var panel = this;
-            panel.SetData(nowData);
-            panel.MoveTipsPanel();
-            yield return new WaitForSeconds(waitTime);
-            panel.MoveTipsPanel(false);
-            yield return new WaitForSeconds(0.8f);
+                var panel = this;
+                panel.SetData(nowData);
+                panel.MoveTipsPanel();
+                yield return new WaitForSeconds(waitTime);
+                panel.MoveTipsPanel(false);
+                yield return new WaitForSeconds(0.8f);
+            }
         }
+        else
+        {
+            while (parentPanel.tipsMessageQueueright.Any())
+            {
+                lock (parentPanel.tipsMessageQueueright)
+                {
+                    nowData = parentPanel.tipsMessageQueueright.Dequeue();
+                }
+
+                var panel = this;
+                panel.SetData(nowData);
+                panel.MoveTipsPanel();
+                yield return new WaitForSeconds(waitTime);
+                panel.MoveTipsPanel(false);
+                yield return new WaitForSeconds(0.8f);
+            }
+        }
+       
 
         isShowTips = false;
     }

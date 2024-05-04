@@ -57,15 +57,15 @@ public class RankPanel : MonoBehaviour
             {
                 //没有数据了 需要自动填充
                 rankItem.Find("Name").GetComponent<TMP_Text>().text = "虚位以待";
-                rankItem.Find("Data").GetComponent<TMP_Text>().text = $"贡献:";
+                rankItem.Find("Data").GetComponent<TMP_Text>().text = $"0";
                 //rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = null;
             }
             else
             {
                 var item = userList[i];
-                rankItem.Find("Name").GetComponent<TMP_Text>().text = item.username;
-                rankItem.Find("Data").GetComponent<TMP_Text>().text = $"贡献:{item.score}";
-                //rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = item.userIcon;//TODO:需要对接user头像，目前没有，所以我的遮罩就没了
+                rankItem.Find("Name").GetComponent<TMP_Text>().text = item.Name;
+                rankItem.Find("Data").GetComponent<TMP_Text>().text = $"{item.score}";
+                rankItem.Find("UserIcon").GetChild(0).GetChild(0).GetComponent<Image>().sprite = item.userIcon;//TODO:需要对接user头像，目前没有，所以我的遮罩就没了
             }
         }
     }

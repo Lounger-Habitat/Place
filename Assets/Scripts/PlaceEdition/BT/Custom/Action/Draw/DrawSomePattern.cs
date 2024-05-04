@@ -26,6 +26,7 @@ public class DrawSomePattern : PlaceAction
                 case "/draw":
                 case "/d":
                     pc.DrawPoint(ins);
+                    pc.user.drawTimes += 1;
                         // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, pc.user.camp);
                         // pc.user.carryingInkCount -= ins.needInkCount;
                         // pc.user.score += ins.needInkCount;
@@ -34,13 +35,14 @@ public class DrawSomePattern : PlaceAction
                 case "/l":
                         // pc.DrawPoint(ins);
                     pc.DrawLine(ins);
+                    pc.user.drawTimes += 1;
                     // PlaceBoardManager.Instance.LineCommand(ins.x, ins.y, ins.ex, ins.ey, ins.r, ins.g, ins.b, pc.user.camp);
                     // pc.user.carryingInkCount -= ins.needInkCount;
                     // pc.user.score += ins.needInkCount;
                     break;
                 case "/paint":
                 case "/p":
-                    PlaceBoardManager.Instance.PaintCommand(ins.mode, ins.x, ins.y, ins.dx, ins.dy, ins.r, ins.g, ins.b, pc.user.camp);
+                    PlaceBoardManager.Instance.PaintCommand(ins.mode, ins.x, ins.y, ins.dx, ins.dy, ins.r, ins.g, ins.b, pc.user.Camp);
                     pc.user.carryingInkCount -= ins.needInkCount;
                     pc.user.score += ins.needInkCount;
                     break;

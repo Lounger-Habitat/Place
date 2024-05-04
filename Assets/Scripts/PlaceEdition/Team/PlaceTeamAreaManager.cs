@@ -1,8 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
 using UnityEngine;
-using UnityEngine.Purchasing;
-
+[System.Serializable]
 public class PlaceTeamAreaManager : MonoBehaviour
 {
     // 队伍区域当前容纳的人数
@@ -19,7 +18,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
 
     public Transform totem;
     public Transform door;
-    public GameObject ps;
+    GameObject ps;
 
     void Start()
     {
@@ -71,7 +70,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         foreach (User u in userList)
         {
             //  额外 墨水
-            exInkRate += (u.getLevel() - 1)  / 100;
+            exInkRate += (u.Level - 1)  / 100;
         }
         inkRate = (teaminfo.currentTeamNumberCount / defaultInkTime) + exInkRate;
         teaminfo.ink += inkRate ;
@@ -85,22 +84,23 @@ public class PlaceTeamAreaManager : MonoBehaviour
 
     void UpdateTeamAreaName()
     {
-        string nameTemplate = "{0} - {1}";
-        string formattedString = string.Format(nameTemplate, teaminfo.Name, (int)System.Math.Round(teaminfo.ink));
-        teamAreaName.GetComponent<NameTag>().go_name = formattedString;
+        // string nameTemplate = "{0} - {1}";
+        // string formattedString = string.Format(nameTemplate, teaminfo.Name, (int)System.Math.Round(teaminfo.ink));
+        string nameTemplate = $"{(int)System.Math.Round(teaminfo.ink)}";
+        teamAreaName.GetComponent<NameTag>().go_name = nameTemplate;
     }
 
     //更新UI数据，包含队伍中包含的User排行数据
     void UpDateTeamUI()
     {
-        UIEvent.OnTeamAreaUIUpdate(this);
+        //UIEvent.OnTeamAreaUIUpdate(this);
+        UIEvent.OnTeamUIUpdate(teaminfo);
     }
 
     // 在队伍区域里创建角色
-    public User CreateCharacterInTeamArea(string username)
+    public User CreateCharacterInTeamArea(User user)
     {
         GameObject go = null;
-        User user = null;
         
         // 检查队伍区域是否已满
         if (teaminfo.currentTeamNumberCount < teaminfo.MaxTeamNumber)
@@ -110,8 +110,10 @@ public class PlaceTeamAreaManager : MonoBehaviour
             go = Instantiate(characterPrefab, spawnPosition, Quaternion.identity);
             go.transform.SetParent(ps.transform);
             PlacePlayerController PlayerControllerScript = go.GetComponent<PlacePlayerController>();
-            GameObject nameTag = PlaceCenter.Instance.CreateNameTag(go.transform, username);
-            user = new User(username, go, teaminfo.Id,this);
+            GameObject nameTag = PlaceCenter.Instance.CreateNameTag(go.transform, user);
+            // user = new User(username, go, teaminfo.Id,this);
+            user.character = go;
+            user.selfTeam = this;
             user.nameTag = nameTag;
             if (PlayerControllerScript != null)
             {
@@ -123,10 +125,12 @@ public class PlaceTeamAreaManager : MonoBehaviour
             teaminfo.currentTeamNumberCount += 1;
             // 可以在这里设置角色的其他属性，比如所属队伍等
             PlaceUIManager.Instance.AddTips(new TipsItem(){
-                userName=username,
+                userName=user.Name,
                 text =$"加入{teaminfo.Name}队伍！",
-                tipsType = TipsType.messagePanel
+                tipsType = TipsType.messagePanel,
+                isLeft = user.Camp == 1
             });
+            
         }
         else
         {
@@ -193,7 +197,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
 
         foreach (User user in userList)
         {
-            if (user.username == username)
+            if (user.Name == username)
             {
                 return user;
             }
@@ -264,4 +268,5 @@ public class PlaceTeamAreaManager : MonoBehaviour
     //         Debug.Log("角色离开触发器");
     //     }
     // }
+
 }

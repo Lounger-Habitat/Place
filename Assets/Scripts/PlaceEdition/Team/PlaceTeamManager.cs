@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +5,6 @@ public class PlaceTeamManager : MonoBehaviour
 {
     // Start is called before the first frame update
     public static PlaceTeamManager Instance { get; private set; }
-
     void Awake()
     {
         if (Instance == null)
@@ -38,14 +36,29 @@ public class PlaceTeamManager : MonoBehaviour
     // 创建队伍区域
     public void CreateTeamArea()
     {
-        PlaceTeamAreaManager tam1 = teamArea1.GetComponent<PlaceTeamAreaManager>();
-        PlaceTeamAreaManager tam2 = teamArea2.GetComponent<PlaceTeamAreaManager>();
-        PlaceTeamAreaManager tam3 = teamArea3.GetComponent<PlaceTeamAreaManager>();
-        PlaceTeamAreaManager tam4 = teamArea4.GetComponent<PlaceTeamAreaManager>();
-        teamAreas.Add(tam1);
-        teamAreas.Add(tam2);
-        teamAreas.Add(tam3);
-        teamAreas.Add(tam4);
+        if (teamArea1 != null )
+        {
+            PlaceTeamAreaManager tam1 = teamArea1.GetComponent<PlaceTeamAreaManager>();
+            teamAreas.Add(tam1);
+        }
+
+        if (teamArea2 != null )
+        {
+            PlaceTeamAreaManager tam2 = teamArea2.GetComponent<PlaceTeamAreaManager>();
+            teamAreas.Add(tam2);
+        }
+
+        if (teamArea3 != null )
+        {
+            PlaceTeamAreaManager tam3 = teamArea3.GetComponent<PlaceTeamAreaManager>();
+            teamAreas.Add(tam3);
+        }
+
+        if (teamArea4 != null )
+        {
+            PlaceTeamAreaManager tam4 = teamArea4.GetComponent<PlaceTeamAreaManager>();
+            teamAreas.Add(tam4);
+        }
     }
 
     public void Reset() {

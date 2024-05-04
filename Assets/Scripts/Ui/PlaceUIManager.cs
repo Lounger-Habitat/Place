@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements.Experimental;
 
 public class PlaceUIManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class PlaceUIManager : MonoBehaviour
     private RankPanel rankPanel;
     private TeamPanel teamPanel;
     private TipsPanel tipsPanel;
+    private PlaceTeamPanel placeTeamPanel;
     private BeginUI beginUI;
     private EndUI endUI;
 
@@ -56,17 +58,26 @@ public class PlaceUIManager : MonoBehaviour
         tipsPanel = GetComponentInChildren<TipsPanel>();
         rankPanel  = GetComponentInChildren<RankPanel>();
         teamPanel = GetComponentInChildren<TeamPanel>();
+        placeTeamPanel = GetComponentInChildren<PlaceTeamPanel>();
         countDown = GetComponentInChildren<CountdownPanel>();
         beginUI = GetComponentInChildren<BeginUI>();
         endUI = GetComponentInChildren<EndUI>();
         tipsPanel.Init();
-        //rankPanel.Init();
-        teamPanel.Init();
+        
         beginUI.Init();
         // Event
-        UIEvent.OnTeamUpdateEvent += UpdateTeam;//
-        UIEvent.OnRankUpdateEvent += UpdateRank;
-        UIEvent.OnTeamAreaUpdateEvent += UpdateTeamArea;
+        if (teamPanel!=null)
+        {
+            UIEvent.OnTeamUpdateEvent += UpdateTeam;
+            teamPanel.Init();
+        }
+        if (placeTeamPanel!=null)
+        {
+            placeTeamPanel.Init();
+        }
+        
+        //UIEvent.OnRankUpdateEvent += UpdateRank;
+        //UIEvent.OnTeamAreaUpdateEvent += UpdateTeamArea;
 
     }
 
@@ -94,6 +105,11 @@ public class PlaceUIManager : MonoBehaviour
     public void StartGame(Action action)
     {
         countDown.Init(action);
+        countDown.Init(() =>
+        {
+            PlaceCenter.Instance.GenGif();
+            endUI.Init();
+        });
         countDown.StartTimeDown();
     }
 
@@ -106,6 +122,7 @@ public class PlaceUIManager : MonoBehaviour
     [ContextMenu("EndGame")]
     public void EndGameUI(/*调用这个方法应该把最后的画作，排行榜前三玩家传递进来*/)
     {
-        endUI.Init();
+            PlaceCenter.Instance.GenGif();
+            // endUI.Init()
     }
 }

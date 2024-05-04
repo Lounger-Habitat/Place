@@ -19,7 +19,7 @@ public class AttackWaitingForIns : PlaceAction
         if (pc.user.attckingIns == 0) {
             return TaskStatus.Running; 
         }
-        if (pc.user.attckingIns == pc.user.camp) {
+        if (pc.user.attckingIns == pc.user.Camp) {
             Debug.Log("不能偷取自家能量");
             return TaskStatus.Running;
         }

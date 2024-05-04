@@ -17,6 +17,7 @@ public class Team
     public float ink;
 
     public int currentTeamNumberCount;
+    
     public Team(int id, string name, int max)
     {
         Id = id;

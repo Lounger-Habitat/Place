@@ -1,12 +1,15 @@
 using AllIn1VfxToolkit.Demo.Scripts;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
+using System.Collections;
 
 public class PlaceConsoleAreaManager : MonoBehaviour
 {
 
     public GameObject ConsoleAreaName;
     // Start is called before the first frame update
+    public GameObject ALine;
 
 
     [Header("颜料特效")]
@@ -59,8 +62,12 @@ public class PlaceConsoleAreaManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // 沿sin曲线上下浮动
-        transform.position = new Vector3(transform.position.x, transform.position.y + Mathf.Sin(Time.time) * 0.001f, transform.position.z);
+        // 沿sin曲线上下浮动 (No) Just 自转
+        // transform.position = new Vector3(transform.position.x, transform.position.y + Mathf.Sin(Time.time) * 0.001f, transform.position.z);
+
+        // 缓慢自转
+        // transform.Rotate(Vector3.up, 0.1f);
+        
 
         // Vector2 mousePosition = Input.mousePosition;
         // 按下 E 键
@@ -131,11 +138,14 @@ public class PlaceConsoleAreaManager : MonoBehaviour
     public void PlayEffect(int x,int y , int camp)
     {
         // 检测 x,y 小于 width height, 超出部分做截断处理
-        x = Mathf.Clamp(x, 0, boradWidth);
-        y = Mathf.Clamp(y, 0, boradHeight);
+        // x = Mathf.Clamp(x, 0, boradWidth);
+        // y = Mathf.Clamp(y, 0, boradHeight);
 
-        Vector3 delta = new Vector3((float)(x * pixelWidth), (float)(y * pixelHeight), 0f);
-        Vector3 aimPos = endPosBottom.position + delta;
+        // Vector3 delta = new Vector3((float)(x * pixelWidth), (float)(y * pixelHeight), 0f);
+        // Vector3 aimPos = endPosBottom.position + delta;
+
+
+        Vector3 aimPos = CalAimPos(x,y);
 
         switch (camp)
         {
@@ -184,5 +194,86 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         {
             Destroy(projectileBase.gameObject);
         });
+    }
+
+    public void VisualAuxiliaryLine(int x,int y , int camp) {
+        float offset = 1f;
+        float fadeTime = 3f;
+        Vector3 aimPos = CalAimPos(x,y);
+        // 实例化 ALine
+        GameObject temp = Instantiate(ALine, endPosBottom.position, Quaternion.identity);
+        // 获取 ALine 的 子物体
+        LineRenderer XAxis = temp.transform.GetChild(0).GetComponent<LineRenderer>();
+        LineRenderer YAxis = temp.transform.GetChild(1).GetComponent<LineRenderer>();
+
+        // 获取 ALine 的 Axis Text
+        TextMeshPro X1AxisText = temp.transform.GetChild(2).GetComponent<TextMeshPro>();
+        TextMeshPro X2AxisText = temp.transform.GetChild(3).GetComponent<TextMeshPro>();
+        TextMeshPro Y1AxisText = temp.transform.GetChild(4).GetComponent<TextMeshPro>();
+        TextMeshPro Y2AxisText = temp.transform.GetChild(5).GetComponent<TextMeshPro>();
+
+        // 设置 ALine X的位置
+        XAxis.SetPosition(0, new Vector3(endPosBottom.position.x, aimPos.y, aimPos.z));
+        XAxis.SetPosition(1, new Vector3(endPosTop.position.x, aimPos.y, aimPos.z));
+
+        // 设置 ALine Y的位置
+        YAxis.SetPosition(0, new Vector3(aimPos.x, endPosBottom.position.y, aimPos.z));
+        YAxis.SetPosition(1, new Vector3(aimPos.x, endPosTop.position.y, aimPos.z));
+
+        // 设置 ALine 的颜色
+
+        // 设置 ALine 的宽度
+        YAxis.startWidth = 0.1f;
+        YAxis.endWidth = 0.1f;
+        XAxis.startWidth = 0.1f;
+        XAxis.endWidth = 0.1f;
+
+        // 设置 Text 位置
+        X1AxisText.transform.position = new Vector3(endPosBottom.position.x - offset, aimPos.y, aimPos.z);
+        X2AxisText.transform.position = new Vector3(endPosTop.position.x + offset , aimPos.y, aimPos.z);
+        Y1AxisText.transform.position = new Vector3(aimPos.x, endPosBottom.position.y - 0.5f, aimPos.z);
+        Y2AxisText.transform.position = new Vector3(aimPos.x, endPosTop.position.y + 0.5f, aimPos.z);
+        // 设置 Text 文字
+        X1AxisText.text = "" + x;
+        X2AxisText.text = "" + x;
+        Y1AxisText.text = "" + y;
+        Y2AxisText.text = "" + y;
+
+        StartCoroutine(FadeOutLineRenderer(XAxis, fadeTime));
+        StartCoroutine(FadeOutLineRenderer(YAxis, fadeTime));
+        StartCoroutine(FadeOutTextMeshPro(X1AxisText, fadeTime));
+        StartCoroutine(FadeOutTextMeshPro(X2AxisText, fadeTime));
+        StartCoroutine(FadeOutTextMeshPro(Y1AxisText, fadeTime));
+        StartCoroutine(FadeOutTextMeshPro(Y2AxisText, fadeTime));
+        // 三秒后销毁
+        Destroy(temp, 3.5f);
+
+
+    }
+
+    IEnumerator FadeOutTextMeshPro(TextMeshPro tmp ,float duration)
+    {
+        // 从当前Alpha值渐变到0
+        tmp.DOKill(); // 首先停止所有正在运行的动画
+        tmp.DOFade(0f, duration); // 渐隐动画
+        yield return new WaitForSeconds(duration); // 等待动画完成
+        tmp.gameObject.SetActive(false); // 可选：在动画结束后禁用TextMeshPro对象
+    }
+
+    IEnumerator FadeOutLineRenderer(LineRenderer lr,float duration)
+    {
+        // 从当前Alpha值渐变到0
+        lr.material.DOKill(); // 首先停止所有正在运行的动画
+        lr.material.DOFade(0f, duration); // 渐隐动画
+        yield return new WaitForSeconds(duration); // 等待动画完成
+        lr.enabled = false; // 可选：在动画结束后禁用LineRenderer
+    }
+
+    public Vector3 CalAimPos(int x,int y) {
+        x = Mathf.Clamp(x, 0, boradWidth);
+        y = Mathf.Clamp(y, 0, boradHeight);
+        Vector3 delta = new Vector3((float)(x * pixelWidth), (float)(y * pixelHeight), 0f);
+        Vector3 aimPos = endPosBottom.position + delta;
+        return aimPos;
     }
 }

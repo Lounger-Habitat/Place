@@ -1,13 +1,12 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class CountdownPanel : MonoBehaviour
 {
     public TMP_Text countdownText; // 用于引用UI中的Text组件  
-    private int startTime = 1200; // 20分钟转换为秒是1200秒  
+    private int startTime = 15 * 60; // 20分钟转换为秒是1200秒  
     //private float countdownTime;
     private Coroutine handle;
 
@@ -20,6 +19,7 @@ public class CountdownPanel : MonoBehaviour
     public void Init(Action action)
     {
         TimeOverAction += action;
+        countdownText.text = $"--:--";
     }
     IEnumerator UpdateCountdown(int duration)  
     {  
@@ -40,6 +40,29 @@ public class CountdownPanel : MonoBehaviour
     public void Reset()
     {
         TimeOverAction = null;
+        countdownText.text = $"--:--";
         StopCoroutine(handle);
     }
+    
+    public void OnChangeTime(int time)
+    {   
+        if (time > 0 && time < 99)
+        {
+            startTime = time * 60;
+        }else if (time == 0)
+        {
+            startTime = (startTime + (15 * 60) ) % 3600;
+        }
+        if (startTime == 0)
+        {
+            startTime = 60 * 60;
+        }
+    }
+    public void OnChangeTimeNumber(TMP_Text text)
+    {
+        text.text = (startTime / 60).ToString();
+    }
+
+
+    
 }
