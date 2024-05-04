@@ -13,6 +13,8 @@ public class GiftTips : TipsBase
     public RectTransform iconRectTransform;
 
     public Image iconImage;
+
+    public Image userImage;
     
     public Sprite[] sprites;//保存一些礼物ICON，护盾、画画、龙卷风、雷电......
     
@@ -35,6 +37,7 @@ public class GiftTips : TipsBase
         transform.Find("Background").Find("Text_Name").GetComponent<TMP_Text>().text = tips.userName;
         transform.Find("Background").Find("ListFrame05_Light_Green").Find("Text").GetComponent<TMP_Text>().text = tips.text;
         transform.Find("Background").Find("ListFrame05_Light_Green").Find("Text_Value").GetComponent<TMP_Text>().text = tips.value;
+        userImage.sprite = tips.icon;
         iconImage.gameObject.SetActive(false);
         needRotation = false;
         switch (tips.text)
