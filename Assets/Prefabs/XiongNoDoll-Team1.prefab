@@ -375,6 +375,8 @@ MonoBehaviour:
   strikeEffect: {fileID: 8316546506534294775, guid: 9935065b872f1af47aa6cfec52cbf812, type: 3}
   levelUpEffect: {fileID: 5630033035972994015, guid: fbf7b003351d3cc4da6c1972a822b53c, type: 3}
   inkUpIcon: {fileID: 6764000743443325766, guid: 91c56989ed3ef4aca9af79bf124aa37a, type: 3}
+  blueArea: {fileID: 5800390818974668028, guid: 957d9c57bd9ce7d4995074d2356e6740, type: 3}
+  PurpleArea: {fileID: 6987406388402313268, guid: 72726ced1404d484d9e944afc475bb13, type: 3}
   tornadoRange: 5
 --- !u!136 &5821709114818931479
 CapsuleCollider:

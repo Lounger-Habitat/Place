@@ -400,6 +400,7 @@ public class PlaceCenter : MonoBehaviour
         TipsType messageType = TipsType.messagePanel;
         int normalPower = 0;
         string message = "";
+        SkillIcon skill = SkillIcon.Pencil;
         switch (u.currentState.topState)
         {
             case HighLevelState.Draw:
@@ -417,27 +418,32 @@ public class PlaceCenter : MonoBehaviour
             case 0.1f://这是礼物得人民币价值，那应该在这个里边通知
                 normalPower = 10;
                 message = "急速神行";
+                skill = SkillIcon.Speed;
                 u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                 break;
             case 1:
                 normalPower = 100;//固定是加颜料
                 message = "雷霆万钧";
+                skill = SkillIcon.Thunder;
                 u.character.GetComponent<PlacePlayerController>().Thunder();
                 break;
             case 1.9f:
                 normalPower = 199;//固定是攻击
                 u.character.GetComponent<PlacePlayerController>().Tornado((int)(power * 10));
                 message = "风之束缚";
+                skill = SkillIcon.Tornado;
                 break;
             case 5.2f:
                 normalPower = 520;//固定是防御
                 u.character.GetComponent<PlacePlayerController>().Invincible(60);
                 message = "绝对防御";
+                skill = SkillIcon.Defense;
                 break;
             case 9.9f:
                 normalPower = 999;
                 message = "天赐神祇";
                 // 随机自动画一个图案
+                skill = SkillIcon.Pencil;
                 u.character.GetComponent<PlacePlayerController>().Invincible(60);
                 int x = Random.Range(0, PlaceBoardManager.Instance.width-50);
                 int y = Random.Range(0, PlaceBoardManager.Instance.height-50);
@@ -450,33 +456,43 @@ public class PlaceCenter : MonoBehaviour
             case 19.9f:
                 normalPower = 1999;
                 message = "掌控雷电";
+                skill = SkillIcon.Thunder;
                 // 全屏攻击
                 break;
             case 29.9f:
+                message = "";
                 normalPower = 2990;
                 break;
             case 52f:
+                message = "";
                 normalPower = 5200;
                 break;
             case 66.6f:
+                message = "";
                 normalPower = 6666;
                 break;
             case 88.8f:
+                message = "";
                 normalPower = 8888;
                 break;
             case 99.9f:
+                message = "";
                 normalPower = 9999;
                 break;
             case 120f:
+                message = "";
                 normalPower = 12000;
                 break;
             case 166.6f:
+                message = "";
                 normalPower = 16666;
                 break;
             case 188.8f:
+                message = "";
                 normalPower = 18888;
                 break;
             case 300f:
+                message = "";
                 normalPower = 30000;
                 break;
         }
@@ -494,7 +510,8 @@ public class PlaceCenter : MonoBehaviour
             tipsType = messageType,
             value = $"+{normalPower:D}",
             isLeft = u.Camp == 1,
-            level = u.level
+            level = u.level,
+            skillIcon = skill
         });
     }
 
