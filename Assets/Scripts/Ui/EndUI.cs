@@ -46,6 +46,6 @@ public class EndUI : MonoBehaviour
 
     public void OnClickNextBtn()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 }
