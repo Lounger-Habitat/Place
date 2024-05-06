@@ -190,3 +190,4 @@ Assets/Starfield Skybox/Skybox.mat
 *.gif.meta
 *.unitypackage.meta
 *Demo.meta
+/Output

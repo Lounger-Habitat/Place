@@ -357,6 +357,12 @@ public class TipsItem
     public string value;
     public bool isLeft = true;
     public int level;
+    public SkillIcon skillIcon;
+
+    public TipsItem()
+    {
+        skillIcon = SkillIcon.Pencil;
+    }
 }
 
 //这是提示的类型，
@@ -371,4 +377,13 @@ public enum TipsType
     likeTipsPanelRight,
     levelUpPanel,
     levelUpPanelRight
+}
+
+public enum SkillIcon
+{
+    Pencil,//画画
+    Thunder,//雷电
+    Defense,//防御
+    Speed,//速度提升
+    Tornado//龙卷风
 }

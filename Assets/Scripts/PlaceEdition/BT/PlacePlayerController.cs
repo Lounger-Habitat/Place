@@ -80,6 +80,8 @@ public class PlacePlayerController : MonoBehaviour
     public GameObject strikeEffect;
     public GameObject levelUpEffect;
     public GameObject inkUpIcon;
+    public GameObject blueArea;
+    public GameObject PurpleArea;
 
     public void Start()
     {
