@@ -5567,7 +5567,7 @@ MonoBehaviour:
   panelType: 3
   dataRectTransform: {fileID: 6320311627185941123}
   iconRectTransform: {fileID: 4909973712208662762}
-  iconImage: {fileID: 3003132337520155517}
+  iconImage: {fileID: 4356414534764546146}
   userImage: {fileID: 1319695163354448157}
   sprites:
   - {fileID: 21300000, guid: 3399428f735e545cc8c29721d4631114, type: 3}
