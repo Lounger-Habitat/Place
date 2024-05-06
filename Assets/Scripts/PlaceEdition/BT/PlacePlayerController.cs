@@ -5,17 +5,13 @@ using System.Collections.Generic;
 using System;
 using System.Collections;
 using DG.Tweening;
-
 using System.Linq;
-using UnityEngine.Analytics;
-using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
 
 public class PlacePlayerController : MonoBehaviour
 {
     public SharedVariable playerGoal;
     public BehaviorTree playerBT;
     public Transform target;
-
     // 祭坛
     public Transform altar;
     // 自家图腾
@@ -349,8 +345,8 @@ public class PlacePlayerController : MonoBehaviour
     }
 
     public void PlayInkUpEffect(int p) {
-        var effect = Instantiate(levelUpEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
-        effect.transform.SetParent(this.transform);
+        // var effect = Instantiate(levelUpEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+        // effect.transform.SetParent(this.transform);
         var icon = Instantiate(inkUpIcon, user.nameTag.transform.position + new Vector3(0f, 2, 0f), Quaternion.identity, transform.parent);//
         icon.GetComponent<InkTag>().countText.text = $"X {p}";
         icon.transform.SetParent(user.nameTag.transform);

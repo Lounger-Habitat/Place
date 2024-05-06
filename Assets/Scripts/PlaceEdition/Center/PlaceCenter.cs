@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
@@ -56,7 +57,11 @@ public class PlaceCenter : MonoBehaviour
 
     int baseId = 0;
 
-    List<Texture2D> demoTextures;
+    List<Texture2D>? demoTextures = null;
+
+    public string platform = "bilibili";
+    public string anchorName = "anchor";
+
 
     public void Start()
     {
@@ -71,7 +76,7 @@ public class PlaceCenter : MonoBehaviour
         // 游戏计时
 
         CreateTeam();
-        demoTextures = LoadResources("Assets/Images/Demo");
+        demoTextures = LoadDemoResources();
 
     }
 
@@ -233,13 +238,14 @@ public class PlaceCenter : MonoBehaviour
         return baseId;
     }
 
-    public int GenPUID()
+    public void GenPUID()
     {
         // 多少位？
         // 平台 + 时间 + 主播 + 人数 + 价值 + ？？
         // TODO
-        int puid = 0;
-        return puid;
+        string puid = PlaceBoardManager.UniqueId;
+        var text = GameObject.Find("DrawID").GetComponentInChildren<TMP_Text>();
+        text.text = puid;
     }
 
     public void JoinGame(User user, string teamId)
@@ -410,17 +416,12 @@ public class PlaceCenter : MonoBehaviour
         {
             case 0.1f://这是礼物得人民币价值，那应该在这个里边通知
                 normalPower = 10;
-                // u.level += normalPower;
-                // u.score += normalPower * 10;
-                // PlaceTeamManager.Instance.teamAreas[u.camp - 1].teaminfo.ink += normalPower * 10;
-                // 特效 动画
-                // UI 更新
                 message = "急速神行";
                 u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                 break;
             case 1:
                 normalPower = 100;//固定是加颜料
-                message = "颜料爆发";
+                message = "雷霆万钧";
                 u.character.GetComponent<PlacePlayerController>().Thunder();
                 break;
             case 1.9f:
@@ -435,8 +436,16 @@ public class PlaceCenter : MonoBehaviour
                 break;
             case 9.9f:
                 normalPower = 999;
-                message = "颜料核弹";
+                message = "天赐神祇";
                 // 随机自动画一个图案
+                u.character.GetComponent<PlacePlayerController>().Invincible(60);
+                int x = Random.Range(0, PlaceBoardManager.Instance.width-50);
+                int y = Random.Range(0, PlaceBoardManager.Instance.height-50);
+                List<Instruction> IL = GenerateRandomImage(x,y);
+                if (IL.Count != 0)
+                {
+                        IL.ForEach( i=>u.instructionQueue.Enqueue(i));
+                }
                 break;
             case 19.9f:
                 normalPower = 1999;
@@ -502,12 +511,12 @@ public class PlaceCenter : MonoBehaviour
         string message = "";
         if (p < 5)
         {
-            message = $"点赞！颜料x{p}";
+            message = $"点赞! 颜料 x {p}";
         }
 
         if (p > 5)
         {
-            message = $"点赞手速突破天际！！颜料x{p}";
+            message = $"点赞手速突破天际!! 颜料 x {p}";
         }
 
 
@@ -573,15 +582,19 @@ public class PlaceCenter : MonoBehaviour
     {
         // 图库
         // 获取index 
-        int index = Random.Range(0, demoTextures.Count);
+        if (demoTextures != null && demoTextures.Count > 0)
+        {
+            int index = Random.Range(0, demoTextures.Count);
+            Texture2D tex = demoTextures[index];
+            // texture 2d
+            // Texture2D tex = Resources.Load<Texture2D>($"Images/{index}");
+            Texture2D retex = PlaceBoardManager.Instance.ScaleTextureProportionally(tex, 50, 50);
 
-        Texture2D tex = demoTextures[index];
-        // texture 2d
-        // Texture2D tex = Resources.Load<Texture2D>($"Images/{index}");
-        Texture2D retex = PlaceBoardManager.Instance.ScaleTextureProportionally(tex, 50, 50);
-
-        // 转换成 instruction
-        return Image2Instruction(retex, ox, oy);
+            // 转换成 instruction
+            return Image2Instruction(retex, ox, oy);
+        }
+        
+        return new List<Instruction>();
     }
 
     List<Instruction> Image2Instruction(Texture2D tex, int ox, int oy)
@@ -638,6 +651,16 @@ public class PlaceCenter : MonoBehaviour
         return resizeTexture;
     }
 
+    public List<Texture2D> LoadDemoResources() {
+        #if UNITY_EDITOR
+        return LoadResources("Assets/Images/Demo");
+        #else
+        string demoPath = Application.streamingAssetsPath;
+        demoPath = Path.Combine(loadImagePath, $"{Demo}");
+        return LoadResources(demoPath);
+        #endif
+    }
+
     public List<Texture2D> LoadResources(string imagePath)
     {
         List<Texture2D> texlist = new List<Texture2D>();
@@ -685,6 +708,12 @@ public class PlaceCenter : MonoBehaviour
         return texture;
     }
 
+    public string AllMember() {
+        return users.Count.ToString();
+    }
+    public string Price() {
+        return users.Values.Sum(u => u.usePowerCount).ToString();
+    }
 
 
         //  ===== 协程 =====

@@ -5,9 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.GifAssets.PowerGif;
-using System.Collections;
-using UnityEngine.Assertions;
-using System.Data.Common;
 
 public class PlaceBoardManager : MonoBehaviour
 {
@@ -32,7 +29,8 @@ public class PlaceBoardManager : MonoBehaviour
     public int[] pixelsUserInfos;
 
     // 画作唯一id
-    public static int UniqueId = 0;
+    public static string UniqueTime = "yyyyMMddHHmmss";
+    public static string UniqueId = "xxxx-xxx-xxxxxxxxxxx-xx-xx";
 
     public string gifPath = "";
 
@@ -101,7 +99,7 @@ public class PlaceBoardManager : MonoBehaviour
         defaultTexture = texture;
 
         // LoadResources();
-        UniqueId = GenerateUniqueId();
+        UniqueTime = GenerateUniqueTime();
 
     }
 
@@ -185,9 +183,19 @@ public class PlaceBoardManager : MonoBehaviour
         }
     }
 
-    public static int GenerateUniqueId()
+    public static string GenerateUniqueTime()
     {
-        return UniqueId++;
+        // 根据时间生成唯一ID
+        DateTime now = DateTime.Now;
+        string formatNow = now.ToString("yyyyMMddHHmmss");
+        // platform + host name + time + people number + price
+        return formatNow;
+    }
+    public static void GenerateUniqueId()
+    {
+        // 根据时间生成唯一ID
+        // platform + host name + time + people number + price
+        UniqueId = $"{PlaceCenter.Instance.platform}-{PlaceCenter.Instance.anchorName}-{UniqueTime}-{PlaceCenter.Instance.AllMember()}-{PlaceCenter.Instance.Price()}";
     }
 
     List<Texture2D> LoadResources(string directoryPath)
@@ -420,18 +428,30 @@ public class PlaceBoardManager : MonoBehaviour
     {
         byte[] bytes = texture.EncodeToPNG();
         // 检测文件夹是否存在
-        if (!Directory.Exists($"Assets/Images/{UniqueId}"))
+        #if UNITY_EDITOR
+        string savePath = $"Assets/Images/{UniqueTime}";
+        #else
+        string savePath = Application.streamingAssetsPath;
+        savePath = Path.Combine(loadImagePath, $"{UniqueTime}");
+        #endif
+        if (!Directory.Exists(savePath))
         {
-            Directory.CreateDirectory($"Assets/Images/{UniqueId}");
+            Directory.CreateDirectory(savePath);
         }
-        string path = $"Assets/Images/{UniqueId}/save_{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
+        string path = $"{savePath}/save_{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
         System.IO.File.WriteAllBytes(path, bytes);
         Debug.Log("Saved Image to: " + path);
     }
 
     public void GenGif()
     {
-        string gifPath = $"Assets/Images/{UniqueId}";
+        // string gifPath = $"Assets/Images/{UniqueTime}";
+        #if UNITY_EDITOR
+        string gifPath = $"Assets/Images/{UniqueTime}";
+        #else
+        string gifPath = Application.streamingAssetsPath;
+        gifPath = Path.Combine(loadImagePath, $"{UniqueTime}");
+        #endif
         List<Texture2D> f = LoadResources(gifPath);
         f = Select20(f.ToArray());
         var frames = f.Select(f => new GifFrame(f, 0.5f)).ToList();
@@ -715,7 +735,14 @@ public class PlaceBoardManager : MonoBehaviour
         //tex2Gif.SetFileExtension(new List<string>{".jpg"});
 
         // string loadImagePath = Application.streamingAssetsPath;
-        string loadImagePath = $"Assets/Images/{UniqueId}";
+        #if UNITY_EDITOR
+        string loadImagePath = $"Assets/Images/{UniqueTime}";
+        #else
+        string loadImagePath = Application.streamingAssetsPath;
+        loadImagePath = Path.Combine(loadImagePath, $"{UniqueTime}");
+        #endif
+
+    
 
         //Load images as texture2D list from target directory
         tex2DList = tex2Gif.LoadImages(loadImagePath);
@@ -744,7 +771,7 @@ public class PlaceBoardManager : MonoBehaviour
     {
         Debug.Log("On file saved: " + path);
         // text1.text = "GIF saved: " + path;
-        // string sourceFolder = Application.dataPath;;
+        // string sourceFolder = Application.dataPath;
         // 目标文件夹路径
         // string destinationFolder = $"Assets/Images/{UniqueId}";
 

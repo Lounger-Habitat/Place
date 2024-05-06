@@ -57,11 +57,11 @@ public class GiftTips : TipsBase
                 iconImage.gameObject.SetActive(true);
                 iconImage.sprite =sprites[2];
                 break;
-            case "颜料核弹":
+            case "天赐神祇":
                 iconRectTransform.GetComponent<Image>().sprite = sprites[0];
                 needRotation = true;
                 break;
-            case "掌控雷电":
+            case "雷霆万钧":
                 iconRectTransform.GetComponent<Image>().sprite = sprites[1];
                 break;
         }

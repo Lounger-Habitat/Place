@@ -37,7 +37,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    private bool noAudio = false;
+    // private bool noAudio = false;
     public void Slider_Audio(float value)
     {
         audioSource.volume = value;

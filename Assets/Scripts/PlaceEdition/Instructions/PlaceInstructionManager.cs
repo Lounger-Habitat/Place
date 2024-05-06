@@ -4,9 +4,6 @@ using OpenBLive.Runtime.Data;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Text.RegularExpressions;
-using System;
-using System.Linq;
-using UnityEngine.SocialPlatforms;
 
 public class PlaceInstructionManager : MonoBehaviour
 {
@@ -249,11 +246,6 @@ public class PlaceInstructionManager : MonoBehaviour
                 break;
             case "/line":
             case "/l":
-                // if (!PlaceCenter.Instance.CheckUser(username))
-                // {
-                //     break;
-                // }
-                // User lineUser = PlaceCenter.Instance.FindUser(username);
                 if (parts.Length >= 5)
                 {
                     if (parts.Length == 5)
@@ -342,71 +334,62 @@ public class PlaceInstructionManager : MonoBehaviour
                 break;
             case "/paint":
             case "/p":
-                // if (!PlaceCenter.Instance.CheckUser(username))
+                break; // ⚠️ 暂时废弃
+                // if (parts.Length >= 5)
                 // {
-                //     break;
+                //     if (parts.Length == 5)
+                //     {
+                //         int x, y, dx, dy, r, g, b;
+                //         string c;
+                //         c = parts[0]; // /l
+                //         x = int.Parse(parts[1]); // x
+                //         y = int.Parse(parts[2]); // y
+                //         dx = int.Parse(parts[3]); // dx
+                //         dy = int.Parse(parts[4]); // dy
+                //         Color color = user.lastColor;
+                //         r = (int)(color.r * 255); // r
+                //         g = (int)(color.g * 255); // g
+                //         b = (int)(color.b * 255); // b
+                //         Instruction ins_p = new Instruction(c, x, y, dx, dy, r: r, g: g, b: b);
+                //         if (!PlaceBoardManager.Instance.CheckIns(ins_p))
+                //         {
+                //             Debug.Log("指令不合法");
+                //             break;
+                //         }
+                //         user.instructionQueue.Enqueue(ins_p);
+                //     }
+                //     else if (parts.Length == 8)
+                //     {
+                //         int x, y, dx, dy, r, g, b;
+                //         string c;
+                //         c = parts[0]; // /d
+                //         x = int.Parse(parts[1]); // x
+                //         y = int.Parse(parts[2]); // y
+                //         dx = int.Parse(parts[3]); // dx
+                //         dy = int.Parse(parts[4]); // dy
+                //         r = int.Parse(parts[5]); // r
+                //         g = int.Parse(parts[6]); // g
+                //         b = int.Parse(parts[7]); // b
+                //         user.lastColor = new Color(r, g, b);
+                //         Instruction ins_p = new Instruction(c, x, y, dx, dy, r: r, g: g, b: b);
+                //         if (!PlaceBoardManager.Instance.CheckIns(ins_p))
+                //         {
+                //             Debug.Log("指令不合法");
+                //             break;
+                //         }
+                //         user.instructionQueue.Enqueue(ins_p);
+                //     }
+                //     else
+                //     {
+                //         Debug.LogError("输入字符串格式不正确");
+                //     }
                 // }
-                // User paintUser = PlaceCenter.Instance.FindUser(username);
-                if (parts.Length >= 5)
-                {
-                    if (parts.Length == 5)
-                    {
-                        int x, y, dx, dy, r, g, b;
-                        string c;
-                        c = parts[0]; // /l
-                        x = int.Parse(parts[1]); // x
-                        y = int.Parse(parts[2]); // y
-                        dx = int.Parse(parts[3]); // dx
-                        dy = int.Parse(parts[4]); // dy
-                        Color color = user.lastColor;
-                        r = (int)(color.r * 255); // r
-                        g = (int)(color.g * 255); // g
-                        b = (int)(color.b * 255); // b
-                        Instruction ins_p = new Instruction(c, x, y, dx, dy, r: r, g: g, b: b);
-                        if (!PlaceBoardManager.Instance.CheckIns(ins_p))
-                        {
-                            Debug.Log("指令不合法");
-                            break;
-                        }
-                        user.instructionQueue.Enqueue(ins_p);
-                    }
-                    else if (parts.Length == 8)
-                    {
-                        int x, y, dx, dy, r, g, b;
-                        string c;
-                        c = parts[0]; // /d
-                        x = int.Parse(parts[1]); // x
-                        y = int.Parse(parts[2]); // y
-                        dx = int.Parse(parts[3]); // dx
-                        dy = int.Parse(parts[4]); // dy
-                        r = int.Parse(parts[5]); // r
-                        g = int.Parse(parts[6]); // g
-                        b = int.Parse(parts[7]); // b
-                        user.lastColor = new Color(r, g, b);
-                        Instruction ins_p = new Instruction(c, x, y, dx, dy, r: r, g: g, b: b);
-                        if (!PlaceBoardManager.Instance.CheckIns(ins_p))
-                        {
-                            Debug.Log("指令不合法");
-                            break;
-                        }
-                        user.instructionQueue.Enqueue(ins_p);
-                    }
-                    else
-                    {
-                        Debug.LogError("输入字符串格式不正确");
-                    }
-                }
-                else
-                {
-                    Debug.LogError("输入字符串格式不正确");
-                }
-                break;
+                // else
+                // {
+                //     Debug.LogError("输入字符串格式不正确");
+                // }
+                // break;
             case "/m":
-                // if (!PlaceCenter.Instance.CheckUser(username))
-                // {
-                //     break;
-                // }
-                // User mUser = PlaceCenter.Instance.FindUser(username);
                 if (parts.Length == 2) // 默认颜色
                 {
                     int x, y, r, g, b;
@@ -502,11 +485,6 @@ public class PlaceInstructionManager : MonoBehaviour
                 break;
             case "visual":
             case "/v":
-                // if (!PlaceCenter.Instance.CheckUser(username))
-                // {
-                //     break;
-                // }
-                // User vUser = PlaceCenter.Instance.FindUser(username);
                 if (parts.Length == 3)
                 {
                     int x, y;
@@ -541,10 +519,12 @@ public class PlaceInstructionManager : MonoBehaviour
                     x = int.Parse(parts[1]); // x
                     y = int.Parse(parts[2]); // y
                     List<Instruction> IL = PlaceCenter.Instance.GenerateRandomImage(x,y);
-                    IL.ForEach( i=>user.instructionQueue.Enqueue(i));
+                    if (IL.Count != 0)
+                    {
+                        IL.ForEach( i=>user.instructionQueue.Enqueue(i));
+                    }
                 }
-                // 从 已有的 图集 中 找一个
-
+                // 从 已有的 图集 中 找一个 图
                 // 把 图 -> 指令
                 // 给到 player
                 break;
@@ -578,6 +558,27 @@ public class PlaceInstructionManager : MonoBehaviour
                 //         Debug.LogError("输入字符串格式不正确");
                 //     }
                 //     break;
+            case "/test":
+                if (parts.Length == 3)
+                {
+                    string c,name,message;
+                    c = parts[0]; // /d
+                    name = parts[1]; // name
+                    message = parts[2]; // y
+                    DefaultGiftCommand(name,message);
+                }else if (parts.Length == 4)
+                {
+                    string c,name;
+                    long count;
+                    c = parts[0]; // /d
+                    name = parts[1]; // name
+                    count = long.Parse(parts[3]); // count
+                    PlaceCenter.Instance.GainLikePower(user, count);
+                }
+                // 从 已有的 图集 中 找一个 图
+                // 把 图 -> 指令
+                // 给到 player
+                break;
         }
     }
     public void DefaultGiftCommand(string username, string command)
@@ -586,33 +587,6 @@ public class PlaceInstructionManager : MonoBehaviour
         string parts = command.Trim();
         float message = float.Parse(parts);
         PlaceCenter.Instance.GainPower(username, message);
-        // switch (parts)
-        // {
-        //     case "0.1":
-        //         int message = 1;
-        //         PlaceCenter.Instance.GainPower(username, message);
-        //         break;
-        //     case "1":
-        //         int message = 1;
-        //         PlaceCenter.Instance.GainPower(username, message);
-        //         break;
-        //     case "1.9":
-        //         int message = 1;
-        //         PlaceCenter.Instance.GainPower(username, message);
-        //         break;
-        //     case "5.2":
-        //         int message = 1;
-        //         PlaceCenter.Instance.GainPower(username, message);
-        //         break;
-        //     case "9.9":
-        //         int message = 1;
-        //         PlaceCenter.Instance.GainPower(username, message);
-        //         break;
-        //     case "20":
-        //         int message = 1;
-        //         PlaceCenter.Instance.GainPower(username, message);
-        //         break;
-        // }
     }
     public void DefaultLikeCommand(Like like)
     {

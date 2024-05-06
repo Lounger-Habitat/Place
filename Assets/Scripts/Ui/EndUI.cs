@@ -48,21 +48,4 @@ public class EndUI : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
-
-    public void ShowGIF(string path)
-	{
-		ProGifManager.Instance.m_OptimizeMemoryUsage = true;
-
-		//Open the Pro GIF player to show the converted GIF
-        Debug.Log($"path: {path}");
-		ProGifManager.Instance.PlayGif(path, displayImage, (loadProgress)=>{
-			if(loadProgress < 1f)
-			{
-				displayImage.SetNativeSize();
-			}
-		});
-
-        displayImage.sprite = ProGifTexturesToGIF.Instance.GetSprite(0);
-		displayImage.SetNativeSize();
-	}
 }
