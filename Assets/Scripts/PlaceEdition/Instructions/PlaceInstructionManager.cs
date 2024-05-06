@@ -565,6 +565,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     c = parts[0]; // /d
                     name = parts[1]; // name
                     message = parts[2]; // y
+                    // Debug.Log($"{c} {name} {message}");
                     DefaultGiftCommand(name,message);
                 }else if (parts.Length == 4)
                 {
@@ -573,7 +574,9 @@ public class PlaceInstructionManager : MonoBehaviour
                     c = parts[0]; // /d
                     name = parts[1]; // name
                     count = long.Parse(parts[3]); // count
-                    PlaceCenter.Instance.GainLikePower(user, count);
+                    User u = PlaceCenter.Instance.users[name];
+                    // Debug.Log($"{c} {name} {count}");
+                    PlaceCenter.Instance.GainLikePower(u, count);
                 }
                 // 从 已有的 图集 中 找一个 图
                 // 把 图 -> 指令

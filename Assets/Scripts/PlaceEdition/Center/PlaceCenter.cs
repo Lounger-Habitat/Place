@@ -550,15 +550,15 @@ public class PlaceCenter : MonoBehaviour
         // StartCoroutine(user.character.GetComponent<PlacePlayerController>().TimeLimitSpeedUp(p));
     }
 
-    public void GainGiftPower(User user, float power)
-    {
-        int p = (int)power;
-        user.score += p;
-        user.Update();
-        PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
-        // 限时加速
-        user.character.GetComponent<PlacePlayerController>().Tornado((int)power);
-    }
+    // public void GainGiftPower(User user, float power)
+    // {
+    //     int p = (int)power;
+    //     user.score += p;
+    //     user.Update();
+    //     PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
+    //     // 限时加速
+    //     user.character.GetComponent<PlacePlayerController>().Tornado((int)power);
+    // }
 
 
     // 重新开始游戏

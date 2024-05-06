@@ -69,6 +69,34 @@ public class TestManager : MonoBehaviour
                 PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
             }
         }
+        // 按下‘，执行指令  接受 指令
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            ins = ins.Trim();
+            string[] parts = ins.Split(' ');
+
+            
+            if (parts.Length == 3)
+            {
+                string c,name;
+                float power;
+                c = parts[0]; // /d
+                name = parts[1]; // name
+                power = float.Parse(parts[2]); // y
+                Debug.Log($"{c} {name} {power}");
+                PlaceCenter.Instance.GainPower(name,power);
+            }else if (parts.Length == 4)
+            {
+                string c,name;
+                long count;
+                c = parts[0]; // /d
+                name = parts[1]; // name
+                User u = PlaceCenter.Instance.users[name];
+                count = long.Parse(parts[3]); // count
+                Debug.Log($"{c} {name} {count}");
+                PlaceCenter.Instance.GainLikePower(u, count);
+            }
+        }
         // 按下,，执行指令  接受 指令
         if (Input.GetKeyDown(KeyCode.Comma))
         {

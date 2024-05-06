@@ -267,7 +267,8 @@ public class PlacePlayerController : MonoBehaviour
     }
 
 
-    public void StartLevelUp () {
+    public void StartLevelUp()
+    {
         StartCoroutine(LevelUpCoroutine());
     }
     public void PlaylevelUpEffect()
@@ -283,7 +284,7 @@ public class PlacePlayerController : MonoBehaviour
         StartCoroutine(SmokeSpeedUpCoroutine(time));
     }
 
-    public void PassiveSpeedUp(float time=3)
+    public void PassiveSpeedUp(float time = 3)
     {
         StartCoroutine(MagicSpeedUpCoroutine(time));
     }
@@ -304,7 +305,8 @@ public class PlacePlayerController : MonoBehaviour
         effect.GetComponent<EffectAutoDelete>().destroyTime = time;
     }
 
-    public void Invincible(float time=30) {
+    public void Invincible(float time = 30)
+    {
         StartCoroutine(InvincibleCoroutine(time));
     }
 
@@ -331,22 +333,36 @@ public class PlacePlayerController : MonoBehaviour
         PlayTornadoEffect(num);
     }
 
-    public void Stuck() {
-        StartCoroutine(StuckCoroutine());
-    }
-
-    public void PlayStuckEffect()
+    public void Stuck(int c = 0)
     {
-        var effect = Instantiate(slowEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
-        effect.transform.SetParent(this.transform);
-
+        StartCoroutine(StuckCoroutine(c));
     }
 
-    public void InkUp(int p) {
+    public void PlayStuckEffect(int camp = 0)
+    {
+        if (camp == 1)
+        {
+            var effect = Instantiate(PurpleArea, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+            effect.transform.SetParent(this.transform);
+        }
+        else if (camp == 2)
+        {
+            var effect = Instantiate(blueArea, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+            effect.transform.SetParent(this.transform);
+        }
+        else
+        {
+            var effect = Instantiate(slowEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+            effect.transform.SetParent(this.transform);
+        }
+    }
+    public void InkUp(int p)
+    {
         PlayInkUpEffect(p);
     }
 
-    public void PlayInkUpEffect(int p) {
+    public void PlayInkUpEffect(int p)
+    {
         // var effect = Instantiate(levelUpEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
         // effect.transform.SetParent(this.transform);
         var icon = Instantiate(inkUpIcon, user.nameTag.transform.position + new Vector3(0f, 2, 0f), Quaternion.identity, transform.parent);//
@@ -358,7 +374,8 @@ public class PlacePlayerController : MonoBehaviour
         });
     }
 
-    public void PlayInkUpEffect() {
+    public void PlayInkUpEffect()
+    {
         //播放特效相关
         // var effect = Instantiate(runMagicEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
         // effect.transform.SetParent(this.transform);
@@ -392,7 +409,8 @@ public class PlacePlayerController : MonoBehaviour
         }
     }
 
-    public void Thunder(float time = 10) {
+    public void Thunder(float time = 10)
+    {
         StartCoroutine(ThunderCoroutine(time));
     }
 
@@ -429,11 +447,20 @@ public class PlacePlayerController : MonoBehaviour
         }
         if (other.tag == "Thunder")
         {
-            if (!other.name.Contains(user.Camp.ToString()))
+            int camp = user.Camp;
+            if (!other.name.Contains(camp.ToString()))
             {
                 if (user.invincible == false)
                 {
-                    Stuck();
+                    if (camp == 2)
+                    {
+                        Stuck(2);
+                    }
+                    else
+                    {
+                        Stuck(1);
+                    }
+
                 }
             }
 
@@ -449,14 +476,14 @@ public class PlacePlayerController : MonoBehaviour
             if (user.Level > lastLevel)
             {
                 PlaylevelUpEffect();
-                var messageType = user.Camp == 1? TipsType.levelUpPanel:TipsType.levelUpPanelRight;
+                var messageType = user.Camp == 1 ? TipsType.levelUpPanel : TipsType.levelUpPanelRight;
                 PlaceUIManager.Instance.AddTips(new TipsItem()
                 {
                     userName = user.Name,
-                    text =$"Lv. {lastLevel}  ->  Lv. {user.level}",
+                    text = $"Lv. {lastLevel}  ->  Lv. {user.level}",
                     icon = user.userIcon,//玩家头像
                     tipsType = messageType,
-                    value =user.Level.ToString(),
+                    value = user.Level.ToString(),
                     isLeft = user.Camp == 1
                 });
                 lastLevel = user.Level;
@@ -466,16 +493,16 @@ public class PlacePlayerController : MonoBehaviour
     }
 
     // 困住 5秒
-    IEnumerator StuckCoroutine()
+    IEnumerator StuckCoroutine(int c)
     {
         user.exSpeed -= 5;
-        PlayStuckEffect();
+        PlayStuckEffect(c);
         yield return new WaitForSeconds(5f);
         user.exSpeed += 5;
     }
 
     // 魔法跑 加速 3秒
-    IEnumerator MagicSpeedUpCoroutine(float time=3)
+    IEnumerator MagicSpeedUpCoroutine(float time = 3)
     {
         user.exSpeed += 5;
         PlayMagicSpeedlUp(time);
