@@ -618,6 +618,8 @@ public class PlaceCenter : MonoBehaviour
     {
         // 读取 颜色
         Color32[] imageData = tex.GetPixels32();
+        
+
         // 宽高
         int width = tex.width;
         int height = tex.height;
@@ -645,7 +647,9 @@ public class PlaceCenter : MonoBehaviour
             for (int i = 0; i < imageData.Length; i++)
             {
                 // c, x, y, r: r, g: g, b: b
+
                 Color32 c = imageData[i];
+                if(c.a == 0) continue;
                 Instruction ins = new Instruction("/draw", ox + i % width, oy + i / width, r: c.r, g: c.g, b: c.b);
                 insList.Add(ins);
             }
