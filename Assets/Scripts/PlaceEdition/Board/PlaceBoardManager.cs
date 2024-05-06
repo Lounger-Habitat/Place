@@ -432,7 +432,7 @@ public class PlaceBoardManager : MonoBehaviour
         string savePath = $"Assets/Images/{UniqueTime}";
         #else
         string savePath = Application.streamingAssetsPath;
-        savePath = Path.Combine(loadImagePath, $"{UniqueTime}");
+        savePath = Path.Combine(savePath, $"{UniqueTime}");
         #endif
         if (!Directory.Exists(savePath))
         {
@@ -450,7 +450,7 @@ public class PlaceBoardManager : MonoBehaviour
         string gifPath = $"Assets/Images/{UniqueTime}";
         #else
         string gifPath = Application.streamingAssetsPath;
-        gifPath = Path.Combine(loadImagePath, $"{UniqueTime}");
+        gifPath = Path.Combine(gifPath, $"{UniqueTime}");
         #endif
         List<Texture2D> f = LoadResources(gifPath);
         f = Select20(f.ToArray());

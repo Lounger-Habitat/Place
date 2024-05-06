@@ -677,7 +677,7 @@ public class PlaceCenter : MonoBehaviour
         return LoadResources("Assets/Images/Demo");
         #else
         string demoPath = Application.streamingAssetsPath;
-        demoPath = Path.Combine(loadImagePath, $"{Demo}");
+        demoPath = Path.Combine(demoPath, "Demo");
         return LoadResources(demoPath);
         #endif
     }
