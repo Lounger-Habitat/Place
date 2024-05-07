@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class NameTag : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class NameTag : MonoBehaviour
 
     TMP_Text tmp_text;
 
+    public Image LackIcon;
+    
     void Start()
     {
         rectTransform = GetComponent<RectTransform>(); // 获取RectTransform组件
@@ -31,5 +34,13 @@ public class NameTag : MonoBehaviour
 
             tmp_text.text = go_name;
         }
+    }
+
+    [ContextMenu("sparkle")]
+    public void Sparkle()
+    {
+        LackIcon.gameObject.SetActive(true);
+        LackIcon.DOFade(1f, 1f).SetLoops(-1, LoopType.Restart);
+        LackIcon.transform.DOScale(Vector3.one * 1.2f, 1f).SetLoops(-1, LoopType.Restart);
     }
 }
