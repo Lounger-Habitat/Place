@@ -37,10 +37,16 @@ public class NameTag : MonoBehaviour
     }
 
     [ContextMenu("sparkle")]
-    public void Sparkle()
+    public void SparkleOn()
     {
         LackIcon.gameObject.SetActive(true);
         LackIcon.DOFade(1f, 1f).SetLoops(-1, LoopType.Restart);
         LackIcon.transform.DOScale(Vector3.one * 1.2f, 1f).SetLoops(-1, LoopType.Restart);
+    }
+
+    public void SparkleOff()
+    {
+        LackIcon.DOKill();//关闭所有变化
+        LackIcon.gameObject.SetActive(false);
     }
 }
