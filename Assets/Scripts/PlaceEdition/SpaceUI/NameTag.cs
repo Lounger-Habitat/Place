@@ -18,7 +18,8 @@ public class NameTag : MonoBehaviour
     {
         rectTransform = GetComponent<RectTransform>(); // 获取RectTransform组件
         tmp_text = GetComponentInChildren<TMP_Text>(); // 获取TextMeshPro组件
-        tmp_text.text = go_name; // 设置文本
+        tmp_text.text = go_name;// 设置文本
+        LackIcon.gameObject.SetActive(false);
     }
 
     void Update()
@@ -39,6 +40,10 @@ public class NameTag : MonoBehaviour
     [ContextMenu("sparkle")]
     public void SparkleOn()
     {
+        if (LackIcon.gameObject.activeSelf)
+        {
+            return;
+        }
         LackIcon.gameObject.SetActive(true);
         LackIcon.DOFade(1f, 1f).SetLoops(-1, LoopType.Restart);
         LackIcon.transform.DOScale(Vector3.one * 1.2f, 1f).SetLoops(-1, LoopType.Restart);
@@ -46,6 +51,10 @@ public class NameTag : MonoBehaviour
 
     public void SparkleOff()
     {
+        if (!LackIcon.gameObject.activeSelf)
+        {
+            return;
+        }
         LackIcon.DOKill();//关闭所有变化
         LackIcon.gameObject.SetActive(false);
     }
