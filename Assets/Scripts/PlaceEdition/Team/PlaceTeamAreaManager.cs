@@ -79,11 +79,23 @@ public class PlaceTeamAreaManager : MonoBehaviour
         teaminfo.ink += inkRate ;
         teaminfo.hisInk += inkRate ;
         //Debug.Log("ink " + ink);
-
+        CheckInk();
         UpdateTeamAreaName();
         // teaminfo.score = PlaceCredits.CalculateScore(ink);
         // PlaceCenter.Instance.OnTeamUIUpdate(teaminfo);
         UpDateTeamUI();
+    }
+
+    private void CheckInk()
+    {
+        if (teaminfo.ink<=20)//检测颜料数是否小于20
+        {
+            teamAreaName.GetComponent<NameTag>().SparkleOn();
+        }
+        else
+        {
+            teamAreaName.GetComponent<NameTag>().SparkleOff();
+        }
     }
 
     void UpdateTeamAreaName()

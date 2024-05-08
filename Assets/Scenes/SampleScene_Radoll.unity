@@ -4223,6 +4223,8 @@ MonoBehaviour:
   bubbleUI: {fileID: 0}
   gameRuning: 0
   recorderTime: 60
+  platform: bilibili
+  anchorName: anchor
 --- !u!1 &1799036361
 GameObject:
   m_ObjectHideFlags: 0
@@ -9357,6 +9359,63 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1001 &768830504963599425
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7703269435794641174}
+    m_Modifications:
+    - target: {fileID: 7318664319657763394, guid: 939257e6f84b96c42a3454aca9e2203b, type: 3}
+      propertyPath: m_Name
+      value: Gold Magic Orb
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639920470180048597, guid: 939257e6f84b96c42a3454aca9e2203b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639920470180048597, guid: 939257e6f84b96c42a3454aca9e2203b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639920470180048597, guid: 939257e6f84b96c42a3454aca9e2203b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639920470180048597, guid: 939257e6f84b96c42a3454aca9e2203b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639920470180048597, guid: 939257e6f84b96c42a3454aca9e2203b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639920470180048597, guid: 939257e6f84b96c42a3454aca9e2203b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639920470180048597, guid: 939257e6f84b96c42a3454aca9e2203b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639920470180048597, guid: 939257e6f84b96c42a3454aca9e2203b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639920470180048597, guid: 939257e6f84b96c42a3454aca9e2203b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639920470180048597, guid: 939257e6f84b96c42a3454aca9e2203b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 939257e6f84b96c42a3454aca9e2203b, type: 3}
 --- !u!1 &782664443805893051
 GameObject:
   m_ObjectHideFlags: 0
@@ -35168,6 +35227,7 @@ MonoBehaviour:
   enemyTotem: {fileID: 0}
   enemyDoor: {fileID: 0}
   insList: []
+  inkCount: 0
   batchCount: 0
   insReadyList: []
   playerAnimator: {fileID: 2311344120433373957}
@@ -35181,10 +35241,13 @@ MonoBehaviour:
     currentState:
       topState: 0
       detailState: 0
+    currentCarryingInkCount: 0
+    currentCarryingInsCount: 0
     maxCarryingInsCount: 0
     speed: 0
     exSpeed: 0
     waitingSpeed: 0
+    contributionRate: 0
     character: {fileID: 0}
     nameTag: {fileID: 0}
     drawTimes: 0
@@ -40706,6 +40769,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5343142890282789052}
   m_CullTransparentMesh: 0
+--- !u!4 &6865371432936761415 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7639920470180048597, guid: 939257e6f84b96c42a3454aca9e2203b, type: 3}
+  m_PrefabInstance: {fileID: 768830504963599425}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6873042288502975207
 GameObject:
   m_ObjectHideFlags: 0
@@ -44144,6 +44212,7 @@ Transform:
   - {fileID: 758294217}
   - {fileID: 9051517706576526147}
   - {fileID: 9188210576895109264}
+  - {fileID: 6865371432936761415}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &7703269435794641175
