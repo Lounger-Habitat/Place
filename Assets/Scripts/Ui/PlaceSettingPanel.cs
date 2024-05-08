@@ -21,4 +21,15 @@ public class PlaceSettingPanel : MonoBehaviour
     {
         placeSettingUI.SetActive(false);
     }
+
+    public void OnClickExitBtn()
+    {
+        if (PlaceCenter.Instance.gameRuning)
+        {
+            //游戏时 无法退出
+            return;
+        }
+        //是否需要断开链接，检测当前是否在游戏，保存当前图片之类得
+        Application.Quit();
+    }
 }
