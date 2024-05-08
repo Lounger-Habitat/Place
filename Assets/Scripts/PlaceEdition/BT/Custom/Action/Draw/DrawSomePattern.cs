@@ -10,7 +10,7 @@ public class DrawSomePattern : PlaceAction
         base.OnStart();
         pc.playerAnimator.SetBool("isRun", false);
         pc.user.currentState.detailState = DetailState.DrawSome;
-        pc.batchCount = pc.insQueue.Count;
+        pc.batchInsCount = pc.insQueue.Count;
     }
 
     public override TaskStatus OnUpdate()
@@ -55,15 +55,13 @@ public class DrawSomePattern : PlaceAction
 
 
 
-        if (pc.batchCount == pc.waitingDraw)
+        if (pc.batchInsCount == pc.batchDrawTimes)
         {
             // 画完了
             if (pc.user.currentCarryingInkCount != 0)
             {
                 Debug.Log($"还剩下 {pc.user.currentCarryingInkCount} 颜料!");
             }
-            pc.batchCount = 0;
-            pc.waitingDraw = 0;
             return TaskStatus.Success;
         }
 

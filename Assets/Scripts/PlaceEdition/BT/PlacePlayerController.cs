@@ -41,7 +41,7 @@ public class PlacePlayerController : MonoBehaviour
     // 指令队列 ，cache
     public Queue<Instruction> insQueue = new Queue<Instruction>();
 
-    public int batchCount = 0;
+
 
     // 指令 Cache ，暂时 没用 
     public List<Instruction> insReadyList = new List<Instruction>();
@@ -49,7 +49,10 @@ public class PlacePlayerController : MonoBehaviour
 
     // 动画
     public Animator playerAnimator;
-    public int waitingDraw = 0;
+
+    public int batchInsCount = 0;
+    public int batchDrawTimes = 0;
+    public int batchNeedInkCount = 0;
 
     // 特效
 
@@ -225,32 +228,12 @@ public class PlacePlayerController : MonoBehaviour
         pathIndex = (pathIndex + 1) % path.Count;  // 移动到下一个路径点
     }
 
+
+
     public void DrawPoint(Instruction ins)
     {
         PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y, user.Camp);
         StartCoroutine(IDrawPoint(ins));
-        // yield return new WaitForSeconds(2);
-        // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
-        // user.carryingInkCount -= ins.needInkCount;
-        // user.score += ins.needInkCount;
-
-    }
-
-    public void DrawLine(Instruction ins)
-    {
-        List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(ins.x, ins.y, ins.ex, ins.ey);
-        // 一笔画
-        points.ForEach(p =>
-        {
-            PlaceConsoleAreaManager.Instance.PlayEffect(p.Item1, p.Item2, user.Camp);
-            StartCoroutine(IDrawLine(p.Item1, p.Item2, ins.r, ins.g, ins.b, user.Camp));
-        });
-
-        // 转成 画点
-        waitingDraw = waitingDraw + 1;
-        // PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y,user.camp);
-        // StartCoroutine(IDrawPoint(ins));
-
         // yield return new WaitForSeconds(2);
         // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
         // user.carryingInkCount -= ins.needInkCount;
@@ -267,13 +250,38 @@ public class PlacePlayerController : MonoBehaviour
         user.currentCarryingInkCount -= ins.needInkCount;
         user.score += ins.needInkCount;
         user.useTotalInkCount += ins.needInkCount;
-        waitingDraw = waitingDraw + 1;
+        batchDrawTimes = batchDrawTimes + 1;
+        user.currentCarryingInsCount -= 1;
     }
+
+    public void DrawLine(Instruction ins)
+    {
+        List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(ins.x, ins.y, ins.ex, ins.ey);
+        // 一笔画
+        points.ForEach(p =>
+        {
+            StartCoroutine(IDrawLine(p.Item1, p.Item2, ins.r, ins.g, ins.b, user.Camp));
+        });
+
+        batchDrawTimes = batchDrawTimes + 1;
+        user.currentCarryingInsCount -= 1;
+        // PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y,user.camp);
+        // StartCoroutine(IDrawPoint(ins));
+
+        // yield return new WaitForSeconds(2);
+        // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
+        // user.carryingInkCount -= ins.needInkCount;
+        // user.score += ins.needInkCount;
+
+    }
+
+
     private IEnumerator IDrawLine(int x, int y, int r, int g, int b, int camp)
     {
+        PlaceConsoleAreaManager.Instance.PlayEffect(x, y, camp);
         // 等待两秒执行
         yield return new WaitForSeconds(1.5f);
-        PlaceBoardManager.Instance.DrawCommand(x, y, r, g, b, user.Camp, user.Id);
+        PlaceBoardManager.Instance.DrawCommand(x, y, r, g, b, camp, user.Id);
         user.currentCarryingInkCount--;
         user.score++;
         // waitingDraw = waitingDraw + 1;
@@ -307,7 +315,8 @@ public class PlacePlayerController : MonoBehaviour
         if (superSpeeding)
         {
             superSpeedUpTime += time;
-        }else
+        }
+        else
         {
             superSpeedUpTime = time;
             StartCoroutine(SmokeSpeedUpCoroutine());
@@ -379,7 +388,8 @@ public class PlacePlayerController : MonoBehaviour
             auto.scale = 1.0f;
             auto.ReStart();
         }
-        else{
+        else
+        {
             reInvincible = Instantiate(shieldsEffect_1, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
             reInvincible.transform.SetParent(this.transform);
             var auto = reInvincible.GetComponent<EffectAutoDelete>();
@@ -522,7 +532,7 @@ public class PlacePlayerController : MonoBehaviour
             thunderTime = time;
             StartCoroutine(ThunderCoroutine(time));
         }
-        
+
     }
 
     public void PlayThunder(Transform t = null)
@@ -657,7 +667,7 @@ public class PlacePlayerController : MonoBehaviour
         {
             reGreen.SetActive(false);
         }
-        
+
     }
 
     // 魔法跑 加速 5秒
@@ -703,7 +713,7 @@ public class PlacePlayerController : MonoBehaviour
             yield return new WaitForSeconds(60f);
             invincibleTime -= 60;
         }
-        
+
         reInvincible.transform.DOScale(0, 1).OnComplete(() =>
         {
             reInvincible.SetActive(false);

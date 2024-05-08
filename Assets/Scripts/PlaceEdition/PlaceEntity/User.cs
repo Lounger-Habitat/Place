@@ -42,9 +42,11 @@ public class User
     public int score { get; set; }  // 玩家当前分数
     public int currentCarryingInkCount = 0;  // 玩家 身上携带的 颜料数量
     public int currentCarryingInsCount = 0; // 玩家 身上携带的 最大指令数量
-    public int maxCarryingInkCount { get; set; } // 玩家 身上携带的 颜料数量
-    public int maxCarryingInsCount; // 玩家 身上携带的 最大指令数量
+    public int maxCarryingInkCount = 10; // 玩家 身上携带的 颜料数量
+    public int maxCarryingInsCount = 10; // 玩家 身上携带的 最大指令数量
+    // base 速度
     public float speed;
+    // 额外速度
     public float exSpeed = 0;
     public float waitingSpeed = 1.0f; // 等待速度
 
@@ -63,9 +65,14 @@ public class User
     // 统计信息
     // 用户绘画次数
     public int drawTimes = 0;
+
+    // 使用颜料总数
     public int useTotalInkCount = 0;
+    // 画面上 有效点
     public int effectiveInkCount = 0;
+    // 使用了多少超能力
     public float usePowerCount = 0;
+    // 生成了多少颜料
     public int genInkCount = 0;
 
 
@@ -122,7 +129,7 @@ public class User
         // 体现角色能力
         if (nameTag != null)
         {
-            nameTag.GetComponent<IconNameTag>().UpdateIconRect(level*0.03f);
+            nameTag.GetComponent<IconNameTag>().UpdateIconRect(level * 0.03f);
         }
 
     }

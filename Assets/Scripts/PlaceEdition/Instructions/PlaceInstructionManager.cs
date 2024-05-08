@@ -272,13 +272,14 @@ public class PlaceInstructionManager : MonoBehaviour
                         }
 
                         // ======= Line2point =======
-                        List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
-                        foreach ((int, int) point in points)
-                        {
-                            Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
-                            user.instructionQueue.Enqueue(drawIns);
-                        }
-                        // user.instructionQueue.Enqueue(ins_l);
+                        // List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
+                        // foreach ((int, int) point in points)
+                        // {
+                        //     Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                        //     user.instructionQueue.Enqueue(drawIns);
+                        // }
+                        // ======= 一笔画 ========
+                        user.instructionQueue.Enqueue(ins_l);
                     }
                     else if (parts.Length == 6)
                     {
@@ -313,12 +314,16 @@ public class PlaceInstructionManager : MonoBehaviour
                         }
 
                         // ======= Line2point =======
-                        List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
-                        foreach ((int, int) point in points)
-                        {
-                            Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
-                            user.instructionQueue.Enqueue(drawIns);
-                        }
+
+                        // List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
+                        // foreach ((int, int) point in points)
+                        // {
+                        //     Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                        //     user.instructionQueue.Enqueue(drawIns);
+                        // }
+
+                        // ======= 一笔画 ========
+                        user.instructionQueue.Enqueue(ins_l);
                     }
                     else if (parts.Length == 8)
                     {
@@ -342,12 +347,16 @@ public class PlaceInstructionManager : MonoBehaviour
                         }
 
                         // ======= Line2point =======
-                        List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
-                        foreach ((int, int) point in points)
-                        {
-                            Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
-                            user.instructionQueue.Enqueue(drawIns);
-                        }
+
+                        // List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
+                        // foreach ((int, int) point in points)
+                        // {
+                        //     Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                        //     user.instructionQueue.Enqueue(drawIns);
+                        // }
+
+                        // ======= 一笔画 ========
+                        user.instructionQueue.Enqueue(ins_l);
                     }
                     else
                     {
@@ -434,6 +443,7 @@ public class PlaceInstructionManager : MonoBehaviour
                 }
                 break;
             case "/c":
+                break; // 暂时不用
                 if (parts.Length == 4)
                 {
                     int x, y, r;
