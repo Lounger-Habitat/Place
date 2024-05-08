@@ -32,7 +32,7 @@ public class DrawMoveToTotem : PlaceAction
         {
             return TaskStatus.Success;
         }
-        base.pc.MoveToTarget();
+        pc.MoveToTarget();
         return TaskStatus.Running;
     }
 }

@@ -87,7 +87,7 @@ public class Trance : IState
     public void Update()
     {
         // 如果没事就去等颜料
-        if (pc.user.carryingInkCount == 0)
+        if (pc.user.currentCarryingInkCount == 0)
         {
             manager.ChangeState(CharacterState.WaitingForCommandInTeamArea);
         }
@@ -145,7 +145,7 @@ public class WaitingForCommandInTeamArea : IState
 
                 // }
 
-                pc.user.carryingInkCount += needInkCount;
+                pc.user.currentCarryingInkCount += needInkCount;
 
                 PlaceCenter.Instance.SetTeamInkCount(pc.user.Camp, -needInkCount);
 
@@ -226,29 +226,29 @@ public class WaitingForCommandExecutionAtConsole : IState
                     case "/draw":
                     case "/d":
                         PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, pc.user.Camp);
-                        pc.user.carryingInkCount -= ins.needInkCount;
+                        pc.user.currentCarryingInkCount -= ins.needInkCount;
                         pc.user.score += ins.needInkCount;
                         break;
                     case "/line":
                     case "/l":
                         PlaceBoardManager.Instance.LineCommand(ins.x, ins.y, ins.ex, ins.ey, ins.r, ins.g, ins.b, pc.user.Camp);
-                        pc.user.carryingInkCount -= ins.needInkCount;
+                        pc.user.currentCarryingInkCount -= ins.needInkCount;
                         pc.user.score += ins.needInkCount;
                         break;
                     case "/paint":
                     case "/p":
                         PlaceBoardManager.Instance.PaintCommand(ins.mode, ins.x, ins.y, ins.dx, ins.dy, ins.r, ins.g, ins.b, pc.user.Camp);
-                        pc.user.carryingInkCount -= ins.needInkCount;
+                        pc.user.currentCarryingInkCount -= ins.needInkCount;
                         pc.user.score += ins.needInkCount;
                         break;
                     default:
                         break;
                 }
             }
-            if (pc.user.carryingInkCount != 0)
+            if (pc.user.currentCarryingInkCount != 0)
             {
                 Debug.Log("账不对啊");
-                pc.user.carryingInkCount = 0;
+                pc.user.currentCarryingInkCount = 0;
             }
             manager.insList.Clear();
         }
