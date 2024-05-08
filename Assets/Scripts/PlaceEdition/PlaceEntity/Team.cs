@@ -15,6 +15,8 @@ public class Team
     public int score;
 
     public float ink;
+    public float hisInk;
+    public float hisExInk;
 
     public int currentTeamNumberCount;
     
@@ -30,6 +32,8 @@ public class Team
     public void Reset() {
         score = 0;
         ink = 0;
+        hisInk = 0;
+        hisExInk = 0;
         currentTeamNumberCount = 0;
     }
 }

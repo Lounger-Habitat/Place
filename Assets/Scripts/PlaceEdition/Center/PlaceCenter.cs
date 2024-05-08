@@ -500,7 +500,10 @@ public class PlaceCenter : MonoBehaviour
         u.score += normalPower;
         u.genInkCount += normalPower;
         u.Update();
-        PlaceTeamManager.Instance.teamAreas[u.Camp - 1].teaminfo.ink += normalPower;
+        u.currentCarryingInkCount += normalPower;
+        PlaceTeamManager.Instance.teamAreas[u.Camp - 1].teaminfo.ink += (int)(0.1 * normalPower);
+        PlaceTeamManager.Instance.teamAreas[u.Camp - 1].teaminfo.hisInk += (int)(0.1 * normalPower);
+        PlaceTeamManager.Instance.teamAreas[u.Camp - 1].teaminfo.hisExInk += (int)(0.1 * normalPower);
         //在这通知UI？还得要状态切换啊，先检查状态再通知
         PlaceUIManager.Instance.AddTips(new TipsItem()
         {

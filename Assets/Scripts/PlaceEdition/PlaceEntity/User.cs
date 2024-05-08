@@ -40,11 +40,15 @@ public class User
     public int Level { get { return level; } set { level = value; } }
     public PlayerState currentState; // 玩家当前状态
     public int score { get; set; }  // 玩家当前分数
-    public int carryingInkCount { get; set; } // 玩家 身上携带的 颜料数量
+    public int currentCarryingInkCount = 0;  // 玩家 身上携带的 颜料数量
+    public int currentCarryingInsCount = 0; // 玩家 身上携带的 最大指令数量
+    public int maxCarryingInkCount { get; set; } // 玩家 身上携带的 颜料数量
     public int maxCarryingInsCount; // 玩家 身上携带的 最大指令数量
     public float speed;
     public float exSpeed = 0;
     public float waitingSpeed = 1.0f; // 等待速度
+
+    public float contributionRate = 0.1f; // 贡献率
 
     public Queue<Instruction> instructionQueue;// 玩家 指令队列， 用于保存 玩家弹幕输入的指令，等待被执行
 
@@ -78,7 +82,7 @@ public class User
         this.selfTeam = null;
         this.lastColor = Color.white;
         this.score = 0;
-        this.carryingInkCount = 0;
+        this.maxCarryingInkCount = 10;
         this.maxCarryingInsCount = 10;
         this.userIcon = null;
         this.speed = 2.0f;
@@ -97,19 +101,28 @@ public class User
 
         // 重置玩家状态
         score = 0;
-        carryingInkCount = 1;
+        maxCarryingInkCount = 10;
+        maxCarryingInsCount = 10;
+        currentCarryingInkCount = 0;
+        currentCarryingInsCount = 0;
         speed = 2.0f;
 
     }
 
     public void Update()
     {
+        // 等级
         this.level = CalLevel(score);
-        this.speed = 2 + (level - 1) * 0.05f;
-        this.maxCarryingInsCount = (int)(10 + (level - 1) * 0.5f);
+        // 速度
+        this.speed = 2 + (level - 1) * 0.03f;
+        // 承载量
+        this.maxCarryingInsCount = (int)(10 + (level - 1) * 10f);
+        this.maxCarryingInkCount = (int)(10 + (level - 1) * 10f);
+
+        // 体现角色能力
         if (nameTag != null)
         {
-            nameTag.GetComponent<IconNameTag>().UpdateIconRect(level*0.05f);
+            nameTag.GetComponent<IconNameTag>().UpdateIconRect(level*0.03f);
         }
 
     }
