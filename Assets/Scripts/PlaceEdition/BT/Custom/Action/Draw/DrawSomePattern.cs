@@ -10,7 +10,7 @@ public class DrawSomePattern : PlaceAction
         base.OnStart();
         pc.playerAnimator.SetBool("isRun", false);
         pc.user.currentState.detailState = DetailState.DrawSome;
-        pc.batchCount = pc.insQueue.Count;
+        pc.batchInsCount = pc.insQueue.Count;
     }
 
     public override TaskStatus OnUpdate()
@@ -42,9 +42,9 @@ public class DrawSomePattern : PlaceAction
                     break;
                 case "/paint":
                 case "/p":
-                    PlaceBoardManager.Instance.PaintCommand(ins.mode, ins.x, ins.y, ins.dx, ins.dy, ins.r, ins.g, ins.b, pc.user.Camp);
-                    pc.user.carryingInkCount -= ins.needInkCount;
-                    pc.user.score += ins.needInkCount;
+                    // PlaceBoardManager.Instance.PaintCommand(ins.mode, ins.x, ins.y, ins.dx, ins.dy, ins.r, ins.g, ins.b, pc.user.Camp);
+                    // pc.user.currentCarryingInkCount -= ins.needInkCount;
+                    // pc.user.score += ins.needInkCount;
                     break;
                 default:
                     break;
@@ -55,15 +55,13 @@ public class DrawSomePattern : PlaceAction
 
 
 
-        if (pc.batchCount == pc.waitingDraw)
+        if (pc.batchInsCount == pc.batchDrawTimes)
         {
-            if (pc.user.carryingInkCount != 0)
+            // 画完了
+            if (pc.user.currentCarryingInkCount != 0)
             {
-                Debug.Log("账不对啊");
-                pc.user.carryingInkCount = 0;
+                Debug.Log($"还剩下 {pc.user.currentCarryingInkCount} 颜料!");
             }
-            pc.batchCount = 0;
-            pc.waitingDraw = 0;
             return TaskStatus.Success;
         }
 

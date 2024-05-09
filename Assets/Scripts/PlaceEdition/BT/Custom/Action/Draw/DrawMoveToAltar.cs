@@ -5,19 +5,15 @@ using UnityEngine;
 [TaskCategory("Custom/Draw")]
 public class DrawMoveToAltar : PlaceAction
 {
-    
+
     public override void OnStart()
     {
         base.OnStart();
         base.pc.target = base.pc.altar;
-        // 初始化目的位置
-        // if (base.pc.target.name == "Console")
-        // {
-        //     Debug.Log("MoveToAltar");
-        // }
+
         pc.playerAnimator.SetBool("isRun", true);
         pc.user.currentState.detailState = DetailState.DrawMoveToAltar;
-
+        pc.batchInsCount = pc.insQueue.Count;
     }
 
     public override TaskStatus OnUpdate()
@@ -25,11 +21,11 @@ public class DrawMoveToAltar : PlaceAction
         Vector2 positionA = new Vector2(transform.position.x, transform.position.z);
         Vector2 positionB = new Vector2(base.pc.target.position.x, base.pc.target.position.z);
 
-        if (Vector2.Distance(positionA, positionB) < 3f)
+        if (Vector2.Distance(positionA, positionB) < 1f)
         {
             return TaskStatus.Success;
         }
-        base.pc.MoveToTarget();
+        pc.MoveToTarget();
         return TaskStatus.Running;
     }
 }

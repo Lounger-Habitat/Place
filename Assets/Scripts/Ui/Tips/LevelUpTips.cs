@@ -14,7 +14,7 @@ public class LevelUpTips : TipsBase
     public Image userIcon;
     
     public GameObject[] starts;
-    
+    public float openRotationZ;
     public override void SetData(TipsItem tips)
     {
         for (int i = 0; i < starts.Length; i++)
@@ -39,12 +39,12 @@ public class LevelUpTips : TipsBase
         if (isOn)
         {
             (transform as RectTransform).DOAnchorPosX(openPos, 0.7f);
-            //(transform as RectTransform).DOLocalRotate(new Vector3(0,0,8.5f), 3.5f);
+            (transform as RectTransform).DOLocalRotate(new Vector3(0,0,openRotationZ), 3.5f);
         }
         else
         {
             (transform as RectTransform).DOAnchorPosX(closePos, 0.6f);
-            //(transform as RectTransform).DOLocalRotate(new Vector3(0,0,0), 0.8f);
+            (transform as RectTransform).DOLocalRotate(new Vector3(0,0,0), 0.8f);
         }
     }
 }

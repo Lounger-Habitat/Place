@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -40,29 +38,51 @@ public class GiftTips : TipsBase
         userImage.sprite = tips.icon;
         iconImage.gameObject.SetActive(false);
         needRotation = false;
-        switch (tips.text)
+        switch (tips.skillIcon)
         {
-            case "急速神行":
-                iconRectTransform.GetComponent<Image>().sprite = sprites[4];
-                break;
-            case "颜料爆发":
+            // case "急速神行":
+            //     iconRectTransform.GetComponent<Image>().sprite = sprites[4];
+            //     break;
+            // case "颜料爆发":
+            //     iconRectTransform.GetComponent<Image>().sprite = sprites[0];
+            //     needRotation = true;
+            //     break;
+            // case "风之束缚":
+            //     iconRectTransform.GetComponent<Image>().sprite = sprites[5];
+            //     break;
+            // case "绝对防御":
+            //     iconRectTransform.GetComponent<Image>().sprite = sprites[3];
+            //     iconImage.gameObject.SetActive(true);
+            //     iconImage.sprite =sprites[2];
+            //     break;
+            // case "颜料核弹":
+            //     iconRectTransform.GetComponent<Image>().sprite = sprites[0];
+            //     needRotation = true;
+            //     break;
+            // case "掌控雷电":
+            //     iconRectTransform.GetComponent<Image>().sprite = sprites[1];
+            //     break;
+            case SkillIcon.Pencil:
                 iconRectTransform.GetComponent<Image>().sprite = sprites[0];
                 needRotation = true;
                 break;
-            case "风之束缚":
-                iconRectTransform.GetComponent<Image>().sprite = sprites[5];
+            case SkillIcon.Thunder:
+                iconRectTransform.GetComponent<Image>().sprite = sprites[1];
                 break;
-            case "绝对防御":
+            case SkillIcon.Defense:
                 iconRectTransform.GetComponent<Image>().sprite = sprites[3];
                 iconImage.gameObject.SetActive(true);
                 iconImage.sprite =sprites[2];
                 break;
-            case "颜料核弹":
+            case SkillIcon.Speed:
+                iconRectTransform.GetComponent<Image>().sprite = sprites[4];
+                break;
+            case SkillIcon.Tornado:
+                iconRectTransform.GetComponent<Image>().sprite = sprites[5];
+                break;
+            default:
                 iconRectTransform.GetComponent<Image>().sprite = sprites[0];
                 needRotation = true;
-                break;
-            case "掌控雷电":
-                iconRectTransform.GetComponent<Image>().sprite = sprites[1];
                 break;
         }
     }

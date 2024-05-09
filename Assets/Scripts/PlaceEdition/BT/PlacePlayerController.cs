@@ -5,17 +5,14 @@ using System.Collections.Generic;
 using System;
 using System.Collections;
 using DG.Tweening;
-
 using System.Linq;
-using UnityEngine.Analytics;
-using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
+using System.Net.NetworkInformation;
 
 public class PlacePlayerController : MonoBehaviour
 {
     public SharedVariable playerGoal;
     public BehaviorTree playerBT;
     public Transform target;
-
     // 祭坛
     public Transform altar;
     // 自家图腾
@@ -38,10 +35,13 @@ public class PlacePlayerController : MonoBehaviour
     // 身上指令
     public List<Instruction> insList = new List<Instruction>();
 
-    // 指令队列
+    // 身上颜料
+    public int inkCount = 0;
+
+    // 指令队列 ，cache
     public Queue<Instruction> insQueue = new Queue<Instruction>();
 
-    public int batchCount = 0;
+
 
     // 指令 Cache ，暂时 没用 
     public List<Instruction> insReadyList = new List<Instruction>();
@@ -49,7 +49,10 @@ public class PlacePlayerController : MonoBehaviour
 
     // 动画
     public Animator playerAnimator;
-    public int waitingDraw = 0;
+
+    public int batchInsCount = 0;
+    public int batchDrawTimes = 0;
+    public int batchNeedInkCount = 0;
 
     // 特效
 
@@ -72,14 +75,16 @@ public class PlacePlayerController : MonoBehaviour
     public GameObject slowEffect;
     public GameObject runMagicEffect;
     public GameObject runSmokeEffect;
-    public GameObject shieldsEffect_1;
-    public GameObject shieldsEffect_2;
-    public GameObject shieldsEffect_3;
+    public GameObject blueShieldsEffect;
+    public GameObject greenShieldsEffect;
+    public GameObject blessingEffect;
     public GameObject tornadoEffect;
     public GameObject electricityEffect;
     public GameObject strikeEffect;
     public GameObject levelUpEffect;
     public GameObject inkUpIcon;
+    public GameObject blueArea;
+    public GameObject PurpleArea;
 
     public void Start()
     {
@@ -105,7 +110,7 @@ public class PlacePlayerController : MonoBehaviour
         }
         if (selfTotem == null)
         {
-            selfTotem = GameObject.Find($"TeamArea{user.Camp}").transform;
+            selfTotem = GameObject.Find($"TeamArea{user.Camp}Totem").transform;
         }
         if (selfDoor == null)
         {
@@ -145,6 +150,12 @@ public class PlacePlayerController : MonoBehaviour
             Debug.Log("trans to Attack");
             playerGoal.SetValue(PlayerGoal.Attack);
             playerBT.SetVariable("playerGoal", playerGoal);
+        }
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            // 清空队列
+            insQueue.Clear();
+            user.instructionQueue.Clear();
         }
     }
 
@@ -217,29 +228,12 @@ public class PlacePlayerController : MonoBehaviour
         pathIndex = (pathIndex + 1) % path.Count;  // 移动到下一个路径点
     }
 
+
+
     public void DrawPoint(Instruction ins)
     {
         PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y, user.Camp);
         StartCoroutine(IDrawPoint(ins));
-        // yield return new WaitForSeconds(2);
-        // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
-        // user.carryingInkCount -= ins.needInkCount;
-        // user.score += ins.needInkCount;
-
-    }
-
-    public void DrawLine(Instruction ins)
-    {
-        List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(ins.x, ins.y, ins.ex, ins.ey);
-        points.ForEach(p =>
-        {
-            PlaceConsoleAreaManager.Instance.PlayEffect(p.Item1, p.Item2, user.Camp);
-            StartCoroutine(IDrawLine(p.Item1, p.Item2, ins.r, ins.g, ins.b, user.Camp));
-        });
-        waitingDraw = waitingDraw + 1;
-        // PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y,user.camp);
-        // StartCoroutine(IDrawPoint(ins));
-
         // yield return new WaitForSeconds(2);
         // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
         // user.carryingInkCount -= ins.needInkCount;
@@ -253,79 +247,212 @@ public class PlacePlayerController : MonoBehaviour
         // 等待两秒执行
         yield return new WaitForSeconds(1.5f);
         PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.Camp, user.Id);
-        user.carryingInkCount -= ins.needInkCount;
+        user.currentCarryingInkCount -= ins.needInkCount;
         user.score += ins.needInkCount;
         user.useTotalInkCount += ins.needInkCount;
-        waitingDraw = waitingDraw + 1;
+        batchDrawTimes = batchDrawTimes + 1;
+        user.currentCarryingInsCount -= 1;
     }
+
+    public void DrawLine(Instruction ins)
+    {
+        List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(ins.x, ins.y, ins.ex, ins.ey);
+        // 一笔画
+        points.ForEach(p =>
+        {
+            StartCoroutine(IDrawLine(p.Item1, p.Item2, ins.r, ins.g, ins.b, user.Camp));
+        });
+
+        batchDrawTimes = batchDrawTimes + 1;
+        user.currentCarryingInsCount -= 1;
+        // PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y,user.camp);
+        // StartCoroutine(IDrawPoint(ins));
+
+        // yield return new WaitForSeconds(2);
+        // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
+        // user.carryingInkCount -= ins.needInkCount;
+        // user.score += ins.needInkCount;
+
+    }
+
+
     private IEnumerator IDrawLine(int x, int y, int r, int g, int b, int camp)
     {
+        PlaceConsoleAreaManager.Instance.PlayEffect(x, y, camp);
         // 等待两秒执行
         yield return new WaitForSeconds(1.5f);
-        PlaceBoardManager.Instance.DrawCommand(x, y, r, g, b, user.Camp, user.Id);
-        user.carryingInkCount--;
+        PlaceBoardManager.Instance.DrawCommand(x, y, r, g, b, camp, user.Id);
+        user.currentCarryingInkCount--;
         user.score++;
         // waitingDraw = waitingDraw + 1;
     }
 
 
-    public void StartLevelUp () {
+
+// ============= Effect API =============
+    public void StartLevelUp()
+    {
         StartCoroutine(LevelUpCoroutine());
     }
     public void PlaylevelUpEffect()
     {
-        //播放特效相关
-        var effect = Instantiate(levelUpEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+        // if (reLevelUp != null)
+        // {
+        //     reLevelUp.SetActive(true);
+        //     var auto = reLevelUp.GetComponent<EffectAutoDelete>();
+        //     auto.ReStart();
+        // }
+        // else
+        // {
+        //     reLevelUp = Instantiate(levelUpEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+        //     reLevelUp.transform.SetParent(this.transform);
+        // }
+        var effect = Instantiate(levelUpEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);
         effect.transform.SetParent(this.transform);
-        //后续可能有音效、UI提示等效果
+        effect.GetComponent<EffectAutoDelete>().DoDestroy(2);
     }
 
     public void ActiveSpeedlUp(float time)
     {
-        StartCoroutine(SmokeSpeedUpCoroutine(time));
+        if (superSpeeding)
+        {
+            superSpeedUpTime += time;
+        }
+        else
+        {
+            superSpeedUpTime = time;
+            StartCoroutine(SmokeSpeedUpCoroutine());
+        }
     }
 
-    public void PassiveSpeedUp(float time=3)
+    public void PassiveSpeedUp(float time = 5)
     {
-        StartCoroutine(MagicSpeedUpCoroutine(time));
+        if (speeding)
+        {
+            speedUpTime += time;
+        }
+        else
+        {
+            speedUpTime = time;
+            StartCoroutine(MagicSpeedUpCoroutine());
+        }
     }
 
-    public void PlaySmokeSpeedlUp(float time)
+    public void PlaySmokeSpeedlUp()
     {
-        //播放特效相关
-        var effect = Instantiate(runSmokeEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
-        effect.transform.SetParent(this.transform);
-        effect.GetComponent<EffectAutoDelete>().destroyTime = time;
+        if (reSmoke != null)
+        {
+            reSmoke.SetActive(true);
+            var auto = reSmoke.GetComponent<EffectAutoDelete>();
+            auto.ReStart();
+        }
+        else
+        {
+            reSmoke = Instantiate(runSmokeEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+            reSmoke.transform.SetParent(this.transform);
+        }
     }
 
-    public void PlayMagicSpeedlUp(float time)
+    public void PlayMagicSpeedlUp()
     {
-        //播放特效相关
-        var effect = Instantiate(runMagicEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
-        effect.transform.SetParent(transform);
-        effect.GetComponent<EffectAutoDelete>().destroyTime = time;
+        if (reMagic != null)
+        {
+            reMagic.SetActive(true);
+            var auto = reMagic.GetComponent<EffectAutoDelete>();
+            auto.ReStart();
+        }
+        else
+        {
+            reMagic = Instantiate(runMagicEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);
+            reMagic.transform.SetParent(transform);
+        }
     }
-
-    public void Invincible(float time=30) {
-        StartCoroutine(InvincibleCoroutine(time));
-    }
-
-    public void PlayInvincibleEffect(float time = 30)
+    public void PlayBlessingEffect()
     {
-        var effect = Instantiate(shieldsEffect_1, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
-        effect.transform.SetParent(this.transform);
-        var auto = effect.GetComponent<EffectAutoDelete>();
+        if (reBlessing != null)
+        {
+            reBlessing.SetActive(true);
+            var auto = reBlessing.GetComponent<EffectAutoDelete>();
+            auto.ReBlessing();
+        }
+        else
+        {
+            reBlessing = Instantiate(runMagicEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);
+            reBlessing.transform.SetParent(transform);
+        }
+    }
+
+    public void Invincible(float time = 60)
+    {
+        if (invincible)
+        {
+            invincibleTime += time;
+        }
+        else
+        {
+            invincibleTime = time;
+            StartCoroutine(InvincibleCoroutine(user.Camp));
+        }
+    }
+
+    public void Blessing(float time = 300)
+    {
+        if (blessing)
+        {
+            blessingTime += time;
+        }
+        else
+        {
+            blessingTime = time;
+            StartCoroutine(BlessingCoroutine());
+        }
+    }
+
+
+    public void PlayInvincibleEffect(int camp)
+    {
+        if (camp == 1)
+        {
+            if (reBlueInvincible != null)
+            {
+                reBlueInvincible.SetActive(true);
+                var auto = reBlueInvincible.GetComponent<EffectAutoDelete>();
+                auto.scale = 1.0f;
+                auto.ReStart();
+            }
+            else
+            {
+                reBlueInvincible = Instantiate(blueShieldsEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+                reBlueInvincible.transform.SetParent(this.transform);
+                var auto = reBlueInvincible.GetComponent<EffectAutoDelete>();
+                auto.scale = 1.0f;
+            }
+        }
+        else if (camp == 2)
+        {
+            if (reGreenInvincible != null)
+            {
+                reGreenInvincible.SetActive(true);
+                var auto = reGreenInvincible.GetComponent<EffectAutoDelete>();
+                auto.scale = 1.0f;
+                auto.ReStart();
+            }
+            else
+            {
+                reGreenInvincible = Instantiate(blueShieldsEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+                reGreenInvincible.transform.SetParent(this.transform);
+                var auto = reGreenInvincible.GetComponent<EffectAutoDelete>();
+                auto.scale = 1.0f;
+            }
+        }
+    }
+
+    public void BallThunder()
+    {
+        reThunderBall = Instantiate(electricityEffect, transform.position + new Vector3(0f, 3f, 0f), Quaternion.identity, transform.parent);//
+        reThunderBall.transform.SetParent(this.transform);
+        var auto = reThunderBall.GetComponent<EffectAutoDelete>();
         auto.scale = 1.0f;
-        auto.destroyTime = time;
-    }
-
-    public void BallThunder(float time = 10)
-    {
-        var effect = Instantiate(electricityEffect, transform.position + new Vector3(0f, 3f, 0f), Quaternion.identity, transform.parent);//
-        effect.transform.SetParent(this.transform);
-        var auto = effect.GetComponent<EffectAutoDelete>();
-        auto.scale = 1.0f;
-        auto.destroyTime = time;
     }
 
     public void Tornado(int num)
@@ -333,24 +460,73 @@ public class PlacePlayerController : MonoBehaviour
         PlayTornadoEffect(num);
     }
 
-    public void Stuck() {
-        StartCoroutine(StuckCoroutine());
-    }
-
-    public void PlayStuckEffect()
+    public void Stuck(int c = 0)
     {
-        var effect = Instantiate(slowEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
-        effect.transform.SetParent(this.transform);
-
+        if (stucking)
+        {
+            stuckTime += 5;
+        }
+        else
+        {
+            stuckTime = 5;
+            StartCoroutine(StuckCoroutine(c));
+        }
     }
 
-    public void InkUp(int p) {
+    public void PlayStuckEffect(int camp = 0)
+    {
+        if (camp == 1)
+        {
+            if (reGreen != null)
+            {
+                reGreen.SetActive(true);
+                var auto = reGreen.GetComponent<EffectAutoDelete>();
+                auto.ReStart();
+            }
+            else
+            {
+                reGreen = Instantiate(PurpleArea, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+                reGreen.transform.SetParent(this.transform);
+            }
+        }
+        else if (camp == 2)
+        {
+            if (reBlue != null)
+            {
+                reBlue.SetActive(true);
+                var auto = reBlue.GetComponent<EffectAutoDelete>();
+                auto.ReStart();
+            }
+            else
+            {
+                reBlue = Instantiate(blueArea, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+                reBlue.transform.SetParent(this.transform);
+            }
+        }
+        else
+        {
+            if (reStuck != null)
+            {
+                reStuck.SetActive(true);
+                var auto = reStuck.GetComponent<EffectAutoDelete>();
+                auto.ReStart();
+            }
+            else
+            {
+                reStuck = Instantiate(slowEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+                reStuck.transform.SetParent(this.transform);
+            }
+        }
+    }
+    public void InkUp(int p)
+    {
         PlayInkUpEffect(p);
     }
 
-    public void PlayInkUpEffect(int p) {
-        var effect = Instantiate(levelUpEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
-        effect.transform.SetParent(this.transform);
+    public void PlayInkUpEffect(int p)
+    {
+        // var effect = Instantiate(levelUpEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+        // effect.transform.SetParent(this.transform);
         var icon = Instantiate(inkUpIcon, user.nameTag.transform.position + new Vector3(0f, 2, 0f), Quaternion.identity, transform.parent);//
         icon.GetComponent<InkTag>().countText.text = $"X {p}";
         icon.transform.SetParent(user.nameTag.transform);
@@ -360,7 +536,8 @@ public class PlacePlayerController : MonoBehaviour
         });
     }
 
-    public void PlayInkUpEffect() {
+    public void PlayInkUpEffect()
+    {
         //播放特效相关
         // var effect = Instantiate(runMagicEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
         // effect.transform.SetParent(this.transform);
@@ -394,8 +571,18 @@ public class PlacePlayerController : MonoBehaviour
         }
     }
 
-    public void Thunder(float time = 10) {
-        StartCoroutine(ThunderCoroutine(time));
+    public void Thunder(float time = 10)
+    {
+        if (thundering)
+        {
+            thunderTime += time;
+        }
+        else
+        {
+            thunderTime = time;
+            StartCoroutine(ThunderCoroutine(time));
+        }
+
     }
 
     public void PlayThunder(Transform t = null)
@@ -407,7 +594,7 @@ public class PlacePlayerController : MonoBehaviour
         GameObject thunder = Instantiate(strikeEffect, targetPos, Quaternion.identity);
         var auto = thunder.GetComponent<EffectAutoDelete>();
         auto.scale = 2.0f;
-        auto.destroyTime = 5;
+        auto.DoDestroy(3);
         // thunder.transform.SetParent(this.transform);
         thunder.name = $"Thunder - {user.Camp}";
     }
@@ -418,7 +605,7 @@ public class PlacePlayerController : MonoBehaviour
         {
             if (other.name.Contains(user.Camp.ToString()))
             {
-                PassiveSpeedUp(3);
+                PassiveSpeedUp(5);
             }
             else
             {
@@ -431,17 +618,54 @@ public class PlacePlayerController : MonoBehaviour
         }
         if (other.tag == "Thunder")
         {
-            if (!other.name.Contains(user.Camp.ToString()))
+            int camp = user.Camp;
+            if (!other.name.Contains(camp.ToString()))
             {
                 if (user.invincible == false)
                 {
-                    Stuck();
+                    if (camp == 2)
+                    {
+                        Stuck(2);
+                    }
+                    else
+                    {
+                        Stuck(1);
+                    }
+
                 }
             }
 
         }
     }
     // === 协程 ===
+
+    float speedUpTime = 0.0f;
+    float stuckTime = 0.0f;
+    float invincibleTime = 0.0f;
+    float blessingTime = 0.0f;
+    float thunderTime = 0.0f;
+    float superSpeedUpTime = 0.0f;
+
+    // for 特效状态 ， 与 逻辑 状态 区分开，逻辑状态 在 user里
+    bool stucking = false;
+    bool invincible = false;
+    bool thundering = false;
+    bool speeding = false;
+    bool superSpeeding = false;
+    bool blessing = false;
+
+    GameObject reStuck;
+    GameObject reSmoke;
+    GameObject reMagic;
+    GameObject reBlueInvincible;
+    GameObject reGreenInvincible;
+    GameObject reBlue;
+    GameObject reGreen;
+    GameObject reThunderBall;
+    GameObject reBlessing;
+
+
+
 
     // 升级
     IEnumerator LevelUpCoroutine()
@@ -451,14 +675,14 @@ public class PlacePlayerController : MonoBehaviour
             if (user.Level > lastLevel)
             {
                 PlaylevelUpEffect();
-                var messageType = user.Camp == 1? TipsType.levelUpPanel:TipsType.levelUpPanelRight;
+                var messageType = user.Camp == 1 ? TipsType.levelUpPanel : TipsType.levelUpPanelRight;
                 PlaceUIManager.Instance.AddTips(new TipsItem()
                 {
                     userName = user.Name,
-                    text =$"Lv. {lastLevel}  ->  Lv. {user.level}",
+                    text = $"Lv. {lastLevel}  ->  Lv. {user.level}",
                     icon = user.userIcon,//玩家头像
                     tipsType = messageType,
-                    value =user.Level.ToString(),
+                    value = user.Level.ToString(),
                     isLeft = user.Camp == 1
                 });
                 lastLevel = user.Level;
@@ -468,54 +692,133 @@ public class PlacePlayerController : MonoBehaviour
     }
 
     // 困住 5秒
-    IEnumerator StuckCoroutine()
+    IEnumerator StuckCoroutine(int camp)
     {
+        stucking = true;
         user.exSpeed -= 5;
-        PlayStuckEffect();
-        yield return new WaitForSeconds(5f);
+        PlayStuckEffect(camp);
+        while (stuckTime > 0)
+        {
+            yield return new WaitForSeconds(5f);
+            stuckTime -= 5;
+        }
         user.exSpeed += 5;
+        stucking = false;
+        OffStuck();
     }
 
-    // 魔法跑 加速 3秒
-    IEnumerator MagicSpeedUpCoroutine(float time=3)
+    private void OffStuck()
     {
+        if (reStuck != null)
+        {
+            reStuck.SetActive(false);
+        }
+        if (reBlue != null)
+        {
+            reBlue.SetActive(false);
+        }
+        if (reGreen != null)
+        {
+            reGreen.SetActive(false);
+        }
+
+    }
+
+    // 魔法跑 加速 5秒
+    IEnumerator MagicSpeedUpCoroutine()
+    {
+        speeding = true;
         user.exSpeed += 5;
-        PlayMagicSpeedlUp(time);
-        yield return new WaitForSeconds(time);
+        PlayMagicSpeedlUp();
+        while (speedUpTime > 0)
+        {
+            yield return new WaitForSeconds(5f);
+            speedUpTime -= 5;
+        }
         user.exSpeed -= 5;
+        speeding = false;
+        reMagic.SetActive(false);
     }
     // 加速跑 加速 自定义时间
-    public IEnumerator SmokeSpeedUpCoroutine(float time)
+    public IEnumerator SmokeSpeedUpCoroutine()
     {
+        superSpeeding = true;
         user.exSpeed += 10.0f;
-        PlaySmokeSpeedlUp(time);
-        yield return new WaitForSeconds(time);
+        PlaySmokeSpeedlUp();
+        while (superSpeedUpTime > 0)
+        {
+            yield return new WaitForSeconds(5f);
+            superSpeedUpTime -= 5f;
+        }
         user.exSpeed -= 10.0f;
+        superSpeeding = false;
+        reSmoke.SetActive(false);
     }
 
     // 无敌 自定义时间
-    public IEnumerator InvincibleCoroutine(float time = 30)
+    public IEnumerator InvincibleCoroutine(int camp)
     {
+        invincible = true; // 特效 
         user.exSpeed += 10.0f;
-        user.invincible = true;
-        PlayInvincibleEffect(time);
-        yield return new WaitForSeconds(time);
+        user.invincible = true; // 逻辑 ，注意区分，为了方便 就设置了两个
+        PlayInvincibleEffect(camp);
+        while (invincibleTime > 1)
+        {
+            yield return new WaitForSeconds(60f);
+            invincibleTime -= 60;
+        }
+        if (camp == 1)
+        {
+            reBlueInvincible.transform.DOScale(0, 1).OnComplete(() =>
+            {
+                reBlueInvincible.SetActive(false);
+            });
+        }
+        else if (camp == 2)
+        {
+            reGreenInvincible.transform.DOScale(0, 1).OnComplete(() =>
+            {
+                reGreenInvincible.SetActive(false);
+            });
+        }
+        yield return new WaitForSeconds(1f);
         user.exSpeed -= 10.0f;
         user.invincible = false;
+        invincible = false;
+
     }
+
+    IEnumerator BlessingCoroutine()
+    {
+        blessing = true; // 特效 
+        // PlayInvincibleEffect(camp);
+        while (blessingTime > 1)
+        {
+            yield return new WaitForSeconds(300f);
+            blessingTime -= 300;
+        }
+
+        reBlessing.transform.DOScale(0, 1).OnComplete(() =>
+        {
+            reBlessing.SetActive(false);
+        });
+
+        yield return new WaitForSeconds(1f);
+        blessing = false;
+    }
+
 
     // ⚡️雷电
     public IEnumerator ThunderCoroutine(float time = 10)
     {
-        float cd = time;
-        BallThunder(time);
+        thundering = true;
+        BallThunder();
         yield return new WaitForSeconds(1f);
-        cd -= 1;
-        while (cd > 1)
+        thunderTime -= 1;
+        while (thunderTime > 1)
         {
             yield return new WaitForSeconds(0.2f);
             Collider[] cs = Physics.OverlapSphere(transform.position, 5f).ToList().Where(c => c.CompareTag("Player") && c.gameObject.GetComponent<PlacePlayerController>().user.Camp != user.Camp).ToArray();
-
 
             if (cs.Length > 0)
             {
@@ -527,7 +830,12 @@ public class PlacePlayerController : MonoBehaviour
             {
                 PlayThunder();
             }
-            cd -= 0.2f;
+            thunderTime -= 0.2f;
         }
+        reThunderBall.transform.DOScale(0, 1).OnComplete(() =>
+        {
+            Destroy(reThunderBall.gameObject);
+        });
+        thundering = false;
     }
 }

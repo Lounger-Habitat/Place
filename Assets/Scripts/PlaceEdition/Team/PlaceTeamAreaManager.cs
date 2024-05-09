@@ -62,7 +62,9 @@ public class PlaceTeamAreaManager : MonoBehaviour
     void InkUpdate()
     {
         // 墨水数随着时间增加，默认初始每10s增加一点，随着人数的增加，增加速度增加
-        // 当前人数/10 = 每秒产生颜料数
+        // 额外颜料数 = 每个人的等级-1/10
+        // 当前人数/10 + 额外颜料数 = 每秒产生颜料数
+        
         // if vip ，
         float inkRate = 0f;
         float exInkRate = 0f;
@@ -70,16 +72,30 @@ public class PlaceTeamAreaManager : MonoBehaviour
         foreach (User u in userList)
         {
             //  额外 墨水
-            exInkRate += (u.Level - 1)  / 100;
+            exInkRate += (u.Level - 1)  / 10;
+            u.contributionRate = (0.1f * u.genInkCount) / teaminfo.hisExInk;
         }
         inkRate = (teaminfo.currentTeamNumberCount / defaultInkTime) + exInkRate;
         teaminfo.ink += inkRate ;
+        teaminfo.hisInk += inkRate ;
         //Debug.Log("ink " + ink);
-
+        CheckInk();
         UpdateTeamAreaName();
         // teaminfo.score = PlaceCredits.CalculateScore(ink);
         // PlaceCenter.Instance.OnTeamUIUpdate(teaminfo);
         UpDateTeamUI();
+    }
+
+    private void CheckInk()
+    {
+        if (teaminfo.ink<=20)//检测颜料数是否小于20
+        {
+            teamAreaName.GetComponent<NameTag>().SparkleOn();
+        }
+        else
+        {
+            teamAreaName.GetComponent<NameTag>().SparkleOff();
+        }
     }
 
     void UpdateTeamAreaName()
@@ -108,9 +124,11 @@ public class PlaceTeamAreaManager : MonoBehaviour
             // 创建角色
             Vector3 spawnPosition = GetRandomPositionInArea();
             go = Instantiate(characterPrefab, spawnPosition, Quaternion.identity);
+            go.name = user.Name;
             go.transform.SetParent(ps.transform);
             PlacePlayerController PlayerControllerScript = go.GetComponent<PlacePlayerController>();
             GameObject nameTag = PlaceCenter.Instance.CreateNameTag(go.transform, user);
+            nameTag.name = user.Name + "-NameTag";
             // user = new User(username, go, teaminfo.Id,this);
             user.character = go;
             user.selfTeam = this;

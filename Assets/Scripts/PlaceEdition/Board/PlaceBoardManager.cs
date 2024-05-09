@@ -5,9 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.GifAssets.PowerGif;
-using System.Collections;
-using UnityEngine.Assertions;
-using System.Data.Common;
 
 public class PlaceBoardManager : MonoBehaviour
 {
@@ -32,7 +29,8 @@ public class PlaceBoardManager : MonoBehaviour
     public int[] pixelsUserInfos;
 
     // 画作唯一id
-    public static int UniqueId = 0;
+    public static string UniqueTime = "yyyyMMddHHmmss";
+    public static string UniqueId = "xxxx-xxx-xxxxxxxxxxx-xx-xx";
 
     public string gifPath = "";
 
@@ -101,7 +99,7 @@ public class PlaceBoardManager : MonoBehaviour
         defaultTexture = texture;
 
         // LoadResources();
-        UniqueId = GenerateUniqueId();
+        UniqueTime = GenerateUniqueTime();
 
     }
 
@@ -185,9 +183,19 @@ public class PlaceBoardManager : MonoBehaviour
         }
     }
 
-    public static int GenerateUniqueId()
+    public static string GenerateUniqueTime()
     {
-        return UniqueId++;
+        // 根据时间生成唯一ID
+        DateTime now = DateTime.Now;
+        string formatNow = now.ToString("yyyyMMddHHmmss");
+        // platform + host name + time + people number + price
+        return formatNow;
+    }
+    public static void GenerateUniqueId()
+    {
+        // 根据时间生成唯一ID
+        // platform + host name + time + people number + price
+        UniqueId = $"{PlaceCenter.Instance.platform}-{PlaceCenter.Instance.anchorName}-{UniqueTime}-{PlaceCenter.Instance.AllMember()}-{PlaceCenter.Instance.Price()}";
     }
 
     List<Texture2D> LoadResources(string directoryPath)
@@ -420,18 +428,30 @@ public class PlaceBoardManager : MonoBehaviour
     {
         byte[] bytes = texture.EncodeToPNG();
         // 检测文件夹是否存在
-        if (!Directory.Exists($"Assets/Images/{UniqueId}"))
+#if UNITY_EDITOR
+        string savePath = $"Assets/Images/{UniqueTime}";
+#else
+        string savePath = Application.streamingAssetsPath;
+        savePath = Path.Combine(savePath, $"{UniqueTime}");
+#endif
+        if (!Directory.Exists(savePath))
         {
-            Directory.CreateDirectory($"Assets/Images/{UniqueId}");
+            Directory.CreateDirectory(savePath);
         }
-        string path = $"Assets/Images/{UniqueId}/save_{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
+        string path = $"{savePath}/save_{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
         System.IO.File.WriteAllBytes(path, bytes);
         Debug.Log("Saved Image to: " + path);
     }
 
     public void GenGif()
     {
-        string gifPath = $"Assets/Images/{UniqueId}";
+        // string gifPath = $"Assets/Images/{UniqueTime}";
+#if UNITY_EDITOR
+        string gifPath = $"Assets/Images/{UniqueTime}";
+#else
+        string gifPath = Application.streamingAssetsPath;
+        gifPath = Path.Combine(gifPath, $"{UniqueTime}");
+#endif
         List<Texture2D> f = LoadResources(gifPath);
         f = Select20(f.ToArray());
         var frames = f.Select(f => new GifFrame(f, 0.5f)).ToList();
@@ -503,6 +523,85 @@ public class PlaceBoardManager : MonoBehaviour
     {
         return ComputeDrawLine(x: x, y: y, ex: ex, ey: ey, isDraw: false);
     }
+    public List<(int, int)> GetSquarePoints(int x, int y, int dx, int dy)
+    {
+        return ComputeDrawSqure(x: x, y: y, dx: dx, dy: dy);
+    }
+
+    private List<(int, int)> ComputeDrawSqure(int x, int y, int dx, int dy)
+    {
+        List<(int, int)> points = new List<(int, int)>();
+        for (int i = x; i < x + dx; i++)
+        {
+            for (int j = y; j < y + dy; j++)
+            {
+                points.Add((i, j));
+            }
+        }
+        return points;
+    }
+
+    public List<(int, int)> GetCirclePoints(int x, int y, int r)
+    {
+        // 合法检测 TODO
+        return ComputeDrawCircle(ox: x, oy: y, r: r);
+    }
+
+    public List<(int, int)> GetFillPoints(int x, int y, int uid)
+    {
+        // 合法检测 TODO
+        return ComputeFillArea(x: x, y: y, uid: uid);
+    }
+
+    private List<(int, int)> ComputeFillArea(int x, int y, int uid)
+    {
+        throw new NotImplementedException();
+    }
+
+    private List<(int, int)> ComputeDrawCircle(int ox, int oy, int r)
+    {
+
+        List<(int, int)> points = new List<(int, int)>();
+        int x, y, p; // x, y为圆上的动态坐标点，p为判别式
+        x = 0;      // 初始化x坐标
+        y = r;      // 初始化y坐标为半径
+        p = 1 - r;  // 初始化判别式p，这里的1/4被省略，因为计算机中1/4的值可以忽略不计
+
+        Draw8Points(ox, oy, x, y, points); // 绘制初始点
+
+        while (x <= y) // 当x小于或等于y时，继续循环
+        {
+            x++; // x坐标向右移动
+
+            if (p < 0) // 如果判别式p小于0，说明当前点在圆上方
+            {
+                p += 2 * x + 3; // 更新判别式p
+            }
+            else // 如果判别式p大于或等于0，说明当前点在圆下方
+            {
+                p += 2 * (x - y) + 5; // 更新判别式p
+                y--; // y坐标向下移动
+            }
+
+            Draw8Points(ox, oy, x, y, points); // 绘制新的点
+        }
+
+        return points;
+    }
+
+    public void Draw8Points(int xo, int yo, int x, int y, List<(int, int)> points)
+    {
+        // 同时画八个象限的点
+        points.Add((xo + x, yo + y)); // 第1象限
+        points.Add((xo + y, yo + x)); // 第2象限
+        points.Add((xo - y, yo + x)); // 第3象限
+        points.Add((xo - x, yo + y)); // 第4象限
+        points.Add((xo - x, yo - y)); // 第5象限
+        points.Add((xo - y, yo - x)); // 第6象限
+        points.Add((xo + x, yo - y)); // 第7象限
+        points.Add((xo + y, yo - x)); // 第8象限
+    }
+
     public int GetLineCount(int x, int y, int ex, int ey)
     {
         return DrawLine(x: x, y: y, ex: ex, ey: ey, isDraw: false);
@@ -715,7 +814,14 @@ public class PlaceBoardManager : MonoBehaviour
         //tex2Gif.SetFileExtension(new List<string>{".jpg"});
 
         // string loadImagePath = Application.streamingAssetsPath;
-        string loadImagePath = $"Assets/Images/{UniqueId}";
+#if UNITY_EDITOR
+        string loadImagePath = $"Assets/Images/{UniqueTime}";
+#else
+        string loadImagePath = Application.streamingAssetsPath;
+        loadImagePath = Path.Combine(loadImagePath, $"{UniqueTime}");
+#endif
+
+
 
         //Load images as texture2D list from target directory
         tex2DList = tex2Gif.LoadImages(loadImagePath);
@@ -744,7 +850,7 @@ public class PlaceBoardManager : MonoBehaviour
     {
         Debug.Log("On file saved: " + path);
         // text1.text = "GIF saved: " + path;
-        // string sourceFolder = Application.dataPath;;
+        // string sourceFolder = Application.dataPath;
         // 目标文件夹路径
         // string destinationFolder = $"Assets/Images/{UniqueId}";
 

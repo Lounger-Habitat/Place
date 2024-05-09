@@ -24,7 +24,6 @@ public class BeginUI : MonoBehaviour
 
     public void OnClickSettingBtn()
     {
-        //通知游戏开始了
         // 显示 ui 界面
         // 关闭setting
         placeSettingUI.SetActive(true);
