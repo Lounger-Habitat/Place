@@ -155,11 +155,6 @@ public class PlaceInstructionManager : MonoBehaviour
             // 可以在这里添加其他命令的处理
             case "/draw":
             case "/d":
-                // if (!PlaceCenter.Instance.CheckUser(username))
-                // {
-                //     break;
-                // }
-                // User drawUser = PlaceCenter.Instance.FindUser(username);
                 if (parts.Length >= 3)
                 {
                     if (parts.Length == 3)

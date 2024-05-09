@@ -75,9 +75,9 @@ public class PlacePlayerController : MonoBehaviour
     public GameObject slowEffect;
     public GameObject runMagicEffect;
     public GameObject runSmokeEffect;
-    public GameObject shieldsEffect_1;
-    public GameObject shieldsEffect_2;
-    public GameObject shieldsEffect_3;
+    public GameObject blueShieldsEffect;
+    public GameObject greenShieldsEffect;
+    public GameObject blessingEffect;
     public GameObject tornadoEffect;
     public GameObject electricityEffect;
     public GameObject strikeEffect;
@@ -288,6 +288,8 @@ public class PlacePlayerController : MonoBehaviour
     }
 
 
+
+// ============= Effect API =============
     public void StartLevelUp()
     {
         StartCoroutine(LevelUpCoroutine());
@@ -361,8 +363,22 @@ public class PlacePlayerController : MonoBehaviour
         }
         else
         {
-            reMagic = Instantiate(runMagicEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+            reMagic = Instantiate(runMagicEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);
             reMagic.transform.SetParent(transform);
+        }
+    }
+    public void PlayBlessingEffect()
+    {
+        if (reBlessing != null)
+        {
+            reBlessing.SetActive(true);
+            var auto = reBlessing.GetComponent<EffectAutoDelete>();
+            auto.ReBlessing();
+        }
+        else
+        {
+            reBlessing = Instantiate(runMagicEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);
+            reBlessing.transform.SetParent(transform);
         }
     }
 
@@ -375,25 +391,59 @@ public class PlacePlayerController : MonoBehaviour
         else
         {
             invincibleTime = time;
-            StartCoroutine(InvincibleCoroutine());
+            StartCoroutine(InvincibleCoroutine(user.Camp));
         }
     }
 
-    public void PlayInvincibleEffect()
+    public void Blessing(float time = 300)
     {
-        if (reInvincible != null)
+        if (blessing)
         {
-            reInvincible.SetActive(true);
-            var auto = reInvincible.GetComponent<EffectAutoDelete>();
-            auto.scale = 1.0f;
-            auto.ReStart();
+            blessingTime += time;
         }
         else
         {
-            reInvincible = Instantiate(shieldsEffect_1, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
-            reInvincible.transform.SetParent(this.transform);
-            var auto = reInvincible.GetComponent<EffectAutoDelete>();
-            auto.scale = 1.0f;
+            blessingTime = time;
+            StartCoroutine(BlessingCoroutine());
+        }
+    }
+
+
+    public void PlayInvincibleEffect(int camp)
+    {
+        if (camp == 1)
+        {
+            if (reBlueInvincible != null)
+            {
+                reBlueInvincible.SetActive(true);
+                var auto = reBlueInvincible.GetComponent<EffectAutoDelete>();
+                auto.scale = 1.0f;
+                auto.ReStart();
+            }
+            else
+            {
+                reBlueInvincible = Instantiate(blueShieldsEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+                reBlueInvincible.transform.SetParent(this.transform);
+                var auto = reBlueInvincible.GetComponent<EffectAutoDelete>();
+                auto.scale = 1.0f;
+            }
+        }
+        else if (camp == 2)
+        {
+            if (reGreenInvincible != null)
+            {
+                reGreenInvincible.SetActive(true);
+                var auto = reGreenInvincible.GetComponent<EffectAutoDelete>();
+                auto.scale = 1.0f;
+                auto.ReStart();
+            }
+            else
+            {
+                reGreenInvincible = Instantiate(blueShieldsEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+                reGreenInvincible.transform.SetParent(this.transform);
+                var auto = reGreenInvincible.GetComponent<EffectAutoDelete>();
+                auto.scale = 1.0f;
+            }
         }
     }
 
@@ -592,6 +642,7 @@ public class PlacePlayerController : MonoBehaviour
     float speedUpTime = 0.0f;
     float stuckTime = 0.0f;
     float invincibleTime = 0.0f;
+    float blessingTime = 0.0f;
     float thunderTime = 0.0f;
     float superSpeedUpTime = 0.0f;
 
@@ -601,14 +652,17 @@ public class PlacePlayerController : MonoBehaviour
     bool thundering = false;
     bool speeding = false;
     bool superSpeeding = false;
+    bool blessing = false;
 
     GameObject reStuck;
     GameObject reSmoke;
     GameObject reMagic;
-    GameObject reInvincible;
+    GameObject reBlueInvincible;
+    GameObject reGreenInvincible;
     GameObject reBlue;
     GameObject reGreen;
     GameObject reThunderBall;
+    GameObject reBlessing;
 
 
 
@@ -702,28 +756,57 @@ public class PlacePlayerController : MonoBehaviour
     }
 
     // 无敌 自定义时间
-    public IEnumerator InvincibleCoroutine()
+    public IEnumerator InvincibleCoroutine(int camp)
     {
         invincible = true; // 特效 
         user.exSpeed += 10.0f;
         user.invincible = true; // 逻辑 ，注意区分，为了方便 就设置了两个
-        PlayInvincibleEffect();
+        PlayInvincibleEffect(camp);
         while (invincibleTime > 1)
         {
             yield return new WaitForSeconds(60f);
             invincibleTime -= 60;
         }
-
-        reInvincible.transform.DOScale(0, 1).OnComplete(() =>
+        if (camp == 1)
         {
-            reInvincible.SetActive(false);
-        });
+            reBlueInvincible.transform.DOScale(0, 1).OnComplete(() =>
+            {
+                reBlueInvincible.SetActive(false);
+            });
+        }
+        else if (camp == 2)
+        {
+            reGreenInvincible.transform.DOScale(0, 1).OnComplete(() =>
+            {
+                reGreenInvincible.SetActive(false);
+            });
+        }
         yield return new WaitForSeconds(1f);
         user.exSpeed -= 10.0f;
         user.invincible = false;
         invincible = false;
 
     }
+
+    IEnumerator BlessingCoroutine()
+    {
+        blessing = true; // 特效 
+        // PlayInvincibleEffect(camp);
+        while (blessingTime > 1)
+        {
+            yield return new WaitForSeconds(300f);
+            blessingTime -= 300;
+        }
+
+        reBlessing.transform.DOScale(0, 1).OnComplete(() =>
+        {
+            reBlessing.SetActive(false);
+        });
+
+        yield return new WaitForSeconds(1f);
+        blessing = false;
+    }
+
 
     // ⚡️雷电
     public IEnumerator ThunderCoroutine(float time = 10)

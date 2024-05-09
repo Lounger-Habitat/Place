@@ -75,19 +75,20 @@ public class TestManager : MonoBehaviour
             ins = ins.Trim();
             string[] parts = ins.Split(' ');
 
-            
+
             if (parts.Length == 3)
             {
-                string c,name;
+                string c, name;
                 float power;
                 c = parts[0]; // /d
                 name = parts[1]; // name
                 power = float.Parse(parts[2]); // y
                 Debug.Log($"{c} {name} {power}");
-                PlaceCenter.Instance.GainPower(name,power);
-            }else if (parts.Length == 4)
+                PlaceCenter.Instance.GainPower(name, power);
+            }
+            else if (parts.Length == 4)
             {
-                string c,name;
+                string c, name;
                 long count;
                 c = parts[0]; // /d
                 name = parts[1]; // name
@@ -295,7 +296,7 @@ public class TestManager : MonoBehaviour
     {
 
         // string[] gifts = { "0.1", "1", "1.9", "5.2", "9.9", "19.9", "29.9", "52", "66.6", "88.8", "99.9", "120"};
-        string[] gifts = { "0.1", "1", "1.9", "5.2" };
+        string[] gifts = { "0.1", "1", "1.9", "5.2", "9.9" };
         int grand = Random.Range(0, gifts.Length);
         string giftIns = gifts[grand];
 
@@ -366,12 +367,7 @@ public class TestManager : MonoBehaviour
             // Debug.Log($"{u.Name} 执行 ({drawIns}) 指令");
             PlaceInstructionManager.Instance.DefaultRunChatCommand(u, drawIns);
         }
-        // else if (rand < 0.99f)
-        // {
-        //     string coolIns = RandomGenCoolIns();
-        //     PlaceInstructionManager.Instance.DefaultRunChatCommand(u, coolIns);
-        // }
-        else
+        else if (rand < 1f)
         {
             string giftIns = RandomGenGiftIns();
             // Debug.Log($"{u.Name} 赠送 ({giftIns}) 颜料");

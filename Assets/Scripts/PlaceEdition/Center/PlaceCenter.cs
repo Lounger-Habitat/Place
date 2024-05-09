@@ -3,11 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 public class PlaceCenter : MonoBehaviour
 {
@@ -444,7 +441,7 @@ public class PlaceCenter : MonoBehaviour
                 message = "天赐神祇";
                 // 随机自动画一个图案
                 skill = SkillIcon.Pencil;
-                u.character.GetComponent<PlacePlayerController>().Invincible(60);
+                u.character.GetComponent<PlacePlayerController>().Blessing(300);
                 int x = Random.Range(0, PlaceBoardManager.Instance.width-50);
                 int y = Random.Range(0, PlaceBoardManager.Instance.height-50);
                 List<Instruction> IL = GenerateRandomImage(x,y);
@@ -455,9 +452,6 @@ public class PlaceCenter : MonoBehaviour
                 break;
             case 19.9f:
                 normalPower = 1999;
-                message = "掌控雷电";
-                skill = SkillIcon.Thunder;
-                // 全屏攻击
                 break;
             case 29.9f:
                 message = "";

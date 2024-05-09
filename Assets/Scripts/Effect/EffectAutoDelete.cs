@@ -22,4 +22,11 @@ public class EffectAutoDelete : MonoBehaviour
         transform.localScale = new Vector3(0, 0, 0);
         transform.DOScale(new Vector3(scale,scale,scale), 1f);
     }
+
+    public void ReBlessing()
+    {
+        transform.localScale = new Vector3(0, 2, 0);
+        transform.DOBlendableLocalMoveBy(Vector3.zero, 1f);
+        transform.DOBlendableScaleBy(new Vector3(scale,scale,scale), 1f);
+    }
 }

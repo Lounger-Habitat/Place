@@ -27,19 +27,6 @@ public class EffectBulletBase : MonoBehaviour
         //ApplyPrecisionOffsetToProjectileDir(ref projectileDir);
         //GetComponent<Rigidbody>().velocity = projectileDir * speed;
     }
-        
-    // public void AddScreenShakeOnImpact(float projectileImpactShakeAmount)
-    // {
-    //     doShake = true;
-    //     shakeAmountOnImpact = projectileImpactShakeAmount;
-    // }
-
-    // private void ApplyPrecisionOffsetToProjectileDir(ref Vector3 projectileDir)
-    // {
-    //     projectileDir.x += Random.Range(-inaccurateAmount, inaccurateAmount);
-    //     projectileDir.y += Random.Range(-inaccurateAmount, inaccurateAmount);
-    //     projectileDir.z += Random.Range(-inaccurateAmount, inaccurateAmount);
-    // }
 
     private void OnTriggerEnter(Collider other)
     {
