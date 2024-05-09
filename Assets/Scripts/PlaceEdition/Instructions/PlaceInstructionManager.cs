@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Text.RegularExpressions;
 using UnityEditor.Experimental.GraphView;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityCapsuleCollider;
 
 public class PlaceInstructionManager : MonoBehaviour
 {
@@ -438,7 +439,6 @@ public class PlaceInstructionManager : MonoBehaviour
                 }
                 break;
             case "/c":
-                break; // 暂时不用
                 if (parts.Length == 4)
                 {
                     int x, y, r;
@@ -446,8 +446,15 @@ public class PlaceInstructionManager : MonoBehaviour
                     c = parts[0]; // /d
                     x = int.Parse(parts[1]); // x
                     y = int.Parse(parts[2]); // y
-                    r = int.Parse(parts[2]); // y
+                    r = int.Parse(parts[3]); // y
                     Color32 color = user.lastColor;
+
+                    // 检测 合法
+                    if (x + r <= PlaceBoardManager.Instance.width || y + r <= PlaceBoardManager.Instance.height || x - r >= 0 || y - r >= 0)
+                    {
+                        Debug.Log("指令不合法");
+                        break;
+                    }
 
                     // ======= Square2point =======
                     List<(int, int)> points = PlaceBoardManager.Instance.GetCirclePoints(x, y, r);
@@ -456,60 +463,71 @@ public class PlaceInstructionManager : MonoBehaviour
                         Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: color.r, g: color.g, b: color.b);
                         user.instructionQueue.Enqueue(drawIns);
                     }
-                    // Debug.Log(username + " : draw " + c + " " + x + " " + y + " " + r + " " + g + " " + b);
                 }
-                // else if (parts.Length == 4)
-                // {
-                //     int x, y, r, g, b;
-                //     string c, dc;
-                //     c = parts[0]; // /d
-                //     x = int.Parse(parts[1]); // x
-                //     y = int.Parse(parts[2]); // y
-                //     dc = parts[3];
-                //     if (colorDict.ContainsKey(dc))
-                //     {
-                //         Color32 color = colorDict[dc];
-                //         r = color.r; // r
-                //         g = color.g; // g
-                //         b = color.b; // b
-                //     }
-                //     else
-                //     {
-                //         Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
-                //         // UI 提示
-                //         break;
-                //     }
-                //     Instruction drawIns = new Instruction(c, x, y, r: r, g: g, b: b);
-                //     if (!PlaceBoardManager.Instance.CheckIns(drawIns))
-                //     {
-                //         Debug.Log("指令不合法");
-                //         break;
-                //     }
-                //     user.lastPoint = (x, y);
-                //     user.instructionQueue.Enqueue(drawIns);
-                // }
-                // else if (parts.Length == 6)
-                // {
-                //     int x, y, r, g, b;
-                //     string c;
-                //     c = parts[0]; // /d
-                //     x = int.Parse(parts[1]); // x
-                //     y = int.Parse(parts[2]); // y
-                //     r = int.Parse(parts[3]); // r
-                //     g = int.Parse(parts[4]); // g
-                //     b = int.Parse(parts[5]); // b
+                else if (parts.Length == 5)
+                {
+                    int x, y, r, g, b, radius;
+                    string c, dc;
+                    c = parts[0]; // /d
+                    x = int.Parse(parts[1]); // x
+                    y = int.Parse(parts[2]); // y
+                    radius = int.Parse(parts[3]);
+                    dc = parts[3];
+                    if (colorDict.ContainsKey(dc))
+                    {
+                        Color32 color = colorDict[dc];
+                        r = color.r; // r
+                        g = color.g; // g
+                        b = color.b; // b
+                    }
+                    else
+                    {
+                        Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
+                        // UI 提示
+                        break;
+                    }
+                    // 检测 合法
+                    if (x + r <= PlaceBoardManager.Instance.width || y + r <= PlaceBoardManager.Instance.height || x - r >= 0 || y - r >= 0)
+                    {
+                        Debug.Log("指令不合法");
+                        break;
+                    }
 
-                //     Instruction drawIns = new Instruction(c, x, y, r: r, g: g, b: b);
-                //     if (!PlaceBoardManager.Instance.CheckIns(drawIns))
-                //     {
-                //         Debug.Log("指令不合法");
-                //         break;
-                //     }
-                //     user.lastColor = new Color(r, g, b);
-                //     user.lastPoint = (x, y);
-                //     user.instructionQueue.Enqueue(drawIns);
-                //     // Debug.Log(username + " : draw " + c + " " + x + " " + y + " " + r + " " + g + " " + b);
-                // }
+                    // ======= Square2point =======
+                    List<(int, int)> points = PlaceBoardManager.Instance.GetCirclePoints(x, y, r);
+                    foreach ((int, int) point in points)
+                    {
+                        Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                        user.instructionQueue.Enqueue(drawIns);
+                    }
+                }
+                else if (parts.Length == 7)
+                {
+                    int x, y, r, g, b, radius;
+                    string c;
+                    c = parts[0]; // /d
+                    x = int.Parse(parts[1]); // x
+                    y = int.Parse(parts[2]); // y
+                    radius = int.Parse(parts[3]);
+                    r = int.Parse(parts[4]); // r
+                    g = int.Parse(parts[5]); // g
+                    b = int.Parse(parts[6]); // b
+
+                    // 检测 合法
+                    if (x + r <= PlaceBoardManager.Instance.width || y + r <= PlaceBoardManager.Instance.height || x - r >= 0 || y - r >= 0)
+                    {
+                        Debug.Log("指令不合法");
+                        break;
+                    }
+
+                    // ======= Square2point =======
+                    List<(int, int)> points = PlaceBoardManager.Instance.GetCirclePoints(x, y, r);
+                    foreach ((int, int) point in points)
+                    {
+                        Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                        user.instructionQueue.Enqueue(drawIns);
+                    }
+                }
                 else
                 {
                     Debug.LogError("输入字符串格式不正确");
