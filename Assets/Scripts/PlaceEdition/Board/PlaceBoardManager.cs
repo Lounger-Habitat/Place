@@ -547,6 +547,17 @@ public class PlaceBoardManager : MonoBehaviour
         return ComputeDrawCircle(ox: x, oy: y, r: r);
     }
 
+    public List<(int, int)> GetFillPoints(int x, int y, int uid)
+    {
+        // 合法检测 TODO
+        return ComputeFillArea(x: x, y: y, uid: uid);
+    }
+
+    private List<(int, int)> ComputeFillArea(int x, int y, int uid)
+    {
+        throw new NotImplementedException();
+    }
+
     private List<(int, int)> ComputeDrawCircle(int ox, int oy, int r)
     {
 

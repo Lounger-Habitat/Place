@@ -702,6 +702,37 @@ public class PlaceInstructionManager : MonoBehaviour
             //         Debug.LogError("输入字符串格式不正确");
             //     }
             //     break;
+            case "/f":
+                break; // 2024-05-09 :⚠️ 暂时废弃
+                if (parts.Length == 4)
+                {
+                    int x, y, r, g, b;
+                    string c, dc;
+                    c = parts[0]; // /d
+                    x = int.Parse(parts[1]); // x
+                    y = int.Parse(parts[2]); // y
+                    dc = parts[3];
+                    if (colorDict.ContainsKey(dc))
+                    {
+                        Color32 color = colorDict[dc];
+                        r = color.r; // r
+                        g = color.g; // g
+                        b = color.b; // b
+                    }
+                    else
+                    {
+                        Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
+                        // UI 提示
+                        break;
+                    }
+                    List<(int, int)> points = PlaceBoardManager.Instance.GetFillPoints(x, y, user.Id);
+                    foreach ((int, int) point in points)
+                    {
+                        Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                        user.instructionQueue.Enqueue(drawIns);
+                    }
+                }
+                break;
             case "/test":
                 if (parts.Length == 3)
                 {

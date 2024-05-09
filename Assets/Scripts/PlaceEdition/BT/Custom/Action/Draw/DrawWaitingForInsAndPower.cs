@@ -23,6 +23,8 @@ public class DrawWaitingForInsAndPower : PlaceAction
         pc.batchInsCount = 0;
         pc.batchDrawTimes = 0;
         pc.batchNeedInkCount = 0;
+
+        Debug.Log("DrawWaitingForInsAndPower : 准备接受指令 : " + pc.user.instructionQueue.Count);
     }
 
     public override TaskStatus OnUpdate()
@@ -55,7 +57,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
 
                 }
                 // 如果颜料富裕，直接走
-                if (pc.user.currentCarryingInkCount >= pc.user.maxCarryingInkCount)
+                if (pc.insQueue.Count > 0 && pc.user.currentCarryingInkCount >= pc.user.maxCarryingInkCount)
                 {
                     return TaskStatus.Success;
                 }
