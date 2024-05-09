@@ -450,7 +450,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     Color32 color = user.lastColor;
 
                     // 检测 合法
-                    if (x + r <= PlaceBoardManager.Instance.width || y + r <= PlaceBoardManager.Instance.height || x - r >= 0 || y - r >= 0)
+                    if (x + r >= PlaceBoardManager.Instance.width || y + r >= PlaceBoardManager.Instance.height || x - r <= 0 || y - r <= 0)
                     {
                         Debug.Log("指令不合法");
                         break;
