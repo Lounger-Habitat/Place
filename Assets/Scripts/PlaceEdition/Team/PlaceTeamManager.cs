@@ -67,4 +67,13 @@ public class PlaceTeamManager : MonoBehaviour
         }
     }
 
+    public void SetTeamNumber(int number)
+    {
+        foreach (PlaceTeamAreaManager team in teamAreas)
+        {
+            team.SetTeamNumber(number);
+        }
+
+    }
+
 }

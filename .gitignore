@@ -192,3 +192,8 @@ Assets/Starfield Skybox/Skybox.mat
 *Demo.meta
 Assets/Images/
 /Output
+Assets/Unity.VisualScripting.Generated.meta
+Assets/Unity.VisualScripting.Generated/VisualScripting.Core.meta
+Assets/Unity.VisualScripting.Generated/VisualScripting.Flow.meta
+Assets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db
+Assets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db.meta
