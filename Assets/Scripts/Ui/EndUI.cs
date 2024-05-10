@@ -46,6 +46,6 @@ public class EndUI : MonoBehaviour
 
     public void OnClickNextBtn()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("1920-1080Scene");
     }
 }

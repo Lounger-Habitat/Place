@@ -194,6 +194,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         {
                             Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
                             // UI 提示
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},抱歉此颜色({dc})目前未包含在,可联系管理员申请新增颜色"
+                            });
                             break;
                         }
                         Instruction drawIns = new Instruction(c, x, y, r: r, g: g, b: b);
@@ -295,6 +299,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         {
                             Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
                             // UI 提示
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},抱歉此颜色({dc})目前未包含在,可联系管理员申请新增颜色"
+                            });
                             break;
                         }
                         // 暂时保留 仅用做 合法检测
@@ -416,6 +424,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         {
                             Debug.Log("抱歉此颜色目前未包含在,使用上一次颜色,可联系管理员申请新增颜色");
                             // UI 提示
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},抱歉此颜色({dc})目前未包含在,可联系管理员申请新增颜色"
+                            });
                             break;
                         }
                         // 暂时保留 仅用做 合法检测
@@ -540,6 +552,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         {
                             Debug.Log("抱歉此颜色目前未包含在,使用上一次颜色,可联系管理员申请新增颜色");
                             // UI 提示
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},抱歉此颜色({dc})目前未包含在,可联系管理员申请新增颜色"
+                            });
                             break;
                         }
                         // 暂时保留 仅用做 合法检测
@@ -670,6 +686,10 @@ public class PlaceInstructionManager : MonoBehaviour
                     {
                         Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
                         // UI 提示
+                        PlaceUIManager.Instance.AddTips(new TipsItem()
+                        {
+                            text = $"尊敬的{user.Name},抱歉此颜色({dc})目前未包含在,可联系管理员申请新增颜色"
+                        });
                         break;
                     }
                     // 检测 合法
@@ -766,6 +786,10 @@ public class PlaceInstructionManager : MonoBehaviour
                     {
                         Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
                         // UI 提示
+                        PlaceUIManager.Instance.AddTips(new TipsItem()
+                        {
+                            text = $"尊敬的{user.Name},抱歉此颜色({dc})目前未包含在,可联系管理员申请新增颜色"
+                        });
                         break;
                     }
                     for (int i = 0; i < s.Length; i++)

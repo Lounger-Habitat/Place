@@ -189,6 +189,11 @@ public class PlaceTeamAreaManager : MonoBehaviour
         return transform.position + new Vector3(x, 1.0f, z);
     }
 
+    public void SetTeamNumber(int Num)
+    {
+        teaminfo.MaxTeamNumber = Num;
+    }
+    
     public void setTeamInfo(Team team)
     {
         teaminfo = team;
