@@ -59,6 +59,9 @@ public class PlaceCenter : MonoBehaviour
     public string platform = "bilibili";
     public string anchorName = "anchor";
 
+    public bool Low = true;
+    public bool High = false;
+
 
     public void Start()
     {
@@ -241,8 +244,8 @@ public class PlaceCenter : MonoBehaviour
         // 平台 + 时间 + 主播 + 人数 + 价值 + ？？
         // TODO
         string puid = PlaceBoardManager.UniqueId;
-        var text = GameObject.Find("DrawID").GetComponentInChildren<TMP_Text>();
-        text.text = puid;
+        var text = GameObject.Find("DrawID").transform.GetChild(0).GetComponent<TMP_Text>();
+        text.text = $"PUID : {puid}";
     }
 
     public void JoinGame(User user, string teamId)
@@ -413,31 +416,31 @@ public class PlaceCenter : MonoBehaviour
         switch (power)
         {
             case 0.1f://这是礼物得人民币价值，那应该在这个里边通知
-                normalPower = 10;
+                normalPower = 30;
                 message = "急速神行";
                 skill = SkillIcon.Speed;
                 u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                 break;
             case 1:
-                normalPower = 100;//固定是加颜料
-                message = "雷霆万钧";
-                skill = SkillIcon.Thunder;
-                u.character.GetComponent<PlacePlayerController>().Thunder();
-                break;
-            case 1.9f:
-                normalPower = 199;//固定是攻击
-                u.character.GetComponent<PlacePlayerController>().Tornado((int)(power * 10));
+                normalPower = 300;//固定是加颜料
                 message = "风之束缚";
                 skill = SkillIcon.Tornado;
+                u.character.GetComponent<PlacePlayerController>().Tornado((int)(power * 10));
+                break;
+            case 1.9f:
+                normalPower = 600;//固定是攻击
+                u.character.GetComponent<PlacePlayerController>().Thunder();
+                skill = SkillIcon.Thunder;
+                message = "雷霆万钧";
                 break;
             case 5.2f:
-                normalPower = 520;//固定是防御
+                normalPower = 1800;//固定是防御
                 u.character.GetComponent<PlacePlayerController>().Invincible(60);
                 message = "绝对防御";
                 skill = SkillIcon.Defense;
                 break;
             case 9.9f:
-                normalPower = 999;
+                normalPower = 3600;
                 message = "天赐神祇";
                 // 随机自动画一个图案
                 skill = SkillIcon.Pencil;
@@ -602,7 +605,7 @@ public class PlaceCenter : MonoBehaviour
             Texture2D tex = demoTextures[index];
             // texture 2d
             // Texture2D tex = Resources.Load<Texture2D>($"Images/{index}");
-            Texture2D retex = PlaceBoardManager.Instance.ScaleTextureProportionally(tex, 50, 50);
+            Texture2D retex = PlaceBoardManager.Instance.ScaleTextureProportionally(tex, 60, 60);
 
             // 转换成 instruction
             return Image2Instruction(retex, ox, oy);

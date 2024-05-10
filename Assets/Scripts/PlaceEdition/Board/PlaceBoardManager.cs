@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.GifAssets.PowerGif;
+using System.Xml;
 
 public class PlaceBoardManager : MonoBehaviour
 {
@@ -528,6 +529,43 @@ public class PlaceBoardManager : MonoBehaviour
         return ComputeDrawSqure(x: x, y: y, dx: dx, dy: dy);
     }
 
+    public List<(int, int)> GetRectPoints(int x, int y, int dx, int dy)
+    {
+        return ComputeDrawRect(x: x, y: y, dx: dx, dy: dy);
+    }
+    public List<(int, int, int, int)> GetRectLines(int x, int y, int dx, int dy)
+    {
+        return ComputeLineRect(x: x, y: y, dx: dx, dy: dy);
+    }
+
+    private List<(int, int, int, int)> ComputeLineRect(int x, int y, int dx, int dy)
+    {
+        int ex = x + dx;
+        int ey = y + dy;
+        List<(int, int, int, int)> lines = new List<(int, int, int, int)>();
+        lines.Add((x, ey, x, y)); // 左
+        lines.Add((x, ey, ex, ey)); // 上
+        lines.Add((ex, ey, ex, y)); // 右
+        lines.Add((x, y, ex, y)); // 下
+        return lines;
+    }
+
+    private List<(int, int)> ComputeDrawRect(int x, int y, int dx, int dy)
+    {
+        List<(int, int)> points = new List<(int, int)>();
+        for (int i = x; i < x + dx; i++)
+        {
+            points.Add((i, y));
+            points.Add((i, y + dy));
+        }
+        for (int j = y; j < y + dy; j++)
+        {
+            points.Add((x, j));
+            points.Add((x + dx, j));
+        }
+        return points;
+    }
+
     private List<(int, int)> ComputeDrawSqure(int x, int y, int dx, int dy)
     {
         List<(int, int)> points = new List<(int, int)>();
@@ -767,7 +805,7 @@ public class PlaceBoardManager : MonoBehaviour
         {
             return ins.x < width && ins.y < height && ins.ex < width && ins.ey < height && ins.x >= 0 && ins.y >= 0 && ins.ex >= 0 && ins.ey >= 0;
         }
-        else if (ins.mode == "/paint" || ins.mode == "/p")
+        else if (ins.mode == "/paint" || ins.mode == "/p" || ins.mode == "/rectangle" || ins.mode == "/rect")
         {
             return ins.x < width && ins.y < height && ins.dx < width && ins.dy < height && ins.x >= 0 && ins.y >= 0 && ins.dx >= 0 && ins.dy >= 0;
         }

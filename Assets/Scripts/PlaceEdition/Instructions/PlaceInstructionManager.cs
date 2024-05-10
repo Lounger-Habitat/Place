@@ -141,7 +141,6 @@ public class PlaceInstructionManager : MonoBehaviour
                 }
                 break;
             case "/say":
-            case "/s":
                 if (parts.Length >= 2)
                 {
                     // 这里调用发送消息的逻辑
@@ -151,7 +150,6 @@ public class PlaceInstructionManager : MonoBehaviour
                     PlaceCenter.Instance.SayMessage(user, message);
                 }
                 break;
-            // 可以在这里添加其他命令的处理
             case "/draw":
             case "/d":
                 if (parts.Length >= 3)
@@ -397,6 +395,45 @@ public class PlaceInstructionManager : MonoBehaviour
                             user.instructionQueue.Enqueue(drawIns);
                         }
                     }
+                    else if (parts.Length == 6)
+                    {
+                        int x, y, dx, dy, r, g, b;
+                        string c, dc;
+                        c = parts[0]; // /l
+                        x = int.Parse(parts[1]); // x
+                        y = int.Parse(parts[2]); // y
+                        dx = int.Parse(parts[3]); // dx
+                        dy = int.Parse(parts[4]); // dy
+                        dc = parts[5];
+                        if (colorDict.ContainsKey(dc))
+                        {
+                            Color32 color = colorDict[dc];
+                            r = color.r; // r
+                            g = color.g; // g
+                            b = color.b; // b
+                        }
+                        else
+                        {
+                            Debug.Log("抱歉此颜色目前未包含在,使用上一次颜色,可联系管理员申请新增颜色");
+                            // UI 提示
+                            break;
+                        }
+                        // 暂时保留 仅用做 合法检测
+                        Instruction ins_p = new Instruction(c, x, y, dx, dy, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(ins_p))
+                        {
+                            Debug.Log("指令不合法");
+                            break;
+                        }
+
+                        // ======= Square2point =======
+                        List<(int, int)> points = PlaceBoardManager.Instance.GetSquarePoints(x, y, dx, dy);
+                        foreach ((int, int) point in points)
+                        {
+                            Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                            user.instructionQueue.Enqueue(drawIns);
+                        }
+                    }
                     else if (parts.Length == 8)
                     {
                         int x, y, dx, dy, r, g, b;
@@ -425,6 +462,157 @@ public class PlaceInstructionManager : MonoBehaviour
                             Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
                             user.instructionQueue.Enqueue(drawIns);
                         }
+                    }
+                    else
+                    {
+                        Debug.LogError("输入字符串格式不正确");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("输入字符串格式不正确");
+                }
+                break;
+            case "/rectangle":
+            case "/rect":
+                if (parts.Length >= 5)
+                {
+                    if (parts.Length == 5)
+                    {
+                        int x, y, dx, dy, r, g, b;
+                        string c;
+                        c = parts[0]; // /l
+                        x = int.Parse(parts[1]); // x
+                        y = int.Parse(parts[2]); // y
+                        dx = int.Parse(parts[3]); // dx
+                        dy = int.Parse(parts[4]); // dy
+                        Color color = user.lastColor;
+                        r = (int)(color.r * 255); // r
+                        g = (int)(color.g * 255); // g
+                        b = (int)(color.b * 255); // b
+                        // 暂时保留 仅用做 合法检测
+                        Instruction ins_rect = new Instruction(c, x, y, dx, dy, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(ins_rect))
+                        {
+                            Debug.Log("指令不合法");
+                            break;
+                        }
+
+                        // ======= Rect2point =======
+                        if (PlaceCenter.Instance.Low)
+                        {
+                            List<(int, int)> points = PlaceBoardManager.Instance.GetRectPoints(x, y, dx, dy);
+                            foreach ((int, int) point in points)
+                            {
+                                Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                                user.instructionQueue.Enqueue(drawIns);
+                            }
+                        }
+                        else if (PlaceCenter.Instance.High)
+                        {
+                            // ====== Rect2Line =======
+                            List<(int, int, int, int)> lines = PlaceBoardManager.Instance.GetRectLines(x, y, dx, dy);
+                            foreach ((int, int, int, int) line in lines)
+                            {
+                                Instruction lineIns = new Instruction("/l", x:line.Item1, y:line.Item2, ex:line.Item3, ey:line.Item4, r: r, g: g, b: b);
+                                user.instructionQueue.Enqueue(lineIns);
+                            }
+                        }
+                    }
+                    else if (parts.Length == 6)
+                    {
+                        int x, y, dx, dy, r, g, b;
+                        string c, dc;
+                        c = parts[0]; // /l
+                        x = int.Parse(parts[1]); // x
+                        y = int.Parse(parts[2]); // y
+                        dx = int.Parse(parts[3]); // dx
+                        dy = int.Parse(parts[4]); // dy
+                        dc = parts[5];
+                        if (colorDict.ContainsKey(dc))
+                        {
+                            Color32 color = colorDict[dc];
+                            r = color.r; // r
+                            g = color.g; // g
+                            b = color.b; // b
+                        }
+                        else
+                        {
+                            Debug.Log("抱歉此颜色目前未包含在,使用上一次颜色,可联系管理员申请新增颜色");
+                            // UI 提示
+                            break;
+                        }
+                        // 暂时保留 仅用做 合法检测
+                        Instruction ins_p = new Instruction(c, x, y, dx, dy, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(ins_p))
+                        {
+                            Debug.Log("指令不合法");
+                            break;
+                        }
+
+                        // ======= Rect2point =======
+                        if (PlaceCenter.Instance.Low)
+                        {
+                            List<(int, int)> points = PlaceBoardManager.Instance.GetRectPoints(x, y, dx, dy);
+                            foreach ((int, int) point in points)
+                            {
+                                Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                                user.instructionQueue.Enqueue(drawIns);
+                            }
+                        }
+                        else if (PlaceCenter.Instance.High)
+                        {
+                            // ====== Rect2Line =======
+                            List<(int, int, int, int)> lines = PlaceBoardManager.Instance.GetRectLines(x, y, dx, dy);
+                            foreach ((int, int, int, int) line in lines)
+                            {
+                                Instruction lineIns = new Instruction("/l", x:line.Item1, y:line.Item2, ex:line.Item3, ey:line.Item4, r: r, g: g, b: b);
+                                user.instructionQueue.Enqueue(lineIns);
+                            }
+                        }
+                    }
+                    else if (parts.Length == 8)
+                    {
+                        int x, y, dx, dy, r, g, b;
+                        string c;
+                        c = parts[0]; // /d
+                        x = int.Parse(parts[1]); // x
+                        y = int.Parse(parts[2]); // y
+                        dx = int.Parse(parts[3]); // dx
+                        dy = int.Parse(parts[4]); // dy
+                        r = int.Parse(parts[5]); // r
+                        g = int.Parse(parts[6]); // g
+                        b = int.Parse(parts[7]); // b
+                        user.lastColor = new Color(r, g, b);
+                        // 暂时保留 仅用做 合法检测
+                        Instruction ins_rect = new Instruction(c, x, y, dx, dy, r: r, g: g, b: b);
+                        if (!PlaceBoardManager.Instance.CheckIns(ins_rect))
+                        {
+                            Debug.Log("指令不合法");
+                            break;
+                        }
+
+                        // ======= Rect2point =======
+                        if (PlaceCenter.Instance.Low)
+                        {
+                            List<(int, int)> points = PlaceBoardManager.Instance.GetRectPoints(x, y, dx, dy);
+                            foreach ((int, int) point in points)
+                            {
+                                Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                                user.instructionQueue.Enqueue(drawIns);
+                            }
+                        }
+                        else if (PlaceCenter.Instance.High)
+                        {
+                            // ====== Rect2Line =======
+                            List<(int, int, int, int)> lines = PlaceBoardManager.Instance.GetRectLines(x, y, dx, dy);
+                            foreach ((int, int, int, int) line in lines)
+                            {
+                                Instruction lineIns = new Instruction("/l", x:line.Item1, y:line.Item2, ex:line.Item3, ey:line.Item4, r: r, g: g, b: b);
+                                user.instructionQueue.Enqueue(lineIns);
+                            }
+                        }
+
                     }
                     else
                     {
@@ -702,35 +890,35 @@ public class PlaceInstructionManager : MonoBehaviour
             //     break;
             case "/f":
                 break; // 2024-05-09 :⚠️ 暂时废弃
-                // if (parts.Length == 4)
-                // {
-                //     int x, y, r, g, b;
-                //     string c, dc;
-                //     c = parts[0]; // /d
-                //     x = int.Parse(parts[1]); // x
-                //     y = int.Parse(parts[2]); // y
-                //     dc = parts[3];
-                //     if (colorDict.ContainsKey(dc))
-                //     {
-                //         Color32 color = colorDict[dc];
-                //         r = color.r; // r
-                //         g = color.g; // g
-                //         b = color.b; // b
-                //     }
-                //     else
-                //     {
-                //         Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
-                //         // UI 提示
-                //         break;
-                //     }
-                //     List<(int, int)> points = PlaceBoardManager.Instance.GetFillPoints(x, y, user.Id);
-                //     foreach ((int, int) point in points)
-                //     {
-                //         Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
-                //         user.instructionQueue.Enqueue(drawIns);
-                //     }
-                // }
-                // break;
+                       // if (parts.Length == 4)
+                       // {
+                       //     int x, y, r, g, b;
+                       //     string c, dc;
+                       //     c = parts[0]; // /d
+                       //     x = int.Parse(parts[1]); // x
+                       //     y = int.Parse(parts[2]); // y
+                       //     dc = parts[3];
+                       //     if (colorDict.ContainsKey(dc))
+                       //     {
+                       //         Color32 color = colorDict[dc];
+                       //         r = color.r; // r
+                       //         g = color.g; // g
+                       //         b = color.b; // b
+                       //     }
+                       //     else
+                       //     {
+                       //         Debug.Log("抱歉此颜色目前未包含在,可联系管理员申请新增颜色");
+                       //         // UI 提示
+                       //         break;
+                       //     }
+                       //     List<(int, int)> points = PlaceBoardManager.Instance.GetFillPoints(x, y, user.Id);
+                       //     foreach ((int, int) point in points)
+                       //     {
+                       //         Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                       //         user.instructionQueue.Enqueue(drawIns);
+                       //     }
+                       // }
+                       // break;
             case "/test":
                 if (parts.Length == 3)
                 {

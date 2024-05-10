@@ -21,7 +21,11 @@ public class TestManager : MonoBehaviour
     private float maxInterval = 2.0f; // 最大时间间隔
 
     public List<Texture2D> loadedTextures;
+    #if UNITY_EDITOR
     public string directoryPath = "Assets/Images";
+    # else
+    public string directoryPath = $"{Application.persistentDataPath}/Images";
+    # endif
     public int index = 0;
     public Color[] pixelsImage;
     public static TestManager Instance { get; private set; }

@@ -75,7 +75,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
             exInkRate += (u.Level - 1)  / 10;
             u.contributionRate = (0.1f * u.genInkCount) / teaminfo.hisExInk;
         }
-        inkRate = (teaminfo.currentTeamNumberCount / defaultInkTime) + exInkRate;
+        inkRate = teaminfo.currentTeamNumberCount + exInkRate;
         teaminfo.ink += inkRate ;
         teaminfo.hisInk += inkRate ;
         //Debug.Log("ink " + ink);
