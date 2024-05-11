@@ -139,6 +139,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
                 // PlayerControllerScript.selfDoor = door;
                 PlayerControllerScript.user = user;
             }
+            PlayerControllerScript.PlaylevelUpEffect();
             userList.Add(user);
             teaminfo.currentTeamNumberCount += 1;
             // 可以在这里设置角色的其他属性，比如所属队伍等

@@ -2,7 +2,6 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
-using Unity.VisualScripting;
 
 public class IconNameTag : MonoBehaviour
 {
@@ -18,7 +17,7 @@ public class IconNameTag : MonoBehaviour
 
     RectTransform maskRect;
 
-    
+
 
     void Start()
     {
@@ -48,9 +47,12 @@ public class IconNameTag : MonoBehaviour
 
     public void UpdateIconRect(float sizeDelta)
     {
+        float magicNum = 1.2f;
+        float powerScale = 1 + sizeDelta;
         //maskrect width height
-        maskRect.sizeDelta = new Vector2(1+sizeDelta, 1+sizeDelta);
-        maskRect.anchoredPosition = new Vector2(0, sizeDelta/2);
+        // maskRect.sizeDelta = new Vector2(1 + sizeDelta, 1 + sizeDelta);
+        offset = new Vector3(0, 3 + magicNum * powerScale + (powerScale / 2), 0);
+        rectTransform.localScale = new Vector3(powerScale, powerScale, 1);
     }
 
     void Update()

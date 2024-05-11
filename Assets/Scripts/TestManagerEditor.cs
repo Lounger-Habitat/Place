@@ -53,9 +53,9 @@ public class TestManagerEditor : Editor
         {
            ((TestManager)target).SendGift(5.2f);
         }
-        if (GUILayout.Button("¥52"))
+        if (GUILayout.Button("¥9.9"))
         {
-            ((TestManager)target).SendGift(52f);
+            ((TestManager)target).SendGift(9.9f);
         }
         if (GUILayout.Button("¥88.8"))
         {

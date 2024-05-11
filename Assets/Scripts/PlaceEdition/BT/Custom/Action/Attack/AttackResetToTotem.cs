@@ -45,7 +45,7 @@ public class AttackResetToTotem : PlaceAction
             }
             return TaskStatus.Running;
         }
-        base.pc.MoveToTarget();
+        // base.pc.MoveToTarget();
         return TaskStatus.Running;
     }
 }

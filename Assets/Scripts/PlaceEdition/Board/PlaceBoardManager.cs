@@ -888,20 +888,22 @@ public class PlaceBoardManager : MonoBehaviour
     {
         Debug.Log("On file saved: " + path);
         // text1.text = "GIF saved: " + path;
-        // string sourceFolder = Application.dataPath;
+        #if UNITY_EDITOR
+        string sourceFolder = Application.dataPath;
+        string destinationFolder = Path.Combine(sourceFolder, $"Images/{UniqueId}");
+        #else
+        string sourceFolder = Application.streamingAssetsPath;
+        string destinationFolder = Path.Combine(sourceFolder, UniqueId);
+        #endif
         // 目标文件夹路径
-        // string destinationFolder = $"Assets/Images/{UniqueId}";
 
-        //     // 获取源文件夹中所有的 .txt 文件
-        // // string txtFile = Directory.GetFiles(sourceFolder, "*.gif").FirstOrDefault();
+        string fileName = Path.GetFileName(path);
 
-        // string fileName = Path.GetFileName(path);
-
-        // string destinationFile = Path.Combine(destinationFolder, fileName);
+        string destinationFile = Path.Combine(destinationFolder, fileName);
 
         // gifPath = destinationFile;
 
-        // File.Move(path, destinationFile);
+        File.Copy(path, destinationFile);
 
         // 显示
         ShowGIF(path);
@@ -912,7 +914,7 @@ public class PlaceBoardManager : MonoBehaviour
 
     private void OnFileSaveProgress(int id, float progress)
     {
-        Debug.Log("On file save progress: " + progress);
+        Debug.Log("On file save progress: " + $"{Mathf.CeilToInt(progress * 100)}" + "%");
         // text1.text = "Save progress: " + Mathf.CeilToInt(progress * 100) + "%";
     }
 

@@ -28,7 +28,7 @@ public class AttackGoSteal : PlaceAction
         {
                 return TaskStatus.Success;
         }
-        pc.MoveToTarget();
+        // pc.MoveToTarget();
         return TaskStatus.Running;
     }
 

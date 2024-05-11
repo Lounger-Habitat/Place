@@ -52,16 +52,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   offset: {x: 0, y: 2.5, z: 0}
-  userName: 
-  userIcon: {fileID: 0}
+  go_Name: 
+  go_Icon: {fileID: 0}
   user:
+    name: 
     defendingIns: 0
     attckingIns: 0
+    invincible: 0
+    level: 0
+    currentState:
+      topState: 0
+      detailState: 0
+    currentCarryingInkCount: 0
+    currentCarryingInsCount: 0
+    maxCarryingInkCount: 0
     maxCarryingInsCount: 0
     speed: 0
+    exSpeed: 0
     waitingSpeed: 0
+    contributionRate: 0
     character: {fileID: 0}
     nameTag: {fileID: 0}
+    drawTimes: 0
+    useTotalInkCount: 0
+    effectiveInkCount: 0
+    usePowerCount: 0
+    genInkCount: 0
     selfTeam: {fileID: 0}
 --- !u!1 &8229647573672195112
 GameObject:

@@ -38,7 +38,7 @@ public class DefendToDoor : PlaceAction
             }
             return TaskStatus.Running;
         }
-        base.pc.MoveToTarget();
+        // base.pc.MoveToTarget();
         return TaskStatus.Running;
     }
 }

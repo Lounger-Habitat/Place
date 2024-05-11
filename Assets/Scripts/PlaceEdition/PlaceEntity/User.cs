@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityNavMeshAgent;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Playables;
 
 [System.Serializable]
@@ -127,9 +128,12 @@ public class User
         this.maxCarryingInkCount = (int)(10 + (level - 1) * 10f);
 
         // 体现角色能力
-        if (nameTag != null)
+        if (nameTag != null && character != null)
         {
-            nameTag.GetComponent<IconNameTag>().UpdateIconRect(level * 0.03f);
+            float delta = level * 0.03f;
+            nameTag.GetComponent<IconNameTag>().UpdateIconRect(delta);
+            character.transform.localScale = new Vector3(1 + delta, 1 + delta, 1 + delta);
+            character.GetComponent<NavMeshAgent>().avoidancePriority = Mathf.Clamp(99 - level,0,99);
         }
 
     }
