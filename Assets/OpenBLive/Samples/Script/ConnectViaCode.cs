@@ -66,7 +66,7 @@ public class ConnectViaCode : MonoBehaviour
         catch (Exception ex)
         {
             ConnectFailure?.Invoke();
-            Debug.Log("连接失败" + ex);
+            Debug.Log("连接失败");
             throw;
         }
 

@@ -875,7 +875,7 @@ public class PlaceBoardManager : MonoBehaviour
             tex2Gif.SetTransparent(true);
 
             //tex2Gif.m_MaxNumberOfThreads = 6;
-            tex2Gif.Save(tex2DList, width, height, 10, 0, 50, OnFileSaved, OnFileSaveProgress, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear: true);
+            tex2Gif.Save(tex2DList, width, height, 10, 0, 1, OnFileSaved, OnFileSaveProgress, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear: true);
             Debug.Log("Load images and start convert/save GIF..");
         }
         else
@@ -892,10 +892,14 @@ public class PlaceBoardManager : MonoBehaviour
         string sourceFolder = Application.dataPath;
         string destinationFolder = Path.Combine(sourceFolder, $"Images/{UniqueId}");
         #else
-        string sourceFolder = Application.streamingAssetsPath;
-        string destinationFolder = Path.Combine(sourceFolder, UniqueId);
+        string sourceFolder = Application.persistentDataPath;
+        string destinationFolder = Path.Combine(sourceFolder, $"Gif/{UniqueId}");
         #endif
         // 目标文件夹路径
+        if (!Directory.Exists(destinationFolder))
+        {
+            Directory.CreateDirectory(destinationFolder);
+        }
 
         string fileName = Path.GetFileName(path);
 

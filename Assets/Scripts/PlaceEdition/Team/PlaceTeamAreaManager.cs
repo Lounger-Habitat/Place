@@ -6,7 +6,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
 {
     // 队伍区域当前容纳的人数
     // public int currentTeamNumberCount = 0;
-    private float defaultInkTime = 10f;
+    // private float defaultInkTime = 10f;
     public List<User> userList = new List<User>();
     public Team teaminfo;
     // prefab of character

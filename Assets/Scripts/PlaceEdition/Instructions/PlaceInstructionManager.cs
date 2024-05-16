@@ -485,7 +485,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     Debug.LogError("输入字符串格式不正确");
                 }
                 break;
-            case "/rectangle":
+            case "/rectangle": // 矩形 无填充
             case "/rect":
                 if (parts.Length >= 5)
                 {
@@ -1070,6 +1070,9 @@ public class PlaceInstructionManager : MonoBehaviour
             else if (Regex.IsMatch(msg, FAST_DRAW_DIY_PATTERN))
             { // 快速画自定义线
                 DefaultRunChatCommand(user, "/m " + msg);
+            }else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN))
+            {// 快速画圆
+                DefaultRunChatCommand(user, "/c " + msg);
             }
         }
         // List<string> selectList = new List<string>(){
@@ -1193,4 +1196,5 @@ public class PlaceInstructionManager : MonoBehaviour
     public const string FAST_DRAW_PATTERN = @"(^\d{1,3} \d{1,3}$)|(^\d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
     public const string FAST_LINE_PATTERN = @"(^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)|(^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)";
     public const string FAST_DRAW_DIY_PATTERN = @"(^[1-9]\d*$)|(^[1-9]\d* [\u4E00-\u9FFF]+$)";
+    public const string FAST_CIRCLE_PATTERN = @"(^\d{1,3} \d{1,3} \d{1,3}$)|(^\d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
 }

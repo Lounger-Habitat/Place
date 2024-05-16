@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using System.Text;
 using System.Threading.Tasks;
 using System;
-using System.Text.RegularExpressions;
 
 
 public class PlaceBiliNetManager : MonoBehaviour
@@ -131,6 +130,7 @@ public class PlaceBiliNetManager : MonoBehaviour
         sb.Append("个");
         sb.Append(sendGift.giftName);
         Debug.Log(sb);
+        PlaceInstructionManager.Instance.DefaultGiftCommand(sendGift.userName, sendGift.price.ToString());
     }
 
     // 弹幕

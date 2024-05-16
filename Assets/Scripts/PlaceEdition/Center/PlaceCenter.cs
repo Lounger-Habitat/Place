@@ -50,7 +50,7 @@ public class PlaceCenter : MonoBehaviour
 
     int[] lastTeamScore = new int[5] { 0, 0, 0, 0, 0 };
 
-    public int recorderTime = 60;
+    public int recorderTime = 6;
 
     int baseId = 0;
 
@@ -745,7 +745,7 @@ public class PlaceCenter : MonoBehaviour
         //     u.character.GetComponent<PlacePlayerController>().Tornado(num);
         // }
 
-        IEnumerator SaveImagePreRecorderTime(int time = 60)
+        IEnumerator SaveImagePreRecorderTime(int time = 6)
         {
             // 持续等待一分钟
             while (gameRuning)

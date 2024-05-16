@@ -20,6 +20,9 @@ public class User
     private int id;          // 玩家 id
     public int Id { get { return id; } set { id = value; } }
 
+    private string open_id;          // 玩家 openid
+    public string Open_ID { get { return open_id; } set { open_id = value; } }
+
 
     /*
     ===============
@@ -83,7 +86,6 @@ public class User
     public User(string username)
     {
         this.name = username;
-        this.id = 0;
         this.level = 1;
         this.camp = 0;
         this.character = null;
