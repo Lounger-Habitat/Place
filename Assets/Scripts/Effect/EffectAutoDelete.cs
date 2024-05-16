@@ -5,7 +5,7 @@ public class EffectAutoDelete : MonoBehaviour
 {
     [SerializeField] 
 
-    public float scale = 0.7f;
+    public float scale = 1f;
 
     void Start()
     {
@@ -25,7 +25,8 @@ public class EffectAutoDelete : MonoBehaviour
 
     public void ReBlessing()
     {
-        transform.localScale = new Vector3(0, 2, 0);
+        transform.localPosition = new Vector3(0, 2, 0);
+        transform.localScale = new Vector3(0, 0, 0);
         transform.DOBlendableLocalMoveBy(Vector3.zero, 1f);
         transform.DOBlendableScaleBy(new Vector3(scale,scale,scale), 1f);
     }

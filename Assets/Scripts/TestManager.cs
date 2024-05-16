@@ -24,7 +24,7 @@ public class TestManager : MonoBehaviour
     #if UNITY_EDITOR
     public string directoryPath = "Assets/Images";
     # else
-    public string directoryPath = $"{Application.persistentDataPath}/Images";
+    public string directoryPath = $"{Application.streamingAssetsPath}/Images";
     # endif
     public int index = 0;
     public Color[] pixelsImage;
@@ -243,7 +243,7 @@ public class TestManager : MonoBehaviour
 
         // 0-1 random
         float rand = Random.Range(0f, 1f);
-        if (rand < 1.1f)
+        if (rand < 0.7f)
         {
             // 生成 画点指令
             int x = Random.Range(0, width);
@@ -251,8 +251,13 @@ public class TestManager : MonoBehaviour
 
             // 随机生成颜色
             int r, g, b;
-            (r, g, b) = RandomGetPoint(x, y);
-
+            // 图
+            // (r, g, b) = RandomGetPoint(x, y);
+            // rand
+            r = Random.Range(0, 255); 
+            g = Random.Range(0, 255);
+            b = Random.Range(0, 255);
+            
             drawIns = "/d " + x + " " + y + " " + r + " " + g + " " + b;
         }
         else if (rand < 0.8f)

@@ -892,10 +892,14 @@ public class PlaceBoardManager : MonoBehaviour
         string sourceFolder = Application.dataPath;
         string destinationFolder = Path.Combine(sourceFolder, $"Images/{UniqueId}");
         #else
-        string sourceFolder = Application.streamingAssetsPath;
-        string destinationFolder = Path.Combine(sourceFolder, UniqueId);
+        string sourceFolder = Application.persistentDataPath;
+        string destinationFolder = Path.Combine(sourceFolder, $"Gif/{UniqueId}");
         #endif
         // 目标文件夹路径
+        if (!Directory.Exists(destinationFolder))
+        {
+            Directory.CreateDirectory(destinationFolder);
+        }
 
         string fileName = Path.GetFileName(path);
 

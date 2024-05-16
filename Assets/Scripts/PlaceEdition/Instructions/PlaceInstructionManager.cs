@@ -96,6 +96,10 @@ public class PlaceInstructionManager : MonoBehaviour
                     if (!PlaceBoardManager.Instance.CheckIns(drawIns))
                     {
                         Debug.Log("指令不合法");
+                        PlaceUIManager.Instance.AddTips(new TipsItem()
+                        {
+                            text = $"尊敬的{user.Name},输入的指令不合法"
+                        });
                         break;
                     }
                     user.lastColor = new Color(r, g, b);
@@ -118,6 +122,10 @@ public class PlaceInstructionManager : MonoBehaviour
                     if (!PlaceBoardManager.Instance.CheckIns(drawIns))
                     {
                         Debug.Log("指令不合法");
+                        PlaceUIManager.Instance.AddTips(new TipsItem()
+                        {
+                            text = $"尊敬的{user.Name},输入的指令不合法"
+                        });
                         break;
                     }
                     user.lastPoint = (x, y);
@@ -169,6 +177,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(drawIns))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             break;
                         }
                         user.lastPoint = (x, y);
@@ -196,7 +208,7 @@ public class PlaceInstructionManager : MonoBehaviour
                             // UI 提示
                             PlaceUIManager.Instance.AddTips(new TipsItem()
                             {
-                                text = $"尊敬的{user.Name},抱歉此颜色({dc})目前未包含在,可联系管理员申请新增颜色"
+                                text = $"尊敬的{user.Name},抱歉此颜色({dc})目前未包含在内,可联系管理员申请新增颜色"
                             });
                             break;
                         }
@@ -204,6 +216,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(drawIns))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             break;
                         }
                         user.lastPoint = (x, y);
@@ -224,6 +240,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(drawIns))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             break;
                         }
                         user.lastColor = new Color(r, g, b);
@@ -264,6 +284,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(ins_l))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             break;
                         }
 
@@ -310,6 +334,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(ins_l))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             break;
                         }
 
@@ -343,6 +371,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(ins_l))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             break;
                         }
 
@@ -392,6 +424,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(ins_p))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             break;
                         }
 
@@ -435,6 +471,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(ins_p))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             break;
                         }
 
@@ -464,6 +504,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(ins_p))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             break;
                         }
 
@@ -507,6 +551,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(ins_rect))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             break;
                         }
 
@@ -563,6 +611,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(ins_p))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             break;
                         }
 
@@ -605,6 +657,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(ins_rect))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             break;
                         }
 
@@ -655,6 +711,10 @@ public class PlaceInstructionManager : MonoBehaviour
                     if (x + r >= PlaceBoardManager.Instance.width || y + r >= PlaceBoardManager.Instance.height || x - r < 0 || y - r < 0)
                     {
                         Debug.Log("指令不合法");
+                        PlaceUIManager.Instance.AddTips(new TipsItem()
+                        {
+                            text = $"尊敬的{user.Name},输入的指令不合法"
+                        });
                         break;
                     }
 
@@ -696,6 +756,10 @@ public class PlaceInstructionManager : MonoBehaviour
                     if (x + r <= PlaceBoardManager.Instance.width || y + r <= PlaceBoardManager.Instance.height || x - r >= 0 || y - r >= 0)
                     {
                         Debug.Log("指令不合法");
+                        PlaceUIManager.Instance.AddTips(new TipsItem()
+                        {
+                            text = $"尊敬的{user.Name},输入的指令不合法"
+                        });
                         break;
                     }
 
@@ -723,6 +787,10 @@ public class PlaceInstructionManager : MonoBehaviour
                     if (x + r <= PlaceBoardManager.Instance.width || y + r <= PlaceBoardManager.Instance.height || x - r >= 0 || y - r >= 0)
                     {
                         Debug.Log("指令不合法");
+                        PlaceUIManager.Instance.AddTips(new TipsItem()
+                        {
+                            text = $"尊敬的{user.Name},输入的指令不合法"
+                        });
                         break;
                     }
 
@@ -759,6 +827,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(drawIns))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             continue;
                         }
                         user.instructionQueue.Enqueue(drawIns);
@@ -800,6 +872,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(drawIns))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             continue;
                         }
                         user.instructionQueue.Enqueue(drawIns);
@@ -826,6 +902,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         if (!PlaceBoardManager.Instance.CheckIns(drawIns))
                         {
                             Debug.Log("指令不合法");
+                            PlaceUIManager.Instance.AddTips(new TipsItem()
+                            {
+                                text = $"尊敬的{user.Name},输入的指令不合法"
+                            });
                             continue;
                         }
                         user.instructionQueue.Enqueue(drawIns);
