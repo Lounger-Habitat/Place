@@ -23,9 +23,9 @@ public class TestManager : MonoBehaviour
     public List<Texture2D> loadedTextures;
 #if UNITY_EDITOR
     public string directoryPath = "Assets/Images";
-#else
-    public string directoryPath = $"{Application.persistentDataPath}/Images";
-#endif
+    # else
+    public string directoryPath = $"{Application.streamingAssetsPath}/Images";
+    # endif
     public int index = 0;
     public Color[] pixelsImage;
     public static TestManager Instance { get; private set; }
@@ -251,8 +251,13 @@ public class TestManager : MonoBehaviour
 
             // 随机生成颜色
             int r, g, b;
-            (r, g, b) = RandomGetPoint(x, y);
-
+            // 图
+            // (r, g, b) = RandomGetPoint(x, y);
+            // rand
+            r = Random.Range(0, 255); 
+            g = Random.Range(0, 255);
+            b = Random.Range(0, 255);
+            
             drawIns = "/d " + x + " " + y + " " + r + " " + g + " " + b;
         }
         else if (rand < 0.6f)
