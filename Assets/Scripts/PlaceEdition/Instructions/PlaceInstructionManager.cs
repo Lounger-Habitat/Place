@@ -4,6 +4,7 @@ using OpenBLive.Runtime.Data;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Text.RegularExpressions;
+using System.Net;
 
 public class PlaceInstructionManager : MonoBehaviour
 {
@@ -191,13 +192,14 @@ public class PlaceInstructionManager : MonoBehaviour
                     {
                         int x, y, r, g, b;
                         string c, dc;
+                        Color32 color = user.lastColor;
                         c = parts[0]; // /d
                         x = int.Parse(parts[1]); // x
                         y = int.Parse(parts[2]); // y
                         dc = parts[3];
                         if (colorDict.ContainsKey(dc))
                         {
-                            Color32 color = colorDict[dc];
+                            color = colorDict[dc];
                             r = color.r; // r
                             g = color.g; // g
                             b = color.b; // b
@@ -223,6 +225,7 @@ public class PlaceInstructionManager : MonoBehaviour
                             break;
                         }
                         user.lastPoint = (x, y);
+                        user.lastColor = color;
                         user.instructionQueue.Enqueue(drawIns);
                     }
                     else if (parts.Length == 6)
@@ -306,6 +309,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         // 文字颜色 - dc
                         string c, dc;
                         int x, y, ex, ey, r, g, b;
+                        Color32 color = user.lastColor;
                         c = parts[0]; // /l
                         x = int.Parse(parts[1]); // x
                         y = int.Parse(parts[2]); // y
@@ -314,7 +318,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         dc = parts[5];
                         if (colorDict.ContainsKey(dc))
                         {
-                            Color32 color = colorDict[dc];
+                            color = colorDict[dc];
                             r = color.r; // r
                             g = color.g; // g
                             b = color.b; // b
@@ -351,6 +355,8 @@ public class PlaceInstructionManager : MonoBehaviour
                         // }
 
                         // ======= 一笔画 ========
+                        user.lastColor = color;
+                        user.lastPoint = (ex,ey);
                         user.instructionQueue.Enqueue(ins_l);
                     }
                     else if (parts.Length == 8)
@@ -388,6 +394,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         // }
 
                         // ======= 一笔画 ========
+                        user.lastPoint = (ex,ey);
                         user.instructionQueue.Enqueue(ins_l);
                     }
                     else
@@ -443,6 +450,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     {
                         int x, y, dx, dy, r, g, b;
                         string c, dc;
+                        Color32 color = user.lastColor;
                         c = parts[0]; // /l
                         x = int.Parse(parts[1]); // x
                         y = int.Parse(parts[2]); // y
@@ -451,7 +459,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         dc = parts[5];
                         if (colorDict.ContainsKey(dc))
                         {
-                            Color32 color = colorDict[dc];
+                            color = colorDict[dc];
                             r = color.r; // r
                             g = color.g; // g
                             b = color.b; // b
@@ -483,6 +491,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         foreach ((int, int) point in points)
                         {
                             Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                            user.lastColor = color;
                             user.instructionQueue.Enqueue(drawIns);
                         }
                     }
@@ -583,6 +592,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     {
                         int x, y, dx, dy, r, g, b;
                         string c, dc;
+                        Color32 color = user.lastColor;
                         c = parts[0]; // /l
                         x = int.Parse(parts[1]); // x
                         y = int.Parse(parts[2]); // y
@@ -591,7 +601,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         dc = parts[5];
                         if (colorDict.ContainsKey(dc))
                         {
-                            Color32 color = colorDict[dc];
+                            color = colorDict[dc];
                             r = color.r; // r
                             g = color.g; // g
                             b = color.b; // b
@@ -625,6 +635,7 @@ public class PlaceInstructionManager : MonoBehaviour
                             foreach ((int, int) point in points)
                             {
                                 Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                                user.lastColor = color;
                                 user.instructionQueue.Enqueue(drawIns);
                             }
                         }
@@ -635,6 +646,7 @@ public class PlaceInstructionManager : MonoBehaviour
                             foreach ((int, int, int, int) line in lines)
                             {
                                 Instruction lineIns = new Instruction("/l", x:line.Item1, y:line.Item2, ex:line.Item3, ey:line.Item4, r: r, g: g, b: b);
+                                user.lastColor = color;
                                 user.instructionQueue.Enqueue(lineIns);
                             }
                         }
@@ -653,7 +665,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         b = int.Parse(parts[7]); // b
                         user.lastColor = new Color(r, g, b);
                         // 暂时保留 仅用做 合法检测
-                        Instruction ins_rect = new Instruction(c, x, y, dx, dy, r: r, g: g, b: b);
+                        Instruction ins_rect = new Instruction(c, x:x, y:y, dx:dx, dy:dy, r: r, g: g, b: b);
                         if (!PlaceBoardManager.Instance.CheckIns(ins_rect))
                         {
                             Debug.Log("指令不合法");
@@ -730,14 +742,15 @@ public class PlaceInstructionManager : MonoBehaviour
                 {
                     int x, y, r, g, b, radius;
                     string c, dc;
+                    Color32 color = user.lastColor;
                     c = parts[0]; // /d
                     x = int.Parse(parts[1]); // x
                     y = int.Parse(parts[2]); // y
                     radius = int.Parse(parts[3]);
-                    dc = parts[3];
+                    dc = parts[4];
                     if (colorDict.ContainsKey(dc))
                     {
-                        Color32 color = colorDict[dc];
+                        color = colorDict[dc];
                         r = color.r; // r
                         g = color.g; // g
                         b = color.b; // b
@@ -753,7 +766,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         break;
                     }
                     // 检测 合法
-                    if (x + r <= PlaceBoardManager.Instance.width || y + r <= PlaceBoardManager.Instance.height || x - r >= 0 || y - r >= 0)
+                    if (x + r >= PlaceBoardManager.Instance.width || y + r >= PlaceBoardManager.Instance.height || x - r < 0 || y - r < 0)
                     {
                         Debug.Log("指令不合法");
                         PlaceUIManager.Instance.AddTips(new TipsItem()
@@ -768,6 +781,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     foreach ((int, int) point in points)
                     {
                         Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                        user.lastColor = color;
                         user.instructionQueue.Enqueue(drawIns);
                     }
                 }
@@ -782,14 +796,15 @@ public class PlaceInstructionManager : MonoBehaviour
                     r = int.Parse(parts[4]); // r
                     g = int.Parse(parts[5]); // g
                     b = int.Parse(parts[6]); // b
+                    user.lastColor = new Color(r, g, b);
 
                     // 检测 合法
-                    if (x + r <= PlaceBoardManager.Instance.width || y + r <= PlaceBoardManager.Instance.height || x - r >= 0 || y - r >= 0)
+                    if (x + r >= PlaceBoardManager.Instance.width || y + r >= PlaceBoardManager.Instance.height || x - r < 0 || y - r < 0)
                     {
-                        Debug.Log("指令不合法");
+                        Debug.Log("/c指令不合法");
                         PlaceUIManager.Instance.AddTips(new TipsItem()
                         {
-                            text = $"尊敬的{user.Name},输入的指令不合法"
+                            text = $"尊敬的{user.Name},输入的/c指令不合法"
                         });
                         break;
                     }
@@ -826,10 +841,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         Instruction drawIns = new Instruction("/d", x, y, r: r, g: g, b: b);
                         if (!PlaceBoardManager.Instance.CheckIns(drawIns))
                         {
-                            Debug.Log("指令不合法");
+                            Debug.Log("/m指令不合法");
                             PlaceUIManager.Instance.AddTips(new TipsItem()
                             {
-                                text = $"尊敬的{user.Name},输入的指令不合法"
+                                text = $"尊敬的{user.Name},输入的/m指令不合法"
                             });
                             continue;
                         }
@@ -843,13 +858,14 @@ public class PlaceInstructionManager : MonoBehaviour
                 {
                     int x, y, r, g, b;
                     string c, s, dc;
+                    Color32 color = user.lastColor;
                     c = parts[0]; // /d
                     s = parts[1]; // seq
                     dc = parts[2];
                     (x, y) = user.lastPoint;
                     if (colorDict.ContainsKey(dc))
                     {
-                        Color32 color = colorDict[dc];
+                        color = colorDict[dc];
                         r = color.r; // r
                         g = color.g; // g
                         b = color.b; // b
@@ -883,6 +899,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
                     y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
                     user.lastPoint = (x, y);
+                    user.lastColor = color;
                 }
                 else if (parts.Length == 5)
                 { // 多颜色

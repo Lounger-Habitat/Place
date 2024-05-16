@@ -22,7 +22,7 @@ public class PlaceBoardManager : MonoBehaviour
     private Texture2D texture;
     private Color drawColor = Color.white; // 可以改为您想要的颜色
 
-    public int height = 500;
+    public int height = 300;
     public int width = 500;
     public Texture2D defaultTexture;
     public int recorderTime = 6;
@@ -789,6 +789,11 @@ public class PlaceBoardManager : MonoBehaviour
     {
         // 对x,y 处理ß
         // 记录
+        if (x < 0 || x >= width || y < 0 || y >= height)
+        {   
+            Debug.Log($"越界 : {x},{y}");
+            return;
+        }
         int index = x + (y * width);
         pixelsInfos[index] = camp;
         pixelsUserInfos[index] = id;
@@ -807,7 +812,7 @@ public class PlaceBoardManager : MonoBehaviour
         }
         else if (ins.mode == "/paint" || ins.mode == "/p" || ins.mode == "/rectangle" || ins.mode == "/rect")
         {
-            return ins.x < width && ins.y < height && ins.dx < width && ins.dy < height && ins.x >= 0 && ins.y >= 0 && ins.dx >= 0 && ins.dy >= 0;
+            return ins.x < width && ins.y < height && ins.dx < width - ins.x && ins.dy < height - ins.y && ins.x >= 0 && ins.y >= 0 && ins.dx >= 0 && ins.dy >= 0;
         }
         return false;
     }

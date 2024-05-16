@@ -23,9 +23,9 @@ public class TestManager : MonoBehaviour
     public List<Texture2D> loadedTextures;
 #if UNITY_EDITOR
     public string directoryPath = "Assets/Images";
-    # else
+#else
     public string directoryPath = $"{Application.streamingAssetsPath}/Images";
-    # endif
+#endif
     public int index = 0;
     public Color[] pixelsImage;
     public static TestManager Instance { get; private set; }
@@ -254,10 +254,10 @@ public class TestManager : MonoBehaviour
             // 图
             // (r, g, b) = RandomGetPoint(x, y);
             // rand
-            r = Random.Range(0, 255); 
+            r = Random.Range(0, 255);
             g = Random.Range(0, 255);
             b = Random.Range(0, 255);
-            
+
             drawIns = "/d " + x + " " + y + " " + r + " " + g + " " + b;
         }
         else if (rand < 0.6f)
@@ -311,11 +311,13 @@ public class TestManager : MonoBehaviour
         }
         else if (rand < 0.9f) // 方块
         {
-            int x = Random.Range(0, width);
-            int y = Random.Range(0, height);
+
 
             int deltaX = Random.Range(1, 50);
             int deltaY = Random.Range(1, 50);
+
+            int x = Random.Range(0, width - deltaX);
+            int y = Random.Range(0, height - deltaY);
 
             // 随机生成颜色
             int r = Random.Range(0, 255);
@@ -323,7 +325,8 @@ public class TestManager : MonoBehaviour
             int b = Random.Range(0, 255);
 
             drawIns = "/p " + x + " " + y + " " + deltaX + " " + deltaY + " " + r + " " + g + " " + b;
-        }else if (rand < 1f) // 框
+        }
+        else if (rand < 1f) // 框
         {
             int x = Random.Range(0, width);
             int y = Random.Range(0, height);
