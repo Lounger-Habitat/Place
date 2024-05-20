@@ -591,6 +591,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7021320378696841173, guid: bd7740c3bddb34472bba420535903bc1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7021320378696841173, guid: bd7740c3bddb34472bba420535903bc1, type: 3}
       propertyPath: m_fontSize
       value: 60
       objectReference: {fileID: 0}
@@ -615,8 +619,16 @@ PrefabInstance:
       value: 4278223615
       objectReference: {fileID: 0}
     - target: {fileID: 7226633563903501627, guid: bd7740c3bddb34472bba420535903bc1, type: 3}
-      propertyPath: m_Enabled
+      propertyPath: m_Type
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7226633563903501627, guid: bd7740c3bddb34472bba420535903bc1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1646976980, guid: f56c17d3ef4224ae18273fadb9c272a3, type: 3}
+    - target: {fileID: 7226633563903501627, guid: bd7740c3bddb34472bba420535903bc1, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: bd7740c3bddb34472bba420535903bc1, type: 3}
       propertyPath: m_Pivot.x
@@ -733,6 +745,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7021320378696841173, guid: bd7740c3bddb34472bba420535903bc1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7021320378696841173, guid: bd7740c3bddb34472bba420535903bc1, type: 3}
       propertyPath: m_fontSize
       value: 60
       objectReference: {fileID: 0}
@@ -757,8 +773,16 @@ PrefabInstance:
       value: 4279073791
       objectReference: {fileID: 0}
     - target: {fileID: 7226633563903501627, guid: bd7740c3bddb34472bba420535903bc1, type: 3}
-      propertyPath: m_Enabled
+      propertyPath: m_Type
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7226633563903501627, guid: bd7740c3bddb34472bba420535903bc1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1181169063, guid: f56c17d3ef4224ae18273fadb9c272a3, type: 3}
+    - target: {fileID: 7226633563903501627, guid: bd7740c3bddb34472bba420535903bc1, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8223862127581749184, guid: bd7740c3bddb34472bba420535903bc1, type: 3}
       propertyPath: m_Pivot.x
