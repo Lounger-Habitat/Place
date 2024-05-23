@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
