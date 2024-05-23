@@ -668,7 +668,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         Instruction ins_rect = new Instruction(c, x:x, y:y, dx:dx, dy:dy, r: r, g: g, b: b);
                         if (!PlaceBoardManager.Instance.CheckIns(ins_rect))
                         {
-                            Debug.Log("指令不合法");
+                            Debug.Log($"{user.Name} , /rect 指令不合法,{ins_rect}");
                             PlaceUIManager.Instance.AddTips(new TipsItem()
                             {
                                 text = $"尊敬的{user.Name},输入的指令不合法"

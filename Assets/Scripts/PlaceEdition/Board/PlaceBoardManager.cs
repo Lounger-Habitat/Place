@@ -425,15 +425,15 @@ public class PlaceBoardManager : MonoBehaviour
         return false;
     }
 
-    public void SaveImage()
+    public void SaveImage(bool lastone = false)
     {
         byte[] bytes = texture.EncodeToPNG();
         // 检测文件夹是否存在
 #if UNITY_EDITOR
-        string savePath = $"Assets/Images/{UniqueTime}";
+        string savePath = $"Assets/Images/Log/{UniqueTime}";
 #else
         string savePath = Application.streamingAssetsPath;
-        savePath = Path.Combine(savePath, $"{UniqueTime}");
+        savePath = Path.Combine(savePath, $"/Log/{UniqueTime}");
 #endif
         if (!Directory.Exists(savePath))
         {
@@ -448,10 +448,10 @@ public class PlaceBoardManager : MonoBehaviour
     {
         // string gifPath = $"Assets/Images/{UniqueTime}";
 #if UNITY_EDITOR
-        string gifPath = $"Assets/Images/{UniqueTime}";
+        string gifPath = $"Assets/Images/Log/{UniqueTime}";
 #else
         string gifPath = Application.streamingAssetsPath;
-        gifPath = Path.Combine(gifPath, $"{UniqueTime}");
+        gifPath = Path.Combine(gifPath, $"/Log/{UniqueTime}");
 #endif
         List<Texture2D> f = LoadResources(gifPath);
         f = Select20(f.ToArray());
@@ -858,7 +858,7 @@ public class PlaceBoardManager : MonoBehaviour
 
         // string loadImagePath = Application.streamingAssetsPath;
 #if UNITY_EDITOR
-        string loadImagePath = $"Assets/Images/{UniqueTime}";
+        string loadImagePath = $"Assets/Images/Log/{UniqueTime}";
 #else
         string loadImagePath = Application.streamingAssetsPath;
         loadImagePath = Path.Combine(loadImagePath, $"{UniqueTime}");
@@ -895,10 +895,10 @@ public class PlaceBoardManager : MonoBehaviour
         // text1.text = "GIF saved: " + path;
         #if UNITY_EDITOR
         string sourceFolder = Application.dataPath;
-        string destinationFolder = Path.Combine(sourceFolder, $"Images/{UniqueId}");
+        string destinationFolder = Path.Combine(sourceFolder, $"Images/Log/{UniqueTime}");
         #else
         string sourceFolder = Application.persistentDataPath;
-        string destinationFolder = Path.Combine(sourceFolder, $"Gif/{UniqueId}");
+        string destinationFolder = Path.Combine(sourceFolder, $"Gif/{UniqueTime}");
         #endif
         // 目标文件夹路径
         if (!Directory.Exists(destinationFolder))
@@ -910,15 +910,34 @@ public class PlaceBoardManager : MonoBehaviour
 
         string destinationFile = Path.Combine(destinationFolder, fileName);
 
-        // gifPath = destinationFile;
+        // public ArtInfo(string artName, int score, int drawTimes, float price, List<string> contributors, string artPath, string PUID, string dir)
+        ArtInfo artInfo = new ArtInfo(
+            "未名0001",
+            99,
+            PlaceCenter.Instance.users.Values.Sum(user => user.drawTimes),
+            PlaceCenter.Instance.users.Values.Sum(user => user.usePowerCount),
+            PlaceCenter.Instance.AllMemberName(),
+            artPath:destinationFolder,
+            PUID:UniqueId
+        );
+        SaveJson(destinationFile, artInfo);
 
-        File.Copy(path, destinationFile);
+
+        // File.Copy(path, destinationFile);
 
         // 显示
         ShowGIF(path);
 
         dpImage.sprite = tex2Gif.GetSprite(0);
         // dpImage.SetNativeSize();
+    }
+
+    private void SaveJson(string path,ArtInfo artInfo)
+    {
+        string json = JsonUtility.ToJson(artInfo);
+        File.WriteAllText(path, json);
+        Debug.Log("Saved Json to: " + path);
+
     }
 
     private void OnFileSaveProgress(int id, float progress)

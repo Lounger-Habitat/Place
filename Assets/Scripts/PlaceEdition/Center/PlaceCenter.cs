@@ -654,9 +654,6 @@ public class PlaceCenter : MonoBehaviour
                 insList.Add(ins);
             }
         }
-
-
-
         return insList;
     }
 
@@ -732,6 +729,9 @@ public class PlaceCenter : MonoBehaviour
     public string AllMember() {
         return users.Count.ToString();
     }
+    public List<string> AllMemberName() {
+        return users.Values.Select(user => user.Name).ToList();
+    }
     public string Price() {
         return users.Values.Sum(u => u.usePowerCount).ToString();
     }
@@ -753,6 +753,7 @@ public class PlaceCenter : MonoBehaviour
                 yield return new WaitForSeconds(time);
                 PlaceBoardManager.Instance.SaveImage();
             }
+            // PlaceBoardManager.Instance.SaveImage(lastone: true);
         }
 
 
