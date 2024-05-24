@@ -442,6 +442,11 @@ public class PlaceBoardManager : MonoBehaviour
         string path = $"{savePath}/save_{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
         System.IO.File.WriteAllBytes(path, bytes);
         Debug.Log("Saved Image to: " + path);
+        // if (lastone)
+        // {
+        //     // 创建 Sprite
+        //     Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+        // }
     }
 
     public void GenGif()
@@ -915,14 +920,14 @@ public class PlaceBoardManager : MonoBehaviour
 
         // public ArtInfo(string artName, int score, int drawTimes, float price, List<string> contributors, string artPath, string PUID, string dir)
         ArtInfo artInfo = new ArtInfo(
-            "未名0001",
+            UniqueTime,
             99,
             PlaceCenter.Instance.users.Values.Sum(user => user.drawTimes),
             PlaceCenter.Instance.users.Values.Sum(user => user.usePowerCount),
             PlaceCenter.Instance.AllMemberName(),
             artPath:destinationGifFile,
             PUID:UniqueId,
-            artSprite:tex2Gif.GetSprite(0)
+            artSprite:Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f))
         );
         SaveJson(destinationJsonFile, artInfo);
 

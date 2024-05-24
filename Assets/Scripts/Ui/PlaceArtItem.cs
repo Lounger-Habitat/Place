@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PlaceArtItem : MonoBehaviour
+public class PlaceArtItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
 {
     public ArtInfo artInfo;
     public Image artImage;
@@ -22,16 +23,17 @@ public class PlaceArtItem : MonoBehaviour
 
     public void DisPlayArt()
     {
-        ShowGIF(artInfo.artPath,artImage);
+        artImage.sprite = artInfo.artSprite;
     }
-
-    void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData eventData)
     {
+        ShowGIF(artInfo.artPath,artImage);
         Debug.Log("Mouse Enter");
     }
 
-    void OnMouseExit()
+    public void OnPointerExit(PointerEventData eventData)
     {
+        artImage.sprite = artInfo.artSprite;
         Debug.Log("Mouse Exit");
     }
     
@@ -45,4 +47,6 @@ public class PlaceArtItem : MonoBehaviour
             //Debug.Log("Load Progress: " + loadProgress);
         });
     }
+
+
 }
