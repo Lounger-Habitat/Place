@@ -848,6 +848,7 @@ public class PlaceBoardManager : MonoBehaviour
     }
     public void ConvertTex2DToGIF()
     {
+        
         Clear();
 
         tex2Gif = ProGifTexturesToGIF.Instance;
@@ -891,6 +892,7 @@ public class PlaceBoardManager : MonoBehaviour
 
     private void OnFileSaved(int id, string path)
     {
+        PlaceUIManager.Instance.GetEndUi().OnSaveGifOk();
         Debug.Log("On file saved: " + path);
         // text1.text = "GIF saved: " + path;
         #if UNITY_EDITOR
@@ -942,8 +944,10 @@ public class PlaceBoardManager : MonoBehaviour
 
     private void OnFileSaveProgress(int id, float progress)
     {
-        Debug.Log("On file save progress: " + $"{Mathf.CeilToInt(progress * 100)}" + "%");
+        int progressInt = Mathf.CeilToInt(progress * 100);
+        //Debug.Log("On file save progress: " + $"{progressInt}" + "%");
         // text1.text = "Save progress: " + Mathf.CeilToInt(progress * 100) + "%";
+        PlaceUIManager.Instance.GetEndUi().OnSaveGifLoading(progressInt);
     }
 
     void ShowGIF(string path)
