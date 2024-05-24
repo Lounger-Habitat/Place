@@ -3019,7 +3019,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7725716354149625757}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PlaceGalleryManager, Assembly-CSharp
         m_MethodName: OpenGallery
         m_Mode: 1
@@ -8254,7 +8254,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7725716354149625757}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PlaceGalleryManager, Assembly-CSharp
         m_MethodName: OpenGallery
         m_Mode: 1
@@ -13650,7 +13650,7 @@ PrefabInstance:
     - target: {fileID: 6444468562688678051, guid: a24b43289851040dba1d01d0b36b5b56, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 7725716354149625757}
+      objectReference: {fileID: 0}
     - target: {fileID: 6444468562688678051, guid: a24b43289851040dba1d01d0b36b5b56, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -14066,9 +14066,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 6685008238055873609}
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 542756910135503241, guid: a24b43289851040dba1d01d0b36b5b56, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7725716354149625757}
     - targetCorrespondingSourceObject: {fileID: 8396282137353306020, guid: a24b43289851040dba1d01d0b36b5b56, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5613516049779929442}
@@ -14097,28 +14094,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: 0, y: 0, z: 0, w: 0}
   m_Softness: {x: 0, y: 0}
---- !u!1 &5956562110325791149 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 542756910135503241, guid: a24b43289851040dba1d01d0b36b5b56, type: 3}
-  m_PrefabInstance: {fileID: 6134385543985164324}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7725716354149625757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5956562110325791149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c4d4cb4a51e74298922625101cedd78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  artsPath: []
-  artsInfo: []
-  artPrefab: {fileID: 1766027965945957793, guid: 6e6888e9aa83c44bcbec298e3fc2ef56, type: 3}
-  disby: time
-  fof: {fileID: 6440408657672691323}
 --- !u!224 &8370902960828672108 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2380958082926876744, guid: a24b43289851040dba1d01d0b36b5b56, type: 3}
