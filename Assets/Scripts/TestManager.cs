@@ -298,7 +298,9 @@ public class TestManager : MonoBehaviour
         }
         else if (rand < 0.8f) // 圆
         {
-            int radius = Random.Range(5, 149);
+            // int x = Random.Range(0, width);
+            // int y = Random.Range(0, width);
+            int radius = Random.Range(5, 100);
             int x = Random.Range(radius, width - radius);
             int y = Random.Range(radius, height - radius);
 
@@ -328,11 +330,14 @@ public class TestManager : MonoBehaviour
         }
         else if (rand < 1f) // 框
         {
-            int x = Random.Range(0, width);
-            int y = Random.Range(0, height);
 
             int deltaX = Random.Range(1, 50);
             int deltaY = Random.Range(1, 50);
+
+            int x = Random.Range(0, width - deltaX);
+            int y = Random.Range(0, height - deltaY);
+
+
 
             // 随机生成颜色
             int r = Random.Range(0, 255);

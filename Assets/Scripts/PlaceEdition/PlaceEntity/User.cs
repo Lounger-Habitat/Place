@@ -97,7 +97,7 @@ public class User
         this.userIcon = null;
         this.speed = 2.0f;
         this.currentState = new PlayerState(HighLevelState.Draw, DetailState.DrawMoveToTotem);
-        this.lastPoint = (0, 0);
+        this.lastPoint = (20, 20);
         this.instructionQueue = new Queue<Instruction>();
     }
 
@@ -126,8 +126,8 @@ public class User
         // 速度
         this.speed = 2 + (level - 1) * 0.03f;
         // 承载量
-        this.maxCarryingInsCount = (int)(10 + (level - 1) * 10f);
-        this.maxCarryingInkCount = (int)(10 + (level - 1) * 10f);
+        this.maxCarryingInsCount = (int)(10 + (level - 1) * 20f);
+        this.maxCarryingInkCount = (int)(10 + (level - 1) * 20f);
 
         // 体现角色能力
         if (nameTag != null && character != null)
@@ -144,15 +144,18 @@ public class User
     {
         /* 
             n 是 level 默认是1, 
-            d = 20,
+            d = 20, # 2024-05-24:太大了，升级太慢，改成 1,d=1
             a1 = 100
             a_n = a_1+(n−1)d
             S_n = n/2(a_1+a_n) = n/2(a_1+a_1+(n−1)d) = n/2(2a_1+(n−1)d)
             给定 S_n = score, 求 n
             20n^2+180n−2S=0
             n = (-180+sqrt(32400+160score))/40
+            n = [-(2a-d) + sqrt((2a-d)^2+8dS_n)] / 2d
+            n = [-199 + sqrt(39961+8*score)] / 2
         */
-        int n = (int)(-180 + Mathf.Sqrt(32400 + 160 * score)) / 40;
+        // int n = (int)(-180 + Mathf.Sqrt(32400 + 160 * score)) / 40;
+        int n = (int)(-199 + Mathf.Sqrt(39601 + 8 * score)) / 2;
         return n;
     }
 }
