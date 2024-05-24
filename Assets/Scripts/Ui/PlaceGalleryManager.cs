@@ -22,6 +22,7 @@ public class PlaceGalleryManager : MonoBehaviour
 
     public GameObject fof;
 
+    public Transform contentParent;
 
 /*
     /// 图片保存在 datapath + "/Images/TUID" 文件夹下
@@ -99,6 +100,11 @@ public class PlaceGalleryManager : MonoBehaviour
     string LoadGifPath(string dir) {
         // 获取目录下 gif 文件
         string[] gifFiles = Directory.GetFiles(dir, "*.gif", SearchOption.AllDirectories);
+        if (gifFiles.Length == 0)
+        {
+            Debug.Log("No GIF files found in the directory.");
+            return "";
+        }
         return gifFiles[0];
     }
 
@@ -127,7 +133,7 @@ public class PlaceGalleryManager : MonoBehaviour
     public void SetLayout()
     {
         // 获取画廊的UI位置
-        GameObject gallery = GameObject.Find("ArtContents");
+        //GameObject gallery = GameObject.Find("ArtContents");
 
         int artCount = arts.Count;
 
@@ -145,32 +151,32 @@ public class PlaceGalleryManager : MonoBehaviour
             artsInfo.OrderBy(art => art.price);
         }
 
-        GameObject h_content = null;
+        //GameObject h_content = null;//不做减法，注释掉更改
         // 生成prefab
         for (int i = 0; i < artCount; i++)
         {
             
-            if (i%3 == 0) {
-                h_content = new GameObject();
-                h_content.name = "h_content" + i;
-                h_content.transform.parent = gallery.transform;
-                h_content.AddComponent<RectTransform>();
-                RectTransform rt = h_content.GetComponent<RectTransform>();
-                rt.position = new Vector3(0, 0, 0);
-                rt.sizeDelta = new Vector2(3150, 750);
-                rt.pivot = new Vector2(0f, 1f);
-                h_content.AddComponent<HorizontalLayoutGroup>();
-                HorizontalLayoutGroup hl = h_content.GetComponent<HorizontalLayoutGroup>();
-                hl.childAlignment = TextAnchor.MiddleCenter;
-                hl.spacing = 60;
-                hl.childControlWidth = false;
-                hl.childControlHeight = false;
-                h_content.AddComponent<ContentSizeFitter>();
-                ContentSizeFitter csf = h_content.GetComponent<ContentSizeFitter>();
-                csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-            }
+            // if (i%3 == 0) {
+            //     h_content = new GameObject();
+            //     h_content.name = "h_content" + i;
+            //     h_content.transform.parent = gallery.transform;
+            //     h_content.AddComponent<RectTransform>();
+            //     RectTransform rt = h_content.GetComponent<RectTransform>();
+            //     rt.position = new Vector3(0, 0, 0);
+            //     rt.sizeDelta = new Vector2(3150, 750);
+            //     rt.pivot = new Vector2(0f, 1f);
+            //     h_content.AddComponent<HorizontalLayoutGroup>();
+            //     HorizontalLayoutGroup hl = h_content.GetComponent<HorizontalLayoutGroup>();
+            //     hl.childAlignment = TextAnchor.MiddleCenter;
+            //     hl.spacing = 60;
+            //     hl.childControlWidth = false;
+            //     hl.childControlHeight = false;
+            //     h_content.AddComponent<ContentSizeFitter>();
+            //     ContentSizeFitter csf = h_content.GetComponent<ContentSizeFitter>();
+            //     csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            // }
             GameObject art = Instantiate(artPrefab);
-            art.transform.parent = h_content.transform;
+            art.transform.parent = contentParent.transform;
             art.name = artsInfo[i].artName;
             art.GetComponent<PlaceArtItem>().artInfo = artsInfo[i];
             art.GetComponent<PlaceArtItem>().DisPlayArt();
