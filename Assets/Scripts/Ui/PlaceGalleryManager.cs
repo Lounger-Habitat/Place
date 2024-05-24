@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +14,7 @@ public class PlaceGalleryManager : MonoBehaviour
     public List<ArtInfo> artsInfo = new List<ArtInfo>(); 
 
 
-    Dictionary<string,List<Texture2D>> arts = new Dictionary<string, List<Texture2D>>();
+    Dictionary<string,string> arts = new Dictionary<string, string>();
 
     public GameObject artPrefab;
 
@@ -50,12 +49,11 @@ public class PlaceGalleryManager : MonoBehaviour
 
         LoadArts(dir);
 
-
-        SetLayout();
-        // 读取图片 地址
-        // 创建 图片 List
-
-        // 显示图片
+        if (artsInfo.Count != 0)
+        {
+            fof.SetActive(false);
+            SetLayout();
+        }
     }
 
     public void OpenGallery()
@@ -83,7 +81,7 @@ public class PlaceGalleryManager : MonoBehaviour
         foreach (string subDir in subDirectories)
         {
             artsPath.Add(subDir);
-            arts.Add(subDir,PlaceCenter.Instance.LoadResources(subDir));
+            arts.Add(subDir,LoadGifPath(subDir));
             List<string> jsons = LoadJson(subDir);
             if (jsons.Count != 1 )
             {
@@ -96,6 +94,12 @@ public class PlaceGalleryManager : MonoBehaviour
                 artsInfo.Add(artInfo);
             }
         }
+    }
+
+    string LoadGifPath(string dir) {
+        // 获取目录下 gif 文件
+        string[] gifFiles = Directory.GetFiles(dir, "*.gif", SearchOption.AllDirectories);
+        return gifFiles[0];
     }
 
 
@@ -141,15 +145,29 @@ public class PlaceGalleryManager : MonoBehaviour
             artsInfo.OrderBy(art => art.price);
         }
 
+        GameObject h_content = null;
         // 生成prefab
         for (int i = 0; i < artCount; i++)
         {
-            GameObject h_content = null;
+            
             if (i%3 == 0) {
                 h_content = new GameObject();
                 h_content.name = "h_content" + i;
                 h_content.transform.parent = gallery.transform;
+                h_content.AddComponent<RectTransform>();
+                RectTransform rt = h_content.GetComponent<RectTransform>();
+                rt.position = new Vector3(0, 0, 0);
+                rt.sizeDelta = new Vector2(3150, 750);
+                rt.pivot = new Vector2(0f, 1f);
                 h_content.AddComponent<HorizontalLayoutGroup>();
+                HorizontalLayoutGroup hl = h_content.GetComponent<HorizontalLayoutGroup>();
+                hl.childAlignment = TextAnchor.MiddleCenter;
+                hl.spacing = 60;
+                hl.childControlWidth = false;
+                hl.childControlHeight = false;
+                h_content.AddComponent<ContentSizeFitter>();
+                ContentSizeFitter csf = h_content.GetComponent<ContentSizeFitter>();
+                csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             }
             GameObject art = Instantiate(artPrefab);
             art.transform.parent = h_content.transform;
@@ -173,8 +191,9 @@ public struct ArtInfo
     public string artPath;
     public string PUID;
     public string time;
+    public Sprite artSprite;
 
-    public ArtInfo(string artName, int score, int drawTimes, float price, List<string> contributors, string artPath, string PUID)
+    public ArtInfo(string artName, int score, int drawTimes, float price, List<string> contributors, string artPath, string PUID,Sprite artSprite)
     {
         this.artName = artName;
         this.score = score;
@@ -184,5 +203,6 @@ public struct ArtInfo
         this.artPath = artPath;
         this.PUID = PUID;
         this.time = DateTime.Now.ToString();
+        this.artSprite = artSprite;
     }
 }

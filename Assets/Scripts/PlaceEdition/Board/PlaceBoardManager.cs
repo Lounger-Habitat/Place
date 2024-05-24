@@ -908,7 +908,8 @@ public class PlaceBoardManager : MonoBehaviour
 
         string fileName = Path.GetFileName(path);
 
-        string destinationFile = Path.Combine(destinationFolder, fileName);
+        string destinationGifFile = Path.Combine(destinationFolder, fileName);
+        string destinationJsonFile = Path.Combine(destinationFolder, "Art.json");
 
         // public ArtInfo(string artName, int score, int drawTimes, float price, List<string> contributors, string artPath, string PUID, string dir)
         ArtInfo artInfo = new ArtInfo(
@@ -917,13 +918,14 @@ public class PlaceBoardManager : MonoBehaviour
             PlaceCenter.Instance.users.Values.Sum(user => user.drawTimes),
             PlaceCenter.Instance.users.Values.Sum(user => user.usePowerCount),
             PlaceCenter.Instance.AllMemberName(),
-            artPath:destinationFolder,
-            PUID:UniqueId
+            artPath:destinationGifFile,
+            PUID:UniqueId,
+            artSprite:tex2Gif.GetSprite(0)
         );
-        SaveJson(destinationFile, artInfo);
+        SaveJson(destinationJsonFile, artInfo);
 
 
-        // File.Copy(path, destinationFile);
+        File.Copy(path, destinationGifFile);
 
         // 显示
         ShowGIF(path);
