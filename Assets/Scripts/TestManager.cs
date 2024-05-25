@@ -125,9 +125,9 @@ public class TestManager : MonoBehaviour
             GenBiliPlayer();
             // 不定时 随机生成指令
             StartCoroutine(GenerateRandomCommand());
-            // StartCoroutine(GenerateRandomCommand());
-            // StartCoroutine(GenerateRandomCommand());
-            // StartCoroutine(GenerateRandomCommand());
+            StartCoroutine(GenerateRandomCommand());
+            StartCoroutine(GenerateRandomCommand());
+            StartCoroutine(GenerateRandomCommand());
 
         }
         if (Input.GetKeyDown(KeyCode.X))

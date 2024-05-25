@@ -5,9 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.GifAssets.PowerGif;
-using System.Xml;
-using System.Reflection;
-
 public class PlaceBoardManager : MonoBehaviour
 {
     public Camera mainCamera;

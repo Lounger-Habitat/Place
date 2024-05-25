@@ -23,7 +23,7 @@ public class DrawMoveToTotem : PlaceAction
         pc.user.currentState.topState = HighLevelState.Draw;
         pc.user.currentState.detailState = DetailState.DrawMoveToTotem;
                 
-        randPosition = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+        randPosition = new Vector2(Random.Range(-2.5f, 2.5f), Random.Range(-2.5f, 2.5f));
         Vector2 positionB = new Vector2(base.pc.target.position.x, base.pc.target.position.z);
         targetPosition = positionB + randPosition;
         targetPositionV3 = new Vector3(targetPosition.x, pc.target.position.y, targetPosition.y);  

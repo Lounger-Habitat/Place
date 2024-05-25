@@ -497,6 +497,7 @@ public class PlaceCenter : MonoBehaviour
         u.character.GetComponent<PlacePlayerController>().InkUp(normalPower);
         u.score += normalPower;
         u.genInkCount += normalPower;
+        u.usePowerCount += power*10;
         u.Update();
         u.currentCarryingInkCount += normalPower;
         PlaceTeamManager.Instance.teamAreas[u.Camp - 1].teaminfo.ink += (int)(0.1 * normalPower);

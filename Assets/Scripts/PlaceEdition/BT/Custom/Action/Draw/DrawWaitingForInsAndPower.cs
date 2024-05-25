@@ -313,7 +313,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
             // 6.增加携带指令数量
             pc.user.currentCarryingInsCount += 1;
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         Debug.Log("协程结束");
         if (callback != null)
         {
