@@ -134,6 +134,7 @@ public class User
         {
             float delta = level * 0.03f;
             nameTag.GetComponent<IconNameTag>().UpdateIconRect(delta);
+            nameTag.GetComponent<IconNameTag>().name_text.text = $"Lv.{level}\n{name}";
             character.transform.localScale = new Vector3(1 + delta, 1 + delta, 1 + delta);
             character.GetComponent<NavMeshAgent>().avoidancePriority = Mathf.Clamp(99 - level,0,99);
         }

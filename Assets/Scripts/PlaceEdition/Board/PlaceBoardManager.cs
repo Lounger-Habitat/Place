@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Assets.GifAssets.PowerGif;
 using System.Xml;
+using System.Reflection;
 
 public class PlaceBoardManager : MonoBehaviour
 {
@@ -927,7 +928,7 @@ public class PlaceBoardManager : MonoBehaviour
             PlaceCenter.Instance.AllMemberName(),
             artPath:destinationGifFile,
             PUID:UniqueId,
-            artSprite:Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f))
+            artTexturePath:Directory.GetFiles(destinationFolder, "*.png", SearchOption.AllDirectories).Last<string>()
         );
         SaveJson(destinationJsonFile, artInfo);
 

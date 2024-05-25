@@ -135,7 +135,7 @@ public class PlaceGalleryManager : MonoBehaviour
         // 获取画廊的UI位置
         //GameObject gallery = GameObject.Find("ArtContents");
 
-        int artCount = arts.Count;
+        int artCount = artsInfo.Count;
 
         if (disby=="time")
         {
@@ -197,9 +197,9 @@ public struct ArtInfo
     public string artPath;
     public string PUID;
     public string time;
-    public Sprite artSprite;
+    public string artTexturePath;
 
-    public ArtInfo(string artName, int score, int drawTimes, float price, List<string> contributors, string artPath, string PUID,Sprite artSprite)
+    public ArtInfo(string artName, int score, int drawTimes, float price, List<string> contributors, string artPath, string PUID,string artTexturePath)
     {
         this.artName = artName;
         this.score = score;
@@ -209,6 +209,6 @@ public struct ArtInfo
         this.artPath = artPath;
         this.PUID = PUID;
         this.time = DateTime.Now.ToString();
-        this.artSprite = artSprite;
+        this.artTexturePath = artTexturePath;
     }
 }

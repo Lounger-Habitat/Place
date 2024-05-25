@@ -11,8 +11,7 @@ public class IconNameTag : MonoBehaviour
     public Sprite go_Icon;
     public User user;
     private RectTransform rectTransform;
-
-    TMP_Text tmp_text;
+    public TMP_Text name_text;
     Image icon;
 
     RectTransform maskRect;
@@ -22,11 +21,19 @@ public class IconNameTag : MonoBehaviour
     void Start()
     {
         rectTransform = GetComponent<RectTransform>(); // 获取RectTransform组件
-        tmp_text = GetComponentInChildren<TMP_Text>(); // 获取TextMeshPro组件
+        name_text = GetComponentInChildren<TMP_Text>(); // 获取TextMeshPro组件
         maskRect = transform.GetChild(0).GetComponent<RectTransform>();
         icon = transform.GetChild(0).GetChild(0).GetComponent<Image>(); // 获取TextMeshPro组件
+        if (user.Camp == 1)
+        {
+            name_text.color = new Color32(174, 255, 255, 255);
+        }
+        else
+        {
+            name_text.color = new Color32(88, 22, 222, 255);
+        }
 
-        tmp_text.text = go_Name; // 设置文本
+        name_text.text = go_Name; // 设置文本
         icon.sprite = go_Icon;
         StartCoroutine(UpdateName());
     }
@@ -38,7 +45,7 @@ public class IconNameTag : MonoBehaviour
         {
             if (target != null)
             {
-                tmp_text.text = user.Name; // 设置文本
+                name_text.text = $"Lv.{user.level}\n{user.Name}"; // 设置文本
                 icon.sprite = user.userIcon;
             }
             yield return new WaitForSeconds(1);
@@ -51,7 +58,7 @@ public class IconNameTag : MonoBehaviour
         float powerScale = 1 + sizeDelta;
         //maskrect width height
         // maskRect.sizeDelta = new Vector2(1 + sizeDelta, 1 + sizeDelta);
-        offset = new Vector3(0, 3 + magicNum * powerScale + (powerScale / 2), 0);
+        offset = new Vector3(0, 2.5f + magicNum * powerScale + (powerScale / 2), 0);
         rectTransform.localScale = new Vector3(powerScale, powerScale, 1);
     }
 

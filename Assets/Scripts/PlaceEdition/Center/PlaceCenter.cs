@@ -243,6 +243,7 @@ public class PlaceCenter : MonoBehaviour
         // 多少位？
         // 平台 + 时间 + 主播 + 人数 + 价值 + ？？
         // TODO
+        PlaceBoardManager.GenerateUniqueId();
         string puid = PlaceBoardManager.UniqueId;
         var text = GameObject.Find("DrawID").transform.GetChild(0).GetComponent<TMP_Text>();
         text.text = $"PUID : {puid}";
