@@ -108,8 +108,9 @@ public class PlaceUIManager : MonoBehaviour
         countDown.Init(() =>
         {
             endUI.Init();
-            PlaceCenter.Instance.GenGif();
             PlaceCenter.Instance.GenPUID();
+            PlaceCenter.Instance.GenGif();
+            
         });
         countDown.StartTimeDown();
     }

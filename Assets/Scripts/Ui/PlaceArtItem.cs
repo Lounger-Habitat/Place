@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -13,6 +11,10 @@ public class PlaceArtItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandl
     public Image artImage;
     public Sprite artSprite;
     ProGifPlayerImage pgpi;
+
+    public GameObject like;
+    public GameObject unLike;
+    public GameObject artName;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +22,7 @@ public class PlaceArtItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandl
         // read png
         Debug.Log("ArtInfo: " + artInfo.artTexturePath);    
         artSprite = LoadPNGAsSprite(artInfo.artTexturePath);
+        artName.GetComponent<TMP_Text>().text = artInfo.PUID;
     }
 
     Sprite LoadPNGAsSprite(string filePath)
@@ -100,6 +103,20 @@ public class PlaceArtItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandl
             //Debug.Log("Load Progress: " + loadProgress);
         });
     }
+
+    public void ClickLike()
+    {
+        unLike.SetActive(false);
+        like.SetActive(true);
+    }
+
+    public void CancelLike()
+    {
+        like.SetActive(false);
+        unLike.SetActive(true);
+    }
+
+
 
 
 }
