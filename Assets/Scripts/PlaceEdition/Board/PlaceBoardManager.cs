@@ -430,7 +430,7 @@ public class PlaceBoardManager : MonoBehaviour
 #if UNITY_EDITOR
         string savePath = $"Assets/Images/Log/{UniqueTime}";
 #else
-        string savePath = Application.streamingAssetsPath;
+        string savePath = Application.persistentDataPath;
         savePath = Path.Combine(savePath, $"/Log/{UniqueTime}");
 #endif
         if (!Directory.Exists(savePath))
@@ -453,7 +453,7 @@ public class PlaceBoardManager : MonoBehaviour
 #if UNITY_EDITOR
         string gifPath = $"Assets/Images/Log/{UniqueTime}";
 #else
-        string gifPath = Application.streamingAssetsPath;
+        string gifPath = Application.persistentDataPath;
         gifPath = Path.Combine(gifPath, $"/Log/{UniqueTime}");
 #endif
         List<Texture2D> f = LoadResources(gifPath);
@@ -864,7 +864,7 @@ public class PlaceBoardManager : MonoBehaviour
 #if UNITY_EDITOR
         string loadImagePath = $"Assets/Images/Log/{UniqueTime}";
 #else
-        string loadImagePath = Application.streamingAssetsPath;
+        string loadImagePath = Application.persistentDataPath;
         loadImagePath = Path.Combine(loadImagePath, $"{UniqueTime}");
 #endif
 
@@ -903,7 +903,7 @@ public class PlaceBoardManager : MonoBehaviour
         string destinationFolder = Path.Combine(sourceFolder, $"Images/Log/{UniqueTime}");
         #else
         string sourceFolder = Application.persistentDataPath;
-        string destinationFolder = Path.Combine(sourceFolder, $"Gif/{UniqueTime}");
+        string destinationFolder = Path.Combine(sourceFolder, $"Images/Log/{UniqueTime}");
         #endif
         // 目标文件夹路径
         if (!Directory.Exists(destinationFolder))

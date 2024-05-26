@@ -36,7 +36,7 @@ public class PlaceGalleryManager : MonoBehaviour
         #if UNITY_EDITOR
         string dir = Application.dataPath + "/Images/Log";
         #else
-        string dir = Application.streamingAssetsPath + "/Images/Log";
+        string dir = Application.persistentDataPath + "/Images/Log";
         #endif
 
         if (!Directory.Exists(dir))

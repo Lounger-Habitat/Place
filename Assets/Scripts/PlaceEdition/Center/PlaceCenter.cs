@@ -442,7 +442,7 @@ public class PlaceCenter : MonoBehaviour
                 break;
             case 9.9f:
                 normalPower = 3600;
-                message = "天赐神祇";
+                message = "天官赐福";
                 // 随机自动画一个图案
                 skill = SkillIcon.Pencil;
                 u.character.GetComponent<PlacePlayerController>().Blessing(300);
