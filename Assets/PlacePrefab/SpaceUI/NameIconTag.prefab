@@ -82,6 +82,7 @@ MonoBehaviour:
     selfTeam: {fileID: 0}
   name_text: {fileID: 4468563114805795245}
   title_text: {fileID: 3580733239300759424}
+  icon: {fileID: 2975287365776592152}
 --- !u!1 &3486081524554313314
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,7 +476,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3395843891494442652
 CanvasRenderer:

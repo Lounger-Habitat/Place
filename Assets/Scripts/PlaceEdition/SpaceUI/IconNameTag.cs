@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
+using Unity.Sentis.Layers;
 
 public class IconNameTag : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class IconNameTag : MonoBehaviour
     public TMP_Text name_text;
     public TMP_Text title_text;
     string title = "";
-    Image icon;
+    public Image icon;
 
     RectTransform maskRect;
 
@@ -26,7 +27,7 @@ public class IconNameTag : MonoBehaviour
         // name_text = GetComponentInChildren<TMP_Text>(); // 获取TextMeshPro组件
         // title_text = transform.GetChild(1).GetComponent<TMP_Text>();
         maskRect = transform.GetChild(0).GetComponent<RectTransform>();
-        icon = transform.GetChild(0).GetChild(0).GetComponent<Image>(); // 获取TextMeshPro组件
+        // icon = transform.GetChild(0).GetChild(0).GetComponent<Image>(); // 获取TextMeshPro组件
         if (user.Camp == 1)
         {
             name_text.color = new Color32(174, 255, 255, 255);
@@ -50,28 +51,28 @@ public class IconNameTag : MonoBehaviour
             {
                 switch (user.level)
                 {
-                    case <10:
+                    case < 10:
                         title = "新手"; // 白
                         title_text.color = new Color32(255, 255, 255, 255);
                         break;
-                    case <20:
+                    case < 20:
                         title = "学徒"; // 绿
                         title_text.color = new Color32(0, 255, 0, 255);
                         break;
-                    case <30:
+                    case < 30:
                         title = "画师"; // 蓝
                         title_text.color = new Color32(0, 0, 255, 255);
                         break;
-                    case <50:
-                        title = "大师"; // 紫
+                    case < 50:
+                        title = "画家"; // 紫
                         title_text.color = new Color32(255, 0, 255, 255);
                         break;
-                    case <100:
-                        title = "宗师"; // 橙
+                    case < 100:
+                        title = "画圣"; // 橙
                         title_text.color = new Color32(255, 165, 0, 255);
                         break;
                     default:
-                        title = "至尊"; // 红
+                        title = "画尊"; // 红
                         title_text.color = new Color32(255, 0, 0, 255);
                         break;
                 }
@@ -85,12 +86,17 @@ public class IconNameTag : MonoBehaviour
 
     public void UpdateIconRect(float sizeDelta)
     {
-        float magicNum = 1.2f;
-        float powerScale = 1 + sizeDelta;
+        float magicNum = 1.2f; // 角色身高
+        float powerScale = sizeDelta; // 1 + sizeDelta;
         //maskrect width height
         // maskRect.sizeDelta = new Vector2(1 + sizeDelta, 1 + sizeDelta);
-        offset = new Vector3(0, 2.5f + magicNum * powerScale + (powerScale / 2), 0);
-        rectTransform.localScale = new Vector3(powerScale, powerScale, 1);
+        offset = new Vector3(0, 2.5f + magicNum * powerScale + (2.7f * powerScale / 2), 0);
+        icon.rectTransform.parent.localScale = new Vector3(1 + powerScale, 1 + powerScale, 1);
+        title_text.rectTransform.localScale = new Vector3(1 + powerScale / 2, 1 + powerScale / 2, 1);
+        title_text.rectTransform.localPosition = new Vector3(0, 0.1f - powerScale/2, 0);
+        name_text.rectTransform.localScale = new Vector3(1 + powerScale / 2, 1 + powerScale / 2, 1);
+        name_text.rectTransform.localPosition = new Vector3(0, -0.8f - powerScale, 0);
+        // rectTransform.localScale = new Vector3(1 + powerScale, 1 + powerScale, 1);
     }
 
     void Update()
