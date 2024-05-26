@@ -22,7 +22,7 @@ public class PlaceArtItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandl
         // read png
         Debug.Log("ArtInfo: " + artInfo.artTexturePath);    
         artSprite = LoadPNGAsSprite(artInfo.artTexturePath);
-        artName.GetComponent<TMP_Text>().text = artInfo.PUID;
+        artName.GetComponent<TMP_Text>().text = artInfo.artName;
     }
 
     Sprite LoadPNGAsSprite(string filePath)

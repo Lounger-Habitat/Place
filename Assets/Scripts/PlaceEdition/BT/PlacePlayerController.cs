@@ -26,7 +26,7 @@ public class PlacePlayerController : MonoBehaviour
 
     public Dictionary<string, Transform> buildings = new Dictionary<string, Transform>();
 
-    private NavMeshAgent navMeshAgent;
+    public NavMeshAgent navMeshAgent;
 
     // 遇到的敌人
     public Dictionary<string, PlacePlayerController> enemies = new Dictionary<string, PlacePlayerController>();
