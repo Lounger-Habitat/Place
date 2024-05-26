@@ -787,6 +787,15 @@ public class PlacePlayerController : MonoBehaviour
     {
         blessing = true; // 特效 
         PlayBlessingEffect();
+
+        Collider[] cs = Physics.OverlapSphere(transform.position, 10f * 1).ToList().Where(c => c.CompareTag("Player")).ToArray();
+
+        foreach (var c in cs)
+        {
+            Debug.Log(c.name + "被击退");
+            c.GetComponent<Rigidbody>().AddExplosionForce(1000, transform.position, 10f);
+        }
+
         while (blessingTime > 1)
         {
             yield return new WaitForSeconds(300f);

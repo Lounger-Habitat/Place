@@ -32,14 +32,14 @@ public class DrawMoveToAltar : PlaceAction
         {
             return TaskStatus.Success;
         }
-        if (!pc.navMeshAgent.hasPath)
-        {
-            GetTargetPoint();
-        }
-        else
-        {
-            pc.MoveToTarget(targetPositionV3);
-        }
+        // if (!pc.navMeshAgent.hasPath)
+        // {
+        //     GetTargetPoint();
+        // }
+        // else
+        // {
+        pc.MoveToTarget(targetPositionV3);
+        // }
         return TaskStatus.Running;
     }
 

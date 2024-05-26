@@ -12,6 +12,8 @@ public class IconNameTag : MonoBehaviour
     public User user;
     private RectTransform rectTransform;
     public TMP_Text name_text;
+    public TMP_Text title_text;
+    string title = "";
     Image icon;
 
     RectTransform maskRect;
@@ -21,7 +23,8 @@ public class IconNameTag : MonoBehaviour
     void Start()
     {
         rectTransform = GetComponent<RectTransform>(); // 获取RectTransform组件
-        name_text = GetComponentInChildren<TMP_Text>(); // 获取TextMeshPro组件
+        // name_text = GetComponentInChildren<TMP_Text>(); // 获取TextMeshPro组件
+        // title_text = transform.GetChild(1).GetComponent<TMP_Text>();
         maskRect = transform.GetChild(0).GetComponent<RectTransform>();
         icon = transform.GetChild(0).GetChild(0).GetComponent<Image>(); // 获取TextMeshPro组件
         if (user.Camp == 1)
@@ -45,7 +48,35 @@ public class IconNameTag : MonoBehaviour
         {
             if (target != null)
             {
-                name_text.text = $"Lv.{user.level}\n{user.Name}"; // 设置文本
+                switch (user.level)
+                {
+                    case <10:
+                        title = "新手"; // 白
+                        title_text.color = new Color32(255, 255, 255, 255);
+                        break;
+                    case <20:
+                        title = "学徒"; // 绿
+                        title_text.color = new Color32(0, 255, 0, 255);
+                        break;
+                    case <30:
+                        title = "画师"; // 蓝
+                        title_text.color = new Color32(0, 0, 255, 255);
+                        break;
+                    case <50:
+                        title = "大师"; // 紫
+                        title_text.color = new Color32(255, 0, 255, 255);
+                        break;
+                    case <100:
+                        title = "宗师"; // 橙
+                        title_text.color = new Color32(255, 165, 0, 255);
+                        break;
+                    default:
+                        title = "至尊"; // 红
+                        title_text.color = new Color32(255, 0, 0, 255);
+                        break;
+                }
+                title_text.text = title;
+                name_text.text = $"{user.Name}"; // 设置文本
                 icon.sprite = user.userIcon;
             }
             yield return new WaitForSeconds(1);
