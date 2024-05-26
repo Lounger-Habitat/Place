@@ -431,7 +431,7 @@ public class PlaceBoardManager : MonoBehaviour
         string savePath = $"Assets/Images/Log/{UniqueTime}";
 #else
         string savePath = Application.persistentDataPath;
-        savePath = Path.Combine(savePath, $"/Log/{UniqueTime}");
+        savePath = Path.Combine(savePath, $"Log/{UniqueTime}");
 #endif
         if (!Directory.Exists(savePath))
         {
@@ -454,7 +454,7 @@ public class PlaceBoardManager : MonoBehaviour
         string gifPath = $"Assets/Images/Log/{UniqueTime}";
 #else
         string gifPath = Application.persistentDataPath;
-        gifPath = Path.Combine(gifPath, $"/Log/{UniqueTime}");
+        gifPath = Path.Combine(gifPath, $"Log/{UniqueTime}");
 #endif
         List<Texture2D> f = LoadResources(gifPath);
         f = Select20(f.ToArray());
@@ -865,7 +865,7 @@ public class PlaceBoardManager : MonoBehaviour
         string loadImagePath = $"Assets/Images/Log/{UniqueTime}";
 #else
         string loadImagePath = Application.persistentDataPath;
-        loadImagePath = Path.Combine(loadImagePath, $"{UniqueTime}");
+        loadImagePath = Path.Combine(loadImagePath, $"Log/{UniqueTime}");
 #endif
 
 
@@ -903,7 +903,7 @@ public class PlaceBoardManager : MonoBehaviour
         string destinationFolder = Path.Combine(sourceFolder, $"Images/Log/{UniqueTime}");
         #else
         string sourceFolder = Application.persistentDataPath;
-        string destinationFolder = Path.Combine(sourceFolder, $"Images/Log/{UniqueTime}");
+        string destinationFolder = Path.Combine(sourceFolder, $"Log/{UniqueTime}");
         #endif
         // 目标文件夹路径
         if (!Directory.Exists(destinationFolder))
@@ -919,7 +919,7 @@ public class PlaceBoardManager : MonoBehaviour
         // public ArtInfo(string artName, int score, int drawTimes, float price, List<string> contributors, string artPath, string PUID, string dir)
         ArtInfo artInfo = new ArtInfo(
             UniqueTime,
-            99,
+            PlaceCenter.Instance.users.Values.Sum(user => user.score),
             PlaceCenter.Instance.users.Values.Sum(user => user.drawTimes),
             PlaceCenter.Instance.users.Values.Sum(user => user.usePowerCount),
             PlaceCenter.Instance.AllMemberName(),
