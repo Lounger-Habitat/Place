@@ -1,5 +1,4 @@
-using System;
-using BehaviorDesigner.Runtime;
+using System.Collections;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
@@ -7,6 +6,8 @@ using UnityEngine;
 public class DrawWaitingForInsAndPower : PlaceAction
 {
     private int danceIndex;
+    bool inEpoch = false;
+    bool free = true;
     private string[] danceName = new[] { "TwistDance", "BreakDacne", "SillyDance", "HipHopDance" };
     public override void OnStart()
     {
@@ -24,11 +25,17 @@ public class DrawWaitingForInsAndPower : PlaceAction
         pc.batchDrawTimes = 0;
         pc.batchNeedInkCount = 0;
 
+        free = true;
+
         Debug.Log("DrawWaitingForInsAndPower : 准备接受指令 : " + pc.user.instructionQueue.Count);
     }
 
     public override TaskStatus OnUpdate()
     {
+        if (pc.insQueue.Count == 0)
+        {
+            free = true;
+        }
         // 获取队伍颜料数量
         int teamInkCount = PlaceCenter.Instance.GetTeamInkCount(pc.user.Camp);
 
@@ -38,24 +45,37 @@ public class DrawWaitingForInsAndPower : PlaceAction
             // 优先使用身上携带的颜料
             if (pc.user.currentCarryingInkCount > 0)
             {
-                int availableInkCount = pc.user.currentCarryingInkCount;
-                for (int i = 0; i < pc.user.instructionQueue.Count; i++)
+                if (inEpoch == false && free == true)
                 {
-                    // 计算指令 消耗颜料数量
-                    int needInkCount = PlaceCenter.Instance.ComputeInstructionColorCount(pc.user.instructionQueue.Peek());
-                    if (availableInkCount < needInkCount) // 身上颜料不够 ，跳出循环
+                    StartCoroutine(UseAvailableInk(() =>
                     {
-                        break;
-                    }
-                    // 身上颜料可以负担这个指令
-                    Instruction instruction = pc.user.instructionQueue.Dequeue();
-                    instruction.needInkCount = needInkCount;
-                    pc.batchNeedInkCount += needInkCount;
-                    availableInkCount -= needInkCount;
-                    pc.insQueue.Enqueue(instruction);
-                    pc.user.currentCarryingInsCount += 1;
-
+                        inEpoch = false;
+                        free = false;
+                        Debug.Log("设置 in Epoch 为 false");
+                    }));
                 }
+                if (inEpoch)
+                {
+                    Debug.Log("身上取指令没完成，等待中");
+                    return TaskStatus.Running;
+                }
+                // for (int i = 0; i < pc.user.instructionQueue.Count; i++)
+                // {
+                //     // 计算指令 消耗颜料数量
+                //     int needInkCount = PlaceCenter.Instance.ComputeInstructionColorCount(pc.user.instructionQueue.Peek());
+                //     if (availableInkCount < needInkCount) // 身上颜料不够 ，跳出循环
+                //     {
+                //         break;
+                //     }
+                //     // 身上颜料可以负担这个指令
+                //     Instruction instruction = pc.user.instructionQueue.Dequeue();
+                //     instruction.needInkCount = needInkCount;
+                //     pc.batchNeedInkCount += needInkCount;
+                //     availableInkCount -= needInkCount;
+                //     pc.insQueue.Enqueue(instruction);
+                //     pc.user.currentCarryingInsCount += 1;
+
+                // }
                 // 如果颜料富裕，直接走
                 if (pc.insQueue.Count > 0 && pc.user.currentCarryingInkCount >= pc.user.maxCarryingInkCount)
                 {
@@ -66,30 +86,44 @@ public class DrawWaitingForInsAndPower : PlaceAction
             // 队伍颜料充足
             if (teamInkCount > 0)
             {
-                // Debug.Log("有新指令添加,队伍有颜料");
-                for (int i = 0; i < pc.user.instructionQueue.Count; i++)
+                if (inEpoch == false && free == true )
                 {
-                    // 计算指令 消耗颜料数量
-                    int needInkCount = PlaceCenter.Instance.ComputeInstructionColorCount(pc.user.instructionQueue.Peek());
-                    teamInkCount = PlaceCenter.Instance.GetTeamInkCount(pc.user.Camp);
-                    if (teamInkCount < needInkCount) // 队伍颜料不够 ，跳出循环
+                    StartCoroutine(UseTeamInk(() =>
                     {
-                        break;
-                    }
-                    // 队伍颜料可以负担这个指令
-                    Instruction instruction = pc.user.instructionQueue.Dequeue();
-                    instruction.needInkCount = needInkCount;
-                    pc.batchNeedInkCount += needInkCount;
-                    pc.user.currentCarryingInkCount += needInkCount;
-                    PlaceCenter.Instance.SetTeamInkCount(pc.user.Camp, -needInkCount);
-                    pc.insQueue.Enqueue(instruction);
-                    pc.user.currentCarryingInsCount += 1;
-                    // 自己已经携带的颜料已经达到最大值
-                    if (pc.user.currentCarryingInkCount >= pc.user.maxCarryingInkCount)
-                    {
-                        return TaskStatus.Success;
-                    }
+                        inEpoch = false;
+                        free = false;
+                        Debug.Log("设置 in Epoch 为 false");
+                    }));
                 }
+                if (inEpoch)
+                {
+                    Debug.Log("队伍取指令没完成，等待中");
+                    return TaskStatus.Running;
+                }
+                // Debug.Log("有新指令添加,队伍有颜料");
+                // for (int i = 0; i < pc.user.instructionQueue.Count; i++)
+                // {
+                //     // 计算指令 消耗颜料数量
+                //     int needInkCount = PlaceCenter.Instance.ComputeInstructionColorCount(pc.user.instructionQueue.Peek());
+                //     teamInkCount = PlaceCenter.Instance.GetTeamInkCount(pc.user.Camp);
+                //     if (teamInkCount < needInkCount) // 队伍颜料不够 ，跳出循环
+                //     {
+                //         break;
+                //     }
+                //     // 队伍颜料可以负担这个指令
+                //     Instruction instruction = pc.user.instructionQueue.Dequeue();
+                //     instruction.needInkCount = needInkCount;
+                //     pc.batchNeedInkCount += needInkCount;
+                //     pc.user.currentCarryingInkCount += needInkCount;
+                //     PlaceCenter.Instance.SetTeamInkCount(pc.user.Camp, -needInkCount);
+                //     pc.insQueue.Enqueue(instruction);
+                //     pc.user.currentCarryingInsCount += 1;
+                //     // 自己已经携带的颜料已经达到最大值
+                //     if (pc.user.currentCarryingInkCount >= pc.user.maxCarryingInkCount)
+                //     {
+                //         return TaskStatus.Success;
+                //     }
+                // }
             }
             if (pc.insQueue.Count > 0)
             {
@@ -201,5 +235,90 @@ public class DrawWaitingForInsAndPower : PlaceAction
 
         // // 没有指令 等待
         // return TaskStatus.Running;
+    }
+
+    // 协程
+    IEnumerator UseTeamInk(System.Action callback)
+    {
+        inEpoch = true;
+        int teamInkCount = PlaceCenter.Instance.GetTeamInkCount(pc.user.Camp);
+        while (teamInkCount > 0 && pc.user.instructionQueue.Count > 0)
+        {
+            Debug.Log("队伍有待用的颜料和指令");
+            // 计算指令 消耗颜料数量
+            int needInkCount = PlaceCenter.Instance.ComputeInstructionColorCount(pc.user.instructionQueue.Peek());
+            teamInkCount = PlaceCenter.Instance.GetTeamInkCount(pc.user.Camp);
+            if (teamInkCount < needInkCount) // 身上颜料不够 ，跳出循环
+            {
+                Debug.Log("队伍颜料不够了，队伍颜料: " + teamInkCount + " 需要颜料: " + needInkCount);
+                break;
+            }
+            // 身上颜料可以负担这个指令
+            // 1.取出指令
+            Instruction instruction = pc.user.instructionQueue.Dequeue();
+            // 2.设置指令消耗颜料数量
+            instruction.needInkCount = needInkCount;
+            // 3.设置批量消耗颜料数量
+            pc.batchNeedInkCount += needInkCount;
+            // 4.增加身上当前颜料数量
+            pc.user.currentCarryingInkCount += needInkCount;
+            // 5.减少队伍颜料数量
+            PlaceCenter.Instance.SetTeamInkCount(pc.user.Camp, -needInkCount);
+            // 6.加入指令队列
+            pc.insQueue.Enqueue(instruction);
+            // 7.增加携带指令数量
+            pc.user.currentCarryingInsCount += 1;
+
+            // 自己已经携带的颜料已经达到最大值
+            if (pc.user.currentCarryingInkCount >= pc.user.maxCarryingInkCount)
+            {
+                Debug.Log("携带颜料到达最大值");
+                break;
+            }
+        }
+        yield return new WaitForSeconds(0.5f);
+        Debug.Log("协程结束");
+        if (callback != null)
+        {
+            callback();
+        }
+
+    }
+
+    IEnumerator UseAvailableInk(System.Action callback)
+    {
+        inEpoch = true;
+        int availableInkCount = pc.user.currentCarryingInkCount;
+        while (availableInkCount > 0 && pc.user.instructionQueue.Count > 0)
+        {
+            Debug.Log("身上有待用颜料和队伍有待用的指令");
+            // 计算指令 消耗颜料数量
+            int needInkCount = PlaceCenter.Instance.ComputeInstructionColorCount(pc.user.instructionQueue.Peek());
+            if (availableInkCount < needInkCount) // 身上颜料不够 ，跳出循环
+            {
+                Debug.Log("身上颜料不够了, 身上颜料: " + availableInkCount + " 需要颜料: " + needInkCount);
+                break;
+            }
+            // 身上颜料可以负担这个指令
+            // 1.取出指令
+            Instruction instruction = pc.user.instructionQueue.Dequeue();
+            // 2.设置指令消耗颜料数量
+            instruction.needInkCount = needInkCount;
+            // 3.设置批量消耗颜料数量
+            pc.batchNeedInkCount += needInkCount;
+            // 4.减少身上可用颜料数量
+            availableInkCount -= needInkCount;
+            // 5.加入指令队列
+            pc.insQueue.Enqueue(instruction);
+            // 6.增加携带指令数量
+            pc.user.currentCarryingInsCount += 1;
+        }
+        yield return new WaitForSeconds(0.2f);
+        Debug.Log("协程结束");
+        if (callback != null)
+        {
+            callback();
+        }
+
     }
 }

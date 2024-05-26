@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class EndUI : MonoBehaviour
 {
@@ -14,6 +12,7 @@ public class EndUI : MonoBehaviour
     public void Init()
     {
         (transform as RectTransform).anchoredPosition = new Vector2(0, 0);
+        OnSaveGifBengin();
         //获取排行数据，将当前前三名玩家展示出来
         var userList = PlaceCenter.Instance.users.Values.ToList();
         userList.Sort((a,b)=>b.score.CompareTo(a.score));//降序排列贡献值，取前三位
@@ -46,6 +45,25 @@ public class EndUI : MonoBehaviour
 
     public void OnClickNextBtn()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("1920-1080Scene");
+    }
+
+
+    public Transform loadingTransform;
+    public TMP_Text loadingText;
+    public void OnSaveGifBengin()
+    {
+        loadingTransform.parent.gameObject.SetActive(true);
+        loadingTransform.DORotate(new Vector3(0,0,-360),2f).SetLoops(-1, LoopType.Restart);
+    }
+
+    public void OnSaveGifLoading(int progress)
+    {
+        loadingText.text = $"正在加载...{progress}%";
+    }
+    public void OnSaveGifOk()
+    {
+        loadingTransform.parent.gameObject.SetActive(false);
+        loadingTransform.DOKill();
     }
 }

@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using System.Text;
 using System.Threading.Tasks;
 using System;
-using System.Text.RegularExpressions;
 
 
 public class PlaceBiliNetManager : MonoBehaviour
@@ -56,6 +55,9 @@ public class PlaceBiliNetManager : MonoBehaviour
             ConnectFailure?.Invoke();
             return;
         }
+
+        // 主播信息
+        PlaceCenter.Instance.anchorName = gameIdResObj.Data.AnchorInfo.UName;
 
         m_WebSocketBLiveClient = new WebSocketBLiveClient(gameIdResObj.GetWssLink(), gameIdResObj.GetAuthBody());
         m_WebSocketBLiveClient.OnDanmaku += WebSocketBLiveClientOnDanmaku;
@@ -131,6 +133,7 @@ public class PlaceBiliNetManager : MonoBehaviour
         sb.Append("个");
         sb.Append(sendGift.giftName);
         Debug.Log(sb);
+        PlaceInstructionManager.Instance.DefaultGiftCommand(sendGift.userName, sendGift.price.ToString());
     }
 
     // 弹幕

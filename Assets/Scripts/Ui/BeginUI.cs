@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class BeginUI : MonoBehaviour
@@ -14,6 +15,7 @@ public class BeginUI : MonoBehaviour
     
     public void OnClickBeginBtn()
     {
+        OnNumberInputEnd(inputField.text);//开局手动调一下 防止修改人数后没有确定
         //通知游戏开始了
         PlaceCenter.Instance.StartGame();
         PlaceCenter.Instance.RecordImage();
@@ -28,4 +30,15 @@ public class BeginUI : MonoBehaviour
         // 关闭setting
         placeSettingUI.SetActive(true);
     }
+
+
+    public TMP_InputField inputField;
+    public void OnNumberInputEnd(string str)
+    {
+        int number = int.Parse(str);
+        number = Mathf.Clamp(number, 10, 100);
+        inputField.text = number.ToString();
+        PlaceTeamManager.Instance.SetTeamNumber(number);
+    }
+
 }

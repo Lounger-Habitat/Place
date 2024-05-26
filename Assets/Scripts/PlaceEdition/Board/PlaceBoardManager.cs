@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.GifAssets.PowerGif;
-
 public class PlaceBoardManager : MonoBehaviour
 {
     public Camera mainCamera;
@@ -21,7 +20,7 @@ public class PlaceBoardManager : MonoBehaviour
     private Texture2D texture;
     private Color drawColor = Color.white; // 可以改为您想要的颜色
 
-    public int height = 500;
+    public int height = 300;
     public int width = 500;
     public Texture2D defaultTexture;
     public int recorderTime = 6;
@@ -424,15 +423,15 @@ public class PlaceBoardManager : MonoBehaviour
         return false;
     }
 
-    public void SaveImage()
+    public void SaveImage(bool lastone = false)
     {
         byte[] bytes = texture.EncodeToPNG();
         // 检测文件夹是否存在
 #if UNITY_EDITOR
-        string savePath = $"Assets/Images/{UniqueTime}";
+        string savePath = $"Assets/Images/Log/{UniqueTime}";
 #else
-        string savePath = Application.streamingAssetsPath;
-        savePath = Path.Combine(savePath, $"{UniqueTime}");
+        string savePath = Application.persistentDataPath;
+        savePath = Path.Combine(savePath, $"Log/{UniqueTime}");
 #endif
         if (!Directory.Exists(savePath))
         {
@@ -441,16 +440,21 @@ public class PlaceBoardManager : MonoBehaviour
         string path = $"{savePath}/save_{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
         System.IO.File.WriteAllBytes(path, bytes);
         Debug.Log("Saved Image to: " + path);
+        // if (lastone)
+        // {
+        //     // 创建 Sprite
+        //     Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+        // }
     }
 
     public void GenGif()
     {
         // string gifPath = $"Assets/Images/{UniqueTime}";
 #if UNITY_EDITOR
-        string gifPath = $"Assets/Images/{UniqueTime}";
+        string gifPath = $"Assets/Images/Log/{UniqueTime}";
 #else
-        string gifPath = Application.streamingAssetsPath;
-        gifPath = Path.Combine(gifPath, $"{UniqueTime}");
+        string gifPath = Application.persistentDataPath;
+        gifPath = Path.Combine(gifPath, $"Log/{UniqueTime}");
 #endif
         List<Texture2D> f = LoadResources(gifPath);
         f = Select20(f.ToArray());
@@ -526,6 +530,43 @@ public class PlaceBoardManager : MonoBehaviour
     public List<(int, int)> GetSquarePoints(int x, int y, int dx, int dy)
     {
         return ComputeDrawSqure(x: x, y: y, dx: dx, dy: dy);
+    }
+
+    public List<(int, int)> GetRectPoints(int x, int y, int dx, int dy)
+    {
+        return ComputeDrawRect(x: x, y: y, dx: dx, dy: dy);
+    }
+    public List<(int, int, int, int)> GetRectLines(int x, int y, int dx, int dy)
+    {
+        return ComputeLineRect(x: x, y: y, dx: dx, dy: dy);
+    }
+
+    private List<(int, int, int, int)> ComputeLineRect(int x, int y, int dx, int dy)
+    {
+        int ex = x + dx;
+        int ey = y + dy;
+        List<(int, int, int, int)> lines = new List<(int, int, int, int)>();
+        lines.Add((x, ey, x, y)); // 左
+        lines.Add((x, ey, ex, ey)); // 上
+        lines.Add((ex, ey, ex, y)); // 右
+        lines.Add((x, y, ex, y)); // 下
+        return lines;
+    }
+
+    private List<(int, int)> ComputeDrawRect(int x, int y, int dx, int dy)
+    {
+        List<(int, int)> points = new List<(int, int)>();
+        for (int i = x; i < x + dx; i++)
+        {
+            points.Add((i, y));
+            points.Add((i, y + dy));
+        }
+        for (int j = y; j < y + dy; j++)
+        {
+            points.Add((x, j));
+            points.Add((x + dx, j));
+        }
+        return points;
     }
 
     private List<(int, int)> ComputeDrawSqure(int x, int y, int dx, int dy)
@@ -751,6 +792,11 @@ public class PlaceBoardManager : MonoBehaviour
     {
         // 对x,y 处理ß
         // 记录
+        if (x < 0 || x >= width || y < 0 || y >= height)
+        {   
+            Debug.Log($"越界 : {x},{y}");
+            return;
+        }
         int index = x + (y * width);
         pixelsInfos[index] = camp;
         pixelsUserInfos[index] = id;
@@ -767,9 +813,9 @@ public class PlaceBoardManager : MonoBehaviour
         {
             return ins.x < width && ins.y < height && ins.ex < width && ins.ey < height && ins.x >= 0 && ins.y >= 0 && ins.ex >= 0 && ins.ey >= 0;
         }
-        else if (ins.mode == "/paint" || ins.mode == "/p")
+        else if (ins.mode == "/paint" || ins.mode == "/p" || ins.mode == "/rectangle" || ins.mode == "/rect")
         {
-            return ins.x < width && ins.y < height && ins.dx < width && ins.dy < height && ins.x >= 0 && ins.y >= 0 && ins.dx >= 0 && ins.dy >= 0;
+            return ins.x < width && ins.y < height && ins.dx < width - ins.x && ins.dy < height - ins.y && ins.x >= 0 && ins.y >= 0 && ins.dx >= 0 && ins.dy >= 0;
         }
         return false;
     }
@@ -805,6 +851,7 @@ public class PlaceBoardManager : MonoBehaviour
     }
     public void ConvertTex2DToGIF()
     {
+        
         Clear();
 
         tex2Gif = ProGifTexturesToGIF.Instance;
@@ -815,10 +862,10 @@ public class PlaceBoardManager : MonoBehaviour
 
         // string loadImagePath = Application.streamingAssetsPath;
 #if UNITY_EDITOR
-        string loadImagePath = $"Assets/Images/{UniqueTime}";
+        string loadImagePath = $"Assets/Images/Log/{UniqueTime}";
 #else
-        string loadImagePath = Application.streamingAssetsPath;
-        loadImagePath = Path.Combine(loadImagePath, $"{UniqueTime}");
+        string loadImagePath = Application.persistentDataPath;
+        loadImagePath = Path.Combine(loadImagePath, $"Log/{UniqueTime}");
 #endif
 
 
@@ -837,7 +884,7 @@ public class PlaceBoardManager : MonoBehaviour
             tex2Gif.SetTransparent(true);
 
             //tex2Gif.m_MaxNumberOfThreads = 6;
-            tex2Gif.Save(tex2DList, width, height, 10, 0, 50, OnFileSaved, OnFileSaveProgress, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear: true);
+            tex2Gif.Save(tex2DList, width, height, 10, 0, 1, OnFileSaved, OnFileSaveProgress, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear: true);
             Debug.Log("Load images and start convert/save GIF..");
         }
         else
@@ -848,22 +895,42 @@ public class PlaceBoardManager : MonoBehaviour
 
     private void OnFileSaved(int id, string path)
     {
+        PlaceUIManager.Instance.GetEndUi().OnSaveGifOk();
         Debug.Log("On file saved: " + path);
         // text1.text = "GIF saved: " + path;
-        // string sourceFolder = Application.dataPath;
+        #if UNITY_EDITOR
+        string sourceFolder = Application.dataPath;
+        string destinationFolder = Path.Combine(sourceFolder, $"Images/Log/{UniqueTime}");
+        #else
+        string sourceFolder = Application.persistentDataPath;
+        string destinationFolder = Path.Combine(sourceFolder, $"Log/{UniqueTime}");
+        #endif
         // 目标文件夹路径
-        // string destinationFolder = $"Assets/Images/{UniqueId}";
+        if (!Directory.Exists(destinationFolder))
+        {
+            Directory.CreateDirectory(destinationFolder);
+        }
 
-        //     // 获取源文件夹中所有的 .txt 文件
-        // // string txtFile = Directory.GetFiles(sourceFolder, "*.gif").FirstOrDefault();
+        string fileName = Path.GetFileName(path);
 
-        // string fileName = Path.GetFileName(path);
+        string destinationGifFile = Path.Combine(destinationFolder, fileName);
+        string destinationJsonFile = Path.Combine(destinationFolder, "Art.json");
 
-        // string destinationFile = Path.Combine(destinationFolder, fileName);
+        // public ArtInfo(string artName, int score, int drawTimes, float price, List<string> contributors, string artPath, string PUID, string dir)
+        ArtInfo artInfo = new ArtInfo(
+            UniqueTime,
+            PlaceCenter.Instance.users.Values.Sum(user => user.score),
+            PlaceCenter.Instance.users.Values.Sum(user => user.drawTimes),
+            PlaceCenter.Instance.users.Values.Sum(user => user.usePowerCount),
+            PlaceCenter.Instance.AllMemberName(),
+            artPath:destinationGifFile,
+            PUID:UniqueId,
+            artTexturePath:Directory.GetFiles(destinationFolder, "*.png", SearchOption.AllDirectories).Last<string>()
+        );
+        SaveJson(destinationJsonFile, artInfo);
 
-        // gifPath = destinationFile;
 
-        // File.Move(path, destinationFile);
+        File.Copy(path, destinationGifFile);
 
         // 显示
         ShowGIF(path);
@@ -872,10 +939,20 @@ public class PlaceBoardManager : MonoBehaviour
         // dpImage.SetNativeSize();
     }
 
+    private void SaveJson(string path,ArtInfo artInfo)
+    {
+        string json = JsonUtility.ToJson(artInfo);
+        File.WriteAllText(path, json);
+        Debug.Log("Saved Json to: " + path);
+
+    }
+
     private void OnFileSaveProgress(int id, float progress)
     {
-        Debug.Log("On file save progress: " + progress);
+        int progressInt = Mathf.CeilToInt(progress * 100);
+        //Debug.Log("On file save progress: " + $"{progressInt}" + "%");
         // text1.text = "Save progress: " + Mathf.CeilToInt(progress * 100) + "%";
+        PlaceUIManager.Instance.GetEndUi().OnSaveGifLoading(progressInt);
     }
 
     void ShowGIF(string path)

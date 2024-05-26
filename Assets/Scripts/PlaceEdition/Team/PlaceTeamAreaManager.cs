@@ -6,7 +6,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
 {
     // 队伍区域当前容纳的人数
     // public int currentTeamNumberCount = 0;
-    private float defaultInkTime = 10f;
+    // private float defaultInkTime = 10f;
     public List<User> userList = new List<User>();
     public Team teaminfo;
     // prefab of character
@@ -75,7 +75,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
             exInkRate += (u.Level - 1)  / 10;
             u.contributionRate = (0.1f * u.genInkCount) / teaminfo.hisExInk;
         }
-        inkRate = (teaminfo.currentTeamNumberCount / defaultInkTime) + exInkRate;
+        inkRate = teaminfo.currentTeamNumberCount + exInkRate;
         teaminfo.ink += inkRate ;
         teaminfo.hisInk += inkRate ;
         //Debug.Log("ink " + ink);
@@ -139,6 +139,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
                 // PlayerControllerScript.selfDoor = door;
                 PlayerControllerScript.user = user;
             }
+            PlayerControllerScript.PlaylevelUpEffect();
             userList.Add(user);
             teaminfo.currentTeamNumberCount += 1;
             // 可以在这里设置角色的其他属性，比如所属队伍等
@@ -189,6 +190,11 @@ public class PlaceTeamAreaManager : MonoBehaviour
         return transform.position + new Vector3(x, 1.0f, z);
     }
 
+    public void SetTeamNumber(int Num)
+    {
+        teaminfo.MaxTeamNumber = Num;
+    }
+    
     public void setTeamInfo(Team team)
     {
         teaminfo = team;

@@ -32,4 +32,19 @@ public class PlaceSettingPanel : MonoBehaviour
         //是否需要断开链接，检测当前是否在游戏，保存当前图片之类得
         Application.Quit();
     }
+
+    public void PlaySound(int index)
+    {
+        AudioManager.Instance.PlaySound(index);
+    }
+    
+    public void Slider_Audio(float value)
+    {
+        AudioManager.Instance.Slider_Audio(value);
+    }
+    
+    public void Mute_Click()
+    {
+        AudioManager.Instance.Mute_Click();
+    }
 }

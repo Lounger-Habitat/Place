@@ -107,9 +107,10 @@ public class PlaceUIManager : MonoBehaviour
         countDown.Init(action);
         countDown.Init(() =>
         {
-            PlaceCenter.Instance.GenGif();
             endUI.Init();
             PlaceCenter.Instance.GenPUID();
+            PlaceCenter.Instance.GenGif();
+            
         });
         countDown.StartTimeDown();
     }
@@ -134,5 +135,10 @@ public class PlaceUIManager : MonoBehaviour
             //打开设置面板
             beginUI.OnClickSettingBtn();
         }
+    }
+
+    public EndUI GetEndUi()
+    {
+        return endUI;
     }
 }

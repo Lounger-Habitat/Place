@@ -22,7 +22,7 @@ namespace OpenBLive.Runtime.Data
         /// <summary>
         /// 用户唯一标识(2024-03-11后上线)
         /// </summary>
-        [JsonProperty("open_id")] public string open_id;
+        [JsonProperty("open_id")] public string openId;
 
         /// <summary>
         /// 用户头像

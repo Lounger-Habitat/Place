@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityNavMeshAgent;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Playables;
 
 [System.Serializable]
@@ -18,6 +19,9 @@ public class User
     public int Camp { get { return camp; } set { camp = value; } }       // 玩家 队伍 阵营
     private int id;          // 玩家 id
     public int Id { get { return id; } set { id = value; } }
+
+    private string open_id;          // 玩家 openid
+    public string Open_ID { get { return open_id; } set { open_id = value; } }
 
 
     /*
@@ -82,7 +86,6 @@ public class User
     public User(string username)
     {
         this.name = username;
-        this.id = 0;
         this.level = 1;
         this.camp = 0;
         this.character = null;
@@ -94,7 +97,7 @@ public class User
         this.userIcon = null;
         this.speed = 2.0f;
         this.currentState = new PlayerState(HighLevelState.Draw, DetailState.DrawMoveToTotem);
-        this.lastPoint = (0, 0);
+        this.lastPoint = (20, 20);
         this.instructionQueue = new Queue<Instruction>();
     }
 
@@ -123,13 +126,16 @@ public class User
         // 速度
         this.speed = 2 + (level - 1) * 0.03f;
         // 承载量
-        this.maxCarryingInsCount = (int)(10 + (level - 1) * 10f);
-        this.maxCarryingInkCount = (int)(10 + (level - 1) * 10f);
+        this.maxCarryingInsCount = (int)(10 + (level - 1) * 20f);
+        this.maxCarryingInkCount = (int)(10 + (level - 1) * 20f);
 
         // 体现角色能力
-        if (nameTag != null)
+        if (nameTag != null && character != null)
         {
-            nameTag.GetComponent<IconNameTag>().UpdateIconRect(level * 0.03f);
+            float delta = level * 0.03f;
+            nameTag.GetComponent<IconNameTag>().UpdateIconRect(delta);
+            character.transform.localScale = new Vector3(1 + delta, 1 + delta, 1 + delta);
+            character.GetComponent<NavMeshAgent>().avoidancePriority = Mathf.Clamp(99 - level,0,99);
         }
 
     }
@@ -138,15 +144,18 @@ public class User
     {
         /* 
             n 是 level 默认是1, 
-            d = 20,
+            d = 20, # 2024-05-24:太大了，升级太慢，改成 1,d=1
             a1 = 100
             a_n = a_1+(n−1)d
             S_n = n/2(a_1+a_n) = n/2(a_1+a_1+(n−1)d) = n/2(2a_1+(n−1)d)
             给定 S_n = score, 求 n
             20n^2+180n−2S=0
             n = (-180+sqrt(32400+160score))/40
+            n = [-(2a-d) + sqrt((2a-d)^2+8dS_n)] / 2d
+            n = [-199 + sqrt(39961+8*score)] / 2
         */
-        int n = (int)(-180 + Mathf.Sqrt(32400 + 160 * score)) / 40;
+        // int n = (int)(-180 + Mathf.Sqrt(32400 + 160 * score)) / 40;
+        int n = (int)(-199 + Mathf.Sqrt(39601 + 8 * score)) / 2;
         return n;
     }
 }

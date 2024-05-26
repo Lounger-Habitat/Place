@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using DG.Tweening;
+using Random = UnityEngine.Random;
 
 public class TipsPanel : MonoBehaviour
 {
@@ -66,6 +67,14 @@ public class TipsPanel : MonoBehaviour
 
     public void AddTips(TipsItem tip)
     {
+        if (tip.tipsType == TipsType.textTipsPanel)
+        {
+            //此消息类型，无需进入队列，直接显示，会自动删除
+            var panel = tipsPanels[tip.tipsType];
+            panel.SetData(tip);
+            return;
+        }
+        
         if (tip.tipsType == TipsType.messagePanel)
         {
             if (tip.isLeft)
@@ -278,6 +287,20 @@ public class TipsPanel : MonoBehaviour
         isShowLevelRight = false;
     }
 
+#if UNITY_EDITOR
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.P))
+        {
+            AddTips(new TipsItem()
+            {
+                userName = "全力以赴",
+                text = $"当前不存在所选物品，如需获取请联系管理员添加。{Random.Range(0,100)}",
+                tipsType = TipsType.textTipsPanel
+            });
+        }
+    }
+
     [ContextMenu("message")]
     public void Test()
     {
@@ -345,6 +368,7 @@ public class TipsPanel : MonoBehaviour
             tipsType = TipsType.giftDrawPanel
         });
     }
+#endif
 }
 
 public class TipsItem
@@ -376,7 +400,8 @@ public enum TipsType
     likeTipsPanel,
     likeTipsPanelRight,
     levelUpPanel,
-    levelUpPanelRight
+    levelUpPanelRight,
+    textTipsPanel
 }
 
 public enum SkillIcon

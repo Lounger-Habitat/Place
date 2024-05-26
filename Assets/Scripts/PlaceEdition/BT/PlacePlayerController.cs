@@ -26,7 +26,7 @@ public class PlacePlayerController : MonoBehaviour
 
     public Dictionary<string, Transform> buildings = new Dictionary<string, Transform>();
 
-    private NavMeshAgent navMeshAgent;
+    public NavMeshAgent navMeshAgent;
 
     // 遇到的敌人
     public Dictionary<string, PlacePlayerController> enemies = new Dictionary<string, PlacePlayerController>();
@@ -163,9 +163,9 @@ public class PlacePlayerController : MonoBehaviour
     // {
     //     transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
     // }
-    public void MoveToTarget()
+    public void MoveToTarget(Vector3 targetPosition)
     {
-        navMeshAgent.destination = target.position;
+        navMeshAgent.destination = targetPosition;
         navMeshAgent.speed = user.speed + user.exSpeed;
     }
 
@@ -289,25 +289,14 @@ public class PlacePlayerController : MonoBehaviour
 
 
 
-// ============= Effect API =============
+    // ============= Effect API =============
     public void StartLevelUp()
     {
         StartCoroutine(LevelUpCoroutine());
     }
     public void PlaylevelUpEffect()
     {
-        // if (reLevelUp != null)
-        // {
-        //     reLevelUp.SetActive(true);
-        //     var auto = reLevelUp.GetComponent<EffectAutoDelete>();
-        //     auto.ReStart();
-        // }
-        // else
-        // {
-        //     reLevelUp = Instantiate(levelUpEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
-        //     reLevelUp.transform.SetParent(this.transform);
-        // }
-        var effect = Instantiate(levelUpEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);
+        var effect = Instantiate(levelUpEffect, transform.position, Quaternion.identity, transform.parent);
         effect.transform.SetParent(this.transform);
         effect.GetComponent<EffectAutoDelete>().DoDestroy(2);
     }
@@ -348,7 +337,7 @@ public class PlacePlayerController : MonoBehaviour
         }
         else
         {
-            reSmoke = Instantiate(runSmokeEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+            reSmoke = Instantiate(runSmokeEffect, transform.position, Quaternion.identity, transform.parent);//
             reSmoke.transform.SetParent(this.transform);
         }
     }
@@ -363,7 +352,7 @@ public class PlacePlayerController : MonoBehaviour
         }
         else
         {
-            reMagic = Instantiate(runMagicEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);
+            reMagic = Instantiate(runMagicEffect, transform.position, Quaternion.identity, transform.parent);
             reMagic.transform.SetParent(transform);
         }
     }
@@ -377,7 +366,7 @@ public class PlacePlayerController : MonoBehaviour
         }
         else
         {
-            reBlessing = Instantiate(runMagicEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);
+            reBlessing = Instantiate(blessingEffect, transform.position, Quaternion.identity, transform.parent);
             reBlessing.transform.SetParent(transform);
         }
     }
@@ -416,13 +405,14 @@ public class PlacePlayerController : MonoBehaviour
             if (reBlueInvincible != null)
             {
                 reBlueInvincible.SetActive(true);
+                reBlueInvincible.transform.position = transform.position;
                 var auto = reBlueInvincible.GetComponent<EffectAutoDelete>();
                 auto.scale = 1.0f;
                 auto.ReStart();
             }
             else
             {
-                reBlueInvincible = Instantiate(blueShieldsEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+                reBlueInvincible = Instantiate(blueShieldsEffect, transform.position, Quaternion.identity, transform.parent);//
                 reBlueInvincible.transform.SetParent(this.transform);
                 var auto = reBlueInvincible.GetComponent<EffectAutoDelete>();
                 auto.scale = 1.0f;
@@ -433,13 +423,14 @@ public class PlacePlayerController : MonoBehaviour
             if (reGreenInvincible != null)
             {
                 reGreenInvincible.SetActive(true);
+                reGreenInvincible.transform.position = transform.position;
                 var auto = reGreenInvincible.GetComponent<EffectAutoDelete>();
                 auto.scale = 1.0f;
                 auto.ReStart();
             }
             else
             {
-                reGreenInvincible = Instantiate(blueShieldsEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+                reGreenInvincible = Instantiate(blueShieldsEffect, transform.position, Quaternion.identity, transform.parent);//
                 reGreenInvincible.transform.SetParent(this.transform);
                 var auto = reGreenInvincible.GetComponent<EffectAutoDelete>();
                 auto.scale = 1.0f;
@@ -485,7 +476,7 @@ public class PlacePlayerController : MonoBehaviour
             }
             else
             {
-                reGreen = Instantiate(PurpleArea, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+                reGreen = Instantiate(PurpleArea, transform.position, Quaternion.identity, transform.parent);//
                 reGreen.transform.SetParent(this.transform);
             }
         }
@@ -499,7 +490,7 @@ public class PlacePlayerController : MonoBehaviour
             }
             else
             {
-                reBlue = Instantiate(blueArea, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+                reBlue = Instantiate(blueArea, transform.position, Quaternion.identity, transform.parent);//
                 reBlue.transform.SetParent(this.transform);
             }
         }
@@ -513,7 +504,7 @@ public class PlacePlayerController : MonoBehaviour
             }
             else
             {
-                reStuck = Instantiate(slowEffect, transform.position + new Vector3(0f, 0.1f, 0f), Quaternion.identity, transform.parent);//
+                reStuck = Instantiate(slowEffect, transform.position, Quaternion.identity, transform.parent);//
                 reStuck.transform.SetParent(this.transform);
             }
         }
@@ -550,17 +541,19 @@ public class PlacePlayerController : MonoBehaviour
     public float tornadoRange = 5f;
     public void PlayTornadoEffect(int num)
     {
+        float powerScale = 1 + user.level * 0.03f;
         //tornadoEffect.SetActive(true);
         //Invoke("CloseTornadoEffect", 2f);  //测试时自动关闭
-        float range = tornadoRange + num * 0.5f;
+        float range = tornadoRange + num * 0.5f * powerScale;
         //首先知道要生成几股龙卷风 随机获得
         for (int i = 0; i < num; i++)
         {
             float dur = UnityEngine.Random.Range(3f, 4f);//获得持续时间
             float xdir = UnityEngine.Random.Range(-1f, 1f);
             float zdir = UnityEngine.Random.Range(-1f, 1f);//分别获得两个方向的
-            Vector3 targetPos = transform.position + new Vector3(xdir, 0, zdir).normalized * range; //当前位置加上目标方向乘以距离就是目标位置
+            Vector3 targetPos = transform.position + new Vector3(xdir, 0, zdir).normalized * range * powerScale; //当前位置加上目标方向乘以距离就是目标位置
             GameObject tornado = Instantiate(tornadoEffect, transform.position, Quaternion.identity);
+            tornado.transform.localScale = new Vector3(powerScale, powerScale, powerScale);
             // tornado.transform.SetParent(this.transform);
             tornado.name = $"Tornado - {user.Camp}";
             // tornado.SetActive(true);
@@ -588,10 +581,12 @@ public class PlacePlayerController : MonoBehaviour
     public void PlayThunder(Transform t = null)
     {
         // float range = 10;
+        float powerScale = 1 + user.level * 0.03f;
         float xdir = UnityEngine.Random.Range(-5f, 5f);
         float zdir = UnityEngine.Random.Range(-5f, 5f);//分别获得两个方向的
-        Vector3 targetPos = t != null ? t.position : transform.position + new Vector3(xdir, 0, zdir); //当前位置加上目标方向乘以距离就是目标位置
+        Vector3 targetPos = t != null ? t.position : transform.position + new Vector3(xdir * powerScale, 0, zdir * powerScale); //当前位置加上目标方向乘以距离就是目标位置
         GameObject thunder = Instantiate(strikeEffect, targetPos, Quaternion.identity);
+        thunder.transform.localScale = new Vector3(powerScale, powerScale, powerScale);
         var auto = thunder.GetComponent<EffectAutoDelete>();
         auto.scale = 2.0f;
         auto.DoDestroy(3);
@@ -791,7 +786,16 @@ public class PlacePlayerController : MonoBehaviour
     IEnumerator BlessingCoroutine()
     {
         blessing = true; // 特效 
-        // PlayInvincibleEffect(camp);
+        PlayBlessingEffect();
+
+        Collider[] cs = Physics.OverlapSphere(transform.position, 10f * 1).ToList().Where(c => c.CompareTag("Player")).ToArray();
+
+        foreach (var c in cs)
+        {
+            Debug.Log(c.name + "被击退");
+            c.GetComponent<Rigidbody>().AddExplosionForce(1000, transform.position, 10f);
+        }
+
         while (blessingTime > 1)
         {
             yield return new WaitForSeconds(300f);
@@ -811,6 +815,7 @@ public class PlacePlayerController : MonoBehaviour
     // ⚡️雷电
     public IEnumerator ThunderCoroutine(float time = 10)
     {
+        float powerScale = 1 + user.level * 0.03f;
         thundering = true;
         BallThunder();
         yield return new WaitForSeconds(1f);
@@ -818,7 +823,7 @@ public class PlacePlayerController : MonoBehaviour
         while (thunderTime > 1)
         {
             yield return new WaitForSeconds(0.2f);
-            Collider[] cs = Physics.OverlapSphere(transform.position, 5f).ToList().Where(c => c.CompareTag("Player") && c.gameObject.GetComponent<PlacePlayerController>().user.Camp != user.Camp).ToArray();
+            Collider[] cs = Physics.OverlapSphere(transform.position, 5f * powerScale).ToList().Where(c => c.CompareTag("Player") && c.gameObject.GetComponent<PlacePlayerController>().user.Camp != user.Camp).ToArray();
 
             if (cs.Length > 0)
             {

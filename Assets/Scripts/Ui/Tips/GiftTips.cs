@@ -28,6 +28,10 @@ public class GiftTips : TipsBase
             starts[i].SetActive(false);
         }
         int start = tips.level / 10;
+        if (start > 10) {
+            start = 10;
+            Debug.Log("等级突破天道限制");
+        }
         for (int i = 0; i < start; i++)
         {
             starts[i].SetActive(true);

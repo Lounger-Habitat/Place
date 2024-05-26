@@ -55,7 +55,7 @@ public class DefendResetToTotem : PlaceAction
             }
             return TaskStatus.Running;
         }
-        pc.MoveToTarget();
+        // pc.MoveToTarget();
         return TaskStatus.Running;
     }
 }

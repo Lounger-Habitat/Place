@@ -88,12 +88,16 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   canvasRenderer: {fileID: 0}
   mode: 2D
+  darkMode: 0
   canvasImage: {fileID: 0}
   height: 200
   width: 200
   defaultTexture: {fileID: 0}
-  recorderTime: 60
+  recorderTime: 6
   pixelsInfos: 
+  pixelsUserInfos: 
+  gifPath: 
+  dpImage: {fileID: 0}
 --- !u!1 &2168988197437939767
 GameObject:
   m_ObjectHideFlags: 0

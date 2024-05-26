@@ -23,6 +23,10 @@ public class LevelUpTips : TipsBase
         }
         int level = int.Parse(tips.value);
         int start = level / 10;
+        if (start > 10) {
+            start = 10;
+            Debug.Log("等级突破天道限制");
+        }
         for (int i = 0; i < start; i++)
         {
             starts[i].SetActive(true);
