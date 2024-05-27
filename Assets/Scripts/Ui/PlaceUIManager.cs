@@ -110,6 +110,7 @@ public class PlaceUIManager : MonoBehaviour
             endUI.Init();
             PlaceCenter.Instance.GenPUID();
             PlaceCenter.Instance.GenGif();
+            PlaceCenter.Instance.Reset();
             
         });
         countDown.StartTimeDown();

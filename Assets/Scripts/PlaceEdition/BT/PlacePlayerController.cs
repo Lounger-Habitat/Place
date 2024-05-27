@@ -154,8 +154,7 @@ public class PlacePlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F2))
         {
             // 清空队列
-            insQueue.Clear();
-            user.instructionQueue.Clear();
+            Reset();
         }
     }
 
@@ -371,7 +370,7 @@ public class PlacePlayerController : MonoBehaviour
         }
     }
 
-    public void Invincible(float time = 60)
+    public void Invincible(float time = 120)
     {
         if (invincible)
         {
@@ -384,7 +383,7 @@ public class PlacePlayerController : MonoBehaviour
         }
     }
 
-    public void Blessing(float time = 300)
+    public void Blessing(float time = 180)
     {
         if (blessing)
         {
@@ -455,11 +454,11 @@ public class PlacePlayerController : MonoBehaviour
     {
         if (stucking)
         {
-            stuckTime += 5;
+            stuckTime += 2;
         }
         else
         {
-            stuckTime = 5;
+            stuckTime = 2;
             StartCoroutine(StuckCoroutine(c));
         }
     }
@@ -541,17 +540,17 @@ public class PlacePlayerController : MonoBehaviour
     public float tornadoRange = 5f;
     public void PlayTornadoEffect(int num)
     {
-        float powerScale = 1 + user.level * 0.03f;
+        float powerScale = 1 + user.level * 0.02f;
         //tornadoEffect.SetActive(true);
         //Invoke("CloseTornadoEffect", 2f);  //测试时自动关闭
-        float range = tornadoRange + num * 0.5f * powerScale;
+        float range = tornadoRange + num * 0.5f * powerScale * 2;
         //首先知道要生成几股龙卷风 随机获得
         for (int i = 0; i < num; i++)
         {
             float dur = UnityEngine.Random.Range(3f, 4f);//获得持续时间
             float xdir = UnityEngine.Random.Range(-1f, 1f);
             float zdir = UnityEngine.Random.Range(-1f, 1f);//分别获得两个方向的
-            Vector3 targetPos = transform.position + new Vector3(xdir, 0, zdir).normalized * range * powerScale; //当前位置加上目标方向乘以距离就是目标位置
+            Vector3 targetPos = transform.position + new Vector3(xdir, 0, zdir).normalized * range; //当前位置加上目标方向乘以距离就是目标位置
             GameObject tornado = Instantiate(tornadoEffect, transform.position, Quaternion.identity);
             tornado.transform.localScale = new Vector3(powerScale, powerScale, powerScale);
             // tornado.transform.SetParent(this.transform);
@@ -586,7 +585,7 @@ public class PlacePlayerController : MonoBehaviour
         float zdir = UnityEngine.Random.Range(-5f, 5f);//分别获得两个方向的
         Vector3 targetPos = t != null ? t.position : transform.position + new Vector3(xdir * powerScale, 0, zdir * powerScale); //当前位置加上目标方向乘以距离就是目标位置
         GameObject thunder = Instantiate(strikeEffect, targetPos, Quaternion.identity);
-        thunder.transform.localScale = new Vector3(powerScale, powerScale, powerScale);
+        thunder.transform.localScale = new Vector3(powerScale, powerScale, powerScale) * 2 ;
         var auto = thunder.GetComponent<EffectAutoDelete>();
         auto.scale = 2.0f;
         auto.DoDestroy(3);
@@ -694,8 +693,8 @@ public class PlacePlayerController : MonoBehaviour
         PlayStuckEffect(camp);
         while (stuckTime > 0)
         {
-            yield return new WaitForSeconds(5f);
-            stuckTime -= 5;
+            yield return new WaitForSeconds(2f);
+            stuckTime -= 2;
         }
         user.exSpeed += 5;
         stucking = false;
@@ -759,8 +758,8 @@ public class PlacePlayerController : MonoBehaviour
         PlayInvincibleEffect(camp);
         while (invincibleTime > 1)
         {
-            yield return new WaitForSeconds(60f);
-            invincibleTime -= 60;
+            yield return new WaitForSeconds(120f);
+            invincibleTime -= 120;
         }
         if (camp == 1)
         {
@@ -788,18 +787,18 @@ public class PlacePlayerController : MonoBehaviour
         blessing = true; // 特效 
         PlayBlessingEffect();
 
-        Collider[] cs = Physics.OverlapSphere(transform.position, 10f * 1).ToList().Where(c => c.CompareTag("Player")).ToArray();
+        Collider[] cs = Physics.OverlapSphere(transform.position, 20f * 1).ToList().Where(c => c.CompareTag("Player") && c.gameObject.GetComponent<PlacePlayerController>().user.Camp != user.Camp).ToArray();
 
         foreach (var c in cs)
         {
             Debug.Log(c.name + "被击退");
-            c.GetComponent<Rigidbody>().AddExplosionForce(1000, transform.position, 10f);
+            c.GetComponent<Rigidbody>().AddExplosionForce(1000, transform.position, 20f);
         }
 
         while (blessingTime > 1)
         {
-            yield return new WaitForSeconds(300f);
-            blessingTime -= 300;
+            yield return new WaitForSeconds(180f);
+            blessingTime -= 180;
         }
 
         reBlessing.transform.DOScale(0, 1).OnComplete(() =>
@@ -822,7 +821,7 @@ public class PlacePlayerController : MonoBehaviour
         thunderTime -= 1;
         while (thunderTime > 1)
         {
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
             Collider[] cs = Physics.OverlapSphere(transform.position, 5f * powerScale).ToList().Where(c => c.CompareTag("Player") && c.gameObject.GetComponent<PlacePlayerController>().user.Camp != user.Camp).ToArray();
 
             if (cs.Length > 0)
@@ -835,12 +834,18 @@ public class PlacePlayerController : MonoBehaviour
             {
                 PlayThunder();
             }
-            thunderTime -= 0.2f;
+            thunderTime -= 0.1f;
         }
         reThunderBall.transform.DOScale(0, 1).OnComplete(() =>
         {
             Destroy(reThunderBall.gameObject);
         });
         thundering = false;
+    }
+
+
+    public void Reset() {
+        insQueue.Clear();
+        user.instructionQueue.Clear();
     }
 }

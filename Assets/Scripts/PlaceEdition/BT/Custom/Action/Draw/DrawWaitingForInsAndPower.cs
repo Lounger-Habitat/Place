@@ -32,8 +32,10 @@ public class DrawWaitingForInsAndPower : PlaceAction
 
     public override TaskStatus OnUpdate()
     {
+        Debug.Log("DrawWaitingForInsAndPower OnUpdate");
         if (pc.insQueue.Count == 0)
         {
+            Debug.Log("身上指令为空");
             free = true;
         }
         // 获取队伍颜料数量
@@ -42,6 +44,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
         // 有新指令
         if (pc.user.instructionQueue.Count > 0)
         {
+
             // 优先使用身上携带的颜料
             if (pc.user.currentCarryingInkCount > 0)
             {
@@ -51,7 +54,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
                     {
                         inEpoch = false;
                         free = false;
-                        Debug.Log("设置 in Epoch 为 false");
+                        Debug.Log("UseAvailableInk 设置 in Epoch 为 false");
                     }));
                 }
                 if (inEpoch)
@@ -79,6 +82,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
                 // 如果颜料富裕，直接走
                 if (pc.insQueue.Count > 0 && pc.user.currentCarryingInkCount >= pc.user.maxCarryingInkCount)
                 {
+                    Debug.Log("身上颜料富裕，直接走");
                     return TaskStatus.Success;
                 }
             }
@@ -125,11 +129,12 @@ public class DrawWaitingForInsAndPower : PlaceAction
                 //     }
                 // }
             }
-            if (pc.insQueue.Count > 0)
-            {
-                return TaskStatus.Success;
-            }
 
+
+        }
+        if (free == false)
+        {
+            return TaskStatus.Success;
         }
         return TaskStatus.Running;
 
@@ -289,6 +294,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
     {
         inEpoch = true;
         int availableInkCount = pc.user.currentCarryingInkCount;
+        // 有多少颜料 拿 多少指令，拿到没指令位置
         while (availableInkCount > 0 && pc.user.instructionQueue.Count > 0)
         {
             Debug.Log("身上有待用颜料和队伍有待用的指令");

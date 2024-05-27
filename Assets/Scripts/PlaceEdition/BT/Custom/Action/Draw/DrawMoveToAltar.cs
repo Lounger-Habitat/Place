@@ -28,7 +28,7 @@ public class DrawMoveToAltar : PlaceAction
         Vector2 positionA = new Vector2(transform.position.x, transform.position.z);
         
 
-        if (Vector2.Distance(positionA, targetPosition) < 2f)
+        if (Vector2.Distance(positionA, targetPosition) < 3f)
         {
             return TaskStatus.Success;
         }
