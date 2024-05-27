@@ -416,83 +416,83 @@ public class PlaceCenter : MonoBehaviour
         }
         switch (power)
         {
-            case 0.1f://这是礼物得人民币价值，那应该在这个里边通知
+            case 1f://这是礼物得人民币价值，那应该在这个里边通知
                 normalPower = 30;
                 message = "急速神行";
                 skill = SkillIcon.Speed;
                 u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                 break;
-            case 1:
+            case 10f:
                 normalPower = 300;//固定是加颜料
                 message = "风之束缚";
                 skill = SkillIcon.Tornado;
-                u.character.GetComponent<PlacePlayerController>().Tornado((int)(power * 10));
+                u.character.GetComponent<PlacePlayerController>().Tornado((int)power);
                 break;
-            case 1.9f:
+            case 20f:
                 normalPower = 600;//固定是攻击
                 u.character.GetComponent<PlacePlayerController>().Thunder();
                 skill = SkillIcon.Thunder;
                 message = "雷霆万钧";
                 break;
-            case 5.2f:
+            case 52f:
                 normalPower = 1800;//固定是防御
-                u.character.GetComponent<PlacePlayerController>().Invincible(60);
+                u.character.GetComponent<PlacePlayerController>().Invincible(120);
                 message = "绝对防御";
                 skill = SkillIcon.Defense;
                 break;
-            case 9.9f:
+            case 99f:
                 normalPower = 3600;
                 message = "天官赐福";
                 // 随机自动画一个图案
                 skill = SkillIcon.Pencil;
-                u.character.GetComponent<PlacePlayerController>().Blessing(300);
-                int x = Random.Range(0, PlaceBoardManager.Instance.width-50);
-                int y = Random.Range(0, PlaceBoardManager.Instance.height-50);
+                u.character.GetComponent<PlacePlayerController>().Blessing(180);
+                int x = Random.Range(0, PlaceBoardManager.Instance.width-60);
+                int y = Random.Range(0, PlaceBoardManager.Instance.height-60);
                 List<Instruction> IL = GenerateRandomImage(x,y);
                 if (IL.Count != 0)
                 {
                         IL.ForEach( i=>u.instructionQueue.Enqueue(i));
                 }
                 break;
-            case 19.9f:
-                normalPower = 1999;
-                break;
-            case 29.9f:
-                message = "";
-                normalPower = 2990;
-                break;
-            case 52f:
-                message = "";
-                normalPower = 5200;
-                break;
-            case 66.6f:
-                message = "";
-                normalPower = 6666;
-                break;
-            case 88.8f:
-                message = "";
-                normalPower = 8888;
-                break;
-            case 99.9f:
-                message = "";
-                normalPower = 9999;
-                break;
-            case 120f:
-                message = "";
-                normalPower = 12000;
-                break;
-            case 166.6f:
-                message = "";
-                normalPower = 16666;
-                break;
-            case 188.8f:
-                message = "";
-                normalPower = 18888;
-                break;
-            case 300f:
-                message = "";
-                normalPower = 30000;
-                break;
+            // case 19.9f:
+            //     normalPower = 1999;
+            //     break;
+            // case 29.9f:
+            //     message = "";
+            //     normalPower = 2990;
+            //     break;
+            // case 52f:
+            //     message = "";
+            //     normalPower = 5200;
+            //     break;
+            // case 66.6f:
+            //     message = "";
+            //     normalPower = 6666;
+            //     break;
+            // case 88.8f:
+            //     message = "";
+            //     normalPower = 8888;
+            //     break;
+            // case 99.9f:
+            //     message = "";
+            //     normalPower = 9999;
+            //     break;
+            // case 120f:
+            //     message = "";
+            //     normalPower = 12000;
+            //     break;
+            // case 166.6f:
+            //     message = "";
+            //     normalPower = 16666;
+            //     break;
+            // case 188.8f:
+            //     message = "";
+            //     normalPower = 18888;
+            //     break;
+            // case 300f:
+            //     message = "";
+            //     normalPower = 30000;
+            //     break;
         }
         u.character.GetComponent<PlacePlayerController>().InkUp(normalPower);
         u.score += normalPower;
@@ -521,7 +521,7 @@ public class PlaceCenter : MonoBehaviour
     {
         // B 站 每人 每天 点赞上限 1000
         int p = (int)power;
-        user.score += p;
+        user.score += 10 * p;
         user.Update();
         PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
         // 颜料增加的特效

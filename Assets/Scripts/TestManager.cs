@@ -105,7 +105,7 @@ public class TestManager : MonoBehaviour
         // 按下,，执行指令  接受 指令
         if (Input.GetKeyDown(KeyCode.Comma))
         {
-            PlaceInstructionManager.Instance.DefaultGiftCommand(playerName, gift);
+            PlaceInstructionManager.Instance.DefaultGiftCommand(playerName, gift, 1);
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -113,7 +113,7 @@ public class TestManager : MonoBehaviour
             // 遍历所有用户
             foreach (var user in users)
             {
-                PlaceInstructionManager.Instance.DefaultGiftCommand(user, gift);
+                PlaceInstructionManager.Instance.DefaultGiftCommand(user, gift, 1);
             }
 
         }
@@ -430,7 +430,7 @@ public class TestManager : MonoBehaviour
         {
             string giftIns = RandomGenGiftIns();
             // Debug.Log($"{u.Name} 赠送 ({giftIns}) 颜料");
-            PlaceInstructionManager.Instance.DefaultGiftCommand(user, giftIns);
+            PlaceInstructionManager.Instance.DefaultGiftCommand(user, giftIns, 1);
         }
     }
 

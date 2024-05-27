@@ -16,19 +16,20 @@ public class PlaceBiliNetManager : MonoBehaviour
     // 项目 id
     public string appId;
 
-    private static PlaceBiliNetManager instance;
+    public static PlaceBiliNetManager Instance { get; private set; }
 
-    public static PlaceBiliNetManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindObjectOfType<PlaceBiliNetManager>();
-            }
-            return instance;
-        }
-    }
+    // public static PlaceBiliNetManager Instance
+    // {
+    //     get
+    //     {
+    //         if (instance == null)
+    //         {
+    //             instance = FindObjectOfType<PlaceBiliNetManager>();
+    //             DontDestroyOnLoad(instance);
+    //         }
+    //         return instance;
+    //     }
+    // }
 
     public Action ConnectSuccess;
     public Action ConnectFailure;
@@ -38,6 +39,21 @@ public class PlaceBiliNetManager : MonoBehaviour
     // 
     private InteractivePlayHeartBeat m_PlayHeartBeat;
     private string gameId;
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            if (Instance != this) {
+                Destroy(gameObject);
+            }
+        }
+    }
 
     // code : 身份码
     public async void LinkStart(string code)
@@ -133,7 +149,8 @@ public class PlaceBiliNetManager : MonoBehaviour
         sb.Append("个");
         sb.Append(sendGift.giftName);
         Debug.Log(sb);
-        PlaceInstructionManager.Instance.DefaultGiftCommand(sendGift.userName, sendGift.price.ToString());
+
+        PlaceInstructionManager.Instance.DefaultGiftCommand(sendGift.userName, (sendGift.price/sendGift.giftNum).ToString(),sendGift.giftNum);
     }
 
     // 弹幕

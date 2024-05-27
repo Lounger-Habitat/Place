@@ -4,8 +4,6 @@ using OpenBLive.Runtime.Data;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Text.RegularExpressions;
-using System.Net;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 
 public class PlaceInstructionManager : MonoBehaviour
 {
@@ -295,15 +293,30 @@ public class PlaceInstructionManager : MonoBehaviour
                             break;
                         }
 
-                        // ======= Line2point =======
-                        // List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
-                        // foreach ((int, int) point in points)
-                        // {
-                        //     Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
-                        //     user.instructionQueue.Enqueue(drawIns);
-                        // }
-                        // ======= 一笔画 ========
-                        user.instructionQueue.Enqueue(ins_l);
+
+
+
+                        if (user.level > 50)
+                        {
+                            // ======= 一笔画 ========
+                            user.instructionQueue.Enqueue(ins_l);
+                        }
+                        else
+                        {
+                            // ======= Line2point =======
+                            List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
+                            foreach ((int, int) point in points)
+                            {
+                                Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                                user.instructionQueue.Enqueue(drawIns);
+                            }
+                        }
+
+                        // 手动 输入 指令 + 大贡献
+                        user.score += 30;
+                        user.lastPoint = (ex, ey);
+
+
                     }
                     else if (parts.Length == 6)
                     {
@@ -346,19 +359,31 @@ public class PlaceInstructionManager : MonoBehaviour
                             break;
                         }
 
-                        // ======= Line2point =======
 
-                        // List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
-                        // foreach ((int, int) point in points)
-                        // {
-                        //     Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
-                        //     user.instructionQueue.Enqueue(drawIns);
-                        // }
 
-                        // ======= 一笔画 ========
+                        if (user.level < 50)
+                        {
+
+                            // ======= Line2point =======
+
+                            List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
+                            foreach ((int, int) point in points)
+                            {
+                                Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                                user.instructionQueue.Enqueue(drawIns);
+                            }
+                        }
+                        else
+                        {
+                            // ======= 一笔画 ========
+                            user.instructionQueue.Enqueue(ins_l);
+                        }
+
+                        user.score += 30;
                         user.lastColor = color;
                         user.lastPoint = (ex, ey);
-                        user.instructionQueue.Enqueue(ins_l);
+
+
                     }
                     else if (parts.Length == 8)
                     {
@@ -385,18 +410,25 @@ public class PlaceInstructionManager : MonoBehaviour
                             break;
                         }
 
-                        // ======= Line2point =======
+                        if (user.level < 50)
+                        {
 
-                        // List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
-                        // foreach ((int, int) point in points)
-                        // {
-                        //     Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
-                        //     user.instructionQueue.Enqueue(drawIns);
-                        // }
+                            // ======= Line2point =======
 
-                        // ======= 一笔画 ========
+                            List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
+                            foreach ((int, int) point in points)
+                            {
+                                Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                                user.instructionQueue.Enqueue(drawIns);
+                            }
+                        }
+                        else
+                        {
+                            // ======= 一笔画 ========
+                            user.instructionQueue.Enqueue(ins_l);
+                        }
+                        user.score += 30;
                         user.lastPoint = (ex, ey);
-                        user.instructionQueue.Enqueue(ins_l);
                     }
                     else
                     {
@@ -446,6 +478,7 @@ public class PlaceInstructionManager : MonoBehaviour
                             Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
                             user.instructionQueue.Enqueue(drawIns);
                         }
+                        user.score += 30;
                     }
                     else if (parts.Length == 6)
                     {
@@ -492,9 +525,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         foreach ((int, int) point in points)
                         {
                             Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
-                            user.lastColor = color;
                             user.instructionQueue.Enqueue(drawIns);
                         }
+                        user.score += 30;
+                        user.lastColor = color;
                     }
                     else if (parts.Length == 8)
                     {
@@ -528,6 +562,7 @@ public class PlaceInstructionManager : MonoBehaviour
                             Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
                             user.instructionQueue.Enqueue(drawIns);
                         }
+                        user.score += 30;
                     }
                     else
                     {
@@ -569,7 +604,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         }
 
                         // ======= Rect2point =======
-                        if (PlaceCenter.Instance.Low)
+                        if (user.level < 50)
                         {
                             List<(int, int)> points = PlaceBoardManager.Instance.GetRectPoints(x, y, dx, dy);
                             foreach ((int, int) point in points)
@@ -578,7 +613,7 @@ public class PlaceInstructionManager : MonoBehaviour
                                 user.instructionQueue.Enqueue(drawIns);
                             }
                         }
-                        else if (PlaceCenter.Instance.High)
+                        else
                         {
                             // ====== Rect2Line =======
                             List<(int, int, int, int)> lines = PlaceBoardManager.Instance.GetRectLines(x, y, dx, dy);
@@ -588,6 +623,7 @@ public class PlaceInstructionManager : MonoBehaviour
                                 user.instructionQueue.Enqueue(lineIns);
                             }
                         }
+                        user.score += 30;
                     }
                     else if (parts.Length == 6)
                     {
@@ -630,7 +666,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         }
 
                         // ======= Rect2point =======
-                        if (PlaceCenter.Instance.Low)
+                        if (user.level < 50)
                         {
                             List<(int, int)> points = PlaceBoardManager.Instance.GetRectPoints(x, y, dx, dy);
                             foreach ((int, int) point in points)
@@ -640,7 +676,7 @@ public class PlaceInstructionManager : MonoBehaviour
                                 user.instructionQueue.Enqueue(drawIns);
                             }
                         }
-                        else if (PlaceCenter.Instance.High)
+                        else
                         {
                             // ====== Rect2Line =======
                             List<(int, int, int, int)> lines = PlaceBoardManager.Instance.GetRectLines(x, y, dx, dy);
@@ -651,6 +687,7 @@ public class PlaceInstructionManager : MonoBehaviour
                                 user.instructionQueue.Enqueue(lineIns);
                             }
                         }
+                        user.score += 30;
                     }
                     else if (parts.Length == 8)
                     {
@@ -678,7 +715,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         }
 
                         // ======= Rect2point =======
-                        if (PlaceCenter.Instance.Low)
+                        if (user.level < 50)
                         {
                             List<(int, int)> points = PlaceBoardManager.Instance.GetRectPoints(x, y, dx, dy);
                             foreach ((int, int) point in points)
@@ -687,7 +724,7 @@ public class PlaceInstructionManager : MonoBehaviour
                                 user.instructionQueue.Enqueue(drawIns);
                             }
                         }
-                        else if (PlaceCenter.Instance.High)
+                        else
                         {
                             // ====== Rect2Line =======
                             List<(int, int, int, int)> lines = PlaceBoardManager.Instance.GetRectLines(x, y, dx, dy);
@@ -697,6 +734,7 @@ public class PlaceInstructionManager : MonoBehaviour
                                 user.instructionQueue.Enqueue(lineIns);
                             }
                         }
+                        user.score += 30;
 
                     }
                     else
@@ -738,6 +776,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: color.r, g: color.g, b: color.b);
                         user.instructionQueue.Enqueue(drawIns);
                     }
+                    user.score += 30;
                 }
                 else if (parts.Length == 5)
                 {
@@ -785,6 +824,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         user.lastColor = color;
                         user.instructionQueue.Enqueue(drawIns);
                     }
+                    user.score += 30;
                 }
                 else if (parts.Length == 7)
                 {
@@ -817,6 +857,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
                         user.instructionQueue.Enqueue(drawIns);
                     }
+                    user.score += 30;
                 }
                 else
                 {
@@ -901,6 +942,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
                     user.lastPoint = (x, y);
                     user.lastColor = color;
+                    user.score += 30;
                 }
                 else if (parts.Length == 5)
                 { // 多颜色
@@ -933,6 +975,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
                     y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
                     user.lastPoint = (x, y);
+                    user.score += 30;
                 }
                 break;
             case "visual":
@@ -1055,7 +1098,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         Debug.Log("未找到对应的用户");
                         return;
                     }
-                    DefaultGiftCommand(name, message);
+                    DefaultGiftCommand(name, message, 1);
                 }
                 else if (parts.Length == 4)
                 {
@@ -1075,7 +1118,8 @@ public class PlaceInstructionManager : MonoBehaviour
                 break;
         }
     }
-    string FindById(string id) {
+    string FindById(string id)
+    {
         foreach (var item in PlaceCenter.Instance.users)
         {
             if (item.Value.Id.ToString() == id)
@@ -1085,13 +1129,24 @@ public class PlaceInstructionManager : MonoBehaviour
         }
         return "";
     }
-    public void DefaultGiftCommand(string username, string command)
+    public void DefaultGiftCommand(string username, string command, long num)
     {
         // 找到 对应 的 礼物
         string parts = command.Trim();
         float message = float.Parse(parts);
-        PlaceCenter.Instance.GainPower(username, message);
+        StartCoroutine(GainMultiPower(username, message, num));
+        // PlaceCenter.Instance.GainPower(username, message);
     }
+
+    IEnumerator GainMultiPower(string username, float message, long num)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            PlaceCenter.Instance.GainPower(username, message);
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
+
     public void DefaultLikeCommand(Like like)
     {
         string username = like.uname;
