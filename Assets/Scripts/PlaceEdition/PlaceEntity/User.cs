@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityNavMeshAgent;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Playables;
 
 [System.Serializable]
 public class User

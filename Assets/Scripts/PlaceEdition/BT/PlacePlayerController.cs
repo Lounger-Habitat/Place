@@ -154,8 +154,7 @@ public class PlacePlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F2))
         {
             // 清空队列
-            insQueue.Clear();
-            user.instructionQueue.Clear();
+            Reset();
         }
     }
 
@@ -842,5 +841,11 @@ public class PlacePlayerController : MonoBehaviour
             Destroy(reThunderBall.gameObject);
         });
         thundering = false;
+    }
+
+
+    public void Reset() {
+        insQueue.Clear();
+        user.instructionQueue.Clear();
     }
 }

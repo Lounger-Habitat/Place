@@ -747,16 +747,22 @@ public class PlaceCenter : MonoBehaviour
         //     u.character.GetComponent<PlacePlayerController>().Tornado(num);
         // }
 
-        IEnumerator SaveImagePreRecorderTime(int time = 6)
+    IEnumerator SaveImagePreRecorderTime(int time = 6)
+    {
+        // 持续等待一分钟
+        while (gameRuning)
         {
-            // 持续等待一分钟
-            while (gameRuning)
-            {
-                yield return new WaitForSeconds(time);
-                PlaceBoardManager.Instance.SaveImage();
-            }
-            // PlaceBoardManager.Instance.SaveImage(lastone: true);
+            yield return new WaitForSeconds(time);
+            PlaceBoardManager.Instance.SaveImage();
         }
-
-
+            // PlaceBoardManager.Instance.SaveImage(lastone: true);
     }
+
+
+    public void Reset() {
+        foreach (var user in users.Values)
+        {
+            user.character.GetComponent<PlacePlayerController>().Reset();
+        }
+    }
+}
