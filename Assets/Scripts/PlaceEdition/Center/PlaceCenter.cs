@@ -428,7 +428,7 @@ public class PlaceCenter : MonoBehaviour
                 skill = SkillIcon.Tornado;
                 u.character.GetComponent<PlacePlayerController>().Tornado((int)(power * 10));
                 break;
-            case 1.9f:
+            case 2f:
                 normalPower = 600;//固定是攻击
                 u.character.GetComponent<PlacePlayerController>().Thunder();
                 skill = SkillIcon.Thunder;
