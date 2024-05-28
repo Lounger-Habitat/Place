@@ -355,7 +355,7 @@ public class TestManager : MonoBehaviour
     {
 
         // string[] gifts = { "0.1", "1", "1.9", "5.2", "9.9", "19.9", "29.9", "52", "66.6", "88.8", "99.9", "120"};
-        string[] gifts = { "0.1", "1", "2", "5.2", "9.9" };
+        string[] gifts = { "1", "10", "20", "52", "99" };
         int grand = Random.Range(0, gifts.Length);
         string giftIns = gifts[grand];
 
