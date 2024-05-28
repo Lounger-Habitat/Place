@@ -1006,14 +1006,15 @@ public class PlaceInstructionManager : MonoBehaviour
             case "/k":
                 break;
             case "/r":
-                if (parts.Length == 3)
+                if (parts.Length == 4)
                 {
-                    int x, y;
+                    int x, y, max;
                     string c;
                     c = parts[0]; // /d
                     x = int.Parse(parts[1]); // x
                     y = int.Parse(parts[2]); // y
-                    List<Instruction> IL = PlaceCenter.Instance.GenerateRandomImage(x, y);
+                    max = int.Parse(parts[3]); // max
+                    List<Instruction> IL = PlaceCenter.Instance.GenerateRandomImage(x, y, max);
                     if (IL.Count != 0)
                     {
                         IL.ForEach(i => user.instructionQueue.Enqueue(i));

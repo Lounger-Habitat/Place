@@ -336,16 +336,16 @@ public class PlaceBoardManager : MonoBehaviour
             Debug.LogError("Source texture is not readable. Please enable 'Read/Write Enabled' in import settings.");
             return null;
         }
-        float sourceWidth = source.width;
-        float sourceHeight = source.height;
-        float targetWidth = maxWidth;
-        float targetHeight = maxHeight;
-        float widthRatio = targetWidth / sourceWidth;
-        float heightRatio = targetHeight / sourceHeight;
-        // float ratio = Mathf.Min(widthRatio, heightRatio);
+        float sourceWidth = source.width; // 原 宽
+        float sourceHeight = source.height; // 原 高
+        float targetWidth = maxWidth;       // 限制最大 宽
+        float targetHeight = maxHeight;     // 限制最大 高
+        float widthRatio = targetWidth / sourceWidth;   // 宽比例
+        float heightRatio = targetHeight / sourceHeight; // 高比例
+        float ratio = Mathf.Min(widthRatio, heightRatio);
 
-        int newWidth = Mathf.RoundToInt(sourceWidth * widthRatio);
-        int newHeight = Mathf.RoundToInt(sourceHeight * heightRatio);
+        int newWidth = Mathf.RoundToInt(sourceWidth * ratio);
+        int newHeight = Mathf.RoundToInt(sourceHeight * ratio);
 
         Texture2D newTexture = new Texture2D(newWidth, newHeight, TextureFormat.RGBA32, false);
 

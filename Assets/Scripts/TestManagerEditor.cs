@@ -57,28 +57,16 @@ public class TestManagerEditor : Editor
         {
             ((TestManager)target).SendGift(99f);
         }
-        if (GUILayout.Button("¥88.8"))
+        if (GUILayout.Button("¥19.9"))
         {
-           ((TestManager)target).SendGift(99f);
+           ((TestManager)target).SendGift(199f);
         }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         // 如果按钮被点击
-        if (GUILayout.Button("¥120"))
+        if (GUILayout.Button("¥29.9"))
         {
-           // 调用MyScript中的DoSomething方法
-           //
-        }
-        if (GUILayout.Button("¥188.8"))
-        {
-           // 调用MyScript中的DoSomething方法
-           //
-        }
-        if (GUILayout.Button("¥300"))
-        {
-           // 调用MyScript中的DoSomething方法
-           //
-           
+           ((TestManager)target).SendGift(299f);
         }
         GUILayout.EndHorizontal();
         // 结束水平布局组

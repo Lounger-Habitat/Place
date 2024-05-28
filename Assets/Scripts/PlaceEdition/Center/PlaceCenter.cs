@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TMPro;
+using Unity.Sentis.Layers;
 using UnityEngine;
 
 public class PlaceCenter : MonoBehaviour
@@ -446,58 +447,86 @@ public class PlaceCenter : MonoBehaviour
                 // 随机自动画一个图案
                 skill = SkillIcon.Pencil;
                 u.character.GetComponent<PlacePlayerController>().Blessing(180);
-                int x = Random.Range(0, PlaceBoardManager.Instance.width-60);
-                int y = Random.Range(0, PlaceBoardManager.Instance.height-60);
-                List<Instruction> IL = GenerateRandomImage(x,y);
+                int x = Random.Range(0, PlaceBoardManager.Instance.width - 64);
+                int y = Random.Range(0, PlaceBoardManager.Instance.height - 64);
+                List<Instruction> IL = GenerateRandomImage(x, y, 64);
                 if (IL.Count != 0)
                 {
-                        IL.ForEach( i=>u.instructionQueue.Enqueue(i));
+                    IL.ForEach(i => u.instructionQueue.Enqueue(i));
                 }
                 break;
-            // case 19.9f:
-            //     normalPower = 1999;
-            //     break;
-            // case 29.9f:
-            //     message = "";
-            //     normalPower = 2990;
-            //     break;
-            // case 52f:
-            //     message = "";
-            //     normalPower = 5200;
-            //     break;
-            // case 66.6f:
-            //     message = "";
-            //     normalPower = 6666;
-            //     break;
-            // case 88.8f:
-            //     message = "";
-            //     normalPower = 8888;
-            //     break;
-            // case 99.9f:
-            //     message = "";
-            //     normalPower = 9999;
-            //     break;
-            // case 120f:
-            //     message = "";
-            //     normalPower = 12000;
-            //     break;
-            // case 166.6f:
-            //     message = "";
-            //     normalPower = 16666;
-            //     break;
-            // case 188.8f:
-            //     message = "";
-            //     normalPower = 18888;
-            //     break;
-            // case 300f:
-            //     message = "";
-            //     normalPower = 30000;
-            //     break;
+            case 199f:
+                normalPower = 14400;
+                message = "天官赐福";
+                // 随机自动画一个图案
+                skill = SkillIcon.Pencil;
+                u.character.GetComponent<PlacePlayerController>().Blessing(180);
+                int x128 = Random.Range(0, PlaceBoardManager.Instance.width - 128);
+                int y128 = Random.Range(0, PlaceBoardManager.Instance.height - 128);
+                List<Instruction> IL128 = GenerateRandomImage(x128, y128, 128);
+                if (IL128.Count != 0)
+                {
+                    IL128.ForEach(i => u.instructionQueue.Enqueue(i));
+                }
+                break;
+            case 299f:
+                normalPower = 62500;
+                message = "天官赐福";
+                // 随机自动画一个图案
+                skill = SkillIcon.Pencil;
+                u.character.GetComponent<PlacePlayerController>().Blessing(180);
+                int x256 = Random.Range(0, PlaceBoardManager.Instance.width - 256);
+                int y256 = Random.Range(0, PlaceBoardManager.Instance.height - 256);
+                List<Instruction> IL256 = GenerateRandomImage(x256, y256, 256);
+                if (IL256.Count != 0)
+                {
+                    IL256.ForEach(i => u.instructionQueue.Enqueue(i));
+                }
+                break;
+                // case 19.9f:
+                //     normalPower = 1999;
+                //     break;
+                // case 29.9f:
+                //     message = "";
+                //     normalPower = 2990;
+                //     break;
+                // case 52f:
+                //     message = "";
+                //     normalPower = 5200;
+                //     break;
+                // case 66.6f:
+                //     message = "";
+                //     normalPower = 6666;
+                //     break;
+                // case 88.8f:
+                //     message = "";
+                //     normalPower = 8888;
+                //     break;
+                // case 99.9f:
+                //     message = "";
+                //     normalPower = 9999;
+                //     break;
+                // case 120f:
+                //     message = "";
+                //     normalPower = 12000;
+                //     break;
+                // case 166.6f:
+                //     message = "";
+                //     normalPower = 16666;
+                //     break;
+                // case 188.8f:
+                //     message = "";
+                //     normalPower = 18888;
+                //     break;
+                // case 300f:
+                //     message = "";
+                //     normalPower = 30000;
+                //     break;
         }
         u.character.GetComponent<PlacePlayerController>().InkUp(normalPower);
         u.score += normalPower;
         u.genInkCount += normalPower;
-        u.usePowerCount += power*10;
+        u.usePowerCount += power * 10;
         u.Update();
         u.currentCarryingInkCount += normalPower;
         PlaceTeamManager.Instance.teamAreas[u.Camp - 1].teaminfo.ink += (int)(0.1 * normalPower);
@@ -597,7 +626,7 @@ public class PlaceCenter : MonoBehaviour
     //     PlaceUIManager.Instance.endUI.ShowGIF(path);
     // }
 
-    public List<Instruction> GenerateRandomImage(int ox, int oy)
+    public List<Instruction> GenerateRandomImage(int ox, int oy, int max)
     {
         // 图库
         // 获取index 
@@ -607,12 +636,12 @@ public class PlaceCenter : MonoBehaviour
             Texture2D tex = demoTextures[index];
             // texture 2d
             // Texture2D tex = Resources.Load<Texture2D>($"Images/{index}");
-            Texture2D retex = PlaceBoardManager.Instance.ScaleTextureProportionally(tex, 60, 60);
+            Texture2D retex = PlaceBoardManager.Instance.ScaleTextureProportionally(tex, max, max);
 
             // 转换成 instruction
             return Image2Instruction(retex, ox, oy);
         }
-        
+
         return new List<Instruction>();
     }
 
@@ -620,7 +649,7 @@ public class PlaceCenter : MonoBehaviour
     {
         // 读取 颜色
         Color32[] imageData = tex.GetPixels32();
-        
+
 
         // 宽高
         int width = tex.width;
@@ -651,7 +680,7 @@ public class PlaceCenter : MonoBehaviour
                 // c, x, y, r: r, g: g, b: b
 
                 Color32 c = imageData[i];
-                if(c.a == 0) continue;
+                if (c.a == 0) continue;
                 Instruction ins = new Instruction("/draw", ox + i % width, oy + i / width, r: c.r, g: c.g, b: c.b);
                 insList.Add(ins);
             }
@@ -662,7 +691,7 @@ public class PlaceCenter : MonoBehaviour
 
 
 
-    public Texture2D ImageFitBoardProcessor(List<Texture2D> texlist , int texindex)
+    public Texture2D ImageFitBoardProcessor(List<Texture2D> texlist, int texindex)
     {
         Texture2D inputTexture = texlist[texindex];
         // 外部引用 
@@ -671,14 +700,15 @@ public class PlaceCenter : MonoBehaviour
         return resizeTexture;
     }
 
-    public List<Texture2D> LoadDemoResources() {
-        #if UNITY_EDITOR
+    public List<Texture2D> LoadDemoResources()
+    {
+#if UNITY_EDITOR
         return LoadResources("Assets/Images/Demo");
-        #else
+#else
         string demoPath = Application.streamingAssetsPath;
         demoPath = Path.Combine(demoPath, "Demo");
         return LoadResources(demoPath);
-        #endif
+#endif
     }
 
     public List<Texture2D> LoadResources(string imagePath)
@@ -720,32 +750,36 @@ public class PlaceCenter : MonoBehaviour
     Texture2D LoadTexture(string filePath)
     {
         byte[] fileData = File.ReadAllBytes(filePath);
-        Texture2D texture = new Texture2D(1,1); // 创建一个临时Texture2D，稍后会被替换为实际的图像数据
+        Texture2D texture = new Texture2D(1, 1); // 创建一个临时Texture2D，稍后会被替换为实际的图像数据
         if (!texture.LoadImage(fileData)) // 加载图像数据
         {
             Debug.LogError("Failed to load texture: " + filePath);
         }
+        // Debug.Log("Load Texture: " + filePath + " " + texture.width + " " + texture.height);
         return texture;
     }
 
-    public string AllMember() {
+    public string AllMember()
+    {
         return users.Count.ToString();
     }
-    public List<string> AllMemberName() {
+    public List<string> AllMemberName()
+    {
         return users.Values.Select(user => user.Name).ToList();
     }
-    public string Price() {
+    public string Price()
+    {
         return users.Values.Sum(u => u.usePowerCount).ToString();
     }
 
 
-        //  ===== 协程 =====
+    //  ===== 协程 =====
 
 
-        // IEnumerator CallTornado(User u ,int num)
-        // {
-        //     u.character.GetComponent<PlacePlayerController>().Tornado(num);
-        // }
+    // IEnumerator CallTornado(User u ,int num)
+    // {
+    //     u.character.GetComponent<PlacePlayerController>().Tornado(num);
+    // }
 
     IEnumerator SaveImagePreRecorderTime(int time = 6)
     {
@@ -755,11 +789,12 @@ public class PlaceCenter : MonoBehaviour
             yield return new WaitForSeconds(time);
             PlaceBoardManager.Instance.SaveImage();
         }
-            // PlaceBoardManager.Instance.SaveImage(lastone: true);
+        // PlaceBoardManager.Instance.SaveImage(lastone: true);
     }
 
 
-    public void Reset() {
+    public void Reset()
+    {
         foreach (var user in users.Values)
         {
             user.character.GetComponent<PlacePlayerController>().Reset();
