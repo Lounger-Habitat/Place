@@ -13,6 +13,8 @@ public class PlaceTeamSlider : MonoBehaviour
     {
         // 初始设置文本
         slider.value = 0;
+        slider.minValue = 0;
+        slider.maxValue = PlaceBoardManager.Instance.pixelsInfos.Length;
     }
 
     public void UpdateSlider(int input)

@@ -24,7 +24,9 @@ public class PlaceBoardManager : MonoBehaviour
     public int width = 500;
     public Texture2D defaultTexture;
     public int recorderTime = 6;
+    // 像素信息 ， 0 为未涂色，>0 为涂色, 数字代表队伍
     public int[] pixelsInfos;
+    // 像素用户信息， 0 为未涂色，>0 为涂色, 数字代表用户
     public int[] pixelsUserInfos;
 
     // 画作唯一id

@@ -49,7 +49,7 @@ public class PlaceCenter : MonoBehaviour
     // 游戏开始标志
     public bool gameRuning = false;
 
-    int[] lastTeamScore = new int[5] { 0, 0, 0, 0, 0 };
+    int[] lastTeamScore = new int[3] { 0, 0, 0 };
 
     public int recorderTime = 6;
 
@@ -370,7 +370,8 @@ public class PlaceCenter : MonoBehaviour
     // 计算 队伍分数
     public void CalculateTeamScore()
     {
-        int[] newTeamScore = new int[5];
+        // 队伍长度
+        int[] newTeamScore = new int[3];
         foreach (int c in PlaceBoardManager.Instance.pixelsInfos)
         {
             newTeamScore[c]++;
@@ -383,6 +384,7 @@ public class PlaceCenter : MonoBehaviour
                 int score = newTeamScore[i];
                 // 如果不相等，调用其他函数或执行其他逻辑
                 PlaceTeamManager.Instance.teamAreas[i - 1].teaminfo.score = score;
+                lastTeamScore[i] = score;
                 // OnTeamUIUpdate(PlaceTeamManager.Instance.teamAreas[i-1].teaminfo);
             }
         }

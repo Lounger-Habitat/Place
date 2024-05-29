@@ -7,6 +7,7 @@ using System.Collections;
 using DG.Tweening;
 using System.Linq;
 using System.Net.NetworkInformation;
+using Unity.VisualScripting;
 
 public class PlacePlayerController : MonoBehaviour
 {
@@ -372,6 +373,8 @@ public class PlacePlayerController : MonoBehaviour
 
     public void Invincible(float time = 120)
     {
+        // 清除 异常状态，幂等
+        stuckTime = 0;
         if (invincible)
         {
             invincibleTime += time;

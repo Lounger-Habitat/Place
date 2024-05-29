@@ -48,17 +48,17 @@ public class PlaceTeamManager : MonoBehaviour
             teamAreas.Add(tam2);
         }
 
-        if (teamArea3 != null )
-        {
-            PlaceTeamAreaManager tam3 = teamArea3.GetComponent<PlaceTeamAreaManager>();
-            teamAreas.Add(tam3);
-        }
+        // if (teamArea3 != null )
+        // {
+        //     PlaceTeamAreaManager tam3 = teamArea3.GetComponent<PlaceTeamAreaManager>();
+        //     teamAreas.Add(tam3);
+        // }
 
-        if (teamArea4 != null )
-        {
-            PlaceTeamAreaManager tam4 = teamArea4.GetComponent<PlaceTeamAreaManager>();
-            teamAreas.Add(tam4);
-        }
+        // if (teamArea4 != null )
+        // {
+        //     PlaceTeamAreaManager tam4 = teamArea4.GetComponent<PlaceTeamAreaManager>();
+        //     teamAreas.Add(tam4);
+        // }
     }
 
     public void Reset() {
