@@ -331,6 +331,7 @@ MonoBehaviour:
   selfDoor: {fileID: 0}
   enemyTotem: {fileID: 0}
   enemyDoor: {fileID: 0}
+  navMeshAgent: {fileID: 0}
   insList: []
   inkCount: 0
   insReadyList: []
@@ -347,6 +348,7 @@ MonoBehaviour:
     currentState:
       topState: 0
       detailState: 0
+    score: 0
     currentCarryingInkCount: 0
     currentCarryingInsCount: 0
     maxCarryingInkCount: 0
