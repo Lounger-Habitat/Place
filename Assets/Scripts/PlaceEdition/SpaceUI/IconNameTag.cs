@@ -49,33 +49,42 @@ public class IconNameTag : MonoBehaviour
         {
             if (target != null)
             {
-                switch (user.level)
+                if (user.speed+user.exSpeed<=0)
                 {
-                    case < 10:
-                        title = "新手"; // 白
-                        title_text.color = new Color32(255, 255, 255, 255);
-                        break;
-                    case < 20:
-                        title = "学徒"; // 绿
-                        title_text.color = new Color32(0, 255, 0, 255);
-                        break;
-                    case < 30:
-                        title = "画师"; // 蓝
-                        title_text.color = new Color32(0, 0, 255, 255);
-                        break;
-                    case < 50:
-                        title = "画家"; // 紫
-                        title_text.color = new Color32(255, 0, 255, 255);
-                        break;
-                    case < 100:
-                        title = "画圣"; // 橙
-                        title_text.color = new Color32(255, 165, 0, 255);
-                        break;
-                    default:
-                        title = "画尊"; // 红
-                        title_text.color = new Color32(255, 0, 0, 255);
-                        break;
+                    title = "禁锢"; // 红
+                    title_text.color = new Color32(255, 0, 0, 255);
                 }
+                else
+                {
+                    switch (user.level)
+                    {
+                        case < 10:
+                            title = "新手"; // 白
+                            title_text.color = new Color32(255, 255, 255, 255);
+                            break;
+                        case < 20:
+                            title = "学徒"; // 绿
+                            title_text.color = new Color32(0, 255, 0, 255);
+                            break;
+                        case < 30:
+                            title = "画师"; // 蓝
+                            title_text.color = new Color32(0, 0, 255, 255);
+                            break;
+                        case < 50:
+                            title = "画家"; // 紫
+                            title_text.color = new Color32(255, 0, 255, 255);
+                            break;
+                        case < 100:
+                            title = "画圣"; // 橙
+                            title_text.color = new Color32(255, 165, 0, 255);
+                            break;
+                        default:
+                            title = "画尊"; // 红
+                            title_text.color = new Color32(255, 0, 0, 255);
+                            break;
+                    }
+                }
+
                 title_text.text = title;
                 name_text.text = $"{user.Name}"; // 设置文本
                 icon.sprite = user.userIcon;

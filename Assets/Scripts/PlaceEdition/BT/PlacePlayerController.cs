@@ -166,9 +166,35 @@ public class PlacePlayerController : MonoBehaviour
     public void MoveToTarget(Vector3 targetPosition)
     {
         navMeshAgent.destination = targetPosition;
+        var nowSpeed =user.speed + user.exSpeed;
+        if (nowSpeed<=0)
+        {
+            navMeshAgent.speed = 0;
+            CheckSpeed();
+            return;
+        }
+        RestSpeed();
         navMeshAgent.speed = user.speed + user.exSpeed;
     }
 
+    private bool lastIsRun = false;
+    public void CheckSpeed()
+    {
+        if (playerAnimator.GetBool("isRun"))//检查是否再奔跑状态，如果是就停止奔跑
+        {
+            lastIsRun = true;//记录上次是奔跑状态
+            playerAnimator.SetBool("isRun", false);
+        }
+    }
+
+    public void RestSpeed()
+    {
+        if (lastIsRun)
+        {
+            lastIsRun = false;
+            playerAnimator.SetBool("isRun", true);
+        }
+    }
     public void TransToDefend()
     {
         isDefending = true;
