@@ -385,7 +385,7 @@ public class TestManager : MonoBehaviour
     {
         while (PlaceCenter.Instance.gameRuning) // 无限循环生成指令
         {
-            // 随机等待一段时间
+            // 随机等待一段时间 , 0.1 - 2s
             float waitTime = Random.Range(minInterval, maxInterval);
             yield return new WaitForSeconds(waitTime);
 
@@ -420,13 +420,13 @@ public class TestManager : MonoBehaviour
 
 
         float rand = Random.Range(0f, 1f);
-        if (rand < 0.95f)
+        if (rand < 0.99f)
         {
             string drawIns = RandomGenDrawIns();
             // Debug.Log($"{u.Name} 执行 ({drawIns}) 指令");
             PlaceInstructionManager.Instance.DefaultRunChatCommand(u, drawIns);
         }
-        else if (rand < 1f)
+        else if (rand < 1f) // 百分之一的几率 送礼物
         {
             string giftIns = RandomGenGiftIns();
             // Debug.Log($"{u.Name} 赠送 ({giftIns}) 颜料");

@@ -19,6 +19,7 @@ public class IconNameTag : MonoBehaviour
 
     RectTransform maskRect;
 
+    private PlacePlayerController pc;
 
 
     void Start()
@@ -27,6 +28,7 @@ public class IconNameTag : MonoBehaviour
         // name_text = GetComponentInChildren<TMP_Text>(); // 获取TextMeshPro组件
         // title_text = transform.GetChild(1).GetComponent<TMP_Text>();
         maskRect = transform.GetChild(0).GetComponent<RectTransform>();
+        pc = user.character.GetComponent<PlacePlayerController>();
         // icon = transform.GetChild(0).GetChild(0).GetComponent<Image>(); // 获取TextMeshPro组件
         if (user.Camp == 1)
         {
@@ -51,7 +53,7 @@ public class IconNameTag : MonoBehaviour
             {
                 if (user.speed+user.exSpeed<=0)
                 {
-                    title = "禁锢"; // 红
+                    title = $"禁锢 - {pc.GetStuckTime()}s"; // 红
                     title_text.color = new Color32(255, 0, 0, 255);
                 }
                 else
@@ -59,28 +61,32 @@ public class IconNameTag : MonoBehaviour
                     switch (user.level)
                     {
                         case < 10:
-                            title = "新手"; // 白
-                            title_text.color = new Color32(255, 255, 255, 255);
+                            title = "新手"; // 灰
+                            title_text.color = new Color32(157, 157, 157, 255);
                             break;
                         case < 20:
-                            title = "学徒"; // 绿
-                            title_text.color = new Color32(0, 255, 0, 255);
+                            title = "学徒"; // 白
+                            title_text.color = new Color32(255, 255, 255, 255);
                             break;
                         case < 30:
-                            title = "画师"; // 蓝
-                            title_text.color = new Color32(0, 0, 255, 255);
+                            title = "画师"; // 绿
+                            title_text.color = new Color32(30, 255, 0, 255);
                             break;
                         case < 50:
-                            title = "画家"; // 紫
-                            title_text.color = new Color32(255, 0, 255, 255);
+                            title = "画家"; // 蓝
+                            title_text.color = new Color32(0, 112, 221, 255);
                             break;
                         case < 100:
-                            title = "画圣"; // 橙
-                            title_text.color = new Color32(255, 165, 0, 255);
+                            title = "画圣"; // 紫
+                            title_text.color = new Color32(163, 53, 238, 255);
+                            break;
+                        case < 200:
+                            title = "画尊"; // 橙
+                            title_text.color = new Color32(255, 128, 0, 255);
                             break;
                         default:
-                            title = "画尊"; // 红
-                            title_text.color = new Color32(255, 0, 0, 255);
+                            title = "传说画帝"; // 暗金
+                            title_text.color = new Color32(230, 204, 128, 255);
                             break;
                     }
                 }

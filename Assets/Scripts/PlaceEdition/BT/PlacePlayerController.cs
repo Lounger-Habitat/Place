@@ -747,6 +747,11 @@ public class PlacePlayerController : MonoBehaviour
 
     }
 
+    public float GetStuckTime()
+    {
+        return stuckTime;
+    }
+
     // 魔法跑 加速 5秒
     IEnumerator MagicSpeedUpCoroutine()
     {
