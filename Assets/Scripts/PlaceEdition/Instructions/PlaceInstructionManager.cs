@@ -1231,11 +1231,11 @@ public class PlaceInstructionManager : MonoBehaviour
             */
 
             // 快速画点
-            if (Regex.IsMatch(msg, FAST_DRAW_POINT_PATTERN_NO_SLASH))
+            if (Regex.IsMatch(msg, FAST_DRAW_PATTERN))
             { // 快速画点
                 DefaultRunChatCommand(user, "/d " + msg);
             }
-            else if (Regex.IsMatch(msg, FAST_LINE_PATTERN_NO_SLASH))
+            else if (Regex.IsMatch(msg, FAST_LINE_PATTERN))
             { // 快速画线
                 DefaultRunChatCommand(user, "/l " + msg);
             }
@@ -1243,15 +1243,33 @@ public class PlaceInstructionManager : MonoBehaviour
             { // 快速画自定义线
                 DefaultRunChatCommand(user, "/m " + msg);
             }
-            else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN_NO_SLASH))
+            else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN))
             {// 快速画圆
                 DefaultRunChatCommand(user, "/c " + msg);
+            }
+
+            // no slash
+            if (Regex.IsMatch(msg, FAST_DRAW_POINT_PATTERN_NO_SLASH))
+            { // 快速画点
+                DefaultRunChatCommand(user, "/" + msg);
+            }
+            else if (Regex.IsMatch(msg, FAST_LINE_PATTERN_NO_SLASH))
+            { // 快速画线
+                DefaultRunChatCommand(user, "/" + msg);
+            }
+            else if (Regex.IsMatch(msg, FAST_DRAW_DIY_PATTERN_NO_SLASH))
+            { // 快速画自定义线
+                DefaultRunChatCommand(user, "/" + msg);
+            }
+            else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN_NO_SLASH))
+            {// 快速画圆
+                DefaultRunChatCommand(user, "/" + msg);
             }else if (Regex.IsMatch(msg, FAST_PAINT_PATTERN_NO_SLASH))
             {// 快速画方块
-                DefaultRunChatCommand(user, "/p " + msg);
+                DefaultRunChatCommand(user, "/" + msg);
             }else if (Regex.IsMatch(msg, FAST_RECT_PATTERN_NO_SLASH))
             {// 快速画rect
-                DefaultRunChatCommand(user, "/r " + msg);
+                DefaultRunChatCommand(user, "/" + msg);
             }
         }
         // List<string> selectList = new List<string>(){
@@ -1385,14 +1403,16 @@ public class PlaceInstructionManager : MonoBehaviour
     public const string FAST_LINE_PATTERN = @"(^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)|(^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)";
     public const string FAST_DRAW_DIY_PATTERN = @"(^[1-9]\d*$)|(^[1-9]\d* [\u4E00-\u9FFF]+$)";
     public const string FAST_CIRCLE_PATTERN = @"(^\d{1,3} \d{1,3} \d{1,3}$)|(^\d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_PAINT_PATTERN = @"(^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|(^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_RECT_PATTERN = @"(^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|(^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
 
     // fast no slash
-    public const string FAST_DRAW_POINT_PATTERN_NO_SLASH = @"d (^\d{1,3} \d{1,3}$)|d (^\d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
-    public const string FAST_LINE_PATTERN_NO_SLASH = @"l (^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)|l (^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)";
-    public const string FAST_DRAW_DIY_PATTERN_NO_SLASH = @"m (^[1-9]\d*$)|m (^[1-9]\d* [\u4E00-\u9FFF]+$)";
-    public const string FAST_CIRCLE_PATTERN_NO_SLASH = @"c (^\d{1,3} \d{1,3} \d{1,3}$)|c (^\d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
-    public const string FAST_PAINT_PATTERN_NO_SLASH = @"p (^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|p (^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
-    public const string FAST_RECT_PATTERN_NO_SLASH = @"r (^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|rect (^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_DRAW_POINT_PATTERN_NO_SLASH = @"(^d \d{1,3} \d{1,3}$)|(^d \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_LINE_PATTERN_NO_SLASH = @"(^l \d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)|(^l \d{1,3} \d{1,3} \d{1,3} \d{1,3}$)";
+    public const string FAST_DRAW_DIY_PATTERN_NO_SLASH = @"(^m [1-9]\d*$)|(^m [1-9]\d* [\u4E00-\u9FFF]+$)";
+    public const string FAST_CIRCLE_PATTERN_NO_SLASH = @"(^c \d{1,3} \d{1,3} \d{1,3}$)|(^c \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_PAINT_PATTERN_NO_SLASH = @"(^p \d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|(^p \d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_RECT_PATTERN_NO_SLASH = @"(^r \d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|(^r \d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
 
 
 }

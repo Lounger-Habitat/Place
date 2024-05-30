@@ -815,7 +815,7 @@ public class PlaceBoardManager : MonoBehaviour
         {
             return ins.x < width && ins.y < height && ins.ex < width && ins.ey < height && ins.x >= 0 && ins.y >= 0 && ins.ex >= 0 && ins.ey >= 0;
         }
-        else if (ins.mode == "/paint" || ins.mode == "/p" || ins.mode == "/rectangle" || ins.mode == "/rect")
+        else if (ins.mode == "/paint" || ins.mode == "/p" || ins.mode == "/rect" || ins.mode == "/r")
         {
             return ins.x < width && ins.y < height && ins.dx < width - ins.x && ins.dy < height - ins.y && ins.x >= 0 && ins.y >= 0 && ins.dx >= 0 && ins.dy >= 0;
         }
