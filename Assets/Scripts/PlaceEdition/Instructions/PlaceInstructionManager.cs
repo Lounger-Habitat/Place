@@ -4,6 +4,7 @@ using OpenBLive.Runtime.Data;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Text.RegularExpressions;
+using TMPro;
 
 public class PlaceInstructionManager : MonoBehaviour
 {
@@ -148,16 +149,16 @@ public class PlaceInstructionManager : MonoBehaviour
                     PlaceCenter.Instance.JoinGame(user, parts[1]);
                 }
                 break;
-            case "/say":
-                if (parts.Length >= 2)
-                {
-                    // 这里调用发送消息的逻辑
-                    // SayMessage(string.Join(" ", parts, 1, parts.Length - 1));
-                    Debug.Log(parts[1]);
-                    string message = parts[1];
-                    PlaceCenter.Instance.SayMessage(user, message);
-                }
-                break;
+            // case "/say":
+            //     if (parts.Length >= 2)
+            //     {
+            //         // 这里调用发送消息的逻辑
+            //         // SayMessage(string.Join(" ", parts, 1, parts.Length - 1));
+            //         Debug.Log(parts[1]);
+            //         string message = parts[1];
+            //         PlaceCenter.Instance.SayMessage(user, message);
+            //     }
+            //     break;
             case "/draw":
             case "/d":
                 if (parts.Length >= 3)
@@ -574,8 +575,8 @@ public class PlaceInstructionManager : MonoBehaviour
                     Debug.LogError("输入字符串格式不正确");
                 }
                 break;
-            case "/rectangle": // 矩形 无填充
-            case "/rect":
+            case "/rect": // 矩形 无填充
+            case "/r":
                 if (parts.Length >= 5)
                 {
                     if (parts.Length == 5)
@@ -994,36 +995,36 @@ public class PlaceInstructionManager : MonoBehaviour
                     Debug.LogError("输入字符串格式不正确");
                 }
                 break;
-            case "gs":
-                break;
-            case "/take": // 拿别人颜料 ，谁家
-            case "/t":
-                break;
-            case "/defense": // 防止别人拿 ，状态
-            case "/de":
-                break;
-            case "/kill": // 除掉守护者，谁家
-            case "/k":
-                break;
-            case "/r":
-                if (parts.Length == 4)
-                {
-                    int x, y, max;
-                    string c;
-                    c = parts[0]; // /d
-                    x = int.Parse(parts[1]); // x
-                    y = int.Parse(parts[2]); // y
-                    max = int.Parse(parts[3]); // max
-                    List<Instruction> IL = PlaceCenter.Instance.GenerateRandomImage(x, y, max);
-                    if (IL.Count != 0)
-                    {
-                        IL.ForEach(i => user.instructionQueue.Enqueue(i));
-                    }
-                }
-                // 从 已有的 图集 中 找一个 图
-                // 把 图 -> 指令
-                // 给到 player
-                break;
+            // case "gs":
+            //     break;
+            // case "/take": // 拿别人颜料 ，谁家
+            // case "/t":
+            //     break;
+            // case "/defense": // 防止别人拿 ，状态
+            // case "/de":
+            //     break;
+            // case "/kill": // 除掉守护者，谁家
+            // case "/k":
+            //     break;
+            // case "/r":
+            //     if (parts.Length == 4)
+            //     {
+            //         int x, y, max;
+            //         string c;
+            //         c = parts[0]; // /d
+            //         x = int.Parse(parts[1]); // x
+            //         y = int.Parse(parts[2]); // y
+            //         max = int.Parse(parts[3]); // max
+            //         List<Instruction> IL = PlaceCenter.Instance.GenerateRandomImage(x, y, max);
+            //         if (IL.Count != 0)
+            //         {
+            //             IL.ForEach(i => user.instructionQueue.Enqueue(i));
+            //         }
+            //     }
+            //     // 从 已有的 图集 中 找一个 图
+            //     // 把 图 -> 指令
+            //     // 给到 player
+            //     break;
             // case "/generate": // diffusion
             // case "/g":
             //     if (parts.Length >= 4)
@@ -1054,8 +1055,8 @@ public class PlaceInstructionManager : MonoBehaviour
             //         Debug.LogError("输入字符串格式不正确");
             //     }
             //     break;
-            case "/f":
-                break; // 2024-05-09 :⚠️ 暂时废弃
+            // case "/f":
+            //     break; // 2024-05-09 :⚠️ 暂时废弃
                        // if (parts.Length == 4)
                        // {
                        //     int x, y, r, g, b;
@@ -1085,38 +1086,38 @@ public class PlaceInstructionManager : MonoBehaviour
                        //     }
                        // }
                        // break;
-            case "/test":
-                if (parts.Length == 3)
-                {
-                    string c, id, message;
-                    c = parts[0]; // /d
-                    id = parts[1]; // name
-                    message = parts[2]; // y
-                    // Debug.Log($"{c} {name} {message}");
-                    string name = FindById(id);
-                    if (name == "")
-                    {
-                        Debug.Log("未找到对应的用户");
-                        return;
-                    }
-                    DefaultGiftCommand(name, message, 1);
-                }
-                else if (parts.Length == 4)
-                {
-                    string c, id;
-                    long count;
-                    c = parts[0]; // /d
-                    id = parts[1]; // name
-                    count = long.Parse(parts[3]); // count
-                    string name = FindById(id);
-                    User u = PlaceCenter.Instance.users[name];
-                    // Debug.Log($"{c} {name} {count}");
-                    PlaceCenter.Instance.GainLikePower(u, count);
-                }
-                // 从 已有的 图集 中 找一个 图
-                // 把 图 -> 指令
-                // 给到 player
-                break;
+            // case "/test":
+            //     if (parts.Length == 3)
+            //     {
+            //         string c, id, message;
+            //         c = parts[0]; // /d
+            //         id = parts[1]; // name
+            //         message = parts[2]; // y
+            //         // Debug.Log($"{c} {name} {message}");
+            //         string name = FindById(id);
+            //         if (name == "")
+            //         {
+            //             Debug.Log("未找到对应的用户");
+            //             return;
+            //         }
+            //         DefaultGiftCommand(name, message, 1);
+            //     }
+            //     else if (parts.Length == 4)
+            //     {
+            //         string c, id;
+            //         long count;
+            //         c = parts[0]; // /d
+            //         id = parts[1]; // name
+            //         count = long.Parse(parts[3]); // count
+            //         string name = FindById(id);
+            //         User u = PlaceCenter.Instance.users[name];
+            //         // Debug.Log($"{c} {name} {count}");
+            //         PlaceCenter.Instance.GainLikePower(u, count);
+            //     }
+            //     // 从 已有的 图集 中 找一个 图
+            //     // 把 图 -> 指令
+            //     // 给到 player
+            //     break;
         }
     }
     string FindById(string id)
@@ -1230,11 +1231,11 @@ public class PlaceInstructionManager : MonoBehaviour
             */
 
             // 快速画点
-            if (Regex.IsMatch(msg, FAST_DRAW_PATTERN))
+            if (Regex.IsMatch(msg, FAST_DRAW_POINT_PATTERN_NO_SLASH))
             { // 快速画点
                 DefaultRunChatCommand(user, "/d " + msg);
             }
-            else if (Regex.IsMatch(msg, FAST_LINE_PATTERN))
+            else if (Regex.IsMatch(msg, FAST_LINE_PATTERN_NO_SLASH))
             { // 快速画线
                 DefaultRunChatCommand(user, "/l " + msg);
             }
@@ -1242,9 +1243,15 @@ public class PlaceInstructionManager : MonoBehaviour
             { // 快速画自定义线
                 DefaultRunChatCommand(user, "/m " + msg);
             }
-            else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN))
+            else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN_NO_SLASH))
             {// 快速画圆
                 DefaultRunChatCommand(user, "/c " + msg);
+            }else if (Regex.IsMatch(msg, FAST_PAINT_PATTERN_NO_SLASH))
+            {// 快速画方块
+                DefaultRunChatCommand(user, "/p " + msg);
+            }else if (Regex.IsMatch(msg, FAST_RECT_PATTERN_NO_SLASH))
+            {// 快速画rect
+                DefaultRunChatCommand(user, "/r " + msg);
             }
         }
         // List<string> selectList = new List<string>(){
@@ -1385,7 +1392,7 @@ public class PlaceInstructionManager : MonoBehaviour
     public const string FAST_DRAW_DIY_PATTERN_NO_SLASH = @"m (^[1-9]\d*$)|m (^[1-9]\d* [\u4E00-\u9FFF]+$)";
     public const string FAST_CIRCLE_PATTERN_NO_SLASH = @"c (^\d{1,3} \d{1,3} \d{1,3}$)|c (^\d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
     public const string FAST_PAINT_PATTERN_NO_SLASH = @"p (^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|p (^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
-    public const string FAST_RECT_PATTERN_NO_SLASH = @"rect (^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|rect (^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_RECT_PATTERN_NO_SLASH = @"r (^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|rect (^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
 
 
 }
