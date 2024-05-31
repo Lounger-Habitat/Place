@@ -61,7 +61,7 @@ public class IconNameTag : MonoBehaviour
                     switch (user.level)
                     {
                         case < 10:
-                            title = "新手"; // 灰
+                            title = "萌新"; // 灰
                             title_text.color = new Color32(157, 157, 157, 255);
                             break;
                         case < 20:
