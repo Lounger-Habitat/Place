@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlaceSettingPanel : MonoBehaviour
 {
@@ -8,7 +10,7 @@ public class PlaceSettingPanel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        CheckAutoPlay();
     }
 
     // Update is called once per frame
@@ -46,5 +48,42 @@ public class PlaceSettingPanel : MonoBehaviour
     public void Mute_Click()
     {
         AudioManager.Instance.Mute_Click();
+    }
+    
+    //自动开始游戏相关
+
+    public Image autoBtnImage;
+    public RectTransform handle;
+    public void OnClickAutoBtn()
+    {
+        if (DataNoDeleteManager.Instance.isAutoPlay)
+        {
+            DataNoDeleteManager.Instance.isAutoPlay = false;
+        }
+        else
+        {
+            DataNoDeleteManager.Instance.isAutoPlay = true;
+        }
+
+        CheckAutoPlay();
+    }
+
+    public void CheckAutoPlay()
+    {
+        if (!DataNoDeleteManager.Instance.isAutoPlay)
+        {
+            
+            handle.DOAnchorPosX(-50f, 0.4f).OnComplete(() =>
+            {
+                autoBtnImage.color =new Color(0.55f,0.55f,0.55f);
+            });
+        }
+        else
+        {
+            handle.DOAnchorPosX(50f, 0.4f).OnComplete(() =>
+            {
+                autoBtnImage.color =new Color(1,0.625f,0.278f);
+            });
+        }
     }
 }

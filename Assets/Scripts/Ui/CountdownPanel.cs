@@ -57,12 +57,17 @@ public class CountdownPanel : MonoBehaviour
         {
             startTime = 60 * 60;
         }
+
+        DataNoDeleteManager.Instance.playTime = (startTime / 60);
     }
     public void OnChangeTimeNumber(TMP_Text text)
     {
         text.text = (startTime / 60).ToString();
     }
 
-
+    public void ChangeTime(int time)
+    {
+        startTime = time * 60;
+    }
     
 }
