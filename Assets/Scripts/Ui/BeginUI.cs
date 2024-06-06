@@ -66,8 +66,13 @@ public class BeginUI : MonoBehaviour
     IEnumerator AutoPlayTime()
     {
         int secends = 60;
-        while (secends>0 && !placeSettingUI.activeSelf)
+        while (secends>0 )
         {
+            if (placeSettingUI.activeSelf)
+            {
+                yield return new WaitForSeconds(1);
+                continue;
+            }
             beginText.text = $"开始({secends}s)";
             yield return new WaitForSeconds(1);
             secends--;

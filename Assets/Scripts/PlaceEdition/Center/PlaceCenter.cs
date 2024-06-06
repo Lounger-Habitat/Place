@@ -1,10 +1,12 @@
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlaceCenter : MonoBehaviour
 {
@@ -314,6 +316,8 @@ public class PlaceCenter : MonoBehaviour
         PlaceTeamManager.Instance.teamAreas[teamId - 1].teaminfo.ink += (float)delta;
     }
 
+    public Action satrtGameAction;
+    
     public void StartGame()
     {
         if (gameRuning)
@@ -321,6 +325,7 @@ public class PlaceCenter : MonoBehaviour
             Debug.Log("游戏已经开始");
             return;
         }
+        satrtGameAction?.Invoke();
         PlaceUIManager.Instance.StartGame(() =>
         {
             gameRuning = false;

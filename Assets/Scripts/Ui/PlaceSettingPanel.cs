@@ -10,7 +10,8 @@ public class PlaceSettingPanel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CheckAutoPlay();
+        CheckAutoPlay(DataNoDeleteManager.Instance.isAutoPlay,autoBtnImage,handle);
+        CheckAutoPlay(DataNoDeleteManager.Instance.addAutoPlayer,autoPlayerBtnImage,handleAutoPlayer);
     }
 
     // Update is called once per frame
@@ -54,6 +55,9 @@ public class PlaceSettingPanel : MonoBehaviour
 
     public Image autoBtnImage;
     public RectTransform handle;
+    
+    public Image autoPlayerBtnImage;
+    public RectTransform handleAutoPlayer;
     public void OnClickAutoBtn()
     {
         if (DataNoDeleteManager.Instance.isAutoPlay)
@@ -65,24 +69,38 @@ public class PlaceSettingPanel : MonoBehaviour
             DataNoDeleteManager.Instance.isAutoPlay = true;
         }
 
-        CheckAutoPlay();
+        CheckAutoPlay(DataNoDeleteManager.Instance.isAutoPlay,autoBtnImage,handle);
     }
 
-    public void CheckAutoPlay()
+    public void OnClickAutoPlayerBtn()
     {
-        if (!DataNoDeleteManager.Instance.isAutoPlay)
+        if (DataNoDeleteManager.Instance.addAutoPlayer)
         {
-            
-            handle.DOAnchorPosX(-50f, 0.4f).OnComplete(() =>
+            DataNoDeleteManager.Instance.addAutoPlayer = false;
+        }
+        else
+        {
+            DataNoDeleteManager.Instance.addAutoPlayer = true;
+        }
+
+        CheckAutoPlay(DataNoDeleteManager.Instance.addAutoPlayer,autoPlayerBtnImage,handleAutoPlayer);
+    }
+
+    public void CheckAutoPlay(bool status, Image img, RectTransform rect)
+    {
+        if (!status)
+        {
+
+            rect.DOAnchorPosX(-50f, 0.4f).OnComplete(() =>
             {
-                autoBtnImage.color =new Color(0.55f,0.55f,0.55f);
+                img.color = new Color(0.55f, 0.55f, 0.55f);
             });
         }
         else
         {
-            handle.DOAnchorPosX(50f, 0.4f).OnComplete(() =>
+            rect.DOAnchorPosX(50f, 0.4f).OnComplete(() =>
             {
-                autoBtnImage.color =new Color(1,0.625f,0.278f);
+                img.color = new Color(1, 0.625f, 0.278f);
             });
         }
     }
