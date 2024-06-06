@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TMPro;
-using Unity.Sentis.Layers;
 using UnityEngine;
 
 public class PlaceCenter : MonoBehaviour
@@ -56,6 +55,7 @@ public class PlaceCenter : MonoBehaviour
     int baseId = 0;
 
     List<Texture2D>? demoTextures = null;
+    Dictionary<string, Texture2D> demoTexturesDic = new Dictionary<string, Texture2D>();
 
     public string platform = "bilibili";
     public string anchorName = "anchor";
@@ -78,6 +78,8 @@ public class PlaceCenter : MonoBehaviour
 
         CreateTeam();
         demoTextures = LoadDemoResources();
+
+        demoTexturesDic = LoadDemoDicResources();
 
     }
 
@@ -194,22 +196,22 @@ public class PlaceCenter : MonoBehaviour
         return bubblTagObj;
     }
 
-    public void SayMessage(User user, string message)
-    {
-        // // 检查用户是否已经存在
-        // if (!users.ContainsKey(username))
-        // {
-        //     Debug.Log("用户不存在");
-        //     return;
-        // }
+    // public void SayMessage(User user, string message)
+    // {
+    //     // // 检查用户是否已经存在
+    //     // if (!users.ContainsKey(username))
+    //     // {
+    //     //     Debug.Log("用户不存在");
+    //     //     return;
+    //     // }
 
-        int teamId = users[user.Name].Camp;
+    //     int teamId = users[user.Name].Camp;
 
 
-        // 创建气泡
-        GameObject bubble = PlaceTeamManager.Instance.teamAreas[teamId - 1].CreateMessageBubbleOnPlayer(user.Name, message);
+    //     // 创建气泡
+    //     GameObject bubble = PlaceTeamManager.Instance.teamAreas[teamId - 1].CreateMessageBubbleOnPlayer(user.Name, message);
 
-    }
+    // }
 
     public bool CheckUser(string username)
     {
@@ -628,6 +630,34 @@ public class PlaceCenter : MonoBehaviour
     //     PlaceUIManager.Instance.endUI.ShowGIF(path);
     // }
 
+
+    public List<Instruction> GenerateImage(int ox, int oy, int max, string name)
+    {
+        // 图库
+        // 获取index 
+        if (demoTextures != null && demoTextures.Count > 0)
+        {
+            // Texture2D tex;
+            // demoTexturesDic.TryGetValue(name,out tex);
+            // if (tex == null)
+            // {
+            //     return new List<Instruction>();
+            // }
+            if (!demoTexturesDic.ContainsKey(name))
+            {
+                return new List<Instruction>();
+            }
+            Texture2D tex = demoTexturesDic[name];
+            // texture 2d
+            // Texture2D tex = Resources.Load<Texture2D>($"Images/{index}");
+            Texture2D retex = PlaceBoardManager.Instance.ScaleTextureProportionally(tex, max, max);
+
+            // 转换成 instruction
+            return Image2Instruction(retex, ox, oy);
+        }
+
+        return new List<Instruction>();
+    }
     public List<Instruction> GenerateRandomImage(int ox, int oy, int max)
     {
         // 图库
@@ -711,6 +741,50 @@ public class PlaceCenter : MonoBehaviour
         demoPath = Path.Combine(demoPath, "Demo");
         return LoadResources(demoPath);
 #endif
+    }
+    public Dictionary<string, Texture2D> LoadDemoDicResources()
+    {
+#if UNITY_EDITOR
+        return LoadDicResources("Assets/Images/Demo");
+#else
+        string demoPath = Application.streamingAssetsPath;
+        demoPath = Path.Combine(demoPath, "Demo");
+        return LoadDicResources(demoPath);
+#endif
+    }
+
+    public Dictionary<string, Texture2D> LoadDicResources(string imagePath)
+    {
+        Dictionary<string, Texture2D> texDic = new Dictionary<string, Texture2D>();
+        // List<Texture2D> texlist = new List<Texture2D>();
+        // 检查目录是否存在
+        if (Directory.Exists(imagePath))
+        {
+            // 获取目录中的所有文件
+            string[] files = Directory.GetFiles(imagePath);
+
+            foreach (string filePath in files)
+            {
+                // 检查文件是否是图片
+                if (IsImageFile(filePath))
+                {
+                    // 加载图片资源并添加到List
+                    Texture2D texture = LoadTexture(filePath);
+                    if (texture != null)
+                    {
+                        Debug.Log("Load Texture: " + filePath + " " + texture.width + " " + texture.height);
+                        string fname = Path.GetFileNameWithoutExtension(filePath);
+                        texDic.Add(fname, texture);
+                    }
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("Directory not found: " + imagePath);
+        }
+
+        return texDic;
     }
 
     public List<Texture2D> LoadResources(string imagePath)

@@ -1006,25 +1006,28 @@ public class PlaceInstructionManager : MonoBehaviour
             // case "/kill": // 除掉守护者，谁家
             // case "/k":
             //     break;
-            // case "/r":
-            //     if (parts.Length == 4)
-            //     {
-            //         int x, y, max;
-            //         string c;
-            //         c = parts[0]; // /d
-            //         x = int.Parse(parts[1]); // x
-            //         y = int.Parse(parts[2]); // y
-            //         max = int.Parse(parts[3]); // max
-            //         List<Instruction> IL = PlaceCenter.Instance.GenerateRandomImage(x, y, max);
-            //         if (IL.Count != 0)
-            //         {
-            //             IL.ForEach(i => user.instructionQueue.Enqueue(i));
-            //         }
-            //     }
-            //     // 从 已有的 图集 中 找一个 图
-            //     // 把 图 -> 指令
-            //     // 给到 player
-            //     break;
+            case "/roll":
+                if (parts.Length == 5)
+                {
+                    int x, y, max;
+                    string c,name;
+                    c = parts[0]; // /d
+                    x = int.Parse(parts[1]); // x
+                    y = int.Parse(parts[2]); // y
+                    max = int.Parse(parts[3]); // max
+                    name = parts[4]; // name
+                    List<Instruction> IL = PlaceCenter.Instance.GenerateImage(x, y, max,name);
+                    if (IL.Count != 0)
+                    {
+                        IL.ForEach(i => user.instructionQueue.Enqueue(i));
+                    }else {
+                        Debug.Log("roll 失败,或许名字key 不对");
+                    }
+                }
+                // 从 已有的 图集 中 找一个 图
+                // 把 图 -> 指令
+                // 给到 player
+                break;
             // case "/generate": // diffusion
             // case "/g":
             //     if (parts.Length >= 4)
@@ -1271,6 +1274,31 @@ public class PlaceInstructionManager : MonoBehaviour
             {// 快速画rect
                 DefaultRunChatCommand(user, "/" + msg);
             }
+            
+            // chinese
+            if (Regex.IsMatch(msg, FAST_DRAW_POINT_PATTERN_CHINESE))
+            { // 快速画点
+                msg = msg.Replace("点", "d");
+                DefaultRunChatCommand(user, "/" + msg);
+            }
+            else if (Regex.IsMatch(msg, FAST_LINE_PATTERN_CHINESE))
+            { // 快速画线
+                msg = msg.Replace("线", "l");
+                DefaultRunChatCommand(user, "/" + msg);
+            }
+            else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN_CHINESE))
+            {// 快速画圆
+                msg = msg.Replace("圆", "c");
+                DefaultRunChatCommand(user, "/" + msg);
+            }else if (Regex.IsMatch(msg, FAST_PAINT_PATTERN_CHINESE))
+            {// 快速画方块
+                msg = msg.Replace("面", "paint");
+                DefaultRunChatCommand(user, "/" + msg);
+            }else if (Regex.IsMatch(msg, FAST_RECT_PATTERN_CHINESE))
+            {// 快速画rect
+                msg = msg.Replace("矩形", "rect");
+                DefaultRunChatCommand(user, "/" + msg);
+            }
         }
         // List<string> selectList = new List<string>(){
         //     "蓝",
@@ -1280,7 +1308,7 @@ public class PlaceInstructionManager : MonoBehaviour
         // };
 
         // 第一次 加入游戏
-        string firstJoinFormat = @"1|11|111|2|22|222|蓝|绿|黄|紫|/a \d";
+        string firstJoinFormat = @"1|11|111|2|22|222|蓝|绿|/a \d";
 
         if (Regex.IsMatch(msg, firstJoinFormat))
         {
@@ -1413,6 +1441,12 @@ public class PlaceInstructionManager : MonoBehaviour
     public const string FAST_CIRCLE_PATTERN_NO_SLASH = @"(^c \d{1,3} \d{1,3} \d{1,3}$)|(^c \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
     public const string FAST_PAINT_PATTERN_NO_SLASH = @"(^p \d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|(^p \d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
     public const string FAST_RECT_PATTERN_NO_SLASH = @"(^r \d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|(^r \d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+
+    public const string FAST_DRAW_POINT_PATTERN_CHINESE = @"(^点 \d{1,3} \d{1,3}$)|(^点 \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_LINE_PATTERN_CHINESE = @"(^线 \d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)|(^线 \d{1,3} \d{1,3} \d{1,3} \d{1,3}$)";
+    public const string FAST_CIRCLE_PATTERN_CHINESE = @"(^圆 \d{1,3} \d{1,3} \d{1,3}$)|(^圆 \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_PAINT_PATTERN_CHINESE = @"(^面 \d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|(^p \d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_RECT_PATTERN_CHINESE = @"(^方框 \d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|(^方框 \d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
 
 
 }
