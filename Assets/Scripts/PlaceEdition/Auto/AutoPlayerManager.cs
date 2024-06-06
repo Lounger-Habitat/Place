@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class AutoPlayerManager : MonoBehaviour
 {
@@ -10,16 +12,29 @@ public class AutoPlayerManager : MonoBehaviour
     public User team2Leader;
 
     // Start is called before the first frame update
-    void Start()
+    // void Start()
+    // {
+    //     StartCoroutine(AddAutoPlayer());
+    // }
+    private void Start()
     {
-        StartCoroutine(AddAutoPlayer());
+        PlaceCenter.Instance.satrtGameAction += OnStartGameCheckAutoStatus;
     }
 
+    //开局时检查是否要自动生成队伍帮手
+    public void OnStartGameCheckAutoStatus()
+    {
+        if (DataNoDeleteManager.Instance.addAutoPlayer)
+        {
+            StartCoroutine(AddAutoPlayer());
+        }
+    }
+    
     IEnumerator AddAutoPlayer()
     {
         // 生成队伍负责人 两个人
-        team1Leader = new User("困困");
-        team2Leader = new User("泰美");
+        team1Leader = new User("困困-帮手");
+        team2Leader = new User("泰美-帮手");
 
         // 设置 阵营
         team1Leader.Camp = 1;

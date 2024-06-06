@@ -23,7 +23,7 @@ public class DataNoDeleteManager : MonoBehaviour
   
 
     public bool isAutoPlay = false;
-
+    public bool addAutoPlayer = false;
     public int playTime = 15;
     public int maxNumber = 25;
 }
