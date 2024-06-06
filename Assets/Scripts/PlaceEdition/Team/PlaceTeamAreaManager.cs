@@ -72,10 +72,10 @@ public class PlaceTeamAreaManager : MonoBehaviour
         foreach (User u in userList)
         {
             //  额外 墨水
-            exInkRate += (u.Level - 1)  / 10;
+            exInkRate += (u.Level - 1)  / 10f;
             u.contributionRate = (0.1f * u.genInkCount) / teaminfo.hisExInk;
         }
-        inkRate = teaminfo.currentTeamNumberCount + exInkRate;
+        inkRate = teaminfo.currentTeamNumberCount / 10f + exInkRate;
         teaminfo.ink += inkRate ;
         teaminfo.hisInk += inkRate ;
         //Debug.Log("ink " + ink);

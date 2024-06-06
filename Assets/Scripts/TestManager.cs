@@ -105,7 +105,7 @@ public class TestManager : MonoBehaviour
         // 按下,，执行指令  接受 指令
         if (Input.GetKeyDown(KeyCode.Comma))
         {
-            PlaceInstructionManager.Instance.DefaultGiftCommand(playerName, gift);
+            PlaceInstructionManager.Instance.DefaultGiftCommand(playerName, gift, 1);
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -113,7 +113,7 @@ public class TestManager : MonoBehaviour
             // 遍历所有用户
             foreach (var user in users)
             {
-                PlaceInstructionManager.Instance.DefaultGiftCommand(user, gift);
+                PlaceInstructionManager.Instance.DefaultGiftCommand(user, gift, 1);
             }
 
         }
@@ -355,7 +355,7 @@ public class TestManager : MonoBehaviour
     {
 
         // string[] gifts = { "0.1", "1", "1.9", "5.2", "9.9", "19.9", "29.9", "52", "66.6", "88.8", "99.9", "120"};
-        string[] gifts = { "0.1", "1", "1.9", "5.2", "9.9" };
+        string[] gifts = { "1", "10", "20", "52", "99" };
         int grand = Random.Range(0, gifts.Length);
         string giftIns = gifts[grand];
 
@@ -385,7 +385,7 @@ public class TestManager : MonoBehaviour
     {
         while (PlaceCenter.Instance.gameRuning) // 无限循环生成指令
         {
-            // 随机等待一段时间
+            // 随机等待一段时间 , 0.1 - 2s
             float waitTime = Random.Range(minInterval, maxInterval);
             yield return new WaitForSeconds(waitTime);
 
@@ -420,17 +420,17 @@ public class TestManager : MonoBehaviour
 
 
         float rand = Random.Range(0f, 1f);
-        if (rand < 0.95f)
+        if (rand < 0.99f)
         {
             string drawIns = RandomGenDrawIns();
             // Debug.Log($"{u.Name} 执行 ({drawIns}) 指令");
             PlaceInstructionManager.Instance.DefaultRunChatCommand(u, drawIns);
         }
-        else if (rand < 1f)
+        else if (rand < 1f) // 百分之一的几率 送礼物
         {
             string giftIns = RandomGenGiftIns();
             // Debug.Log($"{u.Name} 赠送 ({giftIns}) 颜料");
-            PlaceInstructionManager.Instance.DefaultGiftCommand(user, giftIns);
+            PlaceInstructionManager.Instance.DefaultGiftCommand(user, giftIns, 1);
         }
     }
 

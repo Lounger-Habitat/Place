@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityNavMeshAgent;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Playables;
 
 [System.Serializable]
 public class User
@@ -43,7 +41,7 @@ public class User
     public int level;               // 玩家等级 ， 用来升级
     public int Level { get { return level; } set { level = value; } }
     public PlayerState currentState; // 玩家当前状态
-    public int score { get; set; }  // 玩家当前分数
+    public int score;  // 玩家当前分数
     public int currentCarryingInkCount = 0;  // 玩家 身上携带的 颜料数量
     public int currentCarryingInsCount = 0; // 玩家 身上携带的 最大指令数量
     public int maxCarryingInkCount = 10; // 玩家 身上携带的 颜料数量
@@ -152,10 +150,16 @@ public class User
             20n^2+180n−2S=0
             n = (-180+sqrt(32400+160score))/40
             n = [-(2a-d) + sqrt((2a-d)^2+8dS_n)] / 2d
-            n = [-199 + sqrt(39961+8*score)] / 2
+            n = [-199 + sqrt(39961+8*score)] / 2    when d = 1
+            n = [-(2*100 - d) + sqrt((2*100 - d)^2 + 8*d*score)] / 2d
+            n = [-(200 - 10) + sqrt((200 - 10)^2 + 80*score)] / 20
+            n = [-(190) + sqrt(36100 + 80*score)] / 20
         */
         // int n = (int)(-180 + Mathf.Sqrt(32400 + 160 * score)) / 40;
-        int n = (int)(-199 + Mathf.Sqrt(39601 + 8 * score)) / 2;
+        // int n = (int)(-199 + Mathf.Sqrt(39601 + 8 * score)) / 2;
+        // int d = 20;
+        // int n = (int)(-(200 - d) + Mathf.Sqrt( Mathf.Pow(200 - d,2) + 8 * d * score)) / 2 * d;
+        int n = (int)(-190 + Mathf.Sqrt(36100 + 80 * score)) / 20;
         return n;
     }
 }

@@ -4,8 +4,7 @@ using OpenBLive.Runtime.Data;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Text.RegularExpressions;
-using System.Net;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
+using TMPro;
 
 public class PlaceInstructionManager : MonoBehaviour
 {
@@ -150,16 +149,16 @@ public class PlaceInstructionManager : MonoBehaviour
                     PlaceCenter.Instance.JoinGame(user, parts[1]);
                 }
                 break;
-            case "/say":
-                if (parts.Length >= 2)
-                {
-                    // 这里调用发送消息的逻辑
-                    // SayMessage(string.Join(" ", parts, 1, parts.Length - 1));
-                    Debug.Log(parts[1]);
-                    string message = parts[1];
-                    PlaceCenter.Instance.SayMessage(user, message);
-                }
-                break;
+            // case "/say":
+            //     if (parts.Length >= 2)
+            //     {
+            //         // 这里调用发送消息的逻辑
+            //         // SayMessage(string.Join(" ", parts, 1, parts.Length - 1));
+            //         Debug.Log(parts[1]);
+            //         string message = parts[1];
+            //         PlaceCenter.Instance.SayMessage(user, message);
+            //     }
+            //     break;
             case "/draw":
             case "/d":
                 if (parts.Length >= 3)
@@ -295,15 +294,30 @@ public class PlaceInstructionManager : MonoBehaviour
                             break;
                         }
 
-                        // ======= Line2point =======
-                        // List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
-                        // foreach ((int, int) point in points)
-                        // {
-                        //     Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
-                        //     user.instructionQueue.Enqueue(drawIns);
-                        // }
-                        // ======= 一笔画 ========
-                        user.instructionQueue.Enqueue(ins_l);
+
+
+
+                        if (user.level > 50)
+                        {
+                            // ======= 一笔画 ========
+                            user.instructionQueue.Enqueue(ins_l);
+                        }
+                        else
+                        {
+                            // ======= Line2point =======
+                            List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
+                            foreach ((int, int) point in points)
+                            {
+                                Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                                user.instructionQueue.Enqueue(drawIns);
+                            }
+                        }
+
+                        // 手动 输入 指令 + 大贡献
+                        user.score += 30;
+                        user.lastPoint = (ex, ey);
+
+
                     }
                     else if (parts.Length == 6)
                     {
@@ -346,19 +360,31 @@ public class PlaceInstructionManager : MonoBehaviour
                             break;
                         }
 
-                        // ======= Line2point =======
 
-                        // List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
-                        // foreach ((int, int) point in points)
-                        // {
-                        //     Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
-                        //     user.instructionQueue.Enqueue(drawIns);
-                        // }
 
-                        // ======= 一笔画 ========
+                        if (user.level < 50)
+                        {
+
+                            // ======= Line2point =======
+
+                            List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
+                            foreach ((int, int) point in points)
+                            {
+                                Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                                user.instructionQueue.Enqueue(drawIns);
+                            }
+                        }
+                        else
+                        {
+                            // ======= 一笔画 ========
+                            user.instructionQueue.Enqueue(ins_l);
+                        }
+
+                        user.score += 30;
                         user.lastColor = color;
                         user.lastPoint = (ex, ey);
-                        user.instructionQueue.Enqueue(ins_l);
+
+
                     }
                     else if (parts.Length == 8)
                     {
@@ -385,18 +411,25 @@ public class PlaceInstructionManager : MonoBehaviour
                             break;
                         }
 
-                        // ======= Line2point =======
+                        if (user.level < 50)
+                        {
 
-                        // List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
-                        // foreach ((int, int) point in points)
-                        // {
-                        //     Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
-                        //     user.instructionQueue.Enqueue(drawIns);
-                        // }
+                            // ======= Line2point =======
 
-                        // ======= 一笔画 ========
+                            List<(int, int)> points = PlaceBoardManager.Instance.GetLinePoints(x, y, ex, ey);
+                            foreach ((int, int) point in points)
+                            {
+                                Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
+                                user.instructionQueue.Enqueue(drawIns);
+                            }
+                        }
+                        else
+                        {
+                            // ======= 一笔画 ========
+                            user.instructionQueue.Enqueue(ins_l);
+                        }
+                        user.score += 30;
                         user.lastPoint = (ex, ey);
-                        user.instructionQueue.Enqueue(ins_l);
                     }
                     else
                     {
@@ -446,6 +479,7 @@ public class PlaceInstructionManager : MonoBehaviour
                             Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
                             user.instructionQueue.Enqueue(drawIns);
                         }
+                        user.score += 30;
                     }
                     else if (parts.Length == 6)
                     {
@@ -492,9 +526,10 @@ public class PlaceInstructionManager : MonoBehaviour
                         foreach ((int, int) point in points)
                         {
                             Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
-                            user.lastColor = color;
                             user.instructionQueue.Enqueue(drawIns);
                         }
+                        user.score += 30;
+                        user.lastColor = color;
                     }
                     else if (parts.Length == 8)
                     {
@@ -528,6 +563,7 @@ public class PlaceInstructionManager : MonoBehaviour
                             Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
                             user.instructionQueue.Enqueue(drawIns);
                         }
+                        user.score += 30;
                     }
                     else
                     {
@@ -539,8 +575,8 @@ public class PlaceInstructionManager : MonoBehaviour
                     Debug.LogError("输入字符串格式不正确");
                 }
                 break;
-            case "/rectangle": // 矩形 无填充
-            case "/rect":
+            case "/rect": // 矩形 无填充
+            case "/r":
                 if (parts.Length >= 5)
                 {
                     if (parts.Length == 5)
@@ -569,7 +605,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         }
 
                         // ======= Rect2point =======
-                        if (PlaceCenter.Instance.Low)
+                        if (user.level < 50)
                         {
                             List<(int, int)> points = PlaceBoardManager.Instance.GetRectPoints(x, y, dx, dy);
                             foreach ((int, int) point in points)
@@ -578,7 +614,7 @@ public class PlaceInstructionManager : MonoBehaviour
                                 user.instructionQueue.Enqueue(drawIns);
                             }
                         }
-                        else if (PlaceCenter.Instance.High)
+                        else
                         {
                             // ====== Rect2Line =======
                             List<(int, int, int, int)> lines = PlaceBoardManager.Instance.GetRectLines(x, y, dx, dy);
@@ -588,6 +624,7 @@ public class PlaceInstructionManager : MonoBehaviour
                                 user.instructionQueue.Enqueue(lineIns);
                             }
                         }
+                        user.score += 30;
                     }
                     else if (parts.Length == 6)
                     {
@@ -630,7 +667,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         }
 
                         // ======= Rect2point =======
-                        if (PlaceCenter.Instance.Low)
+                        if (user.level < 50)
                         {
                             List<(int, int)> points = PlaceBoardManager.Instance.GetRectPoints(x, y, dx, dy);
                             foreach ((int, int) point in points)
@@ -640,7 +677,7 @@ public class PlaceInstructionManager : MonoBehaviour
                                 user.instructionQueue.Enqueue(drawIns);
                             }
                         }
-                        else if (PlaceCenter.Instance.High)
+                        else
                         {
                             // ====== Rect2Line =======
                             List<(int, int, int, int)> lines = PlaceBoardManager.Instance.GetRectLines(x, y, dx, dy);
@@ -651,6 +688,7 @@ public class PlaceInstructionManager : MonoBehaviour
                                 user.instructionQueue.Enqueue(lineIns);
                             }
                         }
+                        user.score += 30;
                     }
                     else if (parts.Length == 8)
                     {
@@ -678,7 +716,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         }
 
                         // ======= Rect2point =======
-                        if (PlaceCenter.Instance.Low)
+                        if (user.level < 50)
                         {
                             List<(int, int)> points = PlaceBoardManager.Instance.GetRectPoints(x, y, dx, dy);
                             foreach ((int, int) point in points)
@@ -687,7 +725,7 @@ public class PlaceInstructionManager : MonoBehaviour
                                 user.instructionQueue.Enqueue(drawIns);
                             }
                         }
-                        else if (PlaceCenter.Instance.High)
+                        else
                         {
                             // ====== Rect2Line =======
                             List<(int, int, int, int)> lines = PlaceBoardManager.Instance.GetRectLines(x, y, dx, dy);
@@ -697,6 +735,7 @@ public class PlaceInstructionManager : MonoBehaviour
                                 user.instructionQueue.Enqueue(lineIns);
                             }
                         }
+                        user.score += 30;
 
                     }
                     else
@@ -738,6 +777,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: color.r, g: color.g, b: color.b);
                         user.instructionQueue.Enqueue(drawIns);
                     }
+                    user.score += 30;
                 }
                 else if (parts.Length == 5)
                 {
@@ -785,6 +825,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         user.lastColor = color;
                         user.instructionQueue.Enqueue(drawIns);
                     }
+                    user.score += 30;
                 }
                 else if (parts.Length == 7)
                 {
@@ -817,6 +858,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         Instruction drawIns = new Instruction("/d", point.Item1, point.Item2, r: r, g: g, b: b);
                         user.instructionQueue.Enqueue(drawIns);
                     }
+                    user.score += 30;
                 }
                 else
                 {
@@ -901,6 +943,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
                     user.lastPoint = (x, y);
                     user.lastColor = color;
+                    user.score += 30;
                 }
                 else if (parts.Length == 5)
                 { // 多颜色
@@ -933,6 +976,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     x = Mathf.Clamp(x, 0, PlaceBoardManager.Instance.width - 1);
                     y = Mathf.Clamp(y, 0, PlaceBoardManager.Instance.height - 1);
                     user.lastPoint = (x, y);
+                    user.score += 30;
                 }
                 break;
             case "visual":
@@ -951,29 +995,33 @@ public class PlaceInstructionManager : MonoBehaviour
                     Debug.LogError("输入字符串格式不正确");
                 }
                 break;
-            case "gs":
-                break;
-            case "/take": // 拿别人颜料 ，谁家
-            case "/t":
-                break;
-            case "/defense": // 防止别人拿 ，状态
-            case "/de":
-                break;
-            case "/kill": // 除掉守护者，谁家
-            case "/k":
-                break;
-            case "/r":
-                if (parts.Length == 3)
+            // case "gs":
+            //     break;
+            // case "/take": // 拿别人颜料 ，谁家
+            // case "/t":
+            //     break;
+            // case "/defense": // 防止别人拿 ，状态
+            // case "/de":
+            //     break;
+            // case "/kill": // 除掉守护者，谁家
+            // case "/k":
+            //     break;
+            case "/roll":
+                if (parts.Length == 5)
                 {
-                    int x, y;
-                    string c;
+                    int x, y, max;
+                    string c,name;
                     c = parts[0]; // /d
                     x = int.Parse(parts[1]); // x
                     y = int.Parse(parts[2]); // y
-                    List<Instruction> IL = PlaceCenter.Instance.GenerateRandomImage(x, y);
+                    max = int.Parse(parts[3]); // max
+                    name = parts[4]; // name
+                    List<Instruction> IL = PlaceCenter.Instance.GenerateImage(x, y, max,name);
                     if (IL.Count != 0)
                     {
                         IL.ForEach(i => user.instructionQueue.Enqueue(i));
+                    }else {
+                        Debug.Log("roll 失败,或许名字key 不对");
                     }
                 }
                 // 从 已有的 图集 中 找一个 图
@@ -1010,8 +1058,8 @@ public class PlaceInstructionManager : MonoBehaviour
             //         Debug.LogError("输入字符串格式不正确");
             //     }
             //     break;
-            case "/f":
-                break; // 2024-05-09 :⚠️ 暂时废弃
+            // case "/f":
+            //     break; // 2024-05-09 :⚠️ 暂时废弃
                        // if (parts.Length == 4)
                        // {
                        //     int x, y, r, g, b;
@@ -1041,41 +1089,42 @@ public class PlaceInstructionManager : MonoBehaviour
                        //     }
                        // }
                        // break;
-            case "/test":
-                if (parts.Length == 3)
-                {
-                    string c, id, message;
-                    c = parts[0]; // /d
-                    id = parts[1]; // name
-                    message = parts[2]; // y
-                    // Debug.Log($"{c} {name} {message}");
-                    string name = FindById(id);
-                    if (name == "")
-                    {
-                        Debug.Log("未找到对应的用户");
-                        return;
-                    }
-                    DefaultGiftCommand(name, message);
-                }
-                else if (parts.Length == 4)
-                {
-                    string c, id;
-                    long count;
-                    c = parts[0]; // /d
-                    id = parts[1]; // name
-                    count = long.Parse(parts[3]); // count
-                    string name = FindById(id);
-                    User u = PlaceCenter.Instance.users[name];
-                    // Debug.Log($"{c} {name} {count}");
-                    PlaceCenter.Instance.GainLikePower(u, count);
-                }
-                // 从 已有的 图集 中 找一个 图
-                // 把 图 -> 指令
-                // 给到 player
-                break;
+            // case "/test":
+            //     if (parts.Length == 3)
+            //     {
+            //         string c, id, message;
+            //         c = parts[0]; // /d
+            //         id = parts[1]; // name
+            //         message = parts[2]; // y
+            //         // Debug.Log($"{c} {name} {message}");
+            //         string name = FindById(id);
+            //         if (name == "")
+            //         {
+            //             Debug.Log("未找到对应的用户");
+            //             return;
+            //         }
+            //         DefaultGiftCommand(name, message, 1);
+            //     }
+            //     else if (parts.Length == 4)
+            //     {
+            //         string c, id;
+            //         long count;
+            //         c = parts[0]; // /d
+            //         id = parts[1]; // name
+            //         count = long.Parse(parts[3]); // count
+            //         string name = FindById(id);
+            //         User u = PlaceCenter.Instance.users[name];
+            //         // Debug.Log($"{c} {name} {count}");
+            //         PlaceCenter.Instance.GainLikePower(u, count);
+            //     }
+            //     // 从 已有的 图集 中 找一个 图
+            //     // 把 图 -> 指令
+            //     // 给到 player
+            //     break;
         }
     }
-    string FindById(string id) {
+    string FindById(string id)
+    {
         foreach (var item in PlaceCenter.Instance.users)
         {
             if (item.Value.Id.ToString() == id)
@@ -1085,13 +1134,24 @@ public class PlaceInstructionManager : MonoBehaviour
         }
         return "";
     }
-    public void DefaultGiftCommand(string username, string command)
+    public void DefaultGiftCommand(string username, string command, long num)
     {
         // 找到 对应 的 礼物
         string parts = command.Trim();
         float message = float.Parse(parts);
-        PlaceCenter.Instance.GainPower(username, message);
+        StartCoroutine(GainMultiPower(username, message, num));
+        // PlaceCenter.Instance.GainPower(username, message);
     }
+
+    IEnumerator GainMultiPower(string username, float message, long num)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            PlaceCenter.Instance.GainPower(username, message);
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
+
     public void DefaultLikeCommand(Like like)
     {
         string username = like.uname;
@@ -1190,6 +1250,55 @@ public class PlaceInstructionManager : MonoBehaviour
             {// 快速画圆
                 DefaultRunChatCommand(user, "/c " + msg);
             }
+
+            // no slash
+            if (Regex.IsMatch(msg, FAST_DRAW_POINT_PATTERN_NO_SLASH))
+            { // 快速画点
+                DefaultRunChatCommand(user, "/" + msg);
+            }
+            else if (Regex.IsMatch(msg, FAST_LINE_PATTERN_NO_SLASH))
+            { // 快速画线
+                DefaultRunChatCommand(user, "/" + msg);
+            }
+            else if (Regex.IsMatch(msg, FAST_DRAW_DIY_PATTERN_NO_SLASH))
+            { // 快速画自定义线
+                DefaultRunChatCommand(user, "/" + msg);
+            }
+            else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN_NO_SLASH))
+            {// 快速画圆
+                DefaultRunChatCommand(user, "/" + msg);
+            }else if (Regex.IsMatch(msg, FAST_PAINT_PATTERN_NO_SLASH))
+            {// 快速画方块
+                DefaultRunChatCommand(user, "/" + msg);
+            }else if (Regex.IsMatch(msg, FAST_RECT_PATTERN_NO_SLASH))
+            {// 快速画rect
+                DefaultRunChatCommand(user, "/" + msg);
+            }
+            
+            // chinese
+            if (Regex.IsMatch(msg, FAST_DRAW_POINT_PATTERN_CHINESE))
+            { // 快速画点
+                msg = msg.Replace("点", "d");
+                DefaultRunChatCommand(user, "/" + msg);
+            }
+            else if (Regex.IsMatch(msg, FAST_LINE_PATTERN_CHINESE))
+            { // 快速画线
+                msg = msg.Replace("线", "l");
+                DefaultRunChatCommand(user, "/" + msg);
+            }
+            else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN_CHINESE))
+            {// 快速画圆
+                msg = msg.Replace("圆", "c");
+                DefaultRunChatCommand(user, "/" + msg);
+            }else if (Regex.IsMatch(msg, FAST_PAINT_PATTERN_CHINESE))
+            {// 快速画方块
+                msg = msg.Replace("面", "paint");
+                DefaultRunChatCommand(user, "/" + msg);
+            }else if (Regex.IsMatch(msg, FAST_RECT_PATTERN_CHINESE))
+            {// 快速画rect
+                msg = msg.Replace("矩形", "rect");
+                DefaultRunChatCommand(user, "/" + msg);
+            }
         }
         // List<string> selectList = new List<string>(){
         //     "蓝",
@@ -1199,7 +1308,7 @@ public class PlaceInstructionManager : MonoBehaviour
         // };
 
         // 第一次 加入游戏
-        string firstJoinFormat = @"1|11|111|2|22|222|蓝|绿|黄|紫|/a \d";
+        string firstJoinFormat = @"1|11|111|2|22|222|蓝|绿|/a \d";
 
         if (Regex.IsMatch(msg, firstJoinFormat))
         {
@@ -1322,14 +1431,22 @@ public class PlaceInstructionManager : MonoBehaviour
     public const string FAST_LINE_PATTERN = @"(^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)|(^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)";
     public const string FAST_DRAW_DIY_PATTERN = @"(^[1-9]\d*$)|(^[1-9]\d* [\u4E00-\u9FFF]+$)";
     public const string FAST_CIRCLE_PATTERN = @"(^\d{1,3} \d{1,3} \d{1,3}$)|(^\d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_PAINT_PATTERN = @"(^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|(^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_RECT_PATTERN = @"(^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|(^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
 
     // fast no slash
-    public const string FAST_DRAW_POINT_PATTERN_NO_SLASH = @"d (^\d{1,3} \d{1,3}$)|d (^\d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
-    public const string FAST_LINE_PATTERN_NO_SLASH = @"l (^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)|l (^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)";
-    public const string FAST_DRAW_DIY_PATTERN_NO_SLASH = @"m (^[1-9]\d*$)|m (^[1-9]\d* [\u4E00-\u9FFF]+$)";
-    public const string FAST_CIRCLE_PATTERN_NO_SLASH = @"c (^\d{1,3} \d{1,3} \d{1,3}$)|c (^\d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
-    public const string FAST_PAINT_PATTERN_NO_SLASH = @"p (^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|p (^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
-    public const string FAST_RECT_PATTERN_NO_SLASH = @"rect (^\d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|rect (^\d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_DRAW_POINT_PATTERN_NO_SLASH = @"(^d \d{1,3} \d{1,3}$)|(^d \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_LINE_PATTERN_NO_SLASH = @"(^l \d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)|(^l \d{1,3} \d{1,3} \d{1,3} \d{1,3}$)";
+    public const string FAST_DRAW_DIY_PATTERN_NO_SLASH = @"(^m [1-9]\d*$)|(^m [1-9]\d* [\u4E00-\u9FFF]+$)";
+    public const string FAST_CIRCLE_PATTERN_NO_SLASH = @"(^c \d{1,3} \d{1,3} \d{1,3}$)|(^c \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_PAINT_PATTERN_NO_SLASH = @"(^p \d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|(^p \d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_RECT_PATTERN_NO_SLASH = @"(^r \d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|(^r \d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+
+    public const string FAST_DRAW_POINT_PATTERN_CHINESE = @"(^点 \d{1,3} \d{1,3}$)|(^点 \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_LINE_PATTERN_CHINESE = @"(^线 \d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)|(^线 \d{1,3} \d{1,3} \d{1,3} \d{1,3}$)";
+    public const string FAST_CIRCLE_PATTERN_CHINESE = @"(^圆 \d{1,3} \d{1,3} \d{1,3}$)|(^圆 \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_PAINT_PATTERN_CHINESE = @"(^面 \d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|(^p \d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
+    public const string FAST_RECT_PATTERN_CHINESE = @"(^方框 \d{1,3} \d{1,3} \d{1,3} \d{1,3}$)|(^方框 \d{1,3} \d{1,3} \d{1,3} \d{1,3} [\u4E00-\u9FFF]+$)";
 
 
 }

@@ -59,6 +59,7 @@ public class PlaceGalleryManager : MonoBehaviour
 
     public void OpenGallery()
     {
+        //artPrefab.SetActive(false);
         gameObject.SetActive(true);
         (transform as RectTransform).anchoredPosition = new Vector2(0, 0);
     }
@@ -176,7 +177,9 @@ public class PlaceGalleryManager : MonoBehaviour
             //     csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             // }
             GameObject art = Instantiate(artPrefab);
-            art.transform.parent = contentParent.transform;
+            //artPrefab.SetActive(true);
+            //art.transform.parent = contentParent.transform;
+            art.transform.SetParent(contentParent, false);
             art.name = artsInfo[i].artName;
             art.GetComponent<PlaceArtItem>().artInfo = artsInfo[i];
             art.GetComponent<PlaceArtItem>().DisPlayArt();

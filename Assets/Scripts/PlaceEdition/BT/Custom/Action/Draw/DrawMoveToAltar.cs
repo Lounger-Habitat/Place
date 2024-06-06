@@ -28,7 +28,7 @@ public class DrawMoveToAltar : PlaceAction
         Vector2 positionA = new Vector2(transform.position.x, transform.position.z);
         
 
-        if (Vector2.Distance(positionA, targetPosition) < 2f)
+        if (Vector2.Distance(positionA, targetPosition) < 3f)
         {
             return TaskStatus.Success;
         }
@@ -45,11 +45,27 @@ public class DrawMoveToAltar : PlaceAction
 
     void GetTargetPoint()
     {
-        randPosition = new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f));
-        Vector2 positionB = new Vector2(base.pc.target.position.x, base.pc.target.position.z);
-        targetPosition = positionB + randPosition;
+        randPosition = new Vector2(GetRandom(), GetRandom());
+        targetPosition = new Vector2(base.pc.target.position.x, base.pc.target.position.z) + randPosition;
         targetPositionV3 = new Vector3(targetPosition.x, pc.target.position.y, targetPosition.y);
         targetPositionV3 = NavMesh.SamplePosition(targetPositionV3, out NavMeshHit hit, 1.0f, NavMesh.AllAreas) ? hit.position : targetPositionV3;
         targetPosition = new Vector2(targetPositionV3.x, targetPositionV3.z);
+    }
+
+    float GetRandom() {
+        // 随机决定选择哪个区间
+        bool selectFirstRange = Random.Range(0, 2) == 0; // 0 表示选第一个区间，1 表示选第二个区间
+        float randomNumber;
+        if (selectFirstRange)
+        {
+            // 在第一个区间内生成随机浮点数
+            randomNumber = Random.Range(-6f, -2.5f);
+        }
+        else
+        {
+            // 在第二个区间内生成随机浮点数
+            randomNumber = Random.Range(2.5f, 6f);
+        }
+        return randomNumber;
     }
 }

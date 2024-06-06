@@ -24,7 +24,9 @@ public class PlaceBoardManager : MonoBehaviour
     public int width = 500;
     public Texture2D defaultTexture;
     public int recorderTime = 6;
+    // 像素信息 ， 0 为未涂色，>0 为涂色, 数字代表队伍
     public int[] pixelsInfos;
+    // 像素用户信息， 0 为未涂色，>0 为涂色, 数字代表用户
     public int[] pixelsUserInfos;
 
     // 画作唯一id
@@ -336,16 +338,16 @@ public class PlaceBoardManager : MonoBehaviour
             Debug.LogError("Source texture is not readable. Please enable 'Read/Write Enabled' in import settings.");
             return null;
         }
-        float sourceWidth = source.width;
-        float sourceHeight = source.height;
-        float targetWidth = maxWidth;
-        float targetHeight = maxHeight;
-        float widthRatio = targetWidth / sourceWidth;
-        float heightRatio = targetHeight / sourceHeight;
-        // float ratio = Mathf.Min(widthRatio, heightRatio);
+        float sourceWidth = source.width; // 原 宽
+        float sourceHeight = source.height; // 原 高
+        float targetWidth = maxWidth;       // 限制最大 宽
+        float targetHeight = maxHeight;     // 限制最大 高
+        float widthRatio = targetWidth / sourceWidth;   // 宽比例
+        float heightRatio = targetHeight / sourceHeight; // 高比例
+        float ratio = Mathf.Min(widthRatio, heightRatio);
 
-        int newWidth = Mathf.RoundToInt(sourceWidth * widthRatio);
-        int newHeight = Mathf.RoundToInt(sourceHeight * heightRatio);
+        int newWidth = Mathf.RoundToInt(sourceWidth * ratio);
+        int newHeight = Mathf.RoundToInt(sourceHeight * ratio);
 
         Texture2D newTexture = new Texture2D(newWidth, newHeight, TextureFormat.RGBA32, false);
 
@@ -813,7 +815,7 @@ public class PlaceBoardManager : MonoBehaviour
         {
             return ins.x < width && ins.y < height && ins.ex < width && ins.ey < height && ins.x >= 0 && ins.y >= 0 && ins.ex >= 0 && ins.ey >= 0;
         }
-        else if (ins.mode == "/paint" || ins.mode == "/p" || ins.mode == "/rectangle" || ins.mode == "/rect")
+        else if (ins.mode == "/paint" || ins.mode == "/p" || ins.mode == "/rect" || ins.mode == "/r")
         {
             return ins.x < width && ins.y < height && ins.dx < width - ins.x && ins.dy < height - ins.y && ins.x >= 0 && ins.y >= 0 && ins.dx >= 0 && ins.dy >= 0;
         }

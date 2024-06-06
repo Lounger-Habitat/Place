@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -40,6 +41,37 @@ public class PlaceBiliLoginManager : MonoBehaviour
     public UnityEvent ShowEvent;//显示UI时触发
     public UnityEvent HideEvent;//隐藏UI时触发
 
+    public static PlaceBiliLoginManager Instance { get; private set; }
+
+    public bool connected = false;
+
+    // public static PlaceBiliLoginManager Instance {
+    //     get
+    //     {
+    //         if (instance == null)
+    //         {
+    //             instance = FindObjectOfType<PlaceBiliLoginManager>();
+    //             DontDestroyOnLoad(instance);
+    //         }
+    //         return instance;
+    //     }
+    // }
+
+    void Awake()
+    {
+
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }else {
+            if (Instance != this) {
+                Destroy(gameObject);
+            }
+        }
+    }
+
+
     public virtual void Initial()
     {
         //config read and init
@@ -72,11 +104,22 @@ public class PlaceBiliLoginManager : MonoBehaviour
 
 
         //init openblive sdk
-        if (ConnectViaCode.Instance != null)
+        if (PlaceBiliNetManager.Instance != null)
         {
-            ConnectViaCode.Instance.ConnectSuccess += LinkSuccess;
-            ConnectViaCode.Instance.ConnectFailure += LinkFailed;
+            PlaceBiliNetManager.Instance.ConnectSuccess += LinkSuccess;
+            PlaceBiliNetManager.Instance.ConnectFailure += LinkFailed;
         }
+
+        LinkSuccessEvent.AddListener(Connected);
+
+        if (IdCodeInputField.text != string.Empty) {
+            if (connected == false) {
+                StartToPlay();
+            }else {
+                Hide();
+            }
+        }
+
     }
 
     /// <summary>
@@ -140,7 +183,6 @@ public class PlaceBiliLoginManager : MonoBehaviour
             BilibiliPlayerPrefs.SetString(IdCodeSaveKey, IdCode);
         }
         Debug.Log("连接成功");
-        Hide();
         LinkSuccessEvent?.Invoke();
     }
 
@@ -187,4 +229,9 @@ public class PlaceBiliLoginManager : MonoBehaviour
     }
     #endregion
 
+
+    void Connected() {
+        connected = true;
+        Hide();
+    }
 }

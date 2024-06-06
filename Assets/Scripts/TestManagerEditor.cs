@@ -35,51 +35,38 @@ public class TestManagerEditor : Editor
         {
            // 调用MyScript中的DoSomething方法
            //
-           ((TestManager)target).SendGift(0.1f);
+           ((TestManager)target).SendGift(1f);
         }
         if (GUILayout.Button("¥1"))
         {
            // 调用MyScript中的DoSomething方法
-           ((TestManager)target).SendGift(1f);
+           ((TestManager)target).SendGift(10f);
         }
-        if (GUILayout.Button("¥1.9"))
+        if (GUILayout.Button("¥2"))
         {
-           ((TestManager)target).SendGift(1.9f);
+           ((TestManager)target).SendGift(20f);
         }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         // 如果按钮被点击
         if (GUILayout.Button("¥5.2"))
         {
-           ((TestManager)target).SendGift(5.2f);
+           ((TestManager)target).SendGift(52);
         }
         if (GUILayout.Button("¥9.9"))
         {
-            ((TestManager)target).SendGift(9.9f);
+            ((TestManager)target).SendGift(99f);
         }
-        if (GUILayout.Button("¥88.8"))
+        if (GUILayout.Button("¥19.9"))
         {
-           // 调用MyScript中的DoSomething方法
-           //
+           ((TestManager)target).SendGift(199f);
         }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         // 如果按钮被点击
-        if (GUILayout.Button("¥120"))
+        if (GUILayout.Button("¥29.9"))
         {
-           // 调用MyScript中的DoSomething方法
-           //
-        }
-        if (GUILayout.Button("¥188.8"))
-        {
-           // 调用MyScript中的DoSomething方法
-           //
-        }
-        if (GUILayout.Button("¥300"))
-        {
-           // 调用MyScript中的DoSomething方法
-           //
-           
+           ((TestManager)target).SendGift(299f);
         }
         GUILayout.EndHorizontal();
         // 结束水平布局组

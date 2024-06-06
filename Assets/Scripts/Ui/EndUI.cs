@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -45,6 +46,7 @@ public class EndUI : MonoBehaviour
 
     public void OnClickNextBtn()
     {
+        StopAllCoroutines();
         SceneManager.LoadScene("1920-1080Scene");
     }
 
@@ -65,5 +67,30 @@ public class EndUI : MonoBehaviour
     {
         loadingTransform.parent.gameObject.SetActive(false);
         loadingTransform.DOKill();
+        CheckAutoPlay();//加载完图片后再进行自动倒计时，防止图片没加载完 跳过了
+    }
+    
+    //自动开始下一句相关
+
+    public TMP_Text nextBtnText;
+    private void CheckAutoPlay()
+    {
+        if (DataNoDeleteManager.Instance.isAutoPlay)//如果是自动开始，就开始倒计时，并且给按钮上增加倒计时
+        {
+            StartCoroutine(AutoPlayTime());
+        }
+    }
+
+    IEnumerator AutoPlayTime()
+    {
+        int secends = 60;
+        while (secends>0)
+        {
+            nextBtnText.text = $"开始下一局({secends}s)";
+            yield return new WaitForSeconds(1);
+            secends--;
+        }
+        nextBtnText.text = $"开始下一局(0s)";
+        SceneManager.LoadScene("1920-1080Scene");
     }
 }

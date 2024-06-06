@@ -197,3 +197,8 @@ Assets/Unity.VisualScripting.Generated/VisualScripting.Core.meta
 Assets/Unity.VisualScripting.Generated/VisualScripting.Flow.meta
 Assets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db
 Assets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db.meta
+*.zip
+*.rar
+/Place
+Assets/Unity.VisualScripting.Generated/VisualScripting.Core/AotStubs.cs
+Assets/Unity.VisualScripting.Generated/VisualScripting.Core/AotStubs.cs.meta

@@ -33,7 +33,7 @@ public class DrawMoveToTotem : PlaceAction
         Vector2 positionA = new Vector2(transform.position.x, transform.position.z);
 
 
-        if (Vector2.Distance(positionA, targetPosition) < 2f)
+        if (Vector2.Distance(positionA, targetPosition) < 3f)
         {
             return TaskStatus.Success;
         }
@@ -50,9 +50,8 @@ public class DrawMoveToTotem : PlaceAction
 
     void GetTargetPoint()
     {
-        randPosition = new Vector2(Random.Range(-2.5f, 2.5f), Random.Range(-2.5f, 2.5f));
-        Vector2 positionB = new Vector2(base.pc.target.position.x, base.pc.target.position.z);
-        targetPosition = positionB + randPosition;
+        randPosition = new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
+        targetPosition = new Vector2(base.pc.target.position.x, base.pc.target.position.z) + randPosition;
         targetPositionV3 = new Vector3(targetPosition.x, pc.target.position.y, targetPosition.y);
         targetPositionV3 = NavMesh.SamplePosition(targetPositionV3, out NavMeshHit hit, 1.0f, NavMesh.AllAreas) ? hit.position : targetPositionV3;
         targetPosition = new Vector2(targetPositionV3.x, targetPositionV3.z);
