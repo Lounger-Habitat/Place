@@ -851,7 +851,7 @@ public class PlaceInstructionManager : MonoBehaviour
                         break;
                     }
 
-                    // ======= Square2point =======
+                    // ======= Square2point =======       
                     List<(int, int)> points = PlaceBoardManager.Instance.GetCirclePoints(x, y, radius);
                     foreach ((int, int) point in points)
                     {
@@ -1016,7 +1016,8 @@ public class PlaceInstructionManager : MonoBehaviour
                     y = int.Parse(parts[2]); // y
                     max = int.Parse(parts[3]); // max
                     name = parts[4]; // name
-                    List<Instruction> IL = PlaceCenter.Instance.GenerateImage(x, y, max,name);
+                    List<Instruction> IL = PlaceCenter.Instance.GenerateImage(x, y, max, name);
+                    Debug.Log($"图案颜料 : {IL.Count}");
                     if (IL.Count != 0)
                     {
                         IL.ForEach(i => user.instructionQueue.Enqueue(i));

@@ -526,7 +526,7 @@ namespace NativeWebSocket
                 {
                     await Task.Delay(timeSpan);
                     ReConnectCount++;
-                    Debug.LogWarning($"³¢ÊÔÖØÁ¬   ×î´ó´ÎÊı:{maxCount}£¬µ±Ç°´ÎÊı:{ReConnectCount}");
+                    Debug.LogWarning($"å°è¯•é‡è¿   æœ€å¤§æ¬¡æ•°:{maxCount}ï¼Œå½“å‰æ¬¡æ•°:{ReConnectCount}");
                     goto ReConnct;
                 }
                 OnError?.Invoke(ex.Message);
@@ -740,7 +740,7 @@ namespace NativeWebSocket
                         closeCode = WebSocketHelpers.ParseCloseCodeEnum((int)result.CloseStatus);
                         break;
                     }
-                    //ÖØÖÃ´ÎÊı
+                    //ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ï¿½
                     ReConnectCount = 0;
                 }
             }

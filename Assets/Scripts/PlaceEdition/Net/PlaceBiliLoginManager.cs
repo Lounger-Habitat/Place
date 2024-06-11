@@ -110,7 +110,9 @@ public class PlaceBiliLoginManager : MonoBehaviour
             PlaceBiliNetManager.Instance.ConnectFailure += LinkFailed;
         }
 
+        
         LinkSuccessEvent.AddListener(Connected);
+        
 
         if (IdCodeInputField.text != string.Empty) {
             if (connected == false) {
