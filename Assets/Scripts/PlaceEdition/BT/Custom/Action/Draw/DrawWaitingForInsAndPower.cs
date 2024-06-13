@@ -32,10 +32,10 @@ public class DrawWaitingForInsAndPower : PlaceAction
 
     public override TaskStatus OnUpdate()
     {
-        Debug.Log("DrawWaitingForInsAndPower OnUpdate");
-        if (pc.insQueue.Count == 0)
+        //Debug.Log("DrawWaitingForInsAndPower OnUpdate");
+        if (pc.insQueue.Count == 0 && free == false)
         {
-            Debug.Log("身上指令为空");
+            Debug.Log("【wait for ins and power】：玩家身上携带指令数量为0");
             free = true;
         }
         // 获取队伍颜料数量

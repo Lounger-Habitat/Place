@@ -44,6 +44,7 @@ public class PlaceBiliLoginManager : MonoBehaviour
     public static PlaceBiliLoginManager Instance { get; private set; }
 
     public bool connected = false;
+    public bool first = true;
 
     // public static PlaceBiliLoginManager Instance {
     //     get
@@ -112,7 +113,7 @@ public class PlaceBiliLoginManager : MonoBehaviour
 
         LinkSuccessEvent.AddListener(Connected);
 
-        if (IdCodeInputField.text != string.Empty) {
+        if (IdCodeInputField.text != string.Empty && first == false) {
             if (connected == false) {
                 StartToPlay();
             }else {
@@ -183,6 +184,7 @@ public class PlaceBiliLoginManager : MonoBehaviour
             BilibiliPlayerPrefs.SetString(IdCodeSaveKey, IdCode);
         }
         Debug.Log("连接成功");
+        
         LinkSuccessEvent?.Invoke();
     }
 
@@ -232,6 +234,7 @@ public class PlaceBiliLoginManager : MonoBehaviour
 
     void Connected() {
         connected = true;
+        first = false;
         Hide();
     }
 }

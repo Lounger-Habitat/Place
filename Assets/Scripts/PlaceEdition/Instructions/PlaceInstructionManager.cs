@@ -1017,6 +1017,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     max = int.Parse(parts[3]); // max
                     name = parts[4]; // name
                     List<Instruction> IL = PlaceCenter.Instance.GenerateImage(x, y, max,name);
+                    Debug.Log($"颜料数量：{IL.Count}");
                     if (IL.Count != 0)
                     {
                         IL.ForEach(i => user.instructionQueue.Enqueue(i));

@@ -7,12 +7,16 @@ using Newtonsoft.Json;
 using System.Text;
 using System.Threading.Tasks;
 using System;
+using System.Collections;
+using UnityEditor;
 
 
 public class PlaceBiliNetManager : MonoBehaviour
 {
     public string accessKeyId;
+
     public string accessKeySecret;
+
     // 项目 id
     public string appId;
 
@@ -36,6 +40,7 @@ public class PlaceBiliNetManager : MonoBehaviour
 
     // 客户端
     private WebSocketBLiveClient m_WebSocketBLiveClient;
+
     // 
     private InteractivePlayHeartBeat m_PlayHeartBeat;
     private string gameId;
@@ -49,7 +54,8 @@ public class PlaceBiliNetManager : MonoBehaviour
         }
         else
         {
-            if (Instance != this) {
+            if (Instance != this)
+            {
                 Destroy(gameObject);
             }
         }
@@ -58,11 +64,13 @@ public class PlaceBiliNetManager : MonoBehaviour
     // code : 身份码
     public async void LinkStart(string code)
     {
+        currentCode = code;
         //测试的密钥
         SignUtility.accessKeySecret = accessKeySecret;
         //测试的ID
         SignUtility.accessKeyId = accessKeyId;
         var ret = await BApi.StartInteractivePlay(code, appId);
+        Debug.Log($"开启游戏返回数据：{ret}");
         //打印到控制台日志
         var gameIdResObj = JsonConvert.DeserializeObject<AppStartInfo>(ret);
         if (gameIdResObj.Code != 0)
@@ -84,7 +92,7 @@ public class PlaceBiliNetManager : MonoBehaviour
 
         try
         {
-            m_WebSocketBLiveClient.Connect(TimeSpan.FromSeconds(1), 1000000);
+            m_WebSocketBLiveClient.Connect(TimeSpan.FromSeconds(1), 100);
             ConnectSuccess?.Invoke();
             Debug.Log("连接成功");
         }
@@ -104,8 +112,12 @@ public class PlaceBiliNetManager : MonoBehaviour
 
     public async Task LinkEnd()
     {
-        m_WebSocketBLiveClient.Dispose();
-        m_PlayHeartBeat.Dispose();
+        if (m_WebSocketBLiveClient != null)
+        {
+            m_PlayHeartBeat.Dispose();
+            m_WebSocketBLiveClient.Dispose();
+        }
+
         await BApi.EndInteractivePlay(appId, gameId);
         Debug.Log("游戏关闭");
     }
@@ -150,7 +162,8 @@ public class PlaceBiliNetManager : MonoBehaviour
         sb.Append(sendGift.giftName);
         Debug.Log(sb);
 
-        PlaceInstructionManager.Instance.DefaultGiftCommand(sendGift.userName, (sendGift.price/sendGift.giftNum).ToString(),sendGift.giftNum);
+        PlaceInstructionManager.Instance.DefaultGiftCommand(sendGift.userName,
+            (sendGift.price / sendGift.giftNum).ToString(), sendGift.giftNum);
     }
 
     // 弹幕
@@ -165,9 +178,6 @@ public class PlaceBiliNetManager : MonoBehaviour
         Debug.Log(sb);
 
         PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
-
-
-
     }
 
     private void WebSocketBliveClientOnLike(Like like)
@@ -183,24 +193,75 @@ public class PlaceBiliNetManager : MonoBehaviour
     // 心跳
     private static void M_PlayHeartBeat_HeartBeatSucceed()
     {
+        Debug.Log($"查看当前ws的状态 ： {Instance.m_WebSocketBLiveClient.ws.State}");
         Debug.Log("心跳成功");
     }
 
     private static void M_PlayHeartBeat_HeartBeatError(string json)
     {
         Debug.Log("心跳失败" + json);
+        Debug.Log($"查看当前ws的状态 ： {Instance.m_WebSocketBLiveClient.ws.State}");
+
+        Instance.ReConnect();
     }
+
+
+    private string currentCode;
+
+    private bool isReconnect = false;
+
+    // [MenuItem("MyMenu/Do Something")]
+    private void ReConnect()
+    {
+        if (isReconnect)
+        {
+            Debug.Log("正在重连。。。。。");
+            return;
+        }
+
+        try
+        {
+            Debug.Log("开启重连----");
+            isReconnect = true;
+            Instance.m_WebSocketBLiveClient.ws.OnOpen += ReConnectSuccess;
+            Instance.m_WebSocketBLiveClient.Connect(TimeSpan.FromSeconds(1), 100);
+            //ConnectSuccess?.Invoke();
+            //Debug.Log("重接成功");
+        }
+        catch (Exception ex)
+        {
+            //ConnectFailure?.Invoke();
+            Debug.Log("重接失败 : " + ex);
+            isReconnect = false;
+            throw;
+        }
+        m_PlayHeartBeat.Start();
+    }
+
+    void ReConnectSuccess()
+    {
+        isReconnect = false;
+        Instance.m_WebSocketBLiveClient.ws.OnOpen -= ReConnectSuccess;
+    }
+    /*
+     * IEnumerator connectToServer()
+    {
+        LinkEnd();
+        Debug.Log("等待60s后重连");
+        yield return new WaitForSeconds(61f);
+        LinkStart(currentCode);
+    }
+    */
 
     private void Update()
     {
-        #if !UNITY_WEBGL || UNITY_EDITOR
+#if !UNITY_WEBGL || UNITY_EDITOR
         if (m_WebSocketBLiveClient is { ws: { State: WebSocketState.Open } })
         {
             m_WebSocketBLiveClient.ws.DispatchMessageQueue();
         }
-        #endif
+#endif
     }
-
 
 
     private void OnDestroy()
@@ -211,5 +272,4 @@ public class PlaceBiliNetManager : MonoBehaviour
         m_PlayHeartBeat.Dispose();
         m_WebSocketBLiveClient.Dispose();
     }
-
 }
