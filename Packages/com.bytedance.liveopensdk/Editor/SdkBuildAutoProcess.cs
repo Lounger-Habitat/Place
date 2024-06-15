@@ -2,6 +2,7 @@
 // Description:
 
 using System.IO;
+using ByteDance.LiveOpenSdk.Runtime;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
@@ -12,12 +13,14 @@ namespace Douyin.LiveOpenSDK.Editor
     {
         public int callbackOrder => -1;
 
+        private string SdkVersion => LiveOpenSdk.Instance.Version;
+
         public void OnPostprocessBuild(BuildReport report)
         {
             var outputPath = report.summary.outputPath;
             var outputFolderPath = Path.GetDirectoryName(outputPath);
             Debug.Log($"{nameof(SdkBuildAutoProcess)} OnPostprocessBuild" +
-                      $" sdk {LiveOpenSDK.Version} app {Application.version} {report.summary.platform}" +
+                      $" sdk {SdkVersion} app {Application.version} {report.summary.platform}" +
                       $", outputPath: {outputPath}");
 
             if (SdkEditorTool.IsBuildForMobile())
@@ -29,7 +32,7 @@ namespace Douyin.LiveOpenSDK.Editor
             CopyTools(outputFolderPath);
 
             Debug.Log($"{nameof(SdkBuildAutoProcess)} finish" +
-                      $" sdk {LiveOpenSDK.Version} app {Application.version}");
+                      $" sdk {SdkVersion} app {Application.version}");
         }
 
         private void CopyTools(string outputFolderPath)

@@ -4,23 +4,68 @@
 #nullable enable
 using System;
 using System.Threading;
+using ByteDance.Live.Foundation.Logging;
 using ByteDance.LiveOpenSdk;
-using ByteDance.LiveOpenSdk.Room;
-using Douyin.LiveOpenSDK.Integration;
-using UnityEngine;
+using ByteDance.LiveOpenSdk.Runtime;
+using ByteDance.LiveOpenSdk.Runtime.Utilities;
 
 namespace Douyin.LiveOpenSDK.Samples
 {
     /// <summary>
     /// 直播开放 SDK 的接入示例代码。
-    ///
+    /// 配置项：<see cref="AppId"/>
     /// </summary>
-    public class SampleLiveOpenSdkManager
+    /// <seealso cref="ILiveOpenSdk"/>
+    public static class SampleLiveOpenSdkManager
     {
+        private static readonly LogWriter Log = new LogWriter(SdkUnityLogger.LogSink, "SampleGameStartup");
+
         /// <summary>
-        /// 请开发者修改为实际的玩法 app_id。
+        /// 获取或设置玩法的 app_id。
+        /// 请在初始化 SDK 之前设置。
         /// </summary>
-        public string AppId { get; set; } = "<your-app-id>";
+        public static string AppId
+        {
+            get => Sdk.Env.AppId;
+            set => Sdk.Env.AppId = value;
+        }
+
+        /// <summary>
+        /// 直播伴侣 token，仅供调试用。
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// 此参数用于相关 API 鉴权。若没有 token，大部分开放能力无法使用。
+        /// </para>
+        /// <para>
+        /// 小玩法的可执行程序被直播伴侣或云游戏正常启动时，会从命令行参数传递 token。
+        /// SDK 初始化时，会自动解析命令行并获取 token，不需要开发者设置。
+        /// </para>
+        /// <para>
+        /// 目前暂时不支持开发者手动获取 token，但在 Unity 中调试时，可以用这个属性手动指定一个 token。
+        /// </para>
+        /// </remarks>
+        public static string Token
+        {
+            get => Sdk.Env.Token;
+            set => Sdk.Env.Token = value;
+        }
+
+        /// <summary>
+        /// 直播开放 SDK 的实例对象。
+        /// </summary>
+        public static ILiveOpenSdk Sdk => LiveOpenSdk.Instance;
+
+        static SampleLiveOpenSdkManager()
+        {
+            // 将 SDK 内部的日志发往 Unity 的控制台。
+            Sdk.LogSource.OnLog += item =>
+            {
+                // 过滤 Warning 以下的日志，保持简洁
+                if (!item.Severity.IsAtLeast(Severity.Warning)) return;
+                SdkUnityLogger.LogSink.WriteLog(item);
+            };
+        }
 
         /// <summary>
         /// 初始化 SDK。
@@ -28,32 +73,21 @@ namespace Douyin.LiveOpenSDK.Samples
         /// <remarks>
         /// 请在 Unity 主线程调用。
         /// </remarks>
-        public void OnCreate()
+        public static void Initialize()
         {
-            // 销毁之前创建的示例，以方便测试。
-            LiveOpenSdk.Uninitialize();
-
-            // 将 SDK 内部的日志发往 Unity 的控制台。
-            LiveOpenSdk.Logger.OnLog -= UnityLogger.WriteLog;
-            LiveOpenSdk.Logger.OnLog += UnityLogger.WriteLog;
-
-            // 设置 SDK 的环境变量。
-            LiveOpenSdk.Env.AppId = AppId;
-
             // 设置 SDK 的事件触发线程为 Unity 主线程。
-            LiveOpenSdk.DefaultSynchronizationContext = SynchronizationContext.Current;
+            Sdk.DefaultSynchronizationContext = SynchronizationContext.Current;
 
             try
             {
                 // 同步初始化。
-                LiveOpenSdk.Initialize();
-                Debug.Log($"初始化直播开放 SDK：成功");
-                SubscribeRoomInfo();
+                Sdk.Initialize();
+                Log.Info($"初始化直播开放 SDK：成功");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // 正常情况下不会失败，若遇到问题，请和我们联系。
-                Debug.LogError($"初始化直播开放 SDK：失败 {e.Message}");
+                Log.Error($"初始化直播开放 SDK：失败");
                 throw;
             }
         }
@@ -61,41 +95,9 @@ namespace Douyin.LiveOpenSDK.Samples
         /// <summary>
         /// 释放 SDK。通常在退出游戏或停止预览时调用。
         /// </summary>
-        public void OnDestroy()
+        public static void Uninitialize()
         {
-            LiveOpenSdk.Uninitialize();
-            OnRoomIdChanged = null;
+            Sdk.Uninitialize();
         }
-
-        /// <summary>
-        /// 获取抖音云功能。
-        /// </summary>
-        public SampleDyCloudManager DyCloudManager { get; } = new SampleDyCloudManager();
-
-        /// <summary>
-        /// 订阅直播间信息。
-        /// </summary>
-        private void SubscribeRoomInfo()
-        {
-            LiveOpenSdk.RoomInfoService.OnRoomInfoChanged -= OnRoomInfoUpdate;
-            LiveOpenSdk.RoomInfoService.OnRoomInfoChanged += OnRoomInfoUpdate;
-        }
-
-        /// <summary>
-        /// 直播间信息的回调函数。
-        /// </summary>
-        /// <param name="roomInfo">最新的直播间信息</param>
-        private void OnRoomInfoUpdate(IRoomInfo roomInfo)
-        {
-            Debug.Log($"初始化直播信息返回：成功 {roomInfo}");
-            OnRoomIdChanged?.Invoke(roomInfo.RoomId);
-        }
-
-
-        #region FOR_TEST_SCENE
-
-        public event Action<string>? OnRoomIdChanged;
-
-        #endregion
     }
 }

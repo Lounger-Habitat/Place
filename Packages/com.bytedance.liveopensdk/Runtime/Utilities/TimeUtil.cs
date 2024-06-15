@@ -5,7 +5,7 @@ using System;
 
 namespace Douyin.LiveOpenSDK.Utilities
 {
-    public static class TimeUtil
+    internal static class TimeUtil
     {
         /// <summary>
         /// 当前时间字符串。通常用于日志、调试信息。

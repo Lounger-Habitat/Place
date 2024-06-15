@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Douyin.LiveOpenSDK.Utilities
 {
-    public sealed class MonoManager : MonoSingleton<MonoManager>
+    internal sealed class MonoManager : MonoSingleton<MonoManager>
     {
         public event Action<float> MonoUpdate;
         public event Action<float> MonoLateUpdate;

@@ -10,10 +10,9 @@ namespace Douyin.LiveOpenSDK.Modules
         private readonly string _tag;
         protected readonly SdkCore Core;
         protected readonly SdkDebugLogger Debug;
-        protected static SdkDebugLogger s_Debug => LiveOpenSDK.Debug;
+        protected static SdkDebugLogger s_Debug => LiveOpenSdkRuntime.Debug;
         protected readonly AppQuitHelper QuitHelper;
         protected MonoManager MonoManager;
-        protected SdkTeaReporter Reporter => SdkTeaReporter.Instance;
 
         internal ApiBase(SdkCore core, string tag)
         {

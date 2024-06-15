@@ -1,21 +1,12 @@
 ﻿// Copyright (c) Bytedance. All rights reserved.
 // Description:
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using ByteDance.LiveOpenSdk;
-using dyCloudUnitySDK;
-using Newtonsoft.Json;
 using UnityEngine;
-using utils = dyCloudUnitySDK.utils;
 
 namespace Douyin.LiveOpenSDK.Utilities
 {
     internal static class SdkUtils
     {
-        internal static SdkDebugLogger Debug => LiveOpenSDK.Debug;
-
         internal static string GetUnityDeviceId()
         {
             return SystemInfo.deviceUniqueIdentifier;
@@ -50,147 +41,6 @@ namespace Douyin.LiveOpenSDK.Utilities
 #endif
             s_hashDeviceId = did;
             return did;
-        }
-
-        [DebuggerStepThrough]
-        public static string ToJsonString(Dictionary<string, string> stringMap)
-        {
-            return JsonConvert.SerializeObject(stringMap);
-        }
-
-        [DebuggerStepThrough]
-        public static string ToJsonString(DYCloudHttpResponse res)
-        {
-            // var headersJson = ToString(res.headers);
-            // return $"statusCode: {res.statusCode}\nbody: {res.body}\nheaders: {headersJson}";
-            return JsonConvert.SerializeObject(res);
-        }
-
-        [DebuggerStepThrough]
-        public static string ToJsonString(object obj, bool indent = false)
-        {
-            return JsonConvert.SerializeObject(obj, indent ? Formatting.Indented : Formatting.None);
-        }
-
-        [DebuggerStepThrough]
-        public static string ToJsonString(object obj, bool indent, JsonSerializerSettings settings)
-        {
-            return JsonConvert.SerializeObject(obj, indent ? Formatting.Indented : Formatting.None, settings);
-        }
-
-        public static JsonSerializerSettings JsonIgnoreNullSettings => new JsonSerializerSettings
-        {
-            NullValueHandling = NullValueHandling.Ignore
-        };
-
-        public static T FromJsonString<T>(string json)
-        {
-            try
-            {
-                return JsonConvert.DeserializeObject<T>(json);
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-                return default;
-            }
-        }
-
-        public static int ToIntStatusCode(long longRespCode)
-        {
-            try
-            {
-                var intValue = Convert.ToInt32(longRespCode);
-                return intValue;
-            }
-            catch (OverflowException e)
-            {
-                Debug.LogWarning(e.Message);
-                return APICode.ExceptionError;
-            }
-        }
-
-        private static bool _isPpe;
-
-        internal static bool IsPPE
-        {
-            get => _isPpe;
-            set
-            {
-                if (_isPpe == value) return;
-                Debug.Log($"IsPPE = {value}");
-                _isPpe = value;
-                SetDYCloudHeadersEnv();
-                SetHeadersEnv(LiveOpenSdk.Env.HttpHeaders);
-            }
-        }
-
-        internal static void SetHeadersEnv(Dictionary<string, string> headers)
-        {
-            if (!IsPPE) return;
-            if (headers == null) return;
-            headers["x-tt-env"] = "ppe_liveplays_sdk";
-            headers["x-use-ppe"] = "1";
-        }
-
-        private static void SetDYCloudHeadersEnv()
-        {
-            if (IsPPE)
-            {
-                var headers = new Dictionary<string, string>();
-                SetHeadersEnv(headers);
-                utils.SetRequestBaseHeaders(headers);
-            }
-            else
-            {
-                utils.SetRequestBaseHeaders(null);
-            }
-        }
-
-        public static void OpenLocalFile(string filePath)
-        {
-            Debug.LogDebug($"{nameof(OpenLocalFile)} {filePath}");
-            if (string.IsNullOrEmpty(filePath))
-            {
-                Debug.LogError("arg `filePath` is empty");
-                return;
-            }
-
-            try
-            {
-                System.Diagnostics.Process.Start(filePath);
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-        }
-
-        public static void RevealLocalFile(string filePath)
-        {
-            Debug.LogDebug($"{nameof(RevealLocalFile)} {filePath}");
-            if (string.IsNullOrEmpty(filePath))
-            {
-                Debug.LogError("arg `filePath` is empty");
-                return;
-            }
-
-            try
-            {
-                if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
-                {
-                    string argument = "/select," + System.IO.Path.GetFullPath(filePath);
-                    System.Diagnostics.Process.Start("explorer.exe", argument);
-                }
-                else
-                {
-                    Debug.LogWarning("RevealLocalFile only works on Windows.");
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
         }
     }
 }

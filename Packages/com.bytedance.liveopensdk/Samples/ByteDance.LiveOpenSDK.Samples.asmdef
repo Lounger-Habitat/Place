@@ -2,10 +2,8 @@
     "name": "ByteDance.LiveOpenSDK.Samples",
     "rootNamespace": "Douyin.LiveOpenSDK",
     "references": [
-        "ByteDance.LiveOpenSDK.Runtime",
-        "ByteDance.StarkLogs.Runtime",
-        "ByteDance.LiveOpenSdk.Api",
-        "ByteDance.LiveOpenSdk.Impl"
+        "ByteDance.LiveOpenSdk.Runtime",
+        "ByteDance.StarkLogs.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

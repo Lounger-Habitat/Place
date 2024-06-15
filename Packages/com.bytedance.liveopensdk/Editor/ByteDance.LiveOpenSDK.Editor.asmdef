@@ -2,7 +2,7 @@
     "name": "ByteDance.LiveOpenSDK.Editor",
     "rootNamespace": "Douyin.LiveOpenSDK",
     "references": [
-        "ByteDance.LiveOpenSDK.Runtime"
+        "ByteDance.LiveOpenSdk.Runtime"
     ],
     "includePlatforms": [
         "Editor"

@@ -36,9 +36,9 @@ namespace Douyin.LiveOpenSDK
                     return _isTouchMode;
 
                 Debug.Log($"CloudGameInput - Input.touchSupported: {Input.touchSupported}");
-                Debug.LogDebug($"CloudGameInput - IsStartFromMobile: {LiveOpenSDK.CloudGameAPI.IsStartFromMobile()}");
+                Debug.LogDebug($"CloudGameInput - IsStartFromMobile: {LiveOpenSdkRuntime.CloudGameAPI.IsStartFromMobile()}");
                 Debug.LogDebug($"CloudGameInput - isMobilePlatform: {Application.isMobilePlatform}");
-                var isMobile = LiveOpenSDK.CloudGameAPI.IsStartFromMobile() || Application.isMobilePlatform;
+                var isMobile = LiveOpenSdkRuntime.CloudGameAPI.IsStartFromMobile() || Application.isMobilePlatform;
                 _isTouchMode = isMobile && Input.touchSupported;
                 _isTouchModeCached = true;
                 return _isTouchMode;
@@ -89,7 +89,7 @@ namespace Douyin.LiveOpenSDK
         private static readonly TouchInputTracker s_finger1Tracker = new TouchInputTracker("fingerId1", 1, false);
         private static readonly float s_pinchToScrollInternalFactor = 0.1f;
         private static readonly float s_zoomToAxisInternalFactor = 0.1f;
-        private static SdkDebugLogger Debug => LiveOpenSDK.Debug;
+        private static SdkDebugLogger Debug => LiveOpenSdkRuntime.Debug;
 
         static CloudGameInput()
         {
@@ -504,7 +504,7 @@ namespace Douyin.LiveOpenSDK
 
         public static void LogDebugInfo()
         {
-            var isWarning = LiveOpenSDK.CloudGameAPI.IsStartFromMobile() && Input.touchSupported == false;
+            var isWarning = LiveOpenSdkRuntime.CloudGameAPI.IsStartFromMobile() && Input.touchSupported == false;
             if (isWarning)
                 Debug.LogWarning("Warning: `Input.touchSupported == false` ! Expecting `true` for StartFromMobile!");
 
@@ -512,9 +512,9 @@ namespace Douyin.LiveOpenSDK
             var logs = new List<string>();
             logs.Add($"isTouchMode: {IsTouchMode}");
             logs.Add($"Input.touchSupported: {Input.touchSupported}");
-            logs.Add($"CloudGameAPI.IsStartFromMobile: {LiveOpenSDK.CloudGameAPI.IsStartFromMobile()}");
+            logs.Add($"CloudGameAPI.IsStartFromMobile: {LiveOpenSdkRuntime.CloudGameAPI.IsStartFromMobile()}");
             logs.Add($"Application.isMobilePlatform: {Application.isMobilePlatform}");
-            logs.Add($"CloudGameAPI.IsCloudGame: {LiveOpenSDK.CloudGameAPI.IsCloudGame()}");
+            logs.Add($"CloudGameAPI.IsCloudGame: {LiveOpenSdkRuntime.CloudGameAPI.IsCloudGame()}");
             logs.Add($"IsForceMouseButtonMode: {IsForceMouseButtonMode}");
             logs.Add($"IsForceTouchModeOnPC: {IsForceTouchModeOnPC}");
             logs.Add($"ZoomScrollFactor: {ZoomScrollFactor}");

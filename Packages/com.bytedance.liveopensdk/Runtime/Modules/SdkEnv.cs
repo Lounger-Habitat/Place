@@ -3,15 +3,14 @@
 
 using System;
 using System.Collections.Generic;
-using Douyin.LiveOpenSDK.Data;
 using Douyin.LiveOpenSDK.Utilities;
 using UnityEngine;
 
 namespace Douyin.LiveOpenSDK.Modules
 {
-    public class SdkEnv
+    internal class SdkEnv
     {
-        internal const string TAG = nameof(LiveOpenSDK);
+        internal const string TAG = nameof(LiveOpenSdkRuntime);
 
         internal const string ArgMobile = "-mobile";
         internal const string ArgCloudGame = "-cloud-game";
@@ -19,53 +18,10 @@ namespace Douyin.LiveOpenSDK.Modules
         internal const string ArgScreenHeight = "-screen-height";
         internal const string ArgScreenWidth = "-screen-width";
 
-        private static SdkDebugLogger Debug => LiveOpenSDK.Debug;
+        private static SdkDebugLogger Debug => LiveOpenSdkRuntime.Debug;
         private static string s_startTokenCached;
         private static Dictionary<string, int> s_cloudGameArgs;
         private static bool s_hasSetFullscreen;
-
-        internal string GetLaunchToken(bool cache = true)
-        {
-            if (cache && !string.IsNullOrEmpty(s_startTokenCached))
-                return s_startTokenCached;
-
-            var commandline = Environment.CommandLine;
-            Debug.LogDebug($"GetLaunchToken CommandLine: {commandline}");
-
-            var args = Environment.GetCommandLineArgs();
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var i = 0; i < args.Length; i++)
-            {
-                var arg = args[i].Trim();
-                if (arg.StartsWith(ConstsInternal.LaunchCmdArg_Token))
-                {
-                    var startToken = arg.Substring(ConstsInternal.LaunchCmdArg_Token.Length);
-                    s_startTokenCached = startToken;
-                    return startToken;
-                }
-            }
-
-            if (Application.isEditor)
-                Debug.LogDebug($"launch token not found. args len = {args.Length}");
-            else
-                Debug.LogWarning($"launch token not found. args len = {args.Length}");
-
-            return "";
-        }
-
-        private static bool HasCmdArgToken()
-        {
-            string[] args = Environment.GetCommandLineArgs();
-            foreach (var t in args)
-            {
-                if (t.StartsWith("-token="))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
 
         internal int GetCloudGameArgValue(string key)
         {
@@ -129,20 +85,6 @@ namespace Douyin.LiveOpenSDK.Modules
         {
             var mobile = GetCloudGameArgValue(ArgMobile);
             return mobile == 1;
-        }
-
-        internal bool IsStartFromMobileBanLv()
-        {
-            var hasToken = HasCmdArgToken();
-            var mobile = GetCloudGameArgValue(ArgMobile);
-            return hasToken && mobile == 1;
-        }
-
-        internal bool IsStartFromPCBanLv()
-        {
-            var hasToken = HasCmdArgToken();
-            var mobile = GetCloudGameArgValue(ArgMobile);
-            return hasToken && mobile == 0;
         }
 
         internal bool TryInitCloudGameScreen()

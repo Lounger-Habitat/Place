@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Douyin.LiveOpenSDK.Utilities
 {
-    public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
+    internal abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
     {
         protected static T _Instance;
 

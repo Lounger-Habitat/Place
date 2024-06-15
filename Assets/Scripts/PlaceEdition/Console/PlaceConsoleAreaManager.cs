@@ -87,6 +87,22 @@ public class PlaceConsoleAreaManager : MonoBehaviour
             // int y = Random.Range(0, 500);
             PlayEffect(debugx,debugy,1);
         }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            // Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+
+            // // 射线的终点，这里我们假设射线无限远，或者您可以设置一个最大距离
+            // Vector3 rayEnd = ray.origin + ray.direction * 100f; // 例如，100单位远
+
+            // // 使用Debug.DrawLine可视化射线
+            // Debug.DrawLine(ray.origin, rayEnd, Color.green, float.PositiveInfinity, false);
+            // Vector2 a = GetScreenPositionFromPixel();
+            // LaunchPaintEffect(mousePosition);
+
+            // int x = Random.Range(0, 500);
+            // int y = Random.Range(0, 500);
+            PlayEffect(debugx,debugy,2);
+        }
     }
 
     // // 发送 颜料 到画布
@@ -134,6 +150,63 @@ public class PlaceConsoleAreaManager : MonoBehaviour
     //     GameObject paintEffect = Instantiate(paintEffectPrefab, worldPosition, Quaternion.identity);
 
     // }
+
+    public void PlayHorizontalEffect(int x, int camp){
+        
+        Vector3 aimPos = CalAimPos(x,0);
+
+        // 根据 队伍 选择不同颜色
+        switch (camp)
+        {
+            case 1:
+                currDemoEffect = team1DemoEffect;
+                break;
+            case 2:
+                currDemoEffect = team2DemoEffect;
+                break;
+            case 3:
+                currDemoEffect = team3DemoEffect;
+                break;
+            case 4:
+                currDemoEffect = team4DemoEffect;
+                break;
+            default:
+                break;
+        }
+
+        // 发射的闪光特效
+        Transform tempTransform = null;
+        // 实例化闪光特效 （闪光特效，发射位置，方向）
+        tempTransform = Instantiate(currDemoEffect.muzzleFlashPrefab, spawnPoint.position, Quaternion.identity).transform;
+        tempTransform.localRotation = Quaternion.identity;
+        tempTransform.forward = spawnPoint.forward;
+        tempTransform.parent = transform;
+        tempTransform.localScale *= currDemoEffect.scaleMultiplier;
+
+        // 子弹
+        Transform projectileBase = Instantiate(projectileBasePrefab, spawnPoint.position, Quaternion.identity).transform;
+        projectileBase.LookAt(aimPos);
+        projectileBase.parent = transform;
+        //projectileBase.localRotation = Quaternion.identity;
+
+        tempTransform = Instantiate(currDemoEffect.projectilePrefab, spawnPoint.position, Quaternion.identity).transform;
+        tempTransform.localRotation = Quaternion.identity;
+        tempTransform.forward = projectileBase.forward;
+        tempTransform.parent = projectileBase;
+        
+        
+        EffectBulletBase tempProjectileInstance = projectileBase.GetComponent<EffectBulletBase>();
+        tempProjectileInstance.Initialize(transform, spawnPoint.forward, currDemoEffect.projectileSpeed, currDemoEffect.impactPrefab, currDemoEffect.scaleMultiplier);
+
+        projectileBase.DOMove(aimPos, 2.0f).SetEase(Ease.OutQuint).OnComplete(() =>
+        {
+            Destroy(projectileBase.gameObject);
+        });
+
+    }
+    public void PlayVerticalEffect(int y , int camp){
+
+    }
 
     public void PlayEffect(int x,int y , int camp)
     {

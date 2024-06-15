@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Bytedance. All rights reserved.
 // Description:
 
-using Douyin.LiveOpenSDK.Data;
 using Douyin.LiveOpenSDK.Utilities;
 using UnityEngine;
 
@@ -16,7 +15,7 @@ namespace Douyin.LiveOpenSDK.Modules
         internal SdkCore()
         {
             SdkDebugInfo = new SdkDebugInfo();
-            Debug = new SdkDebugLogger(nameof(LiveOpenSDK));
+            Debug = new SdkDebugLogger(nameof(LiveOpenSdkRuntime));
             Env = new SdkEnv();
         }
     }

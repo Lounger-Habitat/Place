@@ -33,4 +33,7 @@
     <!-- LiveOpenSdk Core -->
     <assembly fullname="ByteDance.LiveOpenSdk.Api" preserve="all"/>
     <assembly fullname="ByteDance.LiveOpenSdk.Impl" preserve="all"/>
+
+    <!-- LiveImClient -->
+    <assembly fullname="ByteDance.Live.Message" preserve="all"/>
 </linker>

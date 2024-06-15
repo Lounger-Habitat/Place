@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace Douyin.LiveOpenSDK.Utilities
 {
-    public enum LogLevel
+    internal enum LogLevel
     {
         Debug = 0,
         Info,
@@ -15,7 +15,7 @@ namespace Douyin.LiveOpenSDK.Utilities
         Exception,
     }
 
-    public class SdkDebugLogger
+    internal class SdkDebugLogger
     {
         private string _tag;
         private string _tagText;

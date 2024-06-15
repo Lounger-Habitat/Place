@@ -1,11 +1,9 @@
 {
-    "name": "ByteDance.LiveOpenSDK.Runtime",
-    "rootNamespace": "Douyin.LiveOpenSDK",
+    "name": "ByteDance.LiveOpenSdk.Runtime",
+    "rootNamespace": "ByteDance.LiveOpenSdk.Runtime",
     "references": [
         "Unity.InputSystem",
-        "ByteDance.StarkLogs.Runtime",
-        "ByteDance.LiveOpenSdk.Api",
-        "ByteDance.LiveOpenSdk.Impl"
+        "ByteDance.StarkLogs.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

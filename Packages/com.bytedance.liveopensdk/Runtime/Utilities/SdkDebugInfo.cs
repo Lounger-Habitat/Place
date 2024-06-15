@@ -6,19 +6,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using ByteDance.LiveOpenSdk.Runtime;
 using UnityEngine;
 
 namespace Douyin.LiveOpenSDK.Utilities
 {
-    public class SdkDebugInfo
+    internal class SdkDebugInfo
     {
-        internal static SdkDebugLogger Debug => LiveOpenSDK.Debug;
+        internal static SdkDebugLogger Debug => LiveOpenSdkRuntime.Debug;
 
         public void LogDebugVer()
         {
             try
             {
-                var sdkVer = LiveOpenSDK.Version;
+                var sdkVer = LiveOpenSdk.Instance.Version;
                 var sdkVerInfo = $"LiveOpenSDK ver: {sdkVer}";
                 var gameVer = Application.version;
                 var gameVerInfo = $"GameApp ver: {gameVer} name: {Application.productName}" +
