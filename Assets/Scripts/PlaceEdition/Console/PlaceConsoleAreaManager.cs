@@ -71,22 +71,22 @@ public class PlaceConsoleAreaManager : MonoBehaviour
 
         // Vector2 mousePosition = Input.mousePosition;
         // 按下 E 键
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            // Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-
-            // // 射线的终点，这里我们假设射线无限远，或者您可以设置一个最大距离
-            // Vector3 rayEnd = ray.origin + ray.direction * 100f; // 例如，100单位远
-
-            // // 使用Debug.DrawLine可视化射线
-            // Debug.DrawLine(ray.origin, rayEnd, Color.green, float.PositiveInfinity, false);
-            // Vector2 a = GetScreenPositionFromPixel();
-            // LaunchPaintEffect(mousePosition);
-
-            // int x = Random.Range(0, 500);
-            // int y = Random.Range(0, 500);
-            PlayEffect(debugx,debugy,1);
-        }
+        // if (Input.GetKeyDown(KeyCode.E))
+        // {
+        //     // Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        //
+        //     // // 射线的终点，这里我们假设射线无限远，或者您可以设置一个最大距离
+        //     // Vector3 rayEnd = ray.origin + ray.direction * 100f; // 例如，100单位远
+        //
+        //     // // 使用Debug.DrawLine可视化射线
+        //     // Debug.DrawLine(ray.origin, rayEnd, Color.green, float.PositiveInfinity, false);
+        //     // Vector2 a = GetScreenPositionFromPixel();
+        //     // LaunchPaintEffect(mousePosition);
+        //
+        //     // int x = Random.Range(0, 500);
+        //     // int y = Random.Range(0, 500);
+        //     PlayEffect(debugx,debugy,1);
+        // }
     }
 
     // // 发送 颜料 到画布

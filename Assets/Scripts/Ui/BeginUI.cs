@@ -12,6 +12,7 @@ public class BeginUI : MonoBehaviour
         (transform as RectTransform).anchoredPosition = new Vector2(0, 0);
         // gameObject.SetActive(true);
         CheckAutoPlay();
+        UpdateUi();
     }
     
     public void OnClickBeginBtn()
@@ -79,5 +80,30 @@ public class BeginUI : MonoBehaviour
         }
         beginText.text = $"开始(0s)";
         OnClickBeginBtn();
+    }
+
+    public TMP_Text modeText;
+    public GameObject normalIcon;
+    public GameObject otherIcon;
+    public void OnClickModeBtn()
+    {
+        DataNoDeleteManager.Instance.isNormalModel = !DataNoDeleteManager.Instance.isNormalModel;
+        UpdateUi();
+    }
+
+    private void UpdateUi()
+    {
+        if (DataNoDeleteManager.Instance.isNormalModel)
+        {
+            modeText.text = "常规模式";
+            normalIcon.SetActive(true);
+            otherIcon.SetActive(false);
+        }
+        else
+        {
+            modeText.text = "涂鸦模式";
+            normalIcon.SetActive(false);
+            otherIcon.SetActive(true);
+        }
     }
 }

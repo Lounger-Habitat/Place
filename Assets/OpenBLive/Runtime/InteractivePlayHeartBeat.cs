@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using OpenBLive.Runtime.Data;
 using OpenBLive.Runtime.Utilities;
+using UnityEngine;
 
 namespace OpenBLive.Runtime
 {
@@ -60,7 +61,7 @@ namespace OpenBLive.Runtime
                     {
                         res = await BApi.BatchHeartBeatInteractivePlay(m_GameIds);
                     }
-
+                    
                     var json = JObject.Parse(res);
                     var code = json["code"]!.ToObject<int>();
                     if (code == 0)
@@ -92,6 +93,7 @@ namespace OpenBLive.Runtime
 
         public void Stop()
         {
+            if (m_Cancellation == null)return;
             m_Cancellation.Cancel();
         }
 

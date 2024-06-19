@@ -20,7 +20,7 @@ public class PlaceArtItem : MonoBehaviour,IPointerEnterHandler,IPointerExitHandl
     {
         // png to sprite
         // read png
-        Debug.Log("ArtInfo: " + artInfo.artTexturePath);    
+        // Debug.Log("ArtInfo: " + artInfo.artTexturePath);    
         artSprite = LoadPNGAsSprite(artInfo.artTexturePath);
         artName.GetComponent<TMP_Text>().text = artInfo.artName;
     }

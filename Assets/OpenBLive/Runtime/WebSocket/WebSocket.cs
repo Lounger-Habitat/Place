@@ -504,6 +504,7 @@ namespace NativeWebSocket
                 m_CancellationToken = m_TokenSource.Token;
 
                 m_Socket = new ClientWebSocket();
+                Debug.Log($"Connect new m_Socket {m_Socket}");
 
                 foreach (var header in headers)
                 {
@@ -524,9 +525,9 @@ namespace NativeWebSocket
             {
                 if (ReConnectCount < maxCount)
                 {
-                    await Task.Delay(timeSpan);
+                    await Task.Delay(timeSpan); // è¿™é‡Œæ˜¯ ç­‰å¾…ï¼Œä¸€ç›´å°è¯•ï¼Œæ˜¯ä¸€ä¸ªå¼‚æ­¥
                     ReConnectCount++;
-                    Debug.LogWarning($"³¢ÊÔÖØÁ¬   ×î´ó´ÎÊý:{maxCount}£¬µ±Ç°´ÎÊý:{ReConnectCount}");
+                    Debug.LogWarning($"å°è¯•é‡è¿ž   æœ€å¤§æ¬¡æ•°:{maxCount}ï¼Œå½“å‰æ¬¡æ•°:{ReConnectCount}");
                     goto ReConnct;
                 }
                 OnError?.Invoke(ex.Message);
@@ -736,11 +737,12 @@ namespace NativeWebSocket
                     }
                     else if (result.MessageType == WebSocketMessageType.Close)
                     {
+                        Debug.Log($"m_Socket {m_Socket} Receive Close Message : {result.CloseStatus}");
                         await Close();
                         closeCode = WebSocketHelpers.ParseCloseCodeEnum((int)result.CloseStatus);
                         break;
                     }
-                    //ÖØÖÃ´ÎÊý
+                    //é‡ç½®æ¬¡æ•°
                     ReConnectCount = 0;
                 }
             }

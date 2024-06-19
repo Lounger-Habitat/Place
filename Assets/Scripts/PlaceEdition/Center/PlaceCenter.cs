@@ -78,6 +78,9 @@ public class PlaceCenter : MonoBehaviour
 
     public void Start()
     {
+    #if !UNITY_EDITOR
+            Debug.unityLogger.logEnabled = false;
+    #endif
         // 初始化用户信息
         // 初始化队伍信息
         // 初始化场地信息
@@ -103,14 +106,14 @@ public class PlaceCenter : MonoBehaviour
         {
             CalculateTeamScore();
         }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            StartGame();
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            ResetGame();
-        }
+        // if (Input.GetKeyDown(KeyCode.R))
+        // {
+        //     StartGame();
+        // }
+        // if (Input.GetKeyDown(KeyCode.T))
+        // {
+        //     ResetGame();
+        // }
     }
 
 
@@ -886,7 +889,7 @@ public class PlaceCenter : MonoBehaviour
                     Texture2D texture = LoadTexture(filePath);
                     if (texture != null)
                     {
-                        Debug.Log("Load Texture: " + filePath + " " + texture.width + " " + texture.height);
+                        //Debug.Log("Load Texture: " + filePath + " " + texture.width + " " + texture.height);
                         string fname = Path.GetFileNameWithoutExtension(filePath);
                         texDic.Add(fname, texture);
                     }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using OpenBLive.Runtime.Data;
 using UnityEngine;
+//using UnityEditor;
 
 public class TestManager : MonoBehaviour
 {
@@ -55,89 +56,89 @@ public class TestManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        // 按下/，执行指令  接受 指令
-        if (Input.GetKeyDown(KeyCode.Slash))
-        {
-            ins = ins.Trim();
-
-            if (PlaceCenter.Instance.users.ContainsKey(playerName))
-            {
-                Dm dm = MakeDm(playerName, ins);
-                PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
-            }
-            else
-            {
-                Dm dm = MakeDm(playerName, ins);
-                PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
-            }
-        }
-        // 按下‘，执行指令  接受 指令
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            ins = ins.Trim();
-            string[] parts = ins.Split(' ');
-
-
-            if (parts.Length == 3)
-            {
-                string c, name;
-                float power;
-                c = parts[0]; // /d
-                name = parts[1]; // name
-                power = float.Parse(parts[2]); // y
-                Debug.Log($"{c} {name} {power}");
-                PlaceCenter.Instance.GainPower(name, power);
-            }
-            else if (parts.Length == 4)
-            {
-                string c, name;
-                long count;
-                c = parts[0]; // /d
-                name = parts[1]; // name
-                User u = PlaceCenter.Instance.users[name];
-                count = long.Parse(parts[3]); // count
-                Debug.Log($"{c} {name} {count}");
-                PlaceCenter.Instance.GainLikePower(u, count);
-            }
-        }
-        // 按下,，执行指令  接受 指令
-        if (Input.GetKeyDown(KeyCode.Comma))
-        {
-            PlaceInstructionManager.Instance.DefaultGiftCommand(playerName, gift, 1);
-        }
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            string[] users = PlaceCenter.Instance.users.Keys.ToArray();
-            // 遍历所有用户
-            foreach (var user in users)
-            {
-                PlaceInstructionManager.Instance.DefaultGiftCommand(user, gift, 1);
-            }
-
-        }
-        // 按下.，执行指令  测试 指令
-        if (Input.GetKeyDown(KeyCode.Period))
-        {
-            // 生成角色
-            // GenPlayer();
-            GenBiliPlayer();
-            // 不定时 随机生成指令
-            StartCoroutine(GenerateRandomCommand());
-            StartCoroutine(GenerateRandomCommand());
-            StartCoroutine(GenerateRandomCommand());
-            StartCoroutine(GenerateRandomCommand());
-
-        }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            string coolIns = RandomGenCoolIns();
-            User u = PlaceCenter.Instance.users[playerName];
-            PlaceInstructionManager.Instance.DefaultRunChatCommand(u, coolIns);
-        }
-
-    }
+    // void Update()
+    // {
+    //     // 按下/，执行指令  接受 指令
+    //     if (Input.GetKeyDown(KeyCode.Slash))
+    //     {
+    //         ins = ins.Trim();
+    //
+    //         if (PlaceCenter.Instance.users.ContainsKey(playerName))
+    //         {
+    //             Dm dm = MakeDm(playerName, ins);
+    //             PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
+    //         }
+    //         else
+    //         {
+    //             Dm dm = MakeDm(playerName, ins);
+    //             PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
+    //         }
+    //     }
+    //     // 按下‘，执行指令  接受 指令
+    //     if (Input.GetKeyDown(KeyCode.F1))
+    //     {
+    //         ins = ins.Trim();
+    //         string[] parts = ins.Split(' ');
+    //
+    //
+    //         if (parts.Length == 3)
+    //         {
+    //             string c, name;
+    //             float power;
+    //             c = parts[0]; // /d
+    //             name = parts[1]; // name
+    //             power = float.Parse(parts[2]); // y
+    //             Debug.Log($"{c} {name} {power}");
+    //             PlaceCenter.Instance.GainPower(name, power);
+    //         }
+    //         else if (parts.Length == 4)
+    //         {
+    //             string c, name;
+    //             long count;
+    //             c = parts[0]; // /d
+    //             name = parts[1]; // name
+    //             User u = PlaceCenter.Instance.users[name];
+    //             count = long.Parse(parts[3]); // count
+    //             Debug.Log($"{c} {name} {count}");
+    //             PlaceCenter.Instance.GainLikePower(u, count);
+    //         }
+    //     }
+    //     // 按下,，执行指令  接受 指令
+    //     if (Input.GetKeyDown(KeyCode.Comma))
+    //     {
+    //         PlaceInstructionManager.Instance.DefaultGiftCommand(playerName, gift, 1);
+    //     }
+    //     if (Input.GetKeyDown(KeyCode.Z))
+    //     {
+    //         string[] users = PlaceCenter.Instance.users.Keys.ToArray();
+    //         // 遍历所有用户
+    //         foreach (var user in users)
+    //         {
+    //             PlaceInstructionManager.Instance.DefaultGiftCommand(user, gift, 1);
+    //         }
+    //
+    //     }
+    //     // 按下.，执行指令  测试 指令
+    //     if (Input.GetKeyDown(KeyCode.Period))
+    //     {
+    //         // 生成角色
+    //         // GenPlayer();
+    //         GenBiliPlayer();
+    //         // 不定时 随机生成指令
+    //         StartCoroutine(GenerateRandomCommand());
+    //         StartCoroutine(GenerateRandomCommand());
+    //         StartCoroutine(GenerateRandomCommand());
+    //         StartCoroutine(GenerateRandomCommand());
+    //
+    //     }
+    //     if (Input.GetKeyDown(KeyCode.X))
+    //     {
+    //         string coolIns = RandomGenCoolIns();
+    //         User u = PlaceCenter.Instance.users[playerName];
+    //         PlaceInstructionManager.Instance.DefaultRunChatCommand(u, coolIns);
+    //     }
+    //
+    // }
 
     public void CameraView()
     {
@@ -469,6 +470,13 @@ public class TestManager : MonoBehaviour
         User u = PlaceCenter.Instance.users[playerName];
         PlaceCenter.Instance.GainPower(u.Name, gift);
     }
+    
+    //[MenuItem("Assets/PlayerPrefs_DeleteAll")]
+    //static void PlayerPrefsDeleteAll()
+    //{
+    //    PlayerPrefs.DeleteAll ();
+    //    Debug.Log ("DeleteAll finish!");
+    //}
 }
 
 
@@ -489,3 +497,4 @@ public class TestManager : MonoBehaviour
     评选统计
 
 */
+

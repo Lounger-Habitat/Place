@@ -441,7 +441,7 @@ public class PlaceBoardManager : MonoBehaviour
         }
         string path = $"{savePath}/save_{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
         System.IO.File.WriteAllBytes(path, bytes);
-        Debug.Log("Saved Image to: " + path);
+        //Debug.Log("Saved Image to: " + path);
         // if (lastone)
         // {
         //     // 创建 Sprite
