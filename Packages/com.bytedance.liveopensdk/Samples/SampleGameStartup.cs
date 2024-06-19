@@ -7,6 +7,10 @@ using ByteDance.LiveOpenSdk.Runtime.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 
+using ByteDance.LiveOpenSdk.Room;
+using ByteDance.LiveOpenSdk.Runtime;
+using ByteDance.LiveOpenSdk.Utilities;
+
 namespace Douyin.LiveOpenSDK.Samples
 {
     /// <summary>
@@ -29,10 +33,14 @@ namespace Douyin.LiveOpenSDK.Samples
     {
         public Button Button_Mode1;
         public Button Button_Mode2;
+        public Button Room_Button;
+        public Button Room_Button_Update;
         public Text LogText;
 
         private readonly LogConsole _logConsole = new LogConsole();
         private LogWriter Log { get; } = new LogWriter(SdkUnityLogger.LogSink, "SampleGameStartup");
+
+        // private static IRoomInfoService RoomInfoService { get; } = LiveOpenSdk.Instance.GetRoomInfoService();
 
         private void Awake()
         {
@@ -46,9 +54,10 @@ namespace Douyin.LiveOpenSDK.Samples
             InitEvents();
 
             // 配置相关参数，请修改为实际的值
+            // SampleLiveOpenSdkManager.AppId = "";
             SampleLiveOpenSdkManager.AppId = "tt767800c5e948f69a10";
-            // SampleLiveOpenSdkManager.Token = "Uw8GUFn494r3NVyPPgbOrGNyNFAkG3z2h119TWEiwOe9UxO1iLhVJ0uY/1GwqGTa3lFzCE/vz0LPBJjo43ElHw7vwHUAmq7vWK9/1bwPYa9zCsKa7XmgsWru4H4=";
-            // SampleLiveOpenSdkManager.Token = "048cb601282a17eb35e3661607786c3660e78279";
+            SampleLiveOpenSdkManager.Token = "B+/UhqBCwy6DnApGcQGt0xBEW5cmoodLcZLDAk3P7VbjJd7a6vRenewM0sTJjoKvDPqq00L64Y2yuBClHllTH/Sl1GWI9VZFY1kfSqjomCigzPhMByngGJVlTWM=";
+
             // SampleDyCloudManager.EnvId = "";
             // SampleDyCloudManager.ServiceId = "";
 
@@ -76,6 +85,24 @@ namespace Douyin.LiveOpenSDK.Samples
         {
             Button_Mode1.onClick.AddListener(StartDirectPushMode);
             Button_Mode2.onClick.AddListener(StartDyCloudMode);
+            Room_Button.onClick.AddListener(RoomTest);
+            Room_Button_Update.onClick.AddListener(RoomUpdateTest);
+        }
+
+        // Room Test
+        private async void RoomTest()
+        {
+            Log.Info("开始：Room Test");
+
+            // 创建房间
+            // await RoomInfoService.WaitForRoomInfoAsync();
+        }
+        private async void RoomUpdateTest()
+        {
+            Log.Info("开始：Room Update Test");
+
+            // 创建房间
+            // await RoomInfoService.UpdateRoomInfoAsync();
         }
 
         // 指令直推模式
