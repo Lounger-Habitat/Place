@@ -6,8 +6,6 @@ using System;
 using System.Collections;
 using DG.Tweening;
 using System.Linq;
-using System.Net.NetworkInformation;
-using Unity.VisualScripting;
 
 public class PlacePlayerController : MonoBehaviour
 {
