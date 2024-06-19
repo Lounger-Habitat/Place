@@ -795,7 +795,7 @@ public class PlaceBoardManager : MonoBehaviour
         // 对x,y 处理ß
         // 记录
         if (x < 0 || x >= width || y < 0 || y >= height)
-        {   
+        {
             Debug.Log($"越界 : {x},{y}");
             return;
         }
@@ -853,7 +853,7 @@ public class PlaceBoardManager : MonoBehaviour
     }
     public void ConvertTex2DToGIF()
     {
-        
+
         Clear();
 
         tex2Gif = ProGifTexturesToGIF.Instance;
@@ -900,13 +900,13 @@ public class PlaceBoardManager : MonoBehaviour
         PlaceUIManager.Instance.GetEndUi().OnSaveGifOk();
         Debug.Log("On file saved: " + path);
         // text1.text = "GIF saved: " + path;
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         string sourceFolder = Application.dataPath;
         string destinationFolder = Path.Combine(sourceFolder, $"Images/Log/{UniqueTime}");
-        #else
+#else
         string sourceFolder = Application.persistentDataPath;
         string destinationFolder = Path.Combine(sourceFolder, $"Log/{UniqueTime}");
-        #endif
+#endif
         // 目标文件夹路径
         if (!Directory.Exists(destinationFolder))
         {
@@ -925,9 +925,9 @@ public class PlaceBoardManager : MonoBehaviour
             PlaceCenter.Instance.users.Values.Sum(user => user.drawTimes),
             PlaceCenter.Instance.users.Values.Sum(user => user.usePowerCount),
             PlaceCenter.Instance.AllMemberName(),
-            artPath:destinationGifFile,
-            PUID:UniqueId,
-            artTexturePath:Directory.GetFiles(destinationFolder, "*.png", SearchOption.AllDirectories).Last<string>()
+            artPath: destinationGifFile,
+            PUID: UniqueId,
+            artTexturePath: Directory.GetFiles(destinationFolder, "*.png", SearchOption.AllDirectories).Last<string>()
         );
         SaveJson(destinationJsonFile, artInfo);
 
@@ -941,7 +941,7 @@ public class PlaceBoardManager : MonoBehaviour
         // dpImage.SetNativeSize();
     }
 
-    private void SaveJson(string path,ArtInfo artInfo)
+    private void SaveJson(string path, ArtInfo artInfo)
     {
         string json = JsonUtility.ToJson(artInfo);
         File.WriteAllText(path, json);
@@ -971,4 +971,57 @@ public class PlaceBoardManager : MonoBehaviour
         });
     }
 
+    internal Texture2D MergeTexture(Texture2D userTex, Texture2D tex)
+    {
+        // 获取tex对userTex的要求
+        string format = tex.name;
+        string[] formats = format.Split('-');
+        int centerX = int.Parse(formats[1]);
+        int centerY = int.Parse(formats[2]); // base left top ,but need left bottom,so use tex.height - centerY
+        centerY = tex.height - centerY; // base left top ,but need left bottom,so use tex.height - centerY
+        int radius = int.Parse(formats[3]);
+
+
+        // 合并两个贴图的像素
+        Texture2D newTexture = MergeTwoTexture(tex, userTex, centerX - radius, centerY - radius, radius);
+
+        return newTexture;
+    }
+
+    public Texture2D MergeTwoTexture(Texture2D target, Texture2D source, int posX, int posY, int radius = 10)
+    {
+        // 创建一个新的空白贴图
+        Texture2D newTexture = new Texture2D(target.width, target.height, TextureFormat.RGBA32, false);
+        // 裁剪 userTex
+        Texture2D scaleTexture = ScaleTextureProportionally(source, (int)(radius * 2 * 1.1), (int)(radius * 2 * 1.1));
+
+        // 检查贴图是否超出画布范围
+        if (posX + scaleTexture.width > target.width || posY + scaleTexture.height > target.height)
+        {
+            Debug.Log("The source texture is too large"); // 应该不会
+        }
+
+        Color[] newTexturePixels = target.GetPixels();
+        Color[] sourcePixels = scaleTexture.GetPixels();
+        Color[] tempPixels = target.GetPixels(posX, posY, scaleTexture.width, scaleTexture.height);
+
+        for (int y = 0; y < scaleTexture.height; y++)
+        {
+            for (int x = 0; x < scaleTexture.width; x++)
+            {
+                int targetIndex = y * scaleTexture.width + x;
+                Color sourcePixel = sourcePixels[targetIndex];
+
+                if (tempPixels[targetIndex].a == 0)  // 检查透明度
+                {
+                    tempPixels[targetIndex] = sourcePixel;
+                }
+            }
+        }
+
+        newTexture.SetPixels(newTexturePixels);
+        newTexture.SetPixels(posX, posY, scaleTexture.width, scaleTexture.height, tempPixels);
+        newTexture.Apply(); // 应用更改到目标贴图
+        return newTexture;
+    }
 }

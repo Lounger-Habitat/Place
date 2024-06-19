@@ -4,7 +4,6 @@ using OpenBLive.Runtime.Data;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Text.RegularExpressions;
-using TMPro;
 
 public class PlaceInstructionManager : MonoBehaviour
 {
@@ -1011,18 +1010,47 @@ public class PlaceInstructionManager : MonoBehaviour
                 {
                     int x, y, max;
                     string c,name;
-                    c = parts[0]; // /d
+                    c = parts[0]; // /roll
                     x = int.Parse(parts[1]); // x
                     y = int.Parse(parts[2]); // y
                     max = int.Parse(parts[3]); // max
                     name = parts[4]; // name
-                    List<Instruction> IL = PlaceCenter.Instance.GenerateImage(x, y, max,name);
+                    List<Instruction> IL = PlaceCenter.Instance.FreeGenerateImage(x, y, max,name);
                     if (IL.Count != 0)
                     {
                         IL.ForEach(i => user.instructionQueue.Enqueue(i));
                     }else {
                         Debug.Log("roll 失败,或许名字key 不对");
                     }
+                }
+                else if (parts.Length == 6)
+                {
+                    int x, y, max;
+                    string c,name,mode;
+                    c = parts[0]; // /roll
+                    x = int.Parse(parts[1]); // x
+                    y = int.Parse(parts[2]); // y
+                    max = int.Parse(parts[3]); // max
+                    name = parts[4]; // name
+                    mode = parts[5]; // mode : gift
+                    if (mode == "gift")
+                    {
+                        Texture2D userTex = user.userIcon.texture;
+                        List<Instruction> IL = PlaceCenter.Instance.GiftGenerateImage(x, y, max,userTex,name);
+                        if (IL.Count != 0)
+                        {
+                            IL.ForEach(i => user.instructionQueue.Enqueue(i));
+                        }else {
+                            Debug.Log("roll 失败,或许名字key 不对");
+                        }
+                    }
+                    // List<Instruction> IL = PlaceCenter.Instance.FreeGenerateImage(x, y, max,name);
+                    // if (IL.Count != 0)
+                    // {
+                    //     IL.ForEach(i => user.instructionQueue.Enqueue(i));
+                    // }else {
+                    //     Debug.Log("roll 失败,或许名字key 不对");
+                    // }
                 }
                 // 从 已有的 图集 中 找一个 图
                 // 把 图 -> 指令

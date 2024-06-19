@@ -7,6 +7,9 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using System.Text.RegularExpressions;
+using UnityEngine.UI.Extensions;
+using UnityEngine.UI;
 
 public class PlaceCenter : MonoBehaviour
 {
@@ -56,8 +59,10 @@ public class PlaceCenter : MonoBehaviour
 
     int baseId = 0;
 
-    List<Texture2D>? demoTextures = null;
-    Dictionary<string, Texture2D> demoTexturesDic = new Dictionary<string, Texture2D>();
+    // List<Texture2D>? demoTextures = null;
+    Dictionary<string, Texture2D> freeDemoTexturesDic = new Dictionary<string, Texture2D>();
+    Dictionary<string, Texture2D> giftDemoTexturesDic = new Dictionary<string, Texture2D>();
+    Dictionary<string, List<Texture2D>> cartoonTexturesDic = new Dictionary<string, List<Texture2D>>();
 
     public string platform = "bilibili";
     public string anchorName = "anchor";
@@ -65,6 +70,11 @@ public class PlaceCenter : MonoBehaviour
     public bool Low = true;
     public bool High = false;
 
+#if UNITY_EDITOR
+    string demoPath = "Assets/Images/Demo";
+#else
+    string demoPath = Application.streamingAssetsPath + "/Demo";
+#endif
 
     public void Start()
     {
@@ -79,9 +89,11 @@ public class PlaceCenter : MonoBehaviour
         // 游戏计时
 
         CreateTeam();
-        demoTextures = LoadDemoResources();
+        // demoTextures = LoadDemoResources();
 
-        demoTexturesDic = LoadDemoDicResources();
+        freeDemoTexturesDic = LoadDemoDicResources("free");
+        giftDemoTexturesDic = LoadDemoDicResources("gift");
+        // DemoTexturesDic = LoadDemoDicResources("free");
 
     }
 
@@ -317,7 +329,7 @@ public class PlaceCenter : MonoBehaviour
     }
 
     public Action satrtGameAction;
-    
+
     public void StartGame()
     {
         if (gameRuning)
@@ -636,11 +648,11 @@ public class PlaceCenter : MonoBehaviour
     // }
 
 
-    public List<Instruction> GenerateImage(int ox, int oy, int max, string name)
+    public List<Instruction> FreeGenerateImage(int ox, int oy, int max, string name)
     {
         // 图库
         // 获取index 
-        if (demoTextures != null && demoTextures.Count > 0)
+        if (freeDemoTexturesDic != null && freeDemoTexturesDic.Count > 0)
         {
             // Texture2D tex;
             // demoTexturesDic.TryGetValue(name,out tex);
@@ -648,11 +660,11 @@ public class PlaceCenter : MonoBehaviour
             // {
             //     return new List<Instruction>();
             // }
-            if (!demoTexturesDic.ContainsKey(name))
+            if (!freeDemoTexturesDic.ContainsKey(name))
             {
                 return new List<Instruction>();
             }
-            Texture2D tex = demoTexturesDic[name];
+            Texture2D tex = freeDemoTexturesDic[name];
             // texture 2d
             // Texture2D tex = Resources.Load<Texture2D>($"Images/{index}");
             Texture2D retex = PlaceBoardManager.Instance.ScaleTextureProportionally(tex, max, max);
@@ -663,10 +675,71 @@ public class PlaceCenter : MonoBehaviour
 
         return new List<Instruction>();
     }
+    public List<Instruction> GiftGenerateImage(int ox, int oy, int max, Texture2D userTex ,string name )
+    {
+        // 图库
+        // 获取index 
+        if (giftDemoTexturesDic != null && giftDemoTexturesDic.Count > 0)
+        {
+            // Texture2D tex;
+            // demoTexturesDic.TryGetValue(name,out tex);
+            // if (tex == null)
+            // {
+            //     return new List<Instruction>();
+            // }
+            if (!giftDemoTexturesDic.ContainsKey(name))
+            {
+                return new List<Instruction>();
+            }
+            Texture2D tex = giftDemoTexturesDic[name];
+            tex.name = name;
+            // texture 2d
+            // Texture2D tex = Resources.Load<Texture2D>($"Images/{index}");
+
+            // 合并 头像 与 图片模版
+            Texture2D mergeTex = PlaceBoardManager.Instance.MergeTexture(userTex, tex);
+
+            // 裁剪大小
+            Texture2D retex = PlaceBoardManager.Instance.ScaleTextureProportionally(mergeTex, max, max);
+
+            // 转换成 instruction
+            return Image2Instruction(retex, ox, oy);
+        }
+
+        return new List<Instruction>();
+    }
+    // public List<Instruction> CartoonGenerateImage(int ox, int oy, int max, string name)
+    // {
+    //     // 图库
+    //     // 获取index 
+    //     if (demoTextures != null && demoTextures.Count > 0)
+    //     {
+    //         // Texture2D tex;
+    //         // demoTexturesDic.TryGetValue(name,out tex);
+    //         // if (tex == null)
+    //         // {
+    //         //     return new List<Instruction>();
+    //         // }
+    //         if (!freeDemoTexturesDic.ContainsKey(name))
+    //         {
+    //             return new List<Instruction>();
+    //         }
+    //         Texture2D tex = freeDemoTexturesDic[name];
+    //         // texture 2d
+    //         // Texture2D tex = Resources.Load<Texture2D>($"Images/{index}");
+    //         Texture2D retex = PlaceBoardManager.Instance.ScaleTextureProportionally(tex, max, max);
+
+    //         // 转换成 instruction
+    //         return Image2Instruction(retex, ox, oy);
+    //     }
+
+    //     return new List<Instruction>();
+    // }
     public List<Instruction> GenerateRandomImage(int ox, int oy, int max)
     {
         // 图库
         // 获取index 
+        List<Texture2D> demoTextures = freeDemoTexturesDic.Values.ToList();
         if (demoTextures != null && demoTextures.Count > 0)
         {
             int index = Random.Range(0, demoTextures.Count);
@@ -739,24 +812,60 @@ public class PlaceCenter : MonoBehaviour
 
     public List<Texture2D> LoadDemoResources()
     {
-#if UNITY_EDITOR
-        return LoadResources("Assets/Images/Demo");
-#else
-        string demoPath = Application.streamingAssetsPath;
-        demoPath = Path.Combine(demoPath, "Demo");
         return LoadResources(demoPath);
-#endif
     }
-    public Dictionary<string, Texture2D> LoadDemoDicResources()
+    public Dictionary<string, Texture2D> LoadDemoDicResources(string sbuClass)
     {
-#if UNITY_EDITOR
-        return LoadDicResources("Assets/Images/Demo");
-#else
-        string demoPath = Application.streamingAssetsPath;
-        demoPath = Path.Combine(demoPath, "Demo");
-        return LoadDicResources(demoPath);
-#endif
+        string classFormat = @"free|gift";
+
+        if (Regex.IsMatch(sbuClass, classFormat))
+        {
+            return LoadDicResources(Path.Combine(demoPath, sbuClass));
+        }
+        Debug.LogError("Class not found: " + sbuClass);
+        return new Dictionary<string, Texture2D>();
     }
+    public Dictionary<string, List<Texture2D>> LoadCartoonDemoDicResources(string sbuClass)
+    {
+        string classFormat = @"cartoon";
+
+        if (Regex.IsMatch(sbuClass, classFormat))
+        {
+            return LoadCartoonDicResources(Path.Combine(demoPath, sbuClass));
+        }
+        Debug.LogError("Class not found: " + sbuClass);
+        return new Dictionary<string, List<Texture2D>>();
+    }
+
+    public Dictionary<string, List<Texture2D>> LoadCartoonDicResources(string imagePath)
+    {
+        Dictionary<string, List<Texture2D>> texCartoonDic = new Dictionary<string, List<Texture2D>>();
+        // List<Texture2D> texlist = new List<Texture2D>();
+        // 检查目录是否存在
+        if (Directory.Exists(imagePath))
+        {
+            // 获取目录中的所有子目录
+            string[] subDirs = Directory.GetDirectories(imagePath);
+            foreach (string subDirectory in subDirs)
+            {
+
+                // 获取目录中的所有文件
+                List<Texture2D> texlist = LoadResources(subDirectory);
+
+                texCartoonDic.Add(Path.GetFileName(subDirectory), texlist);
+            }
+
+
+
+        }
+        else
+        {
+            Debug.LogError("Directory not found: " + imagePath);
+        }
+
+        return texCartoonDic;
+    }
+
 
     public Dictionary<string, Texture2D> LoadDicResources(string imagePath)
     {
