@@ -5,6 +5,7 @@ using UnityEngine;
 [CustomEditor(typeof(TestManager))]
 public class TestManagerEditor : Editor
 {
+   string insTxt = "/roll 0 0 120 comeOn-150-115-40 gift";
     public override void OnInspectorGUI()
     {
         // 绘制默认的检视面板布局
@@ -69,6 +70,7 @@ public class TestManagerEditor : Editor
            ((TestManager)target).SendGift(299f);
         }
         GUILayout.EndHorizontal();
+        GUILayout.TextField(insTxt);
         // 结束水平布局组
         GUILayout.EndVertical();
 

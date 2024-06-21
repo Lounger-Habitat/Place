@@ -56,24 +56,24 @@ public class TestManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    // void Update()
-    // {
-    //     // 按下/，执行指令  接受 指令
-    //     if (Input.GetKeyDown(KeyCode.Slash))
-    //     {
-    //         ins = ins.Trim();
-    //
-    //         if (PlaceCenter.Instance.users.ContainsKey(playerName))
-    //         {
-    //             Dm dm = MakeDm(playerName, ins);
-    //             PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
-    //         }
-    //         else
-    //         {
-    //             Dm dm = MakeDm(playerName, ins);
-    //             PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
-    //         }
-    //     }
+    void Update()
+    {
+        // 按下/，执行指令  接受 指令
+        if (Input.GetKeyDown(KeyCode.Slash))
+        {
+            ins = ins.Trim();
+    
+            if (PlaceCenter.Instance.users.ContainsKey(playerName))
+            {
+                Dm dm = MakeDm(playerName, ins);
+                PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
+            }
+            else
+            {
+                Dm dm = MakeDm(playerName, ins);
+                PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
+            }
+        }
     //     // 按下‘，执行指令  接受 指令
     //     if (Input.GetKeyDown(KeyCode.F1))
     //     {
@@ -138,7 +138,7 @@ public class TestManager : MonoBehaviour
     //         PlaceInstructionManager.Instance.DefaultRunChatCommand(u, coolIns);
     //     }
     //
-    // }
+    }
 
     public void CameraView()
     {

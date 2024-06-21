@@ -12,3 +12,8 @@ public class PlaceAction : Action
         pc = GetComponent<PlacePlayerController>();
     }
 }
+public class RefWrapper<T>
+{
+    public T Value;
+    public RefWrapper(T value) { Value = value; }
+}
