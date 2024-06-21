@@ -5,67 +5,34 @@ using UnityEngine;
 [TaskCategory("Custom/Draw")]
 public class DrawSomePattern : PlaceAction
 {
+ 
+    RefWrapper<bool> drawing;
+    RefWrapper<bool> drawFinish;
     public override void OnStart()
     {
         base.OnStart();
         pc.playerAnimator.SetBool("isRun", false);
         pc.user.currentState.detailState = DetailState.DrawSome;
         pc.batchInsCount = pc.insQueue.Count;
+        drawing = new RefWrapper<bool>(false);
+        drawFinish = new RefWrapper<bool>(false);
     }
 
     public override TaskStatus OnUpdate()
     {
-        if (pc.insQueue.Count > 0)
+        if (!drawing.Value)
         {
-            Instruction ins = pc.insQueue.Dequeue();
-                // Debug.Log(instruction.mode);
-                // 这里调用绘制像素的逻辑
-                // PixelsContainer.Instance.DrawPixel(instruction.x, instruction.y, instruction.r, instruction.g, instruction.b);
-            switch (ins.mode)
-            {
-                case "/draw":
-                case "/d":
-                    pc.DrawPoint(ins);
-                    pc.user.drawTimes += 1;
-                        // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, pc.user.camp);
-                        // pc.user.carryingInkCount -= ins.needInkCount;
-                        // pc.user.score += ins.needInkCount;
-                    break;
-                case "/line":
-                case "/l":
-                        // pc.DrawPoint(ins);
-                    pc.DrawLine(ins);
-                    pc.user.drawTimes += 1;
-                    // PlaceBoardManager.Instance.LineCommand(ins.x, ins.y, ins.ex, ins.ey, ins.r, ins.g, ins.b, pc.user.camp);
-                    // pc.user.carryingInkCount -= ins.needInkCount;
-                    // pc.user.score += ins.needInkCount;
-                    break;
-                case "/paint":
-                case "/p":
-                    // PlaceBoardManager.Instance.PaintCommand(ins.mode, ins.x, ins.y, ins.dx, ins.dy, ins.r, ins.g, ins.b, pc.user.Camp);
-                    // pc.user.currentCarryingInkCount -= ins.needInkCount;
-                    // pc.user.score += ins.needInkCount;
-                    break;
-                default:
-                    break;
-            }
-            return TaskStatus.Running;
-
+            drawing.Value = true;
+            StartCoroutine(pc.DrawPattern(drawing,drawFinish));
         }
-
-
-
-        if (pc.batchInsCount == pc.batchDrawTimes)
+        if (drawFinish.Value)
         {
-            // 画完了
-            if (pc.user.currentCarryingInkCount != 0)
-            {
-                Debug.Log($"还剩下 {pc.user.currentCarryingInkCount} 颜料!");
-            }
             return TaskStatus.Success;
         }
+        Debug.Log($"[BT] : drawFinish: {drawFinish.Value} drawing: {drawing.Value}");
 
         // wait for 1 second
         return TaskStatus.Running;
     }
+
 }
