@@ -401,7 +401,8 @@ public enum TipsType
     likeTipsPanelRight,
     levelUpPanel,
     levelUpPanelRight,
-    textTipsPanel
+    textTipsPanel,
+    gittImagePanel
 }
 
 public enum SkillIcon

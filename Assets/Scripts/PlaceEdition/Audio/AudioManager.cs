@@ -33,6 +33,12 @@ public class AudioManager : MonoBehaviour
         //audioSource.PlayOneShot(audioClips[audioIndex]);
     }
 
+    public AudioClip aoTeMan;
+    public void PlayShout()
+    {
+        audioSource.PlayOneShot(aoTeMan);
+    }
+    
     public void Btn_click()
     {
         if (audioIndex.Equals(0))
