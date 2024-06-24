@@ -38,8 +38,8 @@ public class ProjectileController : MonoBehaviour
 
     public void Launch(Vector3 end, float time)
     {
-        // GameObject flashGo = PlaceInkPoolManager.Instance.GetInkFlash();
-        // flashGo.transform.position = transform.position;
+        GameObject flashGo = PlaceInkPoolManager.Instance.GetInkFlash();
+        flashGo.transform.position = transform.position;
         transform.DOMove(end, time).SetEase(Ease.OutQuint).OnComplete(() =>
          {
              gameObject.SetActive(false);
@@ -74,19 +74,19 @@ public class ProjectileController : MonoBehaviour
         Debug.Log("GameObject is now disabled.");
     }
 
-    // void OnTriggerEnter(Collider other)
-    // {
-    //     Debug.Log("OnTriggerEnter");
-    //     if (other.CompareTag("Board"))
-    //     {
-    //         GameObject go = PlaceInkPoolManager.Instance.GetInkImpact();
-    //         go.transform.position = transform.position;
-    //         go.transform.rotation = Quaternion.identity;
-    //         go.SetActive(true);
+    void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("OnTriggerEnter");
+        if (other.CompareTag("Board"))
+        {
+            GameObject go = PlaceInkPoolManager.Instance.GetInkImpact();
+            go.transform.position = transform.position;
+            go.transform.rotation = Quaternion.identity;
+            go.SetActive(true);
 
-    //         DOTween.Kill(transform);
-    //         gameObject.SetActive(false);
-    //     }
-    // }
+            DOTween.Kill(transform);
+            gameObject.SetActive(false);
+        }
+    }
 
 }
