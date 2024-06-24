@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68c1d07ca14386b448937146f73392cb, type: 3}
+  m_Name: GreenInk
+  m_EditorClassIdentifier: 
+  onlyOneAtATime: 0
+  canBePlayedAgain: 1
+  randomSpreadRadius: 0
+  cooldown: 0.25
+  isShootProjectile: 0
+  effectPrefab: {fileID: 0}
+  spawnTouchingFloor: 0
+  projectileSpeed: 15
+  projectilePrefab: {fileID: 7258936774047215834, guid: 0644c589f7483468eac8cf5c06f879da, type: 3}
+  muzzleFlashPrefab: {fileID: 3686776489152041964, guid: fd029556964fc4e6090b39ee1404e9ce, type: 3}
+  impactPrefab: {fileID: 7031711661290200971, guid: 3066c14b0cda949b58ce877b9164172d, type: 3}
+  doCameraShake: 0
+  mainEffectShakeAmount: 1
+  projectileImpactShakeAmount: 1
+  positionOffset: {x: 0, y: 0, z: 0}
+  scaleMultiplier: 1

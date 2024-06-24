@@ -33,7 +33,7 @@ public class PlaceFire : MonoBehaviour
 
     public void Fire(Vector3 endPos)
     {
-        GameObject projGo = PlaceInkPoolManager.Instance.GetInkProjectile();
+        GameObject projGo = PlaceInkPoolManager.Instance.GetBlueInkProjectile();
         projGo.transform.position = start.position;
         ProjectileController projScript = projGo.GetComponent<ProjectileController>();
         projScript.Launch(endPos, 2.0f);

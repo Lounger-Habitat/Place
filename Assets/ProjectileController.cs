@@ -5,6 +5,7 @@ using DG.Tweening;
 
 public class ProjectileController : MonoBehaviour
 {
+    public int camp = 0;
     void OnEnable()
     {
     }
@@ -38,7 +39,17 @@ public class ProjectileController : MonoBehaviour
 
     public void Launch(Vector3 end, float time)
     {
-        GameObject flashGo = PlaceInkPoolManager.Instance.GetInkFlash();
+
+        GameObject flashGo;
+        if (camp == 1)
+        {
+            flashGo = PlaceInkPoolManager.Instance.GetBlueInkFlash();
+        }
+        else
+        {
+            flashGo = PlaceInkPoolManager.Instance.GetGreenInkFlash();
+        }
+
         flashGo.transform.position = transform.position;
         transform.DOMove(end, time).SetEase(Ease.OutQuint).OnComplete(() =>
          {
@@ -79,7 +90,16 @@ public class ProjectileController : MonoBehaviour
         Debug.Log("OnTriggerEnter");
         if (other.CompareTag("Board"))
         {
-            GameObject go = PlaceInkPoolManager.Instance.GetInkImpact();
+            GameObject go;
+            if (camp == 1)
+            {
+                go = PlaceInkPoolManager.Instance.GetBlueInkImpact();
+            }
+            else
+            {
+                go = PlaceInkPoolManager.Instance.GetGreenInkImpact();
+            }
+            
             go.transform.position = transform.position;
             go.transform.rotation = Quaternion.identity;
             go.SetActive(true);

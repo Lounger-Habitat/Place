@@ -22,7 +22,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
     [SerializeField] private All1VfxDemoEffect team2DemoEffect;
     [SerializeField] private All1VfxDemoEffect team3DemoEffect;
     [SerializeField] private All1VfxDemoEffect team4DemoEffect;
-  
+
     public int debugx = 0;
     public int debugy = 0;
 
@@ -51,7 +51,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
     {
         // ConsoleAreaName = GameObject.Find("ConsoleAreaName");
         // ConsoleAreaName.SetActive(false);
-                // 获取 frame 宽 高
+        // 获取 frame 宽 高
         boradWidth = PlaceBoardManager.Instance.width;
         boradHeight = PlaceBoardManager.Instance.height;
         frame = endPosTop.position - endPosBottom.position;
@@ -67,7 +67,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
 
         // 缓慢自转
         // transform.Rotate(Vector3.up, 0.1f);
-        
+
 
         // Vector2 mousePosition = Input.mousePosition;
         // 按下 E 键
@@ -135,7 +135,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
 
     // }
 
-    public void PlayEffect(int x,int y , int camp)
+    public void PlayEffect(int x, int y, int camp)
     {
         // 检测 x,y 小于 width height, 超出部分做截断处理
         // x = Mathf.Clamp(x, 0, boradWidth);
@@ -145,61 +145,59 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         // Vector3 aimPos = endPosBottom.position + delta;
 
 
-        Vector3 aimPos = CalAimPos(x,y);
+        Vector3 aimPos = CalAimPos(x, y);
 
-        switch (camp)
+        GameObject projGo;
+        if (camp == 1)
         {
-            case 1:
-                currDemoEffect = team1DemoEffect;
-                break;
-            case 2:
-                currDemoEffect = team2DemoEffect;
-                break;
-            case 3:
-                currDemoEffect = team3DemoEffect;
-                break;
-            case 4:
-                currDemoEffect = team4DemoEffect;
-                break;
-            default:
-                break;
+            projGo = PlaceInkPoolManager.Instance.GetBlueInkProjectile();
         }
-
-        
-        Transform tempTransform = null;
-        tempTransform = Instantiate(currDemoEffect.muzzleFlashPrefab, spawnPoint.position, Quaternion.identity).transform;
-        tempTransform.localRotation = Quaternion.identity;
-        tempTransform.forward = spawnPoint.forward;
-        tempTransform.parent = transform;
-        tempTransform.localScale *= currDemoEffect.scaleMultiplier;
-        
-        
-        
-        Transform projectileBase = Instantiate(projectileBasePrefab, spawnPoint.position, Quaternion.identity).transform;
-        projectileBase.LookAt(aimPos);
-        projectileBase.parent = transform;
-        //projectileBase.localRotation = Quaternion.identity;
-        
-        
-        tempTransform = Instantiate(currDemoEffect.projectilePrefab, spawnPoint.position, Quaternion.identity).transform;
-        tempTransform.localRotation = Quaternion.identity;
-        tempTransform.forward = projectileBase.forward;
-        tempTransform.parent = projectileBase;
-        
-        
-        EffectBulletBase tempProjectileInstance = projectileBase.GetComponent<EffectBulletBase>();
-        tempProjectileInstance.Initialize(transform, spawnPoint.forward, currDemoEffect.projectileSpeed, currDemoEffect.impactPrefab, currDemoEffect.scaleMultiplier);
-
-        projectileBase.DOMove(aimPos, 2.0f).SetEase(Ease.OutQuint).OnComplete(() =>
+        else
         {
-            Destroy(projectileBase.gameObject);
-        });
+            projGo = PlaceInkPoolManager.Instance.GetGreenInkProjectile();
+        }
+        projGo.transform.position = spawnPoint.position;
+        projGo.transform.forward = spawnPoint.forward;
+        ProjectileController projScript = projGo.GetComponent<ProjectileController>();
+        projScript.camp = camp;
+        projScript.Launch(aimPos, 2.0f);
+
+
+        // Transform tempTransform = null;
+        // tempTransform = Instantiate(currDemoEffect.muzzleFlashPrefab, spawnPoint.position, Quaternion.identity).transform;
+        // tempTransform.localRotation = Quaternion.identity;
+        // tempTransform.forward = spawnPoint.forward;
+        // tempTransform.parent = transform;
+        // tempTransform.localScale *= currDemoEffect.scaleMultiplier;
+
+
+
+        // Transform projectileBase = Instantiate(projectileBasePrefab, spawnPoint.position, Quaternion.identity).transform;
+        // projectileBase.LookAt(aimPos);
+        // projectileBase.parent = transform;
+        // //projectileBase.localRotation = Quaternion.identity;
+
+
+        // tempTransform = Instantiate(currDemoEffect.projectilePrefab, spawnPoint.position, Quaternion.identity).transform;
+        // tempTransform.localRotation = Quaternion.identity;
+        // tempTransform.forward = projectileBase.forward;
+        // tempTransform.parent = projectileBase;
+
+
+        // EffectBulletBase tempProjectileInstance = projectileBase.GetComponent<EffectBulletBase>();
+        // tempProjectileInstance.Initialize(transform, spawnPoint.forward, currDemoEffect.projectileSpeed, currDemoEffect.impactPrefab, currDemoEffect.scaleMultiplier);
+
+        // projectileBase.DOMove(aimPos, 2.0f).SetEase(Ease.OutQuint).OnComplete(() =>
+        // {
+        //     Destroy(projectileBase.gameObject);
+        // });
     }
 
-    public void VisualAuxiliaryLine(int x,int y , int camp) {
+    public void VisualAuxiliaryLine(int x, int y, int camp)
+    {
         float offset = 1f;
         float fadeTime = 3f;
-        Vector3 aimPos = CalAimPos(x,y);
+        Vector3 aimPos = CalAimPos(x, y);
         // 实例化 ALine
         GameObject temp = Instantiate(ALine, endPosBottom.position, Quaternion.identity);
         // 获取 ALine 的 子物体
@@ -230,7 +228,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
 
         // 设置 Text 位置
         X1AxisText.transform.position = new Vector3(endPosBottom.position.x - offset, aimPos.y, aimPos.z);
-        X2AxisText.transform.position = new Vector3(endPosTop.position.x + offset , aimPos.y, aimPos.z);
+        X2AxisText.transform.position = new Vector3(endPosTop.position.x + offset, aimPos.y, aimPos.z);
         Y1AxisText.transform.position = new Vector3(aimPos.x, endPosBottom.position.y - 0.5f, aimPos.z);
         Y2AxisText.transform.position = new Vector3(aimPos.x, endPosTop.position.y + 0.5f, aimPos.z);
         // 设置 Text 文字
@@ -251,7 +249,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
 
     }
 
-    IEnumerator FadeOutTextMeshPro(TextMeshPro tmp ,float duration)
+    IEnumerator FadeOutTextMeshPro(TextMeshPro tmp, float duration)
     {
         // 从当前Alpha值渐变到0
         tmp.DOKill(); // 首先停止所有正在运行的动画
@@ -260,7 +258,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         tmp.gameObject.SetActive(false); // 可选：在动画结束后禁用TextMeshPro对象
     }
 
-    IEnumerator FadeOutLineRenderer(LineRenderer lr,float duration)
+    IEnumerator FadeOutLineRenderer(LineRenderer lr, float duration)
     {
         // 从当前Alpha值渐变到0
         lr.material.DOKill(); // 首先停止所有正在运行的动画
@@ -269,7 +267,8 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         lr.enabled = false; // 可选：在动画结束后禁用LineRenderer
     }
 
-    public Vector3 CalAimPos(int x,int y) {
+    public Vector3 CalAimPos(int x, int y)
+    {
         x = Mathf.Clamp(x, 0, boradWidth);
         y = Mathf.Clamp(y, 0, boradHeight);
         Vector3 delta = new Vector3((float)(x * pixelWidth), (float)(y * pixelHeight), 0f);
