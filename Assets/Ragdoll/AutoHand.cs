@@ -36,14 +36,16 @@ public class AutoHand : MonoBehaviour
         Transform targetParent = col.transform.parent;
         // 如果父级为空 或者 父级名字不是 Ragdoll 或者 父级等于自己的父级
         if (targetParent == null || targetParent.name != "Ragdoll" || targetParent == transform.parent) return;
+        Debug.Log($"2");
         // 获取碰撞体的父级的AutoContainer
         AutoContainer targetContainer = col.transform.root.GetComponent<AutoContainer>();
         // 如果目标重定向器为空
         AutoHitController targetHitController = targetContainer.hitController;
+        Debug.Log($"3");
         // 如果不能打击为空
         if (!hitController.CanHitThisTarget(targetHitController)) return;
         // 如果目标重定向器为空
-
+        Debug.Log($"4");
         if (targetHitController.TakeHit(col.gameObject, col.contacts[0].point, Velocity))
         {
             Debug.Log($"Hit game object : {col.gameObject}");

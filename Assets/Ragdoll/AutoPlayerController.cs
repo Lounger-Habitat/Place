@@ -109,6 +109,7 @@ public class AutoPlayerController : AutoCharacterController
 
         // float time = animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
 
+        if (targetBody == null) return;
         // 计算目标位置与自身位置的距离
         float dist = Vector3.Distance(targetBody.position, rb.position);
         // 如果距离小于 0.6 并且不在奔跑状态
@@ -146,6 +147,11 @@ public class AutoPlayerController : AutoCharacterController
             isRun = false;
         }
 
+        if (targetHitController != null && targetHitController.IsDead)
+        {
+            isAttackState = false;
+        }
+
     }
 
     void LateUpdate()
@@ -169,6 +175,7 @@ public class AutoPlayerController : AutoCharacterController
         Transform nearest = null;
         foreach (var collider in colliders)
         {
+            if (collider.GetComponent<AutoHitController>().IsDead) continue;
             float dist = Vector3.Distance(transform.position, collider.transform.position);
             if (dist < minDist)
             {
@@ -192,7 +199,11 @@ public class AutoPlayerController : AutoCharacterController
             // 设置看向权重 ？
             animator.SetLookAtWeight(1, 0.5f);
             // 设置看向位置 ？
-            animator.SetLookAtPosition(targetHead.position);
+            if (targetHead != null) {
+                animator.SetLookAtPosition(targetHead.position);
+            }else {
+                animator.SetLookAtPosition(transform.forward);
+            }
         }
     }
 }

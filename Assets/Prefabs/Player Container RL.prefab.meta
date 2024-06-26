@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: d1a27947ecc20492e96f6d491e42a070
+labels:
+- animation
+- blend
+- character
+- collider
+- constructor
+- creator
+- hierarchy
+- joint
+- mecanim
+- mix
+- physics
+- ragdoll
+- skeleton
+- state
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

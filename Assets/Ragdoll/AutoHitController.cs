@@ -33,6 +33,7 @@ public class AutoHitController : MonoBehaviour
         rb.isKinematic = true;
         col.enabled = false;
         charController.Die();
+        charController.life--;
 
         // CameraOrbit co = Camera.main.GetComponent<CameraOrbit>();
         // co.secondTarget = this;
@@ -59,6 +60,7 @@ public class AutoHitController : MonoBehaviour
         {
             if (go == bone)
             {
+                if (charController.hp > 0) charController.hp -= 10;
                 hit = true;
                 break;
             }
@@ -66,8 +68,10 @@ public class AutoHitController : MonoBehaviour
         // 如果没有击打到，返回
         if (!hit) return false;
         // 如果可以死亡，死亡
-        if (canDie)
-            Die();
+        if (canDie) {
+            if(charController.hp <= 0) Die();
+        }
+            
 
         // 获取go的rg
         Rigidbody boneRb = go.GetComponent<Rigidbody>();
@@ -115,7 +119,7 @@ public class AutoHitController : MonoBehaviour
                 || ramecanMixer.RootBoneRb.angularVelocity.magnitude > 2f) deadTimer = deadTime;
             Vector3 revivePos = ramecanMixer.RootBoneTr.position;
             rb.position = new Vector3(revivePos.x, rb.position.y, revivePos.z);
-            if (deadTimer <= 0)
+            if (deadTimer <= 0 && charController.life > 0)
             {
                 Revive();
             }
