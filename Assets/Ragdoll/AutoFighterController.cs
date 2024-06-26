@@ -68,7 +68,6 @@ public class AutoFighterController : AutoCharacterController
             FindTarget();
             if (Input.GetButtonDown("Fire1") && !isRun)
             {
-
                 animator.SetBool("side", !animator.GetBool("side"));
                 animator.SetInteger("number", Random.Range(0, 3));
                 animator.SetTrigger("attack");

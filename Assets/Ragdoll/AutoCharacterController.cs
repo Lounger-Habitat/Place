@@ -5,4 +5,8 @@ public abstract class AutoCharacterController : MonoBehaviour
     public bool isAttacking;
     // 死亡
     public abstract void Die();
+
+    public int hp = 100;
+
+    public int life = 3;
 }
