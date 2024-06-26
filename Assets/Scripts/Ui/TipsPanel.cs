@@ -402,7 +402,9 @@ public enum TipsType
     levelUpPanel,
     levelUpPanelRight,
     textTipsPanel,
-    gittImagePanel
+    gittImagePanel,
+    giftImageBaiTuo,
+    giftImageComeOn,
 }
 
 public enum SkillIcon
