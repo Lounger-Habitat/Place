@@ -58,7 +58,7 @@ public class CountdownPanel : MonoBehaviour
             startTime = 60 * 60;
         }
 
-        DataNoDeleteManager.Instance.playTime = (startTime / 60);
+        GameSettingManager.Instance.playTime = (startTime / 60);
     }
     public void OnChangeTimeNumber(TMP_Text text)
     {

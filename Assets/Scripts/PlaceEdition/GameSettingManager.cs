@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DataNoDeleteManager : MonoBehaviour
+public class GameSettingManager : MonoBehaviour
 {
-    public static DataNoDeleteManager Instance { get; private set; }
+    public static GameSettingManager Instance { get; private set; }
     
     void Awake()
     {
@@ -26,5 +26,11 @@ public class DataNoDeleteManager : MonoBehaviour
     public bool addAutoPlayer = false;
     public int playTime = 15;
     public int maxNumber = 25;
-    public bool isNormalModel = true;
+    public GameMode mode = GameMode.Competition;
+}
+
+public enum GameMode {
+    Create, // 创作模式
+    Graffiti, // 涂鸦模式
+    Competition // 竞赛模式
 }

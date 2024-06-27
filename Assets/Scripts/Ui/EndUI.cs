@@ -75,7 +75,7 @@ public class EndUI : MonoBehaviour
     public TMP_Text nextBtnText;
     private void CheckAutoPlay()
     {
-        if (DataNoDeleteManager.Instance.isAutoPlay)//如果是自动开始，就开始倒计时，并且给按钮上增加倒计时
+        if (GameSettingManager.Instance.isAutoPlay)//如果是自动开始，就开始倒计时，并且给按钮上增加倒计时
         {
             StartCoroutine(AutoPlayTime());
         }

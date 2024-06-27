@@ -52,7 +52,7 @@ public class TestManager : MonoBehaviour
     void Start()
     {
         loadedTextures = PlaceCenter.Instance.LoadResources(directoryPath);
-        pixelsImage = PlaceCenter.Instance.ImageFitBoardProcessor(loadedTextures, index).GetPixels();
+        // pixelsImage = PlaceCenter.Instance.ImageFitBoardProcessor(loadedTextures, index).GetPixels();
     }
 
     // Update is called once per frame
@@ -436,12 +436,12 @@ public class TestManager : MonoBehaviour
         }
     }
 
-    (int, int, int) RandomGetPoint(int x, int y)
-    {
-        int i = y * PlaceBoardManager.Instance.width + x;
-        Color32 c = pixelsImage[i];
-        return (c.r, c.g, c.b);
-    }
+    // (int, int, int) RandomGetPoint(int x, int y)
+    // {
+    //     int i = y * PlaceBoardManager.Instance.width + x;
+    //     Color32 c = pixelsImage[i];
+    //     return (c.r, c.g, c.b);
+    // }
 
 
 

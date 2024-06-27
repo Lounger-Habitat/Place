@@ -16,12 +16,18 @@ public class PlaceConsoleAreaManager : MonoBehaviour
     [SerializeField] private Transform endPosBottom;
     [SerializeField] private Transform endPosTop;
     [SerializeField] private Transform spawnPoint;
-    [SerializeField] private All1VfxDemoEffect currDemoEffect;
-    [SerializeField] private GameObject projectileBasePrefab;
-    [SerializeField] private All1VfxDemoEffect team1DemoEffect;
-    [SerializeField] private All1VfxDemoEffect team2DemoEffect;
-    [SerializeField] private All1VfxDemoEffect team3DemoEffect;
-    [SerializeField] private All1VfxDemoEffect team4DemoEffect;
+
+
+
+    [SerializeField] private Transform team1EndPosTop;
+    [SerializeField] private Transform team1EndPosBottom;
+
+
+
+    [SerializeField] private Transform team2EndPosTop;
+    [SerializeField] private Transform team2EndPosBottom;
+
+
 
     public int debugx = 0;
     public int debugy = 0;
@@ -52,11 +58,24 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         // ConsoleAreaName = GameObject.Find("ConsoleAreaName");
         // ConsoleAreaName.SetActive(false);
         // 获取 frame 宽 高
-        boradWidth = PlaceBoardManager.Instance.width;
-        boradHeight = PlaceBoardManager.Instance.height;
-        frame = endPosTop.position - endPosBottom.position;
-        pixelWidth = frame.x / boradWidth;
-        pixelHeight = frame.y / boradHeight;
+
+        // TODO 滞后修改
+        if (GameSettingManager.Instance.mode == GameMode.Create)
+        {
+            boradWidth = PlaceBoardManager.Instance.width;
+            boradHeight = PlaceBoardManager.Instance.height;
+            frame = endPosTop.position - endPosBottom.position;
+            pixelWidth = frame.x / boradWidth;
+            pixelHeight = frame.y / boradHeight;
+        }
+        else
+        {
+            boradWidth = PlaceTeamBoardManager.Instance.width;
+            boradHeight = PlaceTeamBoardManager.Instance.height;
+            frame = team1EndPosTop.position - team1EndPosBottom.position;
+            pixelWidth = frame.x / boradWidth;
+            pixelHeight = frame.y / boradHeight;
+        }
     }
 
     // Update is called once per frame
@@ -145,7 +164,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         // Vector3 aimPos = endPosBottom.position + delta;
 
 
-        Vector3 aimPos = CalAimPos(x, y);
+        Vector3 aimPos = CalAimPos(x, y, camp);
 
         GameObject projGo;
         if (camp == 1)
@@ -197,7 +216,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
     {
         float offset = 1f;
         float fadeTime = 3f;
-        Vector3 aimPos = CalAimPos(x, y);
+        Vector3 aimPos = CalAimPos(x, y, camp);
         // 实例化 ALine
         GameObject temp = Instantiate(ALine, endPosBottom.position, Quaternion.identity);
         // 获取 ALine 的 子物体
@@ -267,12 +286,28 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         lr.enabled = false; // 可选：在动画结束后禁用LineRenderer
     }
 
-    public Vector3 CalAimPos(int x, int y)
+    public Vector3 CalAimPos(int x, int y, int camp)
     {
         x = Mathf.Clamp(x, 0, boradWidth);
         y = Mathf.Clamp(y, 0, boradHeight);
         Vector3 delta = new Vector3((float)(x * pixelWidth), (float)(y * pixelHeight), 0f);
-        Vector3 aimPos = endPosBottom.position + delta;
+
+        Vector3 aimPos;
+        if (GameSettingManager.Instance.mode == GameMode.Competition)
+        {
+            if (camp == 1)
+            {
+                aimPos = team1EndPosBottom.position + delta;
+            }
+            else
+            {
+                aimPos = team2EndPosBottom.position + delta;
+            }
+        }
+        else
+        {
+            aimPos = endPosBottom.position + delta;
+        }
         return aimPos;
     }
 }

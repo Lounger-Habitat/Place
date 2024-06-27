@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class AutoPlayerManager : MonoBehaviour
+public class AutoCompetitionManager : MonoBehaviour
 {
     public Sprite team1;
     public Sprite team2;
@@ -60,16 +60,16 @@ public class AutoPlayerManager : MonoBehaviour
             if (Random.Range(1, 3) == 1)
             {
                 if (team1Leader.instructionQueue.Count == 0) {
-                    string drawIns = RandomGenDrawIns("team1");
-                    PlaceInstructionManager.Instance.DefaultRunChatCommand(team1Leader, drawIns);
+                    // string drawIns = RandomGenDrawIns("team1");
+                    // PlaceInstructionManager.Instance.DefaultRunChatCommand(team1Leader, drawIns);
                 }
 
             }
             else
             {
                 if (team2Leader.instructionQueue.Count == 0) {
-                    string drawIns = RandomGenDrawIns("team2");
-                    PlaceInstructionManager.Instance.DefaultRunChatCommand(team2Leader, drawIns);
+                    // string drawIns = RandomGenDrawIns("team2");
+                    // PlaceInstructionManager.Instance.DefaultRunChatCommand(team2Leader, drawIns);
                 }
 
             }
@@ -81,19 +81,8 @@ public class AutoPlayerManager : MonoBehaviour
 
     }
 
-    string RandomGenDrawIns(string camp)
-    {
-        string drawIns = "";
-        if (camp == "team1")
-        {
-            drawIns = GenDrawIns(1);
-        }
-        else if (camp == "team2")
-        {
-            drawIns = GenDrawIns(2);
-        }
-        return drawIns;
-    }
+    
+    
 
     public string GenDrawIns(int camp)
     {
