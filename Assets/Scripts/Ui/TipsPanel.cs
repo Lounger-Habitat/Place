@@ -65,16 +65,27 @@ public class TipsPanel : MonoBehaviour
     public Queue<TipsItem> tipsLevelUpQueue = new Queue<TipsItem>();
     public Queue<TipsItem> tipsLevelUpQueueright = new Queue<TipsItem>();
 
+    public Queue<TipsItem> giftImageQueue = new Queue<TipsItem>();
+    
     public void AddTips(TipsItem tip)
     {
-        if (tip.tipsType == TipsType.textTipsPanel)
+        switch (tip.tipsType)
         {
-            //此消息类型，无需进入队列，直接显示，会自动删除
-            var panel = tipsPanels[tip.tipsType];
-            panel.SetData(tip);
-            return;
+            case TipsType.gittImagePanel:
+            case TipsType.giftImageBaiTuo:
+            case TipsType.giftImageComeOn:
+            case TipsType.dageEnterTips:
+            case TipsType.otherEnterTips:
+                //此消息类型，无需进入队列，直接显示，会自动删除
+                giftImageQueue.Enqueue(tip);
+                if (isShowGiftImageTips)
+                {
+                    StartCoroutine(showGiftImageAni());
+                }
+                return;
+            
         }
-        
+
         if (tip.tipsType == TipsType.messagePanel)
         {
             if (tip.isLeft)
@@ -167,7 +178,23 @@ public class TipsPanel : MonoBehaviour
             }
         }
     }
+    private bool isShowGiftImageTips = false;
+    IEnumerator showGiftImageAni()
+    {
+        //将标志位置为true
+        isShowGiftImageTips = true;
+        while (tipsQueue.Any())
+        {
+            var Data = tipsQueue.Dequeue();
+            var panel = tipsPanels[Data.tipsType];
+            panel.SetData(Data);
+            panel.TestMenu();
+            yield return new WaitForSeconds(10f);
+        }
 
+        isShowGiftImageTips = false;
+    }
+    
     WaitForSeconds wait = new(4.6f);
     private bool isShowTips = false;
     private bool isShowTipsright = false;
@@ -214,7 +241,7 @@ public class TipsPanel : MonoBehaviour
 
         isShowTipsright = false;
     }
-    
+
     IEnumerator ShowTipslikeAni()
     {
         //将标志位置为true
@@ -233,6 +260,7 @@ public class TipsPanel : MonoBehaviour
 
         isShowlike = false;
     }
+
     IEnumerator ShowTipslikeRight()
     {
         //将标志位置为true
@@ -251,6 +279,7 @@ public class TipsPanel : MonoBehaviour
 
         isShowLikeRight = false;
     }
+
     IEnumerator ShowTipsLevelUp()
     {
         //将标志位置为true
@@ -269,6 +298,7 @@ public class TipsPanel : MonoBehaviour
 
         isShowLevel = false;
     }
+
     IEnumerator ShowTipsLevelUpRight()
     {
         //将标志位置为true
@@ -284,6 +314,7 @@ public class TipsPanel : MonoBehaviour
             panel.MoveTipsPanel(false);
             yield return new WaitForSeconds(0.8f);
         }
+
         isShowLevelRight = false;
     }
 
@@ -295,7 +326,7 @@ public class TipsPanel : MonoBehaviour
             AddTips(new TipsItem()
             {
                 userName = "全力以赴",
-                text = $"当前不存在所选物品，如需获取请联系管理员添加。{Random.Range(0,100)}",
+                text = $"当前不存在所选物品，如需获取请联系管理员添加。{Random.Range(0, 100)}",
                 tipsType = TipsType.textTipsPanel
             });
         }
@@ -333,6 +364,39 @@ public class TipsPanel : MonoBehaviour
             userName = "全力以赴444",
             text = "Add Team33",
             tipsType = TipsType.messagePanel
+        });
+        
+        AddTips(new TipsItem()//拜托你很弱提示面板
+        {
+            userName = "很长的用户名",
+            tipsType = TipsType.giftImageBaiTuo,
+            icon = null//还需要头像
+        });
+        AddTips(new TipsItem()//奥特曼提示面板
+        {
+            userName = "很长的用户名",
+            tipsType = TipsType.gittImagePanel,
+            icon = null//还需要头像
+        });
+        AddTips(new TipsItem()//你爹来喽提示面板
+        {
+            userName = "很长的用户名",
+            tipsType = TipsType.giftImageComeOn,
+            icon = null//还需要头像
+        });
+        AddTips(new TipsItem()//排行第一进入提示，《众爱卿平身》
+        {
+            userName = "很长的用户名00001",
+            tipsType = TipsType.dageEnterTips,
+            icon = null,//还需要头像
+            text = "排行榜第一进入游戏"
+        });
+        AddTips(new TipsItem()//排行前十进入提示
+        {
+            userName = "很长的用户名00001",
+            tipsType = TipsType.otherEnterTips,
+            icon = null,//还需要头像
+            text = "排行榜前几进入游戏"
         });
     }
 
@@ -405,13 +469,15 @@ public enum TipsType
     gittImagePanel,
     giftImageBaiTuo,
     giftImageComeOn,
+    dageEnterTips,
+    otherEnterTips,
 }
 
 public enum SkillIcon
 {
-    Pencil,//画画
-    Thunder,//雷电
-    Defense,//防御
-    Speed,//速度提升
-    Tornado//龙卷风
+    Pencil, //画画
+    Thunder, //雷电
+    Defense, //防御
+    Speed, //速度提升
+    Tornado //龙卷风
 }
