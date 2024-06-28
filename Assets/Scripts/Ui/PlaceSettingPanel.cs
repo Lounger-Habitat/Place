@@ -10,8 +10,8 @@ public class PlaceSettingPanel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CheckAutoPlay(DataNoDeleteManager.Instance.isAutoPlay,autoBtnImage,handle);
-        CheckAutoPlay(DataNoDeleteManager.Instance.addAutoPlayer,autoPlayerBtnImage,handleAutoPlayer);
+        CheckAutoPlay(GameSettingManager.Instance.isAutoPlay,autoBtnImage,handle);
+        CheckAutoPlay(GameSettingManager.Instance.addAutoPlayer,autoPlayerBtnImage,handleAutoPlayer);
     }
 
     // Update is called once per frame
@@ -60,30 +60,30 @@ public class PlaceSettingPanel : MonoBehaviour
     public RectTransform handleAutoPlayer;
     public void OnClickAutoBtn()
     {
-        if (DataNoDeleteManager.Instance.isAutoPlay)
+        if (GameSettingManager.Instance.isAutoPlay)
         {
-            DataNoDeleteManager.Instance.isAutoPlay = false;
+            GameSettingManager.Instance.isAutoPlay = false;
         }
         else
         {
-            DataNoDeleteManager.Instance.isAutoPlay = true;
+            GameSettingManager.Instance.isAutoPlay = true;
         }
 
-        CheckAutoPlay(DataNoDeleteManager.Instance.isAutoPlay,autoBtnImage,handle);
+        CheckAutoPlay(GameSettingManager.Instance.isAutoPlay,autoBtnImage,handle);
     }
 
     public void OnClickAutoPlayerBtn()
     {
-        if (DataNoDeleteManager.Instance.addAutoPlayer)
+        if (GameSettingManager.Instance.addAutoPlayer)
         {
-            DataNoDeleteManager.Instance.addAutoPlayer = false;
+            GameSettingManager.Instance.addAutoPlayer = false;
         }
         else
         {
-            DataNoDeleteManager.Instance.addAutoPlayer = true;
+            GameSettingManager.Instance.addAutoPlayer = true;
         }
 
-        CheckAutoPlay(DataNoDeleteManager.Instance.addAutoPlayer,autoPlayerBtnImage,handleAutoPlayer);
+        CheckAutoPlay(GameSettingManager.Instance.addAutoPlayer,autoPlayerBtnImage,handleAutoPlayer);
     }
 
     public void CheckAutoPlay(bool status, Image img, RectTransform rect)

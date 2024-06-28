@@ -70,6 +70,8 @@ public class PlacePlayerController : MonoBehaviour
     public List<Vector3> consolePath = new List<Vector3>();
     public int pathIndex = 0;  // 当前路径点的索引
 
+    public PlaceTeamBoard teamBoard;
+
     [Header("玩家特效")]
     public GameObject slowEffect;
     public GameObject runMagicEffect;
@@ -270,7 +272,15 @@ public class PlacePlayerController : MonoBehaviour
     {
         // 等待两秒执行
         yield return new WaitForSeconds(1.5f);
-        PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.Camp, user.Id);
+        if (GameSettingManager.Instance.mode == GameMode.Competition)
+        {
+            teamBoard.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.Camp, user.Id);
+        }
+        else
+        {
+            PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.Camp, user.Id);
+        }
+        // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.Camp, user.Id);
         user.currentCarryingInkCount -= ins.needInkCount;
         user.score += ins.needInkCount;
         user.useTotalInkCount += ins.needInkCount;

@@ -12,16 +12,17 @@ public class BeginUI : MonoBehaviour
         (transform as RectTransform).anchoredPosition = new Vector2(0, 0);
         // gameObject.SetActive(true);
         CheckAutoPlay();
+        GameSettingManager.Instance.mode = GameMode.Competition;
         UpdateUi();
     }
-    
+
     public void OnClickBeginBtn()
     {
         StopAllCoroutines();
         OnNumberInputEnd(inputField.text);//开局手动调一下 防止修改人数后没有确定
         //通知游戏开始了
         PlaceCenter.Instance.StartGame();
-        PlaceCenter.Instance.RecordImage();
+        // PlaceCenter.Instance.RecordImage();
         //把自己整个移出显示区域
         (transform as RectTransform).anchoredPosition = new Vector2(9000, 0);
         // gameObject.SetActive(false);
@@ -41,7 +42,7 @@ public class BeginUI : MonoBehaviour
         int number = int.Parse(str);
         number = Mathf.Clamp(number, 10, 100);
         inputField.text = number.ToString();
-        DataNoDeleteManager.Instance.maxNumber = number;//记录
+        GameSettingManager.Instance.maxNumber = number;//记录
         PlaceTeamManager.Instance.SetTeamNumber(number);
     }
 
@@ -52,22 +53,22 @@ public class BeginUI : MonoBehaviour
     public TMP_Text beginText;
     public void CheckAutoPlay()
     {
-        if (DataNoDeleteManager.Instance.isAutoPlay)
+        if (GameSettingManager.Instance.isAutoPlay)
         {
             //如果是自动开启，就把时间与人数设定为上次设定，并且开始倒计时
-            inputField.text = DataNoDeleteManager.Instance.maxNumber.ToString();
-            PlaceTeamManager.Instance.SetTeamNumber(DataNoDeleteManager.Instance.maxNumber);
-            
-            cdp.ChangeTime(DataNoDeleteManager.Instance.playTime);
-            timeText.text = DataNoDeleteManager.Instance.playTime.ToString();
+            inputField.text = GameSettingManager.Instance.maxNumber.ToString();
+            PlaceTeamManager.Instance.SetTeamNumber(GameSettingManager.Instance.maxNumber);
+
+            cdp.ChangeTime(GameSettingManager.Instance.playTime);
+            timeText.text = GameSettingManager.Instance.playTime.ToString();
             StartCoroutine(AutoPlayTime());
         }
     }
-    
+
     IEnumerator AutoPlayTime()
     {
         int secends = 60;
-        while (secends>0 )
+        while (secends > 0)
         {
             if (placeSettingUI.activeSelf)
             {
@@ -83,27 +84,36 @@ public class BeginUI : MonoBehaviour
     }
 
     public TMP_Text modeText;
-    public GameObject normalIcon;
-    public GameObject otherIcon;
+    public GameObject createIcon;
+    public GameObject graffitiIcon;
+    public GameObject competitionIcon;
     public void OnClickModeBtn()
     {
-        DataNoDeleteManager.Instance.isNormalModel = !DataNoDeleteManager.Instance.isNormalModel;
+        GameSettingManager.Instance.mode = GameSettingManager.Instance.mode + 1;
         UpdateUi();
     }
 
     private void UpdateUi()
     {
-        if (DataNoDeleteManager.Instance.isNormalModel)
-        {
-            modeText.text = "常规模式";
-            normalIcon.SetActive(true);
-            otherIcon.SetActive(false);
-        }
-        else
-        {
-            modeText.text = "涂鸦模式";
-            normalIcon.SetActive(false);
-            otherIcon.SetActive(true);
+        switch (GameSettingManager.Instance.mode) {
+            case GameMode.Create:
+                modeText.text = "创作模式";
+                createIcon.SetActive(true);
+                graffitiIcon.SetActive(false);
+                competitionIcon.SetActive(false);
+                break;
+            case GameMode.Graffiti:
+                modeText.text = "涂鸦模式";
+                createIcon.SetActive(false);
+                graffitiIcon.SetActive(true);
+                competitionIcon.SetActive(false);
+                break;
+            case GameMode.Competition:
+                modeText.text = "竞赛模式";
+                createIcon.SetActive(false);
+                graffitiIcon.SetActive(false);
+                competitionIcon.SetActive(true);
+                break;
         }
     }
 }

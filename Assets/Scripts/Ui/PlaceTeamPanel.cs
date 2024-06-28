@@ -30,7 +30,16 @@ public class PlaceTeamPanel : MonoBehaviour
         var list = PlaceTeamManager.Instance.teamAreas[team.Id - 1].userList;
         teamItem.Find(teamPanel).Find("TeamName").GetComponent<TMP_Text>().text = team.Name;//名字起的太随便，先用现有的
         teamItem.Find(teamPanel).Find("PalyerNum").GetComponent<TMP_Text>().text = $"{list.Count}/{team.MaxTeamNumber}";
-        teamScore.valueText.text = $"{team.score}/{PlaceBoardManager.Instance.pixelsInfos.Length}";//队伍分数更新
+        // TODO this
+        if (GameSettingManager.Instance.mode == GameMode.Competition)
+        {
+            teamScore.valueText.text = $"{team.score}/{PlaceTeamBoardManager.Instance.pixelsInfos.Length}";//队伍分数更新
+        }
+        else
+        {
+            teamScore.valueText.text = $"{team.score}/{PlaceBoardManager.Instance.pixelsCampInfos.Length}";//队伍分数更新
+        }
+        
         teamScore.UpdateSlider(team.score);
         //teamItem.Find("TeamScore").GetChild(0).GetComponent<TMP_Text>().text = $"{team.score}";//队伍分数被拆分出去了
 

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using OpenCVForUnity.UnityUtils;
 using TMPro;
 
-public class ImageTest : MonoBehaviour
+public class ImageProcessor : MonoBehaviour
 {
     public int camp;
     public int width = 100;
@@ -171,6 +171,40 @@ public class ImageTest : MonoBehaviour
     }
 
     void MakeContours(string imagePath)
+    {
+        // check image path file is Exists and is image
+        if (!System.IO.File.Exists(imagePath))
+        {
+            Debug.LogError("File not found: " + imagePath);
+            return;
+        }
+
+        // Load image
+        Mat src = Imgcodecs.imread(imagePath, Imgcodecs.IMREAD_UNCHANGED);
+        Mat gray = new Mat();
+        Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY);
+
+        // Canny
+        Mat edges = new Mat();
+        Imgproc.Canny(gray, edges, 50, 150, 3);
+
+        // Find contours
+        List<MatOfPoint> contours = new List<MatOfPoint>();
+        Mat hierarchy = new Mat();
+        Imgproc.findContours(edges, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+
+
+        Mat drawing = Mat.zeros(src.size(), CvType.CV_8UC4);
+        Debug.Log("boundingRect.size() : " + src.size());
+
+        Imgproc.drawContours(drawing, contours, -1, new Scalar(64, 64, 64, 255), 2);
+
+
+        Texture2D texture = new Texture2D(drawing.cols(), drawing.rows(), TextureFormat.RGBA32, false);
+        Utils.matToTexture2D(drawing, texture);
+    }
+
+    void OldMakeContours(string imagePath)
     {
         // check image path file is Exists and is image
         if (!System.IO.File.Exists(imagePath))

@@ -394,9 +394,15 @@ public class PlaceCenter : MonoBehaviour
     {
         // 队伍长度
         int[] newTeamScore = new int[3];
-        foreach (int c in PlaceBoardManager.Instance.pixelsInfos)
+        if (GameSettingManager.Instance.mode == GameMode.Competition){
+            // 单独黑板，单独记分
+        }
+        else
         {
-            newTeamScore[c]++;
+            foreach (int c in PlaceBoardManager.Instance.pixelsCampInfos)
+            {
+                newTeamScore[c]++;
+            }
         }
 
         for (int i = 0; i < newTeamScore.Length; i++)
@@ -804,14 +810,15 @@ public class PlaceCenter : MonoBehaviour
 
 
 
-    public Texture2D ImageFitBoardProcessor(List<Texture2D> texlist, int texindex)
-    {
-        Texture2D inputTexture = texlist[texindex];
-        // 外部引用 
-        Texture2D resizeTexture = PlaceBoardManager.Instance.ScaleTextureProportionally(inputTexture, PlaceBoardManager.Instance.width, PlaceBoardManager.Instance.height);
-        // pixelsImage = resizeTexture.GetPixels();
-        return resizeTexture;
-    }
+    // public Texture2D ImageFitBoardProcessor(List<Texture2D> texlist, int texindex)
+    // {
+    //     Texture2D inputTexture = texlist[texindex];
+    //     // 外部引用 
+    //     // TODO 之后修改
+    //     Texture2D resizeTexture = PlaceBoardManager.Instance.ScaleTextureProportionally(inputTexture, PlaceBoardManager.Instance.width, PlaceBoardManager.Instance.height);
+    //     // pixelsImage = resizeTexture.GetPixels();
+    //     return resizeTexture;
+    // }
 
     public List<Texture2D> LoadDemoResources()
     {
