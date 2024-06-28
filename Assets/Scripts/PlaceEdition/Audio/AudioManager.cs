@@ -34,11 +34,16 @@ public class AudioManager : MonoBehaviour
     }
 
     public AudioClip aoTeMan;
+    public AudioClip daGeEnter;
     public void PlayShout()
     {
         audioSource.PlayOneShot(aoTeMan);
     }
-    
+
+    public void PlayShoutDaGeEnter()
+    {
+        audioSource.PlayOneShot(daGeEnter);
+    }
     public void Btn_click()
     {
         if (audioIndex.Equals(0))
