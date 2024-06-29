@@ -210,16 +210,16 @@ namespace ARP.APR.Scripts
 				PlayerGetUpJumping();
 			}
 
-			// 每一秒 执行一次
-			if (Time.time - lastTime > 1)
-			{
-				lastTime = Time.time;
-				// all time have a up force
-				var v3 = APR_Parts[0].GetComponent<Rigidbody>().transform.up * jumpForce;
-				v3.x = APR_Parts[0].GetComponent<Rigidbody>().velocity.x;
-				v3.z = APR_Parts[0].GetComponent<Rigidbody>().velocity.z;
-				APR_Parts[2].GetComponent<Rigidbody>().velocity = v3;
-			}
+			// // 每一秒 执行一次
+			// if (Time.time - lastTime > 1)
+			// {
+			// 	lastTime = Time.time;
+			// 	// all time have a up force
+			// 	var v3 = APR_Parts[0].GetComponent<Rigidbody>().transform.up * jumpForce;
+			// 	v3.x = APR_Parts[0].GetComponent<Rigidbody>().velocity.x;
+			// 	v3.z = APR_Parts[0].GetComponent<Rigidbody>().velocity.z;
+			// 	APR_Parts[2].GetComponent<Rigidbody>().velocity = v3;
+			// }
 
 
 		}
