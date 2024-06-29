@@ -60,7 +60,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         // 获取 frame 宽 高
 
         // TODO 滞后修改
-        if (GameSettingManager.Instance.mode == GameMode.Create)
+        if (GameSettingManager.Instance.Mode == GameMode.Create)
         {
             boradWidth = PlaceBoardManager.Instance.width;
             boradHeight = PlaceBoardManager.Instance.height;
@@ -293,7 +293,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         Vector3 delta = new Vector3((float)(x * pixelWidth), (float)(y * pixelHeight), 0f);
 
         Vector3 aimPos;
-        if (GameSettingManager.Instance.mode == GameMode.Competition)
+        if (GameSettingManager.Instance.Mode == GameMode.Competition)
         {
             if (camp == 1)
             {

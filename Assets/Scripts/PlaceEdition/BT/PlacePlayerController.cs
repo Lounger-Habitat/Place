@@ -272,7 +272,7 @@ public class PlacePlayerController : MonoBehaviour
     {
         // 等待两秒执行
         yield return new WaitForSeconds(1.5f);
-        if (GameSettingManager.Instance.mode == GameMode.Competition)
+        if (GameSettingManager.Instance.Mode == GameMode.Competition)
         {
             teamBoard.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.Camp, user.Id);
         }

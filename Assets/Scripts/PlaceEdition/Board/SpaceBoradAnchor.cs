@@ -35,7 +35,7 @@ public class SpaceBoradAnchor : MonoBehaviour
 
     public void GetBoardSpaceInfo()
     {
-        if (GameSettingManager.Instance.mode == GameMode.Competition)
+        if (GameSettingManager.Instance.Mode == GameMode.Competition)
         {
             if (team1SpaceUIBoard != null)
             {

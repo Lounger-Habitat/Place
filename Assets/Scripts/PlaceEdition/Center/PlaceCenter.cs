@@ -394,7 +394,7 @@ public class PlaceCenter : MonoBehaviour
     {
         // 队伍长度
         int[] newTeamScore = new int[3];
-        if (GameSettingManager.Instance.mode == GameMode.Competition){
+        if (GameSettingManager.Instance.Mode == GameMode.Competition){
             // 单独黑板，单独记分
         }
         else

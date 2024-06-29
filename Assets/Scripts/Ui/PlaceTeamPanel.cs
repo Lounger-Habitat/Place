@@ -31,7 +31,7 @@ public class PlaceTeamPanel : MonoBehaviour
         teamItem.Find(teamPanel).Find("TeamName").GetComponent<TMP_Text>().text = team.Name;//名字起的太随便，先用现有的
         teamItem.Find(teamPanel).Find("PalyerNum").GetComponent<TMP_Text>().text = $"{list.Count}/{team.MaxTeamNumber}";
         // TODO this
-        if (GameSettingManager.Instance.mode == GameMode.Competition)
+        if (GameSettingManager.Instance.Mode == GameMode.Competition&& PlaceCenter.Instance.gameRuning)//不切换场景会报错
         {
             teamScore.valueText.text = $"{team.score}/{PlaceTeamBoardManager.Instance.pixelsInfos.Length}";//队伍分数更新
         }

@@ -16,7 +16,7 @@ public class PlaceTeamSlider : MonoBehaviour
         slider.minValue = 0;
 
         // 临时 TODO 之后修改
-        if (GameSettingManager.Instance.mode == GameMode.Create)
+        if (GameSettingManager.Instance.Mode == GameMode.Create)
         {
             slider.maxValue = PlaceBoardManager.Instance.width * PlaceBoardManager.Instance.height;
         }

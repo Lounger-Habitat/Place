@@ -26,7 +26,23 @@ public class GameSettingManager : MonoBehaviour
     public bool addAutoPlayer = false;
     public int playTime = 15;
     public int maxNumber = 25;
-    public GameMode mode;
+
+    private GameMode mode;
+    public GameMode Mode
+    {
+        get => mode;
+        set
+        {
+            if ((int)value>=3)
+            {
+                mode = GameMode.Create;
+            }
+            else
+            {
+                mode = value;
+            }
+        }
+    }
 }
 
 public enum GameMode {

@@ -2,24 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BeginUI : MonoBehaviour
 {
+    public bool isMode2 = false;
+
     //开始时调用，先把整个UI移到屏幕中间
     public GameObject placeSettingUI;
+
     public void Init()
     {
-        (transform as RectTransform).anchoredPosition = new Vector2(0, 0);
-        // gameObject.SetActive(true);
-        CheckAutoPlay();
-        // GameSettingManager.Instance.mode = GameMode.Competition;
-        UpdateUi();
+        if (isMode2) //如果是mode2，表示当前场景是竞赛场景，不需要开始UI，直接开始游戏即可
+        {
+            inputField.text = GameSettingManager.Instance.maxNumber.ToString();
+            PlaceTeamManager.Instance.SetTeamNumber(GameSettingManager.Instance.maxNumber);
+            cdp.ChangeTime(GameSettingManager.Instance.playTime); //设定相关游戏数据
+
+            OnClickBeginBtn(); //直接开始游戏
+        }
+        else
+        {
+            (transform as RectTransform).anchoredPosition = new Vector2(0, 0);
+            // gameObject.SetActive(true);
+            CheckAutoPlay();
+            // GameSettingManager.Instance.mode = GameMode.Competition;
+            UpdateUi();
+        }
     }
 
     public void OnClickBeginBtn()
     {
+        if (GameSettingManager.Instance.Mode == GameMode.Competition && !isMode2)
+        {
+            //如果是竞速模式 需要切换到竞速场景中
+            SceneManager.LoadScene("1920-1080Scene Mode2");
+        }
+
         StopAllCoroutines();
-        OnNumberInputEnd(inputField.text);//开局手动调一下 防止修改人数后没有确定
+        OnNumberInputEnd(inputField.text); //开局手动调一下 防止修改人数后没有确定
         //通知游戏开始了
         PlaceCenter.Instance.StartGame();
         // PlaceCenter.Instance.RecordImage();
@@ -37,12 +58,13 @@ public class BeginUI : MonoBehaviour
 
 
     public TMP_InputField inputField;
+
     public void OnNumberInputEnd(string str)
     {
         int number = int.Parse(str);
         number = Mathf.Clamp(number, 10, 100);
         inputField.text = number.ToString();
-        GameSettingManager.Instance.maxNumber = number;//记录
+        GameSettingManager.Instance.maxNumber = number; //记录
         PlaceTeamManager.Instance.SetTeamNumber(number);
     }
 
@@ -51,6 +73,7 @@ public class BeginUI : MonoBehaviour
     public CountdownPanel cdp;
     public TMP_Text timeText;
     public TMP_Text beginText;
+
     public void CheckAutoPlay()
     {
         if (GameSettingManager.Instance.isAutoPlay)
@@ -75,10 +98,12 @@ public class BeginUI : MonoBehaviour
                 yield return new WaitForSeconds(1);
                 continue;
             }
+
             beginText.text = $"开始({secends}s)";
             yield return new WaitForSeconds(1);
             secends--;
         }
+
         beginText.text = $"开始(0s)";
         OnClickBeginBtn();
     }
@@ -87,15 +112,17 @@ public class BeginUI : MonoBehaviour
     public GameObject createIcon;
     public GameObject graffitiIcon;
     public GameObject competitionIcon;
+
     public void OnClickModeBtn()
     {
-        GameSettingManager.Instance.mode = GameSettingManager.Instance.mode + 1;
+        GameSettingManager.Instance.Mode = GameSettingManager.Instance.Mode + 1;
         UpdateUi();
     }
 
     private void UpdateUi()
     {
-        switch (GameSettingManager.Instance.mode) {
+        switch (GameSettingManager.Instance.Mode)
+        {
             case GameMode.Create:
                 modeText.text = "创作模式";
                 createIcon.SetActive(true);
