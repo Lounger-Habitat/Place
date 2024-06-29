@@ -21,9 +21,9 @@ public class SpaceBoradAnchor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        hitCollider.gameObject.SetActive(false);
-        team1HitCollider.gameObject.SetActive(false);
-        team2HitCollider.gameObject.SetActive(false);
+        if (hitCollider != null) hitCollider.gameObject.SetActive(false);
+        if (team1HitCollider!= null) team1HitCollider.gameObject.SetActive(false);
+        if (team2HitCollider != null) team2HitCollider.gameObject.SetActive(false);
         GetBoardSpaceInfo();
     }
 

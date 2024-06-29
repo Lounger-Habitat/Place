@@ -12,7 +12,7 @@ public class BeginUI : MonoBehaviour
         (transform as RectTransform).anchoredPosition = new Vector2(0, 0);
         // gameObject.SetActive(true);
         CheckAutoPlay();
-        GameSettingManager.Instance.mode = GameMode.Competition;
+        // GameSettingManager.Instance.mode = GameMode.Competition;
         UpdateUi();
     }
 

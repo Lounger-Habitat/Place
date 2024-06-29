@@ -26,7 +26,7 @@ public class GameSettingManager : MonoBehaviour
     public bool addAutoPlayer = false;
     public int playTime = 15;
     public int maxNumber = 25;
-    public GameMode mode = GameMode.Competition;
+    public GameMode mode;
 }
 
 public enum GameMode {
