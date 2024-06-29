@@ -2089,6 +2089,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62955bff3b09f3a4587226ef94459d6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMode2: 0
   placeSettingUI: {fileID: 1635745958888546269}
   inputField: {fileID: 6885468098846723609}
   cdp: {fileID: 402920682594016952}
@@ -11792,7 +11793,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u5E38\u89C4\u6A21\u5F0F"
+  m_text: "\u521B\u4F5C\u6A21\u5F0F"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: eb8bacd46357fb4418b3d529965e7b08, type: 2}
   m_sharedMaterial: {fileID: 2979193228837331801, guid: eb8bacd46357fb4418b3d529965e7b08, type: 2}

@@ -764,6 +764,13 @@ public class PlaceCenter : MonoBehaviour
         return new List<Instruction>();
     }
 
+    public List<Instruction> UserIcon2Instruction(int ox, int oy, int max, Texture2D userTex)
+    {
+        Texture2D retex = PlaceBoardManager.Instance.ScaleTextureProportionally(userTex, max, max);
+
+        // 转换成 instruction
+        return Image2Instruction(retex, ox, oy);
+    }
     List<Instruction> Image2Instruction(Texture2D tex, int ox, int oy)
     {
         // 读取 颜色
