@@ -22,6 +22,7 @@ public class AudioManager : MonoBehaviour
     public void Init()
     {
         PlaySound(0);
+        Slider_Audio(0.3f);
     }
 
     public void PlaySound(int index)
@@ -35,14 +36,15 @@ public class AudioManager : MonoBehaviour
 
     public AudioClip aoTeMan;
     public AudioClip daGeEnter;
+    public AudioSource effectAudio;
     public void PlayShout()
     {
-        audioSource.PlayOneShot(aoTeMan);
+        effectAudio.PlayOneShot(aoTeMan);
     }
 
     public void PlayShoutDaGeEnter()
     {
-        audioSource.PlayOneShot(daGeEnter);
+        effectAudio.PlayOneShot(daGeEnter);
     }
     public void Btn_click()
     {

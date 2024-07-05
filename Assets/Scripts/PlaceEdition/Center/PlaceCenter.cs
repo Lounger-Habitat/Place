@@ -486,18 +486,40 @@ public class PlaceCenter : MonoBehaviour
                 }
                 break;
             case 199f:
-                normalPower = 14400;
-                message = "天官赐福";
-                // 随机自动画一个图案
-                skill = SkillIcon.Pencil;
-                u.character.GetComponent<PlacePlayerController>().Blessing(180);
-                int x128 = Random.Range(0, PlaceBoardManager.Instance.width - 128);
-                int y128 = Random.Range(0, PlaceBoardManager.Instance.height - 128);
-                List<Instruction> IL128 = GenerateRandomImage(x128, y128, 128);
-                if (IL128.Count != 0)
+                if (GameSettingManager.Instance.Mode == GameMode.Graffiti)
                 {
-                    IL128.ForEach(i => u.instructionQueue.Enqueue(i));
+                    var Iname =iconNames[Random.Range(0,5)];
+                    DrawUserIconImage(u,Iname);
+                    normalPower = 14400;
+                    switch (Iname)
+                    {
+                        case "comeOn-150-115-40":
+                            messageType = TipsType.giftImageBaiTuo;
+                            break;
+                        case  "guang-608-452-141":
+                            messageType = TipsType.gittImagePanel;
+                            break;
+                        case  "lailou-250-256-76":
+                            messageType = TipsType.giftImageComeOn;
+                            break;
+                    }
                 }
+                else
+                {
+                    normalPower = 14400;
+                    message = "天官赐福";
+                    // 随机自动画一个图案
+                    skill = SkillIcon.Pencil;
+                    u.character.GetComponent<PlacePlayerController>().Blessing(180);
+                    int x128 = Random.Range(0, PlaceBoardManager.Instance.width - 128);
+                    int y128 = Random.Range(0, PlaceBoardManager.Instance.height - 128);
+                    List<Instruction> IL128 = GenerateRandomImage(x128, y128, 128);
+                    if (IL128.Count != 0)
+                    {
+                        IL128.ForEach(i => u.instructionQueue.Enqueue(i));
+                    }
+                }
+
                 break;
             case 299f:
                 normalPower = 62500;
@@ -621,6 +643,37 @@ public class PlaceCenter : MonoBehaviour
     //     user.character.GetComponent<PlacePlayerController>().Tornado((int)power);
     // }
 
+
+    private string[] iconNames = new[]
+    {
+        "comeOn-150-115-40",
+        "comeOn-150-115-40",
+        //"flower",
+        "guang-608-452-141",
+        "lailou-250-256-76",
+        "lailou-250-256-76"
+    };
+    
+    //这是画指定的，上一级随机的名字
+    private void DrawUserIconImage(User user,string IName)
+    {
+        int x, y,max;
+        max = PlaceBoardManager.Instance.height / 2;
+        x = Random.Range(1, PlaceBoardManager.Instance.width - max);
+        y = Random.Range(1,PlaceBoardManager.Instance.height-max);
+        Texture2D userTex = user.userIcon.texture;
+        List<Instruction> IL = Instance.GiftGenerateImage(x, y, max, userTex, IName);
+        if (IL.Count != 0)
+        {
+            IL.ForEach(i => user.instructionQueue.Enqueue(i));
+        }
+        else
+        {
+            Debug.Log("roll 失败,或许名字key 不对");
+        }
+        
+    }
+    
 
     // 重新开始游戏
     void RestartGame()

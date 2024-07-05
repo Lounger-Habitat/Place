@@ -78,7 +78,7 @@ public class TipsPanel : MonoBehaviour
             case TipsType.otherEnterTips:
                 //此消息类型，无需进入队列，直接显示，会自动删除
                 giftImageQueue.Enqueue(tip);
-                if (isShowGiftImageTips)
+                if (!isShowGiftImageTips)
                 {
                     StartCoroutine(showGiftImageAni());
                 }
@@ -183,9 +183,9 @@ public class TipsPanel : MonoBehaviour
     {
         //将标志位置为true
         isShowGiftImageTips = true;
-        while (tipsQueue.Any())
+        while (giftImageQueue.Any())
         {
-            var Data = tipsQueue.Dequeue();
+            var Data = giftImageQueue.Dequeue();
             var panel = tipsPanels[Data.tipsType];
             panel.SetData(Data);
             panel.TestMenu();

@@ -49,9 +49,9 @@ public class PlaceInkPoolManager : MonoBehaviour
         BlueInkImpactPools = new List<GameObject>();
         for (int i = 0; i < poolAmount; i++)
         {
-            GameObject blueInkFlash = Instantiate(BlueInkBuilder.muzzleFlashPrefab);
-            GameObject blueInkProjectile = Instantiate(BlueInkBuilder.projectilePrefab, transform.position, Quaternion.identity);
-            GameObject blueInkImpact = Instantiate(BlueInkBuilder.impactPrefab, transform.position, Quaternion.identity);
+            GameObject blueInkFlash = Instantiate(BlueInkBuilder.muzzleFlashPrefab,transform);
+            GameObject blueInkProjectile = Instantiate(BlueInkBuilder.projectilePrefab, transform.position, Quaternion.identity,transform);
+            GameObject blueInkImpact = Instantiate(BlueInkBuilder.impactPrefab, transform.position, Quaternion.identity,transform);
 
             blueInkFlash.SetActive(false);
             blueInkProjectile.SetActive(false);
@@ -72,9 +72,9 @@ public class PlaceInkPoolManager : MonoBehaviour
         GreenInkImpactPools = new List<GameObject>();
         for (int i = 0; i < poolAmount; i++)
         {
-            GameObject greenInkFlash = Instantiate(GreenInkBuilder.muzzleFlashPrefab);
-            GameObject greenInkProjectile = Instantiate(GreenInkBuilder.projectilePrefab, transform.position, Quaternion.identity);
-            GameObject greenInkImpact = Instantiate(GreenInkBuilder.impactPrefab, transform.position, Quaternion.identity);
+            GameObject greenInkFlash = Instantiate(GreenInkBuilder.muzzleFlashPrefab,transform);
+            GameObject greenInkProjectile = Instantiate(GreenInkBuilder.projectilePrefab, transform.position, Quaternion.identity,transform);
+            GameObject greenInkImpact = Instantiate(GreenInkBuilder.impactPrefab, transform.position, Quaternion.identity,transform);
 
             greenInkFlash.SetActive(false);
             greenInkProjectile.SetActive(false);

@@ -1200,13 +1200,13 @@ public class PlaceInstructionManager : MonoBehaviour
             //     // 给到 player
             //     break;
             //原有
-            case "userIcon":
+            case "/userIcon":
               
                 int ox = int.Parse(parts[1]); // x
                 int oy = int.Parse(parts[2]); // 
                 
                 Texture2D userIcon = user.userIcon.texture;
-                List<Instruction> res = PlaceCenter.Instance.UserIcon2Instruction(ox, oy, 15, userIcon);
+                List<Instruction> res = PlaceCenter.Instance.UserIcon2Instruction(ox, oy, 30, userIcon);
                 if (res.Count != 0)
                 {
                     res.ForEach(i => user.instructionQueue.Enqueue(i));
@@ -1307,7 +1307,7 @@ public class PlaceInstructionManager : MonoBehaviour
     }
 
 
-    private string[] _str = { "heart,Hi,Hi,ok,smile" };
+    private string[] _str = { "heart","Hi","Hi","ok","smile","heart" };
     // 弹幕
     public void DefaultDanmuCommand(Dm dm)
     {
@@ -1320,8 +1320,8 @@ public class PlaceInstructionManager : MonoBehaviour
             if (GameSettingManager.Instance.Mode == GameMode.Graffiti)
             {
                 int x, y;
-                x = Random.Range(1, PlaceBoardManager.Instance.width - 20);
-                y = Random.Range(1,PlaceBoardManager.Instance.height-20);
+                x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
+                y = Random.Range(1,PlaceBoardManager.Instance.height-35);
                 if (msg.StartsWith("666"))//画自己头像
                 {
                     DefaultRunChatCommand(user, $"/userIcon {x} {y}");
@@ -1330,22 +1330,22 @@ public class PlaceInstructionManager : MonoBehaviour
 
                 if (msg.StartsWith("777"))//随便画一幅图片
                 {
-                    DefaultRunChatCommand(user, $"/roll {x} {y} 15 {_str[Random.Range(0,5)]}");
+                    DefaultRunChatCommand(user, $"/roll {x} {y} 30 {_str[Random.Range(0,6)]}");
                     return;
                 }
                 if (msg.StartsWith("hi")||msg.StartsWith("Hi"))//画出嗨
                 {
-                    DefaultRunChatCommand(user, $"/roll {x} {y} 15 Hi");
+                    DefaultRunChatCommand(user, $"/roll {x} {y} 30 Hi");
                     return;
                 }
                 if (msg.StartsWith("心")||msg.StartsWith("heart"))//画出心
                 {
-                    DefaultRunChatCommand(user, $"/roll {x} {y} 15 heart");
+                    DefaultRunChatCommand(user, $"/roll {x} {y} 30 heart");
                     return;
                 }
                 if (msg.StartsWith("ok")||msg.StartsWith("OK"))//画出ok
                 {
-                    DefaultRunChatCommand(user, $"/roll {x} {y} 15 ok");
+                    DefaultRunChatCommand(user, $"/roll {x} {y} 30 ok");
                     return;
                 }
             }

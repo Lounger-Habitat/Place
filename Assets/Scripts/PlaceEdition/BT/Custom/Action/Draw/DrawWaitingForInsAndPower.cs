@@ -8,7 +8,8 @@ public class DrawWaitingForInsAndPower : PlaceAction
     private int danceIndex;
     bool inEpoch = false;
     bool free = true;
-    private string[] danceName = new[] { "TwistDance", "BreakDacne", "SillyDance", "HipHopDance" };
+    private string[] danceName = new[] { "TwistDance", //"BreakDacne",
+        "SillyDance","SillyDance", "HipHopDance" };
     public override void OnStart()
     {
         base.OnStart();

@@ -10,6 +10,9 @@ EditorBuildSettings:
     guid: 597fb3c08567f1542a72f7c9e4612cca
   - enabled: 1
     path: Assets/Scenes/1920-1080Scene Mode2.unity
+    guid: 3bc5e78704d933f44ae43467d5602abc
+  - enabled: 1
+    path: Assets/Scenes/1920-1080Scene Mode3.unity
     guid: abe86759575044e8a9b765273601f6d8
   - enabled: 0
     path: Assets/Scenes/BegiinScene.unity

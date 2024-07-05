@@ -33,17 +33,24 @@ public class BeginUI : MonoBehaviour
 
     public void OnClickBeginBtn()
     {
+        if (GameSettingManager.Instance.Mode == GameMode.Graffiti && !isMode2)
+        {
+            //如果是涂鸦模式 需要切换到竞速场景中
+            SceneManager.LoadScene("1920-1080Scene Mode2");
+            return;
+        }
         if (GameSettingManager.Instance.Mode == GameMode.Competition && !isMode2)
         {
             //如果是竞速模式 需要切换到竞速场景中
-            SceneManager.LoadScene("1920-1080Scene Mode2");
+            SceneManager.LoadScene("1920-1080Scene Mode3");
+            return;
         }
 
         StopAllCoroutines();
         OnNumberInputEnd(inputField.text); //开局手动调一下 防止修改人数后没有确定
         //通知游戏开始了
         PlaceCenter.Instance.StartGame();
-        // PlaceCenter.Instance.RecordImage();
+        PlaceCenter.Instance.RecordImage();
         //把自己整个移出显示区域
         (transform as RectTransform).anchoredPosition = new Vector2(9000, 0);
         // gameObject.SetActive(false);

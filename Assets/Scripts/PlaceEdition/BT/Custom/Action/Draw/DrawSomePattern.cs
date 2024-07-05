@@ -23,6 +23,7 @@ public class DrawSomePattern : PlaceAction
         if (!drawing.Value)
         {
             drawing.Value = true;
+            Debug.Log(pc);
             StartCoroutine(pc.DrawPattern(drawing,drawFinish));
         }
         if (drawFinish.Value)

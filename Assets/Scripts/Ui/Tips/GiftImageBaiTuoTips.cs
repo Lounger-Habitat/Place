@@ -39,7 +39,7 @@ public class GiftImageBaiTuoTips : TipsBase
     }
     
     [ContextMenu("gogogo")]
-    public void TestMenu()
+    public override void TestMenu()
     {
         StartCoroutine(showTips());
     }
