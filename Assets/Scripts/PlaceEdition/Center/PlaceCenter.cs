@@ -490,7 +490,8 @@ public class PlaceCenter : MonoBehaviour
                 {
                     var Iname =iconNames[Random.Range(0,5)];
                     DrawUserIconImage(u,Iname);
-                    normalPower = 14400;
+                    int max = PlaceBoardManager.Instance.height / 4;
+                    normalPower = max*max+100;
                     switch (Iname)
                     {
                         case "comeOn-150-115-40":
@@ -658,7 +659,7 @@ public class PlaceCenter : MonoBehaviour
     private void DrawUserIconImage(User user,string IName)
     {
         int x, y,max;
-        max = PlaceBoardManager.Instance.height / 2;
+        max = PlaceBoardManager.Instance.height / 4;
         x = Random.Range(1, PlaceBoardManager.Instance.width - max);
         y = Random.Range(1,PlaceBoardManager.Instance.height-max);
         Texture2D userTex = user.userIcon.texture;
