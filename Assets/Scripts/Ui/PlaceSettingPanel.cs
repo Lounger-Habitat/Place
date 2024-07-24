@@ -38,16 +38,28 @@ public class PlaceSettingPanel : MonoBehaviour
 
     public void PlaySound(int index)
     {
+        if (AudioManager.Instance == null)
+        {
+            return;
+        }
         AudioManager.Instance.PlaySound(index);
     }
     
     public void Slider_Audio(float value)
     {
+        if (AudioManager.Instance == null)
+        {
+            return;
+        }
         AudioManager.Instance.Slider_Audio(value);
     }
     
     public void Mute_Click()
     {
+        if (AudioManager.Instance == null)
+        {
+            return;
+        }
         AudioManager.Instance.Mute_Click();
     }
     

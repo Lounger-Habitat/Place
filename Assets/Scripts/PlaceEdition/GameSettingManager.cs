@@ -46,7 +46,7 @@ public class GameSettingManager : MonoBehaviour
 }
 
 public enum GameMode {
-    Create, // 创作模式
+    Create=1, // 创作模式
     Graffiti, // 涂鸦模式
     Competition // 竞赛模式
 }

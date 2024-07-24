@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,45 +7,46 @@ using UnityEngine.SceneManagement;
 
 public class BeginUI : MonoBehaviour
 {
-    public bool isMode2 = false;
+    //public bool isMode2 = false;
 
     //开始时调用，先把整个UI移到屏幕中间
     public GameObject placeSettingUI;
 
     public void Init()
     {
-        if (isMode2) //如果是mode2，表示当前场景是竞赛场景，不需要开始UI，直接开始游戏即可
-        {
-            inputField.text = GameSettingManager.Instance.maxNumber.ToString();
-            PlaceTeamManager.Instance.SetTeamNumber(GameSettingManager.Instance.maxNumber);
-            cdp.ChangeTime(GameSettingManager.Instance.playTime); //设定相关游戏数据
-
-            OnClickBeginBtn(); //直接开始游戏
-        }
-        else
-        {
+        //将模式选择单独放到外部场景。
+        // if (isMode2) //如果是mode2，表示当前场景是竞赛场景，不需要开始UI，直接开始游戏即可
+        // {
+        //     inputField.text = GameSettingManager.Instance.maxNumber.ToString();
+        //     PlaceTeamManager.Instance.SetTeamNumber(GameSettingManager.Instance.maxNumber);
+        //     cdp.ChangeTime(GameSettingManager.Instance.playTime); //设定相关游戏数据
+        //
+        //     OnClickBeginBtn(); //直接开始游戏
+        // }
+        // else
+        // {
             (transform as RectTransform).anchoredPosition = new Vector2(0, 0);
             // gameObject.SetActive(true);
             CheckAutoPlay();
             // GameSettingManager.Instance.mode = GameMode.Competition;
             UpdateUi();
-        }
+        //}
     }
 
     public void OnClickBeginBtn()
     {
-        if (GameSettingManager.Instance.Mode == GameMode.Graffiti && !isMode2)
-        {
-            //如果是涂鸦模式 需要切换到竞速场景中
-            SceneManager.LoadScene("1920-1080Scene Mode2");
-            return;
-        }
-        if (GameSettingManager.Instance.Mode == GameMode.Competition && !isMode2)
-        {
-            //如果是竞速模式 需要切换到竞速场景中
-            SceneManager.LoadScene("1920-1080Scene Mode3");
-            return;
-        }
+        // if (GameSettingManager.Instance.Mode == GameMode.Graffiti && !isMode2)
+        // {
+        //     //如果是涂鸦模式 需要切换到竞速场景中
+        //     SceneManager.LoadScene("1920-1080Scene Mode2");
+        //     return;
+        // }
+        // if (GameSettingManager.Instance.Mode == GameMode.Competition && !isMode2)
+        // {
+        //     //如果是竞速模式 需要切换到竞速场景中
+        //     SceneManager.LoadScene("1920-1080Scene Mode3");
+        //     return;
+        // }
 
         StopAllCoroutines();
         OnNumberInputEnd(inputField.text); //开局手动调一下 防止修改人数后没有确定
@@ -149,5 +151,16 @@ public class BeginUI : MonoBehaviour
                 competitionIcon.SetActive(true);
                 break;
         }
+    }
+
+    public void SelectGameModel(int gameMode)
+    {   //选择后直接进入对应游戏模式场景
+        GameSettingManager.Instance.Mode =(GameMode)gameMode;
+        SceneManager.LoadSceneAsync(gameMode);
+    }
+
+    public void GoToFirstScene()
+    {
+        SceneManager.LoadSceneAsync(0);
     }
 }
