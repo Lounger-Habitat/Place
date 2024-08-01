@@ -41,6 +41,9 @@ public class PlaceTeamAreaManager : MonoBehaviour
             ps = GameObject.Find("PlayerSpace");
         }
 
+#if UNITY_EDITOR
+        teaminfo.ink = 100000;
+#endif
     }
 
 
@@ -61,6 +64,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         }
     }
 
+    public int inkMagnification = 1;
     void InkUpdate()
     {
         // 墨水数随着时间增加，默认初始每10s增加一点，随着人数的增加，增加速度增加
@@ -78,8 +82,9 @@ public class PlaceTeamAreaManager : MonoBehaviour
             u.contributionRate = (0.1f * u.genInkCount) / teaminfo.hisExInk;
         }
         inkRate = teaminfo.currentTeamNumberCount / 10f + exInkRate;
-        teaminfo.ink += inkRate ;
-        teaminfo.hisInk += inkRate ;
+        inkRate *= inkMagnification;
+        teaminfo.ink += inkRate;
+        teaminfo.hisInk += inkRate;
         //Debug.Log("ink " + ink);
         CheckInk();
         UpdateTeamAreaName();

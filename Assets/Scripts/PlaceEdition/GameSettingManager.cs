@@ -33,7 +33,7 @@ public class GameSettingManager : MonoBehaviour
         get => mode;
         set
         {
-            if ((int)value>=3)
+            if ((int)value>3)
             {
                 mode = GameMode.Create;
             }
@@ -43,6 +43,12 @@ public class GameSettingManager : MonoBehaviour
             }
         }
     }
+
+    [ContextMenu("Show")]
+    public void showMode()
+    {
+        Debug.Log(Mode);
+    }
 }
 
 public enum GameMode {
@@ -50,3 +56,4 @@ public enum GameMode {
     Graffiti, // 涂鸦模式
     Competition // 竞赛模式
 }
+

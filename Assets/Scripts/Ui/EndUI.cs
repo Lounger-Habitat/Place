@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using TMPro;
@@ -47,7 +48,18 @@ public class EndUI : MonoBehaviour
     public void OnClickNextBtn()
     {
         StopAllCoroutines();
-        SceneManager.LoadScene("1920-1080Scene");
+        switch (GameSettingManager.Instance.Mode)
+        {
+            case GameMode.Create:
+                SceneManager.LoadScene("1920-1080Scene");
+                break;
+            case GameMode.Graffiti:
+                SceneManager.LoadScene("1920-1080Scene Mode2");
+                break;
+            case GameMode.Competition:
+                SceneManager.LoadScene("1920-1080Scene Mode3");
+                break;
+        }
     }
 
 
@@ -90,7 +102,18 @@ public class EndUI : MonoBehaviour
             yield return new WaitForSeconds(1);
             secends--;
         }
-        nextBtnText.text = $"开始下一局(0s)";
-        SceneManager.LoadScene("1920-1080Scene");
+        nextBtnText.text = $"开始下一局";
+        switch (GameSettingManager.Instance.Mode)
+        {
+            case GameMode.Create:
+                SceneManager.LoadScene("1920-1080Scene");
+                break;
+            case GameMode.Graffiti:
+                SceneManager.LoadScene("1920-1080Scene Mode2");
+                break;
+            case GameMode.Competition:
+                SceneManager.LoadScene("1920-1080Scene Mode3");
+                break;
+        }
     }
 }

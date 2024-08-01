@@ -31,6 +31,7 @@ public class PlaceTeamBoardManager : MonoBehaviour
 
     string test = "test";
 
+    private string UniqueTime;
     public static PlaceTeamBoardManager Instance { get; private set; }
 
     void Awake()
@@ -48,8 +49,18 @@ public class PlaceTeamBoardManager : MonoBehaviour
 
     void Start()
     {
+        UniqueTime = GenerateUniqueTime();
+        team1Board.UniqueTime = UniqueTime;
+        team2Board.UniqueTime = UniqueTime;
     }
-
+    private string GenerateUniqueTime()
+    {
+        // 根据时间生成唯一ID
+        DateTime now = DateTime.Now;
+        string formatNow = now.ToString("yyyyMMddHHmmss");
+        // platform + host name + time + people number + price
+        return formatNow;
+    }
     void Update()
     {
     }
@@ -318,6 +329,13 @@ public class PlaceTeamBoardManager : MonoBehaviour
         //     // 创建 Sprite
         //     Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         // }
+    }
+
+    public PlaceTeamBoard team1Board, team2Board;
+    public void SaveTeamImage()
+    {
+        team1Board.SaveImage();
+        team2Board.SaveImage();
     }
 
     public void GenGif()
@@ -697,7 +715,8 @@ public class PlaceTeamBoardManager : MonoBehaviour
     // ========= gif part =========
     // pro gif lib
     private ProGifTexturesToGIF tex2Gif = null;
-    private List<Texture2D> tex2DList = null;
+    private List<Texture2D> board1Tex2DList = null;
+    private List<Texture2D> board2Tex2DList = null;
     public Image dpImage;
     void Clear()
     {
@@ -710,18 +729,31 @@ public class PlaceTeamBoardManager : MonoBehaviour
         }
 
         //Clear texture
-        if (tex2DList != null)
+        if (board1Tex2DList != null)
         {
-            foreach (Texture2D tex in tex2DList)
+            foreach (Texture2D tex in board1Tex2DList)
             {
                 if (tex != null)
                 {
                     Destroy(tex);
                 }
             }
-            tex2DList = null;
+            board1Tex2DList = null;
+        }
+        
+        if (board2Tex2DList != null)
+        {
+            foreach (Texture2D tex in board2Tex2DList)
+            {
+                if (tex != null)
+                {
+                    Destroy(tex);
+                }
+            }
+            board2Tex2DList = null;
         }
     }
+/*
     public void ConvertTex2DToGIF()
     {
 
@@ -765,15 +797,62 @@ public class PlaceTeamBoardManager : MonoBehaviour
             Debug.LogWarning("No image/texture found at: " + loadImagePath);
         }
     }
+*/
+    public void ConvertTex2DToGIFTeamFun()
+    {
+        team1Board.ConvertTex2DToGIF(()=>
+        {
+            Debug.Log("开始生成第二幅图片");
+            team2Board.ConvertTex2DToGIF();
+        });
+        
+    }
+    
+    private int team1Progress=1, team2Progress=1;
+    public void OnfileProgress(string teamID,int progress)
+    {
+        if (teamID=="1")
+        {
+            team1Progress = progress;
+        }
+        else
+        {
+            team2Progress = progress;
+        }
 
-    private void OnFileSaved(int id, string path)
+        var finProgress = (team1Progress + team2Progress) / 2;
+        PlaceUIManager.Instance.GetEndUi().OnSaveGifLoading(finProgress);
+    }
+
+    private bool team1OK , team2OK = false;
+    public void OnSaveOK(string teamId)
+    {
+        if (teamId == "1")
+        {
+            team1OK = true;
+        }
+        else
+        {
+            team2OK = true;
+        }
+
+        if (team1OK && team2OK)
+        {
+            PlaceUIManager.Instance.GetEndUi().OnSaveGifOk();
+            team1Board.Clear();
+            team2Board.Clear();
+            Debug.Log("Both Save OK!!!!!!!!!!!!");
+        }
+    }
+    private void OnFileSavedBoard1(int id, string path)
     {
         PlaceUIManager.Instance.GetEndUi().OnSaveGifOk();
         Debug.Log("On file saved: " + path);
         // text1.text = "GIF saved: " + path;
 #if UNITY_EDITOR
         string sourceFolder = Application.dataPath;
-        string destinationFolder = Path.Combine(sourceFolder, $"Images/Log/{test}");
+        // string destinationFolder = Path.Combine(sourceFolder, $"Images/Log/{test}");
+        string destinationFolder  = team1Board.savePath;
 #else
         string sourceFolder = Application.persistentDataPath;
         string destinationFolder = Path.Combine(sourceFolder, $"Log/{test}");
@@ -806,9 +885,56 @@ public class PlaceTeamBoardManager : MonoBehaviour
         File.Copy(path, destinationGifFile);
 
         // 显示
-        ShowGIF(path);
+        ShowBoard1GIF(path);
 
-        dpImage.sprite = tex2Gif.GetSprite(0);
+        //team1Board.dpImage.sprite = tex2Gif.GetSprite(0);
+        // dpImage.SetNativeSize();
+    }
+    
+    private void OnFileSavedBoard2(int id, string path)
+    {
+        PlaceUIManager.Instance.GetEndUi().OnSaveGifOk();
+        Debug.Log("On file saved: " + path);
+        // text1.text = "GIF saved: " + path;
+#if UNITY_EDITOR
+        string sourceFolder = Application.dataPath;
+        // string destinationFolder = Path.Combine(sourceFolder, team1Board.savePath);
+        string destinationFolder = team2Board.savePath;
+#else
+        string sourceFolder = Application.persistentDataPath;
+        string destinationFolder = Path.Combine(sourceFolder, $"Log/{UniqueTime}/{teamID}");
+#endif
+        // 目标文件夹路径
+        if (!Directory.Exists(destinationFolder))
+        {
+            Directory.CreateDirectory(destinationFolder);
+        }
+
+        string fileName = Path.GetFileName(path);
+
+        string destinationGifFile = Path.Combine(destinationFolder, fileName);
+        string destinationJsonFile = Path.Combine(destinationFolder, "Art.json");
+
+        // public ArtInfo(string artName, int score, int drawTimes, float price, List<string> contributors, string artPath, string PUID, string dir)
+        ArtInfo artInfo = new ArtInfo(
+            "null",
+            PlaceCenter.Instance.users.Values.Sum(user => user.score),
+            PlaceCenter.Instance.users.Values.Sum(user => user.drawTimes),
+            PlaceCenter.Instance.users.Values.Sum(user => user.usePowerCount),
+            PlaceCenter.Instance.AllMemberName(),
+            artPath: destinationGifFile,
+            PUID: "null",
+            artTexturePath: Directory.GetFiles(destinationFolder, "*.png", SearchOption.AllDirectories).Last<string>()
+        );
+        SaveJson(destinationJsonFile, artInfo);
+
+
+        File.Copy(path, destinationGifFile);
+
+        // 显示
+        ShowBoard2GIF(path);
+
+        //team2Board.dpImage.sprite = tex2Gif.GetSprite(0);
         // dpImage.SetNativeSize();
     }
 
@@ -822,18 +948,32 @@ public class PlaceTeamBoardManager : MonoBehaviour
 
     private void OnFileSaveProgress(int id, float progress)
     {
+        Debug.Log($"ID：{id}进度条：{progress}");
         int progressInt = Mathf.CeilToInt(progress * 100);
         //Debug.Log("On file save progress: " + $"{progressInt}" + "%");
         // text1.text = "Save progress: " + Mathf.CeilToInt(progress * 100) + "%";
         PlaceUIManager.Instance.GetEndUi().OnSaveGifLoading(progressInt);
     }
 
-    void ShowGIF(string path)
+    void ShowBoard1GIF(string path)
     {
         ProGifManager.Instance.m_OptimizeMemoryUsage = true;
 
         //Open the Pro GIF player to show the converted GIF
-        ProGifManager.Instance.PlayGif(path, dpImage, (loadProgress) =>
+        ProGifManager.Instance.PlayGif(path, team1Board.dpImage, (loadProgress) =>
+        {
+            // if(loadProgress < 1f)
+            // {
+            // 	dpImage.SetNativeSize();
+            // }
+        });
+    }
+    void ShowBoard2GIF(string path)
+    {
+        ProGifManager.Instance.m_OptimizeMemoryUsage = true;
+
+        //Open the Pro GIF player to show the converted GIF
+        ProGifManager.Instance.PlayGif(path, team2Board.dpImage, (loadProgress) =>
         {
             // if(loadProgress < 1f)
             // {

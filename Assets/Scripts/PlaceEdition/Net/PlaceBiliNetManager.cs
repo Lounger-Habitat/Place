@@ -81,7 +81,7 @@ public class PlaceBiliNetManager : MonoBehaviour
         }
 
         // 主播信息
-        PlaceCenter.Instance.anchorName = gameIdResObj.Data.AnchorInfo.UName;
+        //PlaceCenter.Instance.anchorName = gameIdResObj.Data.AnchorInfo.UName;
 
         m_WebSocketBLiveClient = new WebSocketBLiveClient(gameIdResObj.GetWssLink(), gameIdResObj.GetAuthBody());
         m_WebSocketBLiveClient.OnDanmaku += WebSocketBLiveClientOnDanmaku;

@@ -44,8 +44,8 @@ public class User
     public int score;  // 玩家当前分数
     public int currentCarryingInkCount = 0;  // 玩家 身上携带的 颜料数量
     public int currentCarryingInsCount = 0; // 玩家 身上携带的 最大指令数量
-    public int maxCarryingInkCount = 10; // 玩家 身上携带的 颜料数量
-    public int maxCarryingInsCount = 10; // 玩家 身上携带的 最大指令数量
+    public int maxCarryingInkCount = 100; // 玩家 身上携带的 颜料数量
+    public int maxCarryingInsCount = 100; // 玩家 身上携带的 最大指令数量
     // base 速度
     public float speed;
     // 额外速度

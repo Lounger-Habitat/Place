@@ -125,8 +125,13 @@ public class PlaceUIManager : MonoBehaviour
     [ContextMenu("EndGame")]
     public void EndGameUI(/*调用这个方法应该把最后的画作，排行榜前三玩家传递进来*/)
     {
-            PlaceCenter.Instance.GenGif();
+            //PlaceCenter.Instance.GenGif();
             // endUI.Init()
+            endUI.Init();
+            PlaceCenter.Instance.gameRuning=false;
+            PlaceCenter.Instance.GenPUID();
+            PlaceCenter.Instance.GenGif();
+            PlaceCenter.Instance.Reset();
     }
 
     private void Update()

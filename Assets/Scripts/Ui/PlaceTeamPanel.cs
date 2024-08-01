@@ -35,7 +35,7 @@ public class PlaceTeamPanel : MonoBehaviour
         {
             teamScore.valueText.text = $"{team.score}/{PlaceTeamBoardManager.Instance.pixelsInfos.Length}";//队伍分数更新
         }
-        else
+        else if(GameSettingManager.Instance.Mode != GameMode.Competition)
         {
             teamScore.valueText.text = $"{team.score}/{PlaceBoardManager.Instance.pixelsCampInfos.Length}";//队伍分数更新
         }

@@ -36,5 +36,5 @@ Material:
     - _BumpAmt: 0
     - _Size: 1
     m_Colors:
-    - _Color: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
+    - _Color: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 1}
   m_BuildTextureStacks: []

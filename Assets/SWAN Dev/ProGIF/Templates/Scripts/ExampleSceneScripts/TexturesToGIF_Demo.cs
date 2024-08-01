@@ -10,11 +10,16 @@ public class TexturesToGIF_Demo : MonoBehaviour
 	public UnityEngine.UI.Image displayImage;
 	public ImageRotator.Rotation m_Rotation = ImageRotator.Rotation.None;
 
+	public string path;
+	
 	private ProGifTexturesToGIF tex2Gif = null;
 	private List<Texture2D> tex2DList = null;
 
-	public void ConvertTex2DToGIF()
+	private Action SavedAction;
+	
+	public void ConvertTex2DToGIF(Action FileSavedCallBack=null)
 	{
+		SavedAction = FileSavedCallBack;
         Clear();
 
 		tex2Gif = ProGifTexturesToGIF.Instance;
@@ -24,7 +29,7 @@ public class TexturesToGIF_Demo : MonoBehaviour
 		//tex2Gif.SetFileExtension(new List<string>{".jpg"});
 
 		// string loadImagePath = Application.streamingAssetsPath;
-		string loadImagePath = $"Assets/Images/{0}";
+		string loadImagePath = $"Assets/Images/{path}";
 
 		//Load images as texture2D list from target directory
 		tex2DList = tex2Gif.LoadImages(loadImagePath);
@@ -41,7 +46,7 @@ public class TexturesToGIF_Demo : MonoBehaviour
 
             //tex2Gif.m_MaxNumberOfThreads = 6;
 
-            tex2Gif.Save(tex2DList, 512, 512, 1, 0, 30, OnFileSaved, OnFileSaveProgress, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear:true);
+            tex2Gif.Save(tex2DList, 512, 512, 1, 0, 30, OnFileSaved, OnFileSaveProgress, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear:false);
 			text1.text = "Load images and start convert/save GIF..";
 		}
 		else
@@ -81,20 +86,26 @@ public class TexturesToGIF_Demo : MonoBehaviour
 		text1.text = "GIF saved: " + path;
 		ShowGIF(path);
 
-		displayImage.sprite = tex2Gif.GetSprite(0);
-		displayImage.SetNativeSize();
+		//displayImage.sprite = tex2Gif.GetSprite(0);
+		//displayImage.SetNativeSize();
+		SavedAction?.Invoke();
 	}
 
+	public RawImage m_RawImage2;
 	void ShowGIF(string path)
 	{
-		ProGifManager.Instance.m_OptimizeMemoryUsage = true;
+		//ProGifManager.Instance.m_OptimizeMemoryUsage = true;
 
 		//Open the Pro GIF player to show the converted GIF
-		ProGifManager.Instance.PlayGif(path, displayImage, (loadProgress)=>{
-			if(loadProgress < 1f)
-			{
-				displayImage.SetNativeSize();
-			}
+		// ProGifManager.Instance.PlayGif(path, displayImage, (loadProgress)=>{
+		// 	if(loadProgress < 1f)
+		// 	{
+		// 		displayImage.SetNativeSize();
+		// 	}
+		// });
+		PGif.iPlayGif(path, m_RawImage2.gameObject, "MyGifPlayerName 01", (texture2D) => {
+			// get and display the decoded texture here:
+			m_RawImage2.texture = texture2D;
 		});
 	}
 

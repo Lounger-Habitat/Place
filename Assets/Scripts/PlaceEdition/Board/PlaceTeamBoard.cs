@@ -36,9 +36,12 @@ public class PlaceTeamBoard : MonoBehaviour
     public string gifPath = "";
 
     string test = "test";
+    
+    public string savePath = "";
 
     Texture2D templateTexture;
-
+    public string teamID = "";
+    public string UniqueTime;
 #if UNITY_EDITOR
     string competitionsDir = "Assets/Images/Competitions/";
 #else
@@ -72,7 +75,10 @@ public class PlaceTeamBoard : MonoBehaviour
         Texture2D contex = MakeContours(imagePath);
         contex = ScaleTextureFixed(contex,width,height);
         contoursImage.texture = contex;
+        //UniqueTime =string.IsNullOrEmpty(UniqueTime)? GenerateUniqueTime():UniqueTime;
     }
+    
+    
     Texture2D MakeContours(string imagePath)
     {
         // check image path file is Exists and is image
@@ -407,10 +413,10 @@ public class PlaceTeamBoard : MonoBehaviour
         byte[] bytes = (realImage.texture as Texture2D).EncodeToPNG();
         // 检测文件夹是否存在
 #if UNITY_EDITOR
-        string savePath = $"Assets/Images/Log/{test}";
+        savePath = $"Assets/Images/Log/{UniqueTime}/{teamID}";
 #else
-        string savePath = Application.persistentDataPath;
-        savePath = Path.Combine(savePath, $"Log/{test}");
+        savePath = Application.persistentDataPath;
+        savePath = Path.Combine(savePath, $"Log/{UniqueTime}/{teamID}");
 #endif
         if (!Directory.Exists(savePath))
         {
@@ -804,16 +810,16 @@ public class PlaceTeamBoard : MonoBehaviour
     // pro gif lib
     private ProGifTexturesToGIF tex2Gif = null;
     private List<Texture2D> tex2DList = null;
-    public Image dpImage;
-    void Clear()
+    public RawImage dpImage;
+    public void Clear()
     {
         if (tex2Gif != null) tex2Gif.Clear();
 
-        if (dpImage != null && dpImage.sprite != null && dpImage.sprite.texture != null)
-        {
-            // Texture2D.Destroy(dpImage.sprite.texture);
-            dpImage.sprite = null;
-        }
+        // if (dpImage != null && dpImage.sprite != null && dpImage.sprite.texture != null)
+        // {
+        //     // Texture2D.Destroy(dpImage.sprite.texture);
+        //     dpImage.sprite = null;
+        // }
 
         //Clear texture
         if (tex2DList != null)
@@ -828,30 +834,33 @@ public class PlaceTeamBoard : MonoBehaviour
             tex2DList = null;
         }
     }
-    public void ConvertTex2DToGIF()
+    public void ConvertTex2DToGIF(Action action=null)
     {
 
+        OnTexture2GifOk = action;
         Clear();
-
-        tex2Gif = ProGifTexturesToGIF.Instance;
+        tex2Gif = ProGifTexturesToGIF.Instance; // 我还是怀疑这里？？,别分开了，不行就 mamanger 里 用一个，处理 这两个？或者你刚才说搞两个 是啥意思
+        // int ad = &tex2Gif;
+        // Debug.Log("address : " + ad);
 
         //Set file extensions for loading images
         tex2Gif.SetFileExtension(new List<string> { ".jpg", ".png" });
         //tex2Gif.SetFileExtension(new List<string>{".jpg"});
 
-        // string loadImagePath = Application.streamingAssetsPath;
+        // string loadImagePath = Application.streamingAssetnidosPath;
 #if UNITY_EDITOR
-        string loadImagePath = $"Assets/Images/Log/{test}";
+        string loadImagePath = $"Assets/Images/Log/{UniqueTime}/{teamID}";
 #else
         string loadImagePath = Application.persistentDataPath;
-        loadImagePath = Path.Combine(loadImagePath, $"Log/{test}");
+        loadImagePath = Path.Combine(loadImagePath, $"Log/{UniqueTime}/{teamID}");
 #endif
 
 
 
         //Load images as texture2D list from target directory
         tex2DList = tex2Gif.LoadImages(loadImagePath);
-        tex2Gif.LoadImagesFromResourcesFolder();
+        // tex2DList = tex2Gif.LoadImages(loadImagePath2); 
+        tex2Gif.LoadImagesFromResourcesFolder(); // 这是干嘛的？
 
         if (tex2DList != null && tex2DList.Count > 0)
         {
@@ -863,8 +872,11 @@ public class PlaceTeamBoard : MonoBehaviour
             tex2Gif.SetTransparent(true);
 
             //tex2Gif.m_MaxNumberOfThreads = 6;
-            tex2Gif.Save(tex2DList, width, height, 10, 0, 1, OnFileSaved, OnFileSaveProgress, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear: true);
-            Debug.Log("Load images and start convert/save GIF..");
+            Debug.Log("tex2DList.Count : " + tex2DList.Count);
+            tex2Gif.Save(tex2DList, width, height, 10, 0, 1, OnFileSaved, OnFileSaveProgress, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear: false);
+            // tex2Gif.Save(tex2DList2, width, height, 10, 0, 1, OnFileSaved2, OnFileSaveProgress2, ProGifTexturesToGIF.ResolutionHandle.ResizeKeepRatio, autoClear: 
+            // 这样行不行？
+            Debug.Log("Load images and start convert/save GIF..");//就打印了这个
         }
         else
         {
@@ -872,17 +884,18 @@ public class PlaceTeamBoard : MonoBehaviour
         }
     }
 
+    private Action OnTexture2GifOk;
     private void OnFileSaved(int id, string path)
     {
-        PlaceUIManager.Instance.GetEndUi().OnSaveGifOk();
-        Debug.Log("On file saved: " + path);
+        //PlaceUIManager.Instance.GetEndUi().OnSaveGifOk();
+        Debug.Log("On file saved: " + path);//这都没打印
         // text1.text = "GIF saved: " + path;
 #if UNITY_EDITOR
         string sourceFolder = Application.dataPath;
-        string destinationFolder = Path.Combine(sourceFolder, $"Images/Log/{test}");
+        string destinationFolder = Path.Combine(sourceFolder, $"Images/Log/{UniqueTime}/{teamID}");
 #else
         string sourceFolder = Application.persistentDataPath;
-        string destinationFolder = Path.Combine(sourceFolder, $"Log/{test}");
+        string destinationFolder = Path.Combine(sourceFolder, $"Log/{UniqueTime}/{teamID}");
 #endif
         // 目标文件夹路径
         if (!Directory.Exists(destinationFolder))
@@ -914,8 +927,10 @@ public class PlaceTeamBoard : MonoBehaviour
         // 显示
         ShowGIF(path);
 
-        dpImage.sprite = tex2Gif.GetSprite(0);
+        //dpImage.sprite = tex2Gif.GetSprite(0);
+        OnTexture2GifOk?.Invoke();  // 这个位置 合适吗
         // dpImage.SetNativeSize();
+        PlaceTeamBoardManager.Instance.OnSaveOK(teamID);
     }
 
     private void SaveJson(string path, ArtInfo artInfo)
@@ -931,20 +946,25 @@ public class PlaceTeamBoard : MonoBehaviour
         int progressInt = Mathf.CeilToInt(progress * 100);
         //Debug.Log("On file save progress: " + $"{progressInt}" + "%");
         // text1.text = "Save progress: " + Mathf.CeilToInt(progress * 100) + "%";
-        PlaceUIManager.Instance.GetEndUi().OnSaveGifLoading(progressInt);
+        //PlaceUIManager.Instance.GetEndUi().OnSaveGifLoading(progressInt);
+        PlaceTeamBoardManager.Instance.OnfileProgress(teamID,progressInt);
     }
 
     void ShowGIF(string path)
     {
-        ProGifManager.Instance.m_OptimizeMemoryUsage = true;
-
-        //Open the Pro GIF player to show the converted GIF
-        ProGifManager.Instance.PlayGif(path, dpImage, (loadProgress) =>
-        {
-            // if(loadProgress < 1f)
-            // {
-            // 	dpImage.SetNativeSize();
-            // }
+        // ProGifManager.Instance.m_OptimizeMemoryUsage = true;
+        //
+        // //Open the Pro GIF player to show the converted GIF
+        // ProGifManager.Instance.PlayGif(path, dpImage, (loadProgress) =>
+        // {
+        //     // if(loadProgress < 1f)
+        //     // {
+        //     // 	dpImage.SetNativeSize();
+        //     // }
+        // });
+        PGif.iPlayGif(path, dpImage.gameObject, "MyGifPlayerName 01", (texture2D) => {
+            // get and display the decoded texture here:
+            dpImage.texture = texture2D;
         });
     }
 

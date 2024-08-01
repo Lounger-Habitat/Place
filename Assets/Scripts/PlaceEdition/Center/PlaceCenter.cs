@@ -490,8 +490,8 @@ public class PlaceCenter : MonoBehaviour
                 {
                     var Iname =iconNames[Random.Range(0,5)];
                     DrawUserIconImage(u,Iname);
-                    int max = PlaceBoardManager.Instance.height / 4;
-                    normalPower = max*max+100;
+                    int max = PlaceBoardManager.Instance.height / 2;
+                    normalPower = max * max + 10;
                     switch (Iname)
                     {
                         case "comeOn-150-115-40":
@@ -602,8 +602,8 @@ public class PlaceCenter : MonoBehaviour
     public void GainLikePower(User user, long power)
     {
         // B 站 每人 每天 点赞上限 1000
-        int p = (int)power;
-        user.score += 10 * p;
+        int p = (int)power * 10;//TODO:记得修改哦！根据点赞数量获取颜料，修改为自动倍率。
+        user.score += p;
         user.Update();
         PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
         // 颜料增加的特效
@@ -659,7 +659,7 @@ public class PlaceCenter : MonoBehaviour
     private void DrawUserIconImage(User user,string IName)
     {
         int x, y,max;
-        max = PlaceBoardManager.Instance.height / 4;
+        max = PlaceBoardManager.Instance.height / 2;
         x = Random.Range(1, PlaceBoardManager.Instance.width - max);
         y = Random.Range(1,PlaceBoardManager.Instance.height-max);
         Texture2D userTex = user.userIcon.texture;
@@ -703,7 +703,15 @@ public class PlaceCenter : MonoBehaviour
     // 结束 生成 gif
     public void GenGif()
     {
-        PlaceBoardManager.Instance.ConvertTex2DToGIF();
+        if (GameSettingManager.Instance.Mode != GameMode.Competition)
+        {
+            PlaceBoardManager.Instance.ConvertTex2DToGIF();
+        }
+        else
+        {
+            PlaceTeamBoardManager.Instance.ConvertTex2DToGIFTeamFun();
+        }
+        
     }
 
     // public void ShowGif(string path) {
@@ -1048,7 +1056,14 @@ public class PlaceCenter : MonoBehaviour
         while (gameRuning)
         {
             yield return new WaitForSeconds(time);
-            PlaceBoardManager.Instance.SaveImage();
+            if (GameSettingManager.Instance.Mode == GameMode.Competition)
+            {
+                PlaceTeamBoardManager.Instance.SaveTeamImage();
+            }
+            else
+            {
+                PlaceBoardManager.Instance.SaveImage();
+            }
         }
         // PlaceBoardManager.Instance.SaveImage(lastone: true);
     }
