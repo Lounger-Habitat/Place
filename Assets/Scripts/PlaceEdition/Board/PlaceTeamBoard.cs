@@ -36,7 +36,7 @@ public class PlaceTeamBoard : MonoBehaviour
     public string gifPath = "";
 
     string test = "test";
-    
+
     public string savePath = "";
 
     Texture2D templateTexture;
@@ -69,16 +69,16 @@ public class PlaceTeamBoard : MonoBehaviour
         string imagePath = LoadRandomImage();
         // ImageProcessor processor = new ImageProcessor();
         templateTexture = LoadTexture(imagePath);
-        templateTexture = ScaleTextureFixed(templateTexture,width,height);
+        templateTexture = ScaleTextureFixed(templateTexture, width, height);
         currentPixels = templateTexture.GetPixels();
         Debug.Log("currentPixels.Length : " + currentPixels.Length);
         Texture2D contex = MakeContours(imagePath);
-        contex = ScaleTextureFixed(contex,width,height);
+        contex = ScaleTextureFixed(contex, width, height);
         contoursImage.texture = contex;
         //UniqueTime =string.IsNullOrEmpty(UniqueTime)? GenerateUniqueTime():UniqueTime;
     }
-    
-    
+
+
     Texture2D MakeContours(string imagePath)
     {
         // check image path file is Exists and is image
@@ -140,6 +140,12 @@ public class PlaceTeamBoard : MonoBehaviour
     {
     }
 
+    public void SetWidthAndHeight(int width, int height)
+    {
+        this.width = width;
+        this.height = height;
+    }
+
     List<Texture2D> LoadResources(string directoryPath)
     {
         List<Texture2D> loadedTextures = new List<Texture2D>();
@@ -191,12 +197,6 @@ public class PlaceTeamBoard : MonoBehaviour
             return null;
         }
     }
-
-    // void UpdateTexture(int x, int y)
-    // {
-    //     texture.SetPixel(x, y, drawColor);
-    //     texture.Apply(); // 应用更改到贴图
-    // }
 
     // 生成新贴图的函数
     public Texture2D GenerateTexture(int width, int height, Color fillColor)
@@ -347,49 +347,6 @@ public class PlaceTeamBoard : MonoBehaviour
         newTexture.Apply();
         return newTexture;
     }
-
-    // void MarkEdges(Texture2D texture)
-    // {
-    //     if (texture == null)
-    //     {
-    //         Debug.LogError("Texture is null.");
-    //         return;
-    //     }
-
-    //     if (!texture.isReadable)
-    //     {
-    //         Debug.LogError("Texture is not readable. Please enable 'Read/Write Enabled' in import settings.");
-    //         return;
-    //     }
-
-    //     int width = texture.width;
-    //     int height = texture.height;
-
-    //     // 设置原点为紫色
-    //     texture.SetPixel(0, 0, Color.magenta);
-    //     // 设置右上角为青色
-    //     texture.SetPixel(width - 1, height - 1, Color.cyan);
-    //     // 设置左上角为青色
-    //     texture.SetPixel(0, height - 1, Color.cyan);
-    //     // 设置右下角为青色
-    //     texture.SetPixel(width - 1, 0, Color.cyan);
-
-    //     // 修改第一行和最后一行
-    //     for (int x = 1; x < width - 1; x++)
-    //     {
-    //         texture.SetPixel(x, 0, Color.green);       // 第一行
-    //         texture.SetPixel(x, height - 1, Color.green); // 最后一行
-    //     }
-
-    //     // 修改第一列和最后一列
-    //     for (int y = 1; y < height - 1; y++)
-    //     {
-    //         texture.SetPixel(0, y, Color.green);        // 第一列
-    //         texture.SetPixel(width - 1, y, Color.green);   // 最后一列
-    //     }
-
-    //     texture.Apply();
-    // }
 
     bool CheckForTransparency(Texture2D texture)
     {
@@ -834,7 +791,7 @@ public class PlaceTeamBoard : MonoBehaviour
             tex2DList = null;
         }
     }
-    public void ConvertTex2DToGIF(Action action=null)
+    public void ConvertTex2DToGIF(Action action = null)
     {
 
         OnTexture2GifOk = action;
@@ -947,7 +904,7 @@ public class PlaceTeamBoard : MonoBehaviour
         //Debug.Log("On file save progress: " + $"{progressInt}" + "%");
         // text1.text = "Save progress: " + Mathf.CeilToInt(progress * 100) + "%";
         //PlaceUIManager.Instance.GetEndUi().OnSaveGifLoading(progressInt);
-        PlaceTeamBoardManager.Instance.OnfileProgress(teamID,progressInt);
+        PlaceTeamBoardManager.Instance.OnfileProgress(teamID, progressInt);
     }
 
     void ShowGIF(string path)
@@ -962,7 +919,8 @@ public class PlaceTeamBoard : MonoBehaviour
         //     // 	dpImage.SetNativeSize();
         //     // }
         // });
-        PGif.iPlayGif(path, dpImage.gameObject, "MyGifPlayerName 01", (texture2D) => {
+        PGif.iPlayGif(path, dpImage.gameObject, "MyGifPlayerName 01", (texture2D) =>
+        {
             // get and display the decoded texture here:
             dpImage.texture = texture2D;
         });
@@ -1026,7 +984,7 @@ public class PlaceTeamBoard : MonoBehaviour
     {
         string drawIns = "";
         int take_count = user.maxCarryingInsCount - user.currentCarryingInsCount;
-        for (int i = 0; i<take_count && currentIndex < currentPixels.Length; currentIndex++)
+        for (int i = 0; i < take_count && currentIndex < currentPixels.Length; currentIndex++)
         {
             Color32 c = currentPixels[currentIndex];
             if (c.a > 0)

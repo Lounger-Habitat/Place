@@ -33,7 +33,7 @@ public class PlaceTeamPanel : MonoBehaviour
         // TODO this
         if (GameSettingManager.Instance.Mode == GameMode.Competition&& PlaceCenter.Instance.gameRuning)//不切换场景会报错
         {
-            teamScore.valueText.text = $"{team.score}/{PlaceTeamBoardManager.Instance.pixelsInfos.Length}";//队伍分数更新
+            teamScore.valueText.text = $"{team.score}/{PlaceTeamBoardManager.Instance.width * PlaceTeamBoardManager.Instance.height}";//队伍分数更新
         }
         else if(GameSettingManager.Instance.Mode != GameMode.Competition)
         {

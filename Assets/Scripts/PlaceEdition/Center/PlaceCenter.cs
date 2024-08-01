@@ -10,6 +10,7 @@ using Random = UnityEngine.Random;
 using System.Text.RegularExpressions;
 using UnityEngine.UI.Extensions;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class PlaceCenter : MonoBehaviour
 {
@@ -78,9 +79,9 @@ public class PlaceCenter : MonoBehaviour
 
     public void Start()
     {
-    #if !UNITY_EDITOR
+#if !UNITY_EDITOR
             Debug.unityLogger.logEnabled = false;
-    #endif
+#endif
         // 初始化用户信息
         // 初始化队伍信息
         // 初始化场地信息
@@ -263,7 +264,14 @@ public class PlaceCenter : MonoBehaviour
         // 多少位？
         // 平台 + 时间 + 主播 + 人数 + 价值 + ？？
         // TODO
-        PlaceBoardManager.GenerateUniqueId();
+        if (GameSettingManager.Instance.Mode == GameMode.Competition)//不切换场景会报错
+        {
+            PlaceTeamBoardManager.GenerateUniqueId();
+        }
+        else
+        {
+            PlaceBoardManager.GenerateUniqueId();
+        }
         string puid = PlaceBoardManager.UniqueId;
         var text = GameObject.Find("DrawID").transform.GetChild(0).GetComponent<TMP_Text>();
         text.text = $"PUID : {puid}";
@@ -394,8 +402,22 @@ public class PlaceCenter : MonoBehaviour
     {
         // 队伍长度
         int[] newTeamScore = new int[3];
-        if (GameSettingManager.Instance.Mode == GameMode.Competition){
-            // 单独黑板，单独记分
+        if (GameSettingManager.Instance.Mode == GameMode.Competition)
+        {
+            foreach (int c in PlaceTeamBoardManager.Instance.team1Board.pixelsUserInfos)
+            {
+                if (c != 0)
+                {
+                    newTeamScore[1]++;
+                }
+            }
+            foreach (int c in PlaceTeamBoardManager.Instance.team2Board.pixelsUserInfos)
+            {
+                if (c != 0)
+                {
+                    newTeamScore[2]++;
+                }
+            }
         }
         else
         {
@@ -403,6 +425,7 @@ public class PlaceCenter : MonoBehaviour
             {
                 newTeamScore[c]++;
             }
+
         }
 
         for (int i = 0; i < newTeamScore.Length; i++)
@@ -416,6 +439,8 @@ public class PlaceCenter : MonoBehaviour
                 // OnTeamUIUpdate(PlaceTeamManager.Instance.teamAreas[i-1].teaminfo);
             }
         }
+
+
 
         // UI显示 , 不知道为什么成为空函数了
         // PlaceUIManager.Instance.SetTeamData(teams.Values.ToList());
@@ -488,8 +513,8 @@ public class PlaceCenter : MonoBehaviour
             case 199f:
                 if (GameSettingManager.Instance.Mode == GameMode.Graffiti)
                 {
-                    var Iname =iconNames[Random.Range(0,5)];
-                    DrawUserIconImage(u,Iname);
+                    var Iname = iconNames[Random.Range(0, 5)];
+                    DrawUserIconImage(u, Iname);
                     int max = PlaceBoardManager.Instance.height / 2;
                     normalPower = max * max + 10;
                     switch (Iname)
@@ -497,10 +522,10 @@ public class PlaceCenter : MonoBehaviour
                         case "comeOn-150-115-40":
                             messageType = TipsType.giftImageBaiTuo;
                             break;
-                        case  "guang-608-452-141":
+                        case "guang-608-452-141":
                             messageType = TipsType.gittImagePanel;
                             break;
-                        case  "lailou-250-256-76":
+                        case "lailou-250-256-76":
                             messageType = TipsType.giftImageComeOn;
                             break;
                     }
@@ -654,14 +679,14 @@ public class PlaceCenter : MonoBehaviour
         "lailou-250-256-76",
         "lailou-250-256-76"
     };
-    
+
     //这是画指定的，上一级随机的名字
-    private void DrawUserIconImage(User user,string IName)
+    private void DrawUserIconImage(User user, string IName)
     {
-        int x, y,max;
+        int x, y, max;
         max = PlaceBoardManager.Instance.height / 2;
         x = Random.Range(1, PlaceBoardManager.Instance.width - max);
-        y = Random.Range(1,PlaceBoardManager.Instance.height-max);
+        y = Random.Range(1, PlaceBoardManager.Instance.height - max);
         Texture2D userTex = user.userIcon.texture;
         List<Instruction> IL = Instance.GiftGenerateImage(x, y, max, userTex, IName);
         if (IL.Count != 0)
@@ -672,9 +697,9 @@ public class PlaceCenter : MonoBehaviour
         {
             Debug.Log("roll 失败,或许名字key 不对");
         }
-        
+
     }
-    
+
 
     // 重新开始游戏
     void RestartGame()
@@ -711,7 +736,7 @@ public class PlaceCenter : MonoBehaviour
         {
             PlaceTeamBoardManager.Instance.ConvertTex2DToGIFTeamFun();
         }
-        
+
     }
 
     // public void ShowGif(string path) {
@@ -746,7 +771,7 @@ public class PlaceCenter : MonoBehaviour
 
         return new List<Instruction>();
     }
-    public List<Instruction> GiftGenerateImage(int ox, int oy, int max, Texture2D userTex ,string name )
+    public List<Instruction> GiftGenerateImage(int ox, int oy, int max, Texture2D userTex, string name)
     {
         // 图库
         // 获取index 
