@@ -14,9 +14,12 @@ public class PlaceTeamBoard : MonoBehaviour
 {
     public bool darkMode = false;
 
-    // for 2d canvas use
+    // for 2d canvas use ， 
+    // 背景图片
     public RawImage bgImage;
+    // 轮廓图片
     public RawImage contoursImage;
+    // 实际图片
     public RawImage realImage;
 
     private Texture2D texture;
@@ -30,6 +33,7 @@ public class PlaceTeamBoard : MonoBehaviour
     // public int[] pixelsInfos;
     // 像素用户信息， 0 为未涂色，>0 为涂色, 数字代表用户
     public int[] pixelsUserInfos;
+    public int[] randomIndexs;
     Color[] currentPixels;
     int currentIndex = 0;
 
@@ -71,11 +75,33 @@ public class PlaceTeamBoard : MonoBehaviour
         templateTexture = LoadTexture(imagePath);
         templateTexture = ScaleTextureFixed(templateTexture, width, height);
         currentPixels = templateTexture.GetPixels();
+        SetRandomIndex(currentPixels.Length);
         Debug.Log("currentPixels.Length : " + currentPixels.Length);
         Texture2D contex = MakeContours(imagePath);
         contex = ScaleTextureFixed(contex, width, height);
         contoursImage.texture = contex;
         //UniqueTime =string.IsNullOrEmpty(UniqueTime)? GenerateUniqueTime():UniqueTime;
+    }
+
+    public void SetRandomIndex(int len)
+    {
+        // 初始化1到100的数组
+        randomIndexs = new int[len];
+        for (int i = 0; i < randomIndexs.Length; i++)
+        {
+            randomIndexs[i] = i + 1;
+        }
+
+        // 使用Random的静态方法生成随机数
+        System.Random random = new System.Random();
+        for (int i = randomIndexs.Length - 1; i > 0; i--)
+        {
+            int j = random.Next(i + 1); // 随机选择一个索引
+            // 交换i和j位置的元素
+            var temp = randomIndexs[i];
+            randomIndexs[i] = randomIndexs[j];
+            randomIndexs[j] = temp;
+        }
     }
 
 
@@ -980,20 +1006,45 @@ public class PlaceTeamBoard : MonoBehaviour
         return newTexture;
     }
 
+    public bool take_random = true;
+    public bool take_sequence = false;
+    // 竞赛取出像素
     public void TakeIns(User user)
     {
         string drawIns = "";
         int take_count = user.maxCarryingInsCount - user.currentCarryingInsCount;
-        for (int i = 0; i < take_count && currentIndex < currentPixels.Length; currentIndex++)
+        for (int i = 0; i < take_count && currentIndex < currentPixels.Length; i++)
         {
-            Color32 c = currentPixels[currentIndex];
+            int x,y,tempIndex;
+            Color32 c;
+            // 顺序取
+            if (take_sequence)
+            {
+                c = currentPixels[currentIndex];
+                tempIndex = currentIndex;
+                currentIndex++;
+            }
+            // 随机取
+            else {
+                int index = randomIndexs[currentIndex];
+                currentIndex++;
+                c = currentPixels[index];
+                tempIndex = index;
+            }
+            
+            // if (take_random) {
+            //     int index = randomIndexs[currentIndex];
+            //     c = currentPixels[index];
+            // }
+
+
+            
             if (c.a > 0)
             {
-                int x = currentIndex % templateTexture.width;
-                int y = currentIndex / templateTexture.width;
+                x = tempIndex % templateTexture.width;
+                y = tempIndex / templateTexture.width;
                 drawIns = $"/d {x} {y} {c.r} {c.g} {c.b}";
                 PlaceTeamInstructionManager.Instance.DefaultRunChatCommand(user, drawIns);
-                i++;
             }
         }
     }
