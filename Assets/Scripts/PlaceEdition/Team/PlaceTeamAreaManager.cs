@@ -254,16 +254,18 @@ public class PlaceTeamAreaManager : MonoBehaviour
         {
             PlacePlayerController pc = other.transform.GetComponent<PlacePlayerController>();
             // 角色刚刚进入触发器
-            Debug.Log("角色进入触发器");
+            
             string name = pc.user.Name;
+            Debug.Log($"角色：{name} 进入触发器");
             // 如果角色在此队伍区域内
             /*
                 1. 检查角色是否在队伍区域内
                 2. 敌对角色进入队伍区域
                 3. 友方角色进入队伍区域
             */
-            if (IsUserInTeam(name) && pc.user.currentCarryingInsCount == 0) // 本队队员进入队伍区域
+            if (IsUserInTeam(name)) //  && pc.user.currentCarryingInsCount == 0) // 本队队员进入队伍区域
             {
+                Debug.Log("拿取颜料");
                 placeTeamBoard.TakeIns(pc.user);
             }
             // TODO ： 友方队伍

@@ -1,11 +1,11 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using DG.Tweening;
 
 public class ProjectileController : MonoBehaviour
 {
     public int camp = 0;
+    public Color32 aimColor;
     void OnEnable()
     {
     }
@@ -50,6 +50,7 @@ public class ProjectileController : MonoBehaviour
             flashGo = PlaceInkPoolManager.Instance.GetGreenInkFlash();
         }
 
+        flashGo.GetComponent<ColorFlashManager>().SetFlashColor(aimColor);
         flashGo.transform.position = transform.position;
         transform.DOMove(end, time).SetEase(Ease.OutQuint).OnComplete(() =>
          {
@@ -87,7 +88,7 @@ public class ProjectileController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("OnTriggerEnter");
+        // Debug.Log("OnTriggerEnter");
         if (other.CompareTag("Board"))
         {
             GameObject go;
@@ -99,7 +100,7 @@ public class ProjectileController : MonoBehaviour
             {
                 go = PlaceInkPoolManager.Instance.GetGreenInkImpact();
             }
-            
+            go.GetComponent<ColorImpactManager>().SetImpactColor(aimColor);
             go.transform.position = transform.position;
             go.transform.rotation = Quaternion.identity;
             go.SetActive(true);

@@ -166,8 +166,8 @@ public class PlacePlayerController : MonoBehaviour
     public void MoveToTarget(Vector3 targetPosition)
     {
         navMeshAgent.destination = targetPosition;
-        var nowSpeed =user.speed + user.exSpeed;
-        if (nowSpeed<=0)
+        var nowSpeed = user.speed + user.exSpeed;
+        if (nowSpeed <= 0)
         {
             navMeshAgent.speed = 0;
             CheckSpeed();
@@ -258,7 +258,7 @@ public class PlacePlayerController : MonoBehaviour
 
     public void DrawPoint(Instruction ins)
     {
-        PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y, user.Camp);
+        PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y, ins.r, ins.g, ins.b, user.Camp);
         StartCoroutine(IDrawPoint(ins));
         // yield return new WaitForSeconds(2);
         // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
@@ -312,7 +312,7 @@ public class PlacePlayerController : MonoBehaviour
 
     private IEnumerator IDrawLine(int x, int y, int r, int g, int b, int camp)
     {
-        PlaceConsoleAreaManager.Instance.PlayEffect(x, y, camp);
+        PlaceConsoleAreaManager.Instance.PlayEffect(x, y, r, g, b, camp);
         // 等待两秒执行
         yield return new WaitForSeconds(1.5f);
         PlaceBoardManager.Instance.DrawCommand(x, y, r, g, b, camp, user.Id);
@@ -622,7 +622,7 @@ public class PlacePlayerController : MonoBehaviour
         float zdir = UnityEngine.Random.Range(-5f, 5f);//分别获得两个方向的
         Vector3 targetPos = t != null ? t.position : transform.position + new Vector3(xdir * powerScale, 0, zdir * powerScale); //当前位置加上目标方向乘以距离就是目标位置
         GameObject thunder = Instantiate(strikeEffect, targetPos, Quaternion.identity);
-        thunder.transform.localScale = new Vector3(powerScale, powerScale, powerScale) * 2 ;
+        thunder.transform.localScale = new Vector3(powerScale, powerScale, powerScale) * 2;
         var auto = thunder.GetComponent<EffectAutoDelete>();
         auto.scale = 2.0f;
         auto.DoDestroy(3);
@@ -886,12 +886,13 @@ public class PlacePlayerController : MonoBehaviour
     }
 
 
-    public void Reset() {
+    public void Reset()
+    {
         insQueue.Clear();
         user.instructionQueue.Clear();
     }
 
-    public IEnumerator DrawPattern(RefWrapper<bool> btDrawing,RefWrapper<bool> btDrawFinish)
+    public IEnumerator DrawPattern(RefWrapper<bool> btDrawing, RefWrapper<bool> btDrawFinish)
     {
         int timer = 0;
         // insQueue 身上携带的指令
@@ -932,10 +933,10 @@ public class PlacePlayerController : MonoBehaviour
             timer += 1;
             if (timer >= 10)
             {
-                yield return null;;
+                yield return null; ;
                 timer = 0;
             }
-            
+
         }
 
 

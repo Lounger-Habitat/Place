@@ -133,7 +133,7 @@ public class User
             float delta = level * 0.03f;
             nameTag.GetComponent<IconNameTag>().UpdateIconRect(delta);
             character.transform.localScale = new Vector3(1 + delta, 1 + delta, 1 + delta);
-            character.GetComponent<NavMeshAgent>().avoidancePriority = Mathf.Clamp(99 - level,0,99);
+            character.GetComponent<NavMeshAgent>().avoidancePriority = Mathf.Clamp(99 - level, 0, 99);
         }
 
     }
@@ -144,10 +144,30 @@ public class User
             n 是 level 默认是1, 
             d = 20, # 2024-05-24:太大了，升级太慢，改成 1,d=1
             a1 = 100
-            a_n = a_1+(n−1)d
-            S_n = n/2(a_1+a_n) = n/2(a_1+a_1+(n−1)d) = n/2(2a_1+(n−1)d)
+            a_2 = a1+(n−1)d
+
+            1). S_n = n/2(a_1+a_n) = n/2(a_1+a_1+(n−1)d) = n/2(2a_1+(n−1)d)
+            fix: S_n = n * a_1 + ( (n*(n-1) / 2) * d )
+                     = n * 100 + ( (n*(n-1) / 2) * 20 )
+                     = 100n + 10n^2 - 10n
+                     = 10n^2 + 90n
+            2). S_n = n * a_1 + ( (n*(n-1) / 2) * d )
+            fix: S_n = n * a_1 + ( (n*(n-1) / 2) * d )
+                     = n * 100 + ( (n*(n-1) / 2) * 20 )
+                     = 100n + 10n^2 - 10n
+                     = 10n^2 + 90n
+                     当 S_n = 0 时，n = 0 不对
+                改写成: S_n = 10n^2 + 90n - 100
+                所以 n = (-90 + sqrt(8100+4000S_n))/20
+                    
+            3). 求根公式: n = (-b + sqrt(b^2 - 4ac)) / 2a
+                             
+                             a = 10 , b = 90, c = -100-Sn
+                        n = (-90 + sqrt(8100+4000S_n))/20
+
             给定 S_n = score, 求 n
-            20n^2+180n−2S=0
+            
+
             n = (-180+sqrt(32400+160score))/40
             n = [-(2a-d) + sqrt((2a-d)^2+8dS_n)] / 2d
             n = [-199 + sqrt(39961+8*score)] / 2    when d = 1
@@ -160,6 +180,7 @@ public class User
         // int d = 20;
         // int n = (int)(-(200 - d) + Mathf.Sqrt( Mathf.Pow(200 - d,2) + 8 * d * score)) / 2 * d;
         int n = (int)(-190 + Mathf.Sqrt(36100 + 80 * score)) / 20;
+        // int n = (int)(-90 + Mathf.Sqrt(8100 + 4000 * score)) / 20;
         return n;
     }
 }

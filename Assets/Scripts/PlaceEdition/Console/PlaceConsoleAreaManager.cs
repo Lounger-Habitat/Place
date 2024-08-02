@@ -154,7 +154,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
 
     // }
 
-    public void PlayEffect(int x, int y, int camp)
+    public void PlayEffect(int x, int y, int r, int g, int b, int camp)
     {
         // 检测 x,y 小于 width height, 超出部分做截断处理
         // x = Mathf.Clamp(x, 0, boradWidth);
@@ -163,7 +163,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         // Vector3 delta = new Vector3((float)(x * pixelWidth), (float)(y * pixelHeight), 0f);
         // Vector3 aimPos = endPosBottom.position + delta;
 
-
+        Color32 color = new Color(r / 255f, g / 255f, b / 255f, 1f);
         Vector3 aimPos = CalAimPos(x, y, camp);
 
         GameObject projGo;
@@ -175,10 +175,12 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         {
             projGo = PlaceInkPoolManager.Instance.GetGreenInkProjectile();
         }
+        projGo.GetComponent<ColorProjectileManager>().SetProjectileColor(color);
         projGo.transform.position = spawnPoint.position;
         projGo.transform.forward = spawnPoint.forward;
         ProjectileController projScript = projGo.GetComponent<ProjectileController>();
         projScript.camp = camp;
+        projScript.aimColor = color;
         projScript.Launch(aimPos, 2.0f);
 
 
