@@ -60,6 +60,7 @@ public class PlaceCenter : MonoBehaviour
 
     int baseId = 0;
 
+    private int maxSocre = 120000;
     // List<Texture2D>? demoTextures = null;
     Dictionary<string, Texture2D> freeDemoTexturesDic = new Dictionary<string, Texture2D>();
     Dictionary<string, Texture2D> giftDemoTexturesDic = new Dictionary<string, Texture2D>();
@@ -98,6 +99,17 @@ public class PlaceCenter : MonoBehaviour
         freeDemoTexturesDic = LoadDemoDicResources("free");
         giftDemoTexturesDic = LoadDemoDicResources("gift");
         // DemoTexturesDic = LoadDemoDicResources("free");
+        if (GameSettingManager.Instance.Mode == GameMode.Competition)
+        {
+            maxSocre = PlaceTeamBoardManager.Instance.width *
+                       PlaceTeamBoardManager.Instance.height;
+        }
+        else
+        {
+            maxSocre = PlaceBoardManager.Instance.width *
+                       PlaceBoardManager.Instance.height;
+        }
+
 
     }
 
@@ -271,10 +283,12 @@ public class PlaceCenter : MonoBehaviour
         else
         {
             PlaceBoardManager.GenerateUniqueId();
+            string puid = PlaceBoardManager.UniqueId;
+            var text = GameObject.Find("DrawID").transform.GetChild(0).GetComponent<TMP_Text>();
+            text.text = $"PUID : {puid}";
         }
-        string puid = PlaceBoardManager.UniqueId;
-        var text = GameObject.Find("DrawID").transform.GetChild(0).GetComponent<TMP_Text>();
-        text.text = $"PUID : {puid}";
+        
+        
     }
 
     public void JoinGame(User user, string teamId)
@@ -404,20 +418,23 @@ public class PlaceCenter : MonoBehaviour
         int[] newTeamScore = new int[3];
         if (GameSettingManager.Instance.Mode == GameMode.Competition)
         {
-            foreach (int c in PlaceTeamBoardManager.Instance.team1Board.pixelsUserInfos)
-            {
-                if (c != 0)
-                {
-                    newTeamScore[1]++;
-                }
-            }
-            foreach (int c in PlaceTeamBoardManager.Instance.team2Board.pixelsUserInfos)
-            {
-                if (c != 0)
-                {
-                    newTeamScore[2]++;
-                }
-            }
+            // foreach (int c in PlaceTeamBoardManager.Instance.team1Board.pixelsUserInfos)
+            // {
+            //     if (c != 0)
+            //     {
+            //         newTeamScore[1]++;
+            //     }
+            // }
+            // foreach (int c in PlaceTeamBoardManager.Instance.team2Board.pixelsUserInfos)
+            // {
+            //     if (c != 0)
+            //     {
+            //         newTeamScore[2]++;
+            //     }
+            // }
+            newTeamScore[1] = PlaceTeamBoardManager.Instance.team1Board.socre;
+            newTeamScore[2] = PlaceTeamBoardManager.Instance.team2Board.socre;
+
         }
         else
         {
@@ -440,12 +457,55 @@ public class PlaceCenter : MonoBehaviour
             }
         }
 
-
+        if (GameSettingManager.Instance.Mode!=GameMode.Competition)return;
+        
+        if (newTeamScore[1]>=maxSocre-10)
+        {
+            //一队获胜
+            GameEnd();
+            //PlaceUIManager.Instance.SetWinInfo(1);
+            Debug.Log("Game end ,win team1");
+            return;
+        }
+        if (newTeamScore[2]>=maxSocre-10)
+        {
+            //二队获胜
+            GameEnd();
+            //PlaceUIManager.Instance.SetWinInfo(2);
+            Debug.Log("Game end ,win team1");
+            return;
+        }
 
         // UI显示 , 不知道为什么成为空函数了
         // PlaceUIManager.Instance.SetTeamData(teams.Values.ToList());
 
     }
+
+    //游戏结束
+    public void GameEnd()
+    {
+        gameRuning=false;
+        GenPUID();
+        GenGif();
+        Reset();
+        CheckWinTeam();
+        PlaceUIManager.Instance.EndGameUI();
+    }
+
+    public void CheckWinTeam()
+    {
+        if (PlaceTeamBoardManager.Instance.team1Board.socre>PlaceTeamBoardManager.Instance.team2Board.socre)
+        {
+            //一队获胜
+            PlaceUIManager.Instance.SetWinInfo(1);
+        }
+        else
+        {
+            PlaceUIManager.Instance.SetWinInfo(2);
+        }
+    }
+    
+    
     public void GainPower(string username, float power)
     {
         if (!users.ContainsKey(username))

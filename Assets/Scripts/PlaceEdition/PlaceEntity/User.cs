@@ -180,7 +180,7 @@ public class User
         // int d = 20;
         // int n = (int)(-(200 - d) + Mathf.Sqrt( Mathf.Pow(200 - d,2) + 8 * d * score)) / 2 * d;
         int n = (int)(-190 + Mathf.Sqrt(36100 + 80 * score)) / 20;
-        // int n = (int)(-90 + Mathf.Sqrt(8100 + 4000 * score)) / 20;
+        n = Mathf.Clamp(n, 1, 999);
         return n;
     }
 }

@@ -31,13 +31,13 @@ public class PlacePlayerController : MonoBehaviour
     public Dictionary<string, PlacePlayerController> enemies = new Dictionary<string, PlacePlayerController>();
 
 
-    // 身上指令
+    // 身上指令em...
     public List<Instruction> insList = new List<Instruction>();
 
     // 身上颜料
     public int inkCount = 0;
 
-    // 指令队列 ，cache
+    // 指令队列 ，cache， 跑动中 携带的 指令 队列
     public Queue<Instruction> insQueue = new Queue<Instruction>();
 
 
@@ -258,7 +258,7 @@ public class PlacePlayerController : MonoBehaviour
 
     public void DrawPoint(Instruction ins)
     {
-        PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y, ins.r, ins.g, ins.b, user.Camp);
+        PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y, user.Camp , ins.r, ins.g, ins.b );
         StartCoroutine(IDrawPoint(ins));
         // yield return new WaitForSeconds(2);
         // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
@@ -312,7 +312,7 @@ public class PlacePlayerController : MonoBehaviour
 
     private IEnumerator IDrawLine(int x, int y, int r, int g, int b, int camp)
     {
-        PlaceConsoleAreaManager.Instance.PlayEffect(x, y, r, g, b, camp);
+        PlaceConsoleAreaManager.Instance.PlayEffect(x, y, camp,r, g, b );
         // 等待两秒执行
         yield return new WaitForSeconds(1.5f);
         PlaceBoardManager.Instance.DrawCommand(x, y, r, g, b, camp, user.Id);

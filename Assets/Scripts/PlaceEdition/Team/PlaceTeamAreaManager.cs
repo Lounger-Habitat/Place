@@ -250,6 +250,10 @@ public class PlaceTeamAreaManager : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (GameSettingManager.Instance.Mode!=GameMode.Competition)
+        {
+            return;
+        }
         if (other.CompareTag("Player")) // 确保触发器有一个特定的标签
         {
             PlacePlayerController pc = other.transform.GetComponent<PlacePlayerController>();

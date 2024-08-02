@@ -5,6 +5,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.GifAssets.PowerGif;
+using TMPro;
+
 public class PlaceTeamBoardManager : MonoBehaviour
 {
     public Camera mainCamera;
@@ -34,7 +36,7 @@ public class PlaceTeamBoardManager : MonoBehaviour
     public static string UniqueTime;
     public static string UniqueId;
     public static PlaceTeamBoardManager Instance { get; private set; }
-
+    
     void Awake()
     {
         if (Instance == null)

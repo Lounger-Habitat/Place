@@ -49,8 +49,11 @@ public class ProjectileController : MonoBehaviour
         {
             flashGo = PlaceInkPoolManager.Instance.GetGreenInkFlash();
         }
-
-        flashGo.GetComponent<ColorFlashManager>().SetFlashColor(aimColor);
+        if (GameSettingManager.Instance.Mode == GameMode.Competition)
+        {
+            flashGo.GetComponent<ColorFlashManager>().SetFlashColor(aimColor);
+        }
+        
         flashGo.transform.position = transform.position;
         transform.DOMove(end, time).SetEase(Ease.OutQuint).OnComplete(() =>
          {
@@ -100,7 +103,11 @@ public class ProjectileController : MonoBehaviour
             {
                 go = PlaceInkPoolManager.Instance.GetGreenInkImpact();
             }
-            go.GetComponent<ColorImpactManager>().SetImpactColor(aimColor);
+            if (GameSettingManager.Instance.Mode == GameMode.Competition)
+            {
+                go.GetComponent<ColorImpactManager>().SetImpactColor(aimColor);
+            }
+            
             go.transform.position = transform.position;
             go.transform.rotation = Quaternion.identity;
             go.SetActive(true);

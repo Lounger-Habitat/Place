@@ -42,7 +42,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
         // 获取队伍颜料数量
         int teamInkCount = PlaceCenter.Instance.GetTeamInkCount(pc.user.Camp);
 
-        // 有新指令
+        // 有新指令，player接收的弹幕指令
         if (pc.user.instructionQueue.Count > 0)
         {
 

@@ -768,8 +768,14 @@ public class PlaceTeamBoard : MonoBehaviour
         int index = x + (y * width);
         // pixelsInfos[index] = camp;
         pixelsUserInfos[index] = id;
+        if (id!=0)
+        {
+            socre++;
+        }
 
     }
+
+    public int socre=0;
 
     public bool CheckIns(Instruction ins)
     {

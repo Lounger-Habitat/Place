@@ -43,6 +43,8 @@ public class EndUI : MonoBehaviour
             item.Find("Score").GetComponent<TMP_Text>().text = $"{userList[i].drawTimes}";
             item.Find("Picture").Find("InnerFrame").Find("Image").GetComponent<Image>().sprite = userList[i].userIcon;
         }
+
+        SetUniqueID();
     }
 
     public void OnClickNextBtn()
@@ -114,6 +116,33 @@ public class EndUI : MonoBehaviour
             case GameMode.Competition:
                 SceneManager.LoadScene("1920-1080Scene Mode3");
                 break;
+        }
+    }
+    
+    public TMP_Text UniqueID_text1,UniqueID_text2;
+
+    void SetUniqueID()
+    {
+        if (GameSettingManager.Instance.Mode == GameMode.Competition)
+        {
+            UniqueID_text1.text = PlaceTeamBoardManager.UniqueId;
+            UniqueID_text2.text = PlaceTeamBoardManager.UniqueId;
+        }
+        
+    }
+
+    public GameObject team1, team2;
+    public void SetWinTeam(int id)
+    {
+        if (id == 1)
+        {
+            team1.SetActive(true);
+            team2.SetActive(false);
+        }
+        else
+        {
+            team1.SetActive(false);
+            team2.SetActive(true);
         }
     }
 }

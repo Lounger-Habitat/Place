@@ -105,14 +105,7 @@ public class PlaceUIManager : MonoBehaviour
     public void StartGame(Action action)
     {
         countDown.Init(action);
-        countDown.Init(() =>
-        {
-            endUI.Init();
-            PlaceCenter.Instance.GenPUID();
-            PlaceCenter.Instance.GenGif();
-            PlaceCenter.Instance.Reset();
-            
-        });
+        countDown.Init(PlaceCenter.Instance.GameEnd);
         countDown.StartTimeDown();
     }
 
@@ -122,16 +115,19 @@ public class PlaceUIManager : MonoBehaviour
         countDown.Reset();
     }
     
-    [ContextMenu("EndGame")]
+    //[ContextMenu("EndGame")]
+    //手动结束游戏
     public void EndGameUI(/*调用这个方法应该把最后的画作，排行榜前三玩家传递进来*/)
     {
             //PlaceCenter.Instance.GenGif();
             // endUI.Init()
             endUI.Init();
-            PlaceCenter.Instance.gameRuning=false;
-            PlaceCenter.Instance.GenPUID();
-            PlaceCenter.Instance.GenGif();
-            PlaceCenter.Instance.Reset();
+            countDown.Reset();
+    }
+
+    public void SetWinInfo(int id)
+    {
+        endUI.SetWinTeam(id);
     }
 
     private void Update()
