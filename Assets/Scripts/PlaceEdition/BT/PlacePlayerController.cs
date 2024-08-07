@@ -258,7 +258,7 @@ public class PlacePlayerController : MonoBehaviour
 
     public void DrawPoint(Instruction ins)
     {
-        PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y, user.Camp , ins.r, ins.g, ins.b );
+        PlaceConsoleAreaManager.Instance.PlayEffect(ins.x, ins.y, user.Camp, ins.r, ins.g, ins.b);
         StartCoroutine(IDrawPoint(ins));
         // yield return new WaitForSeconds(2);
         // PlaceBoardManager.Instance.DrawCommand(ins.x, ins.y, ins.r, ins.g, ins.b, user.camp);
@@ -312,7 +312,7 @@ public class PlacePlayerController : MonoBehaviour
 
     private IEnumerator IDrawLine(int x, int y, int r, int g, int b, int camp)
     {
-        PlaceConsoleAreaManager.Instance.PlayEffect(x, y, camp,r, g, b );
+        PlaceConsoleAreaManager.Instance.PlayEffect(x, y, camp, r, g, b);
         // 等待两秒执行
         yield return new WaitForSeconds(1.5f);
         PlaceBoardManager.Instance.DrawCommand(x, y, r, g, b, camp, user.Id);
@@ -587,8 +587,10 @@ public class PlacePlayerController : MonoBehaviour
             float dur = UnityEngine.Random.Range(3f, 4f);//获得持续时间
             float xdir = UnityEngine.Random.Range(-1f, 1f);
             float zdir = UnityEngine.Random.Range(-1f, 1f);//分别获得两个方向的
-            Vector3 targetPos = transform.position + new Vector3(xdir, 0, zdir).normalized * range; //当前位置加上目标方向乘以距离就是目标位置
+            Vector3 dir = new Vector3(xdir, 0, zdir).normalized;
+            Vector3 targetPos = transform.position + dir * range; //当前位置加上目标方向乘以距离就是目标位置
             GameObject tornado = Instantiate(tornadoEffect, transform.position, Quaternion.identity);
+            tornado.transform.forward = dir;
             tornado.transform.localScale = new Vector3(powerScale, powerScale, powerScale);
             // tornado.transform.SetParent(this.transform);
             tornado.name = $"Tornado - {user.Camp}";
@@ -630,6 +632,30 @@ public class PlacePlayerController : MonoBehaviour
         thunder.name = $"Thunder - {user.Camp}";
     }
 
+    public void KnockBack(Collider c)
+    {
+        //
+        
+        // 获取 collider 的 方向
+        Vector3 dir = c.transform.forward;
+        // 沿方向 施加一个冲击力
+        
+        Rigidbody rg = transform.GetComponent<Rigidbody>();
+        // 先取消 isKinematic
+        rg.isKinematic = false;
+        // 施加力
+        rg.AddForce(dir * 10000);
+        
+        Debug.Log($"{user.name} 被击退 , 击退方向 {dir}");
+        // 1.5秒后 恢复
+        Invoke("RecoverKinematic", 1.5f);
+    }
+    void RecoverKinematic()
+    {
+        Rigidbody rg = transform.GetComponent<Rigidbody>();
+        rg.isKinematic = true;
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Tornado")
@@ -642,7 +668,9 @@ public class PlacePlayerController : MonoBehaviour
             {
                 if (user.invincible == false)
                 {
-                    Stuck();
+                    // 击退
+                    KnockBack(other);
+                    // Stuck();
                 }
             }
 
