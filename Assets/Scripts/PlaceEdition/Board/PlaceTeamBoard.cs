@@ -1034,8 +1034,17 @@ public class PlaceTeamBoard : MonoBehaviour
             else {
                 int index = randomIndexs[currentIndex];
                 currentIndex++;
-                c = currentPixels[index];
-                tempIndex = index;
+                try
+                {
+                    c = currentPixels[index];
+                    tempIndex = index;
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e.Message);
+                    continue;
+                }
+                
             }
             
             // if (take_random) {

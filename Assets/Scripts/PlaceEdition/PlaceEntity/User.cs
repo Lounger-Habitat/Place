@@ -42,7 +42,7 @@ public class User
     public int Level { get { return level; } set { level = value; } }
     public PlayerState currentState; // 玩家当前状态
     public int score;  // 玩家当前分数
-    public int currentCarryingInkCount = 0;  // 玩家 身上携带的 颜料数量
+    public int currentCarryingInkCount = 300;  // 玩家 身上携带的 颜料数量
     public int currentCarryingInsCount = 0; // 玩家 身上携带的 最大指令数量
     public int maxCarryingInkCount = 100; // 玩家 身上携带的 颜料数量
     public int maxCarryingInsCount = 100; // 玩家 身上携带的 最大指令数量
@@ -111,7 +111,7 @@ public class User
         score = 0;
         maxCarryingInkCount = 10;
         maxCarryingInsCount = 10;
-        currentCarryingInkCount = 0;
+        currentCarryingInkCount = 300;
         currentCarryingInsCount = 0;
         speed = 2.0f;
 

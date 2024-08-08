@@ -494,6 +494,10 @@ public class PlaceCenter : MonoBehaviour
 
     public void CheckWinTeam()
     {
+        if (GameSettingManager.Instance.Mode != GameMode.Competition)
+        {
+            return;
+        }
         if (PlaceTeamBoardManager.Instance.team1Board.socre>PlaceTeamBoardManager.Instance.team2Board.socre)
         {
             //一队获胜
@@ -533,46 +537,47 @@ public class PlaceCenter : MonoBehaviour
         switch (power)
         {
             case 1f://这是礼物得人民币价值，那应该在这个里边通知
-                normalPower = 30;
+                normalPower = 300;
                 message = "急速神行";
                 skill = SkillIcon.Speed;
                 u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                 break;
             case 10f:
-                normalPower = 300;//固定是加颜料
+                normalPower = 900;//固定是加颜料
                 message = "风之束缚";
                 skill = SkillIcon.Tornado;
                 u.character.GetComponent<PlacePlayerController>().Tornado((int)power);
                 break;
             case 20f:
-                normalPower = 600;//固定是攻击
+                normalPower = 1800;//固定是攻击
                 u.character.GetComponent<PlacePlayerController>().Thunder();
                 skill = SkillIcon.Thunder;
                 message = "雷霆万钧";
                 break;
             case 52f:
-                normalPower = 1800;//固定是防御
+                normalPower = 3600;//固定是防御
                 u.character.GetComponent<PlacePlayerController>().Invincible(120);
                 message = "绝对防御";
                 skill = SkillIcon.Defense;
                 break;
             case 99f:
-                normalPower = 3600;
-                message = "天官赐福";
-                // 随机自动画一个图案
-                skill = SkillIcon.Pencil;
-                u.character.GetComponent<PlacePlayerController>().Blessing(180);
-                int x = Random.Range(0, PlaceBoardManager.Instance.width - 64);
-                int y = Random.Range(0, PlaceBoardManager.Instance.height - 64);
-                List<Instruction> IL = GenerateRandomImage(x, y, 64);
-                if (IL.Count != 0)
-                {
-                    IL.ForEach(i => u.instructionQueue.Enqueue(i));
-                }
+                // normalPower = 3600;
+                // message = "天官赐福";
+                // // 随机自动画一个图案
+                // skill = SkillIcon.Pencil;
+                // u.character.GetComponent<PlacePlayerController>().Blessing(180);
+                // int x = Random.Range(0, PlaceBoardManager.Instance.width - 64);
+                // int y = Random.Range(0, PlaceBoardManager.Instance.height - 64);
+                // List<Instruction> IL = GenerateRandomImage(x, y, 64);
+                // if (IL.Count != 0)
+                // {
+                //     IL.ForEach(i => u.instructionQueue.Enqueue(i));
+                // }
                 break;
             case 199f:
                 if (GameSettingManager.Instance.Mode == GameMode.Graffiti)
                 {
+                    u.character.GetComponent<PlacePlayerController>().Invincible(20);
                     var Iname = iconNames[Random.Range(0, 5)];
                     DrawUserIconImage(u, Iname);
                     int max = PlaceBoardManager.Instance.height / 2;
@@ -590,9 +595,19 @@ public class PlaceCenter : MonoBehaviour
                             break;
                     }
                 }
+                else if(GameSettingManager.Instance.Mode == GameMode.Competition)//会将所有技能释放一边
+                {
+                    normalPower = 15000;
+                    message = "天官赐福";
+                    skill = SkillIcon.Pencil;
+                    u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
+                    u.character.GetComponent<PlacePlayerController>().Tornado((int)power);
+                    u.character.GetComponent<PlacePlayerController>().Thunder();
+                    u.character.GetComponent<PlacePlayerController>().Invincible(120);
+                }
                 else
                 {
-                    normalPower = 14400;
+                    normalPower = 15000;
                     message = "天官赐福";
                     // 随机自动画一个图案
                     skill = SkillIcon.Pencil;
@@ -608,18 +623,18 @@ public class PlaceCenter : MonoBehaviour
 
                 break;
             case 299f:
-                normalPower = 62500;
-                message = "天官赐福";
-                // 随机自动画一个图案
-                skill = SkillIcon.Pencil;
-                u.character.GetComponent<PlacePlayerController>().Blessing(180);
-                int x256 = Random.Range(0, PlaceBoardManager.Instance.width - 256);
-                int y256 = Random.Range(0, PlaceBoardManager.Instance.height - 256);
-                List<Instruction> IL256 = GenerateRandomImage(x256, y256, 256);
-                if (IL256.Count != 0)
-                {
-                    IL256.ForEach(i => u.instructionQueue.Enqueue(i));
-                }
+                // normalPower = 62500;
+                // message = "天官赐福";
+                // // 随机自动画一个图案
+                // skill = SkillIcon.Pencil;
+                // u.character.GetComponent<PlacePlayerController>().Blessing(180);
+                // int x256 = Random.Range(0, PlaceBoardManager.Instance.width - 256);
+                // int y256 = Random.Range(0, PlaceBoardManager.Instance.height - 256);
+                // List<Instruction> IL256 = GenerateRandomImage(x256, y256, 256);
+                // if (IL256.Count != 0)
+                // {
+                //     IL256.ForEach(i => u.instructionQueue.Enqueue(i));
+                // }
                 break;
                 // case 19.9f:
                 //     normalPower = 1999;
@@ -695,12 +710,12 @@ public class PlaceCenter : MonoBehaviour
         user.character.GetComponent<PlacePlayerController>().InkUp(p);
         var messageType = user.Camp == 1 ? TipsType.likeTipsPanel : TipsType.likeTipsPanelRight;
         string message = "";
-        if (p < 5)
+        if (power < 5)
         {
             message = $"点赞! 颜料 x {p}";
         }
 
-        if (p > 5)
+        if (power > 5)
         {
             message = $"点赞手速突破天际!! 颜料 x {p}";
         }
@@ -740,6 +755,7 @@ public class PlaceCenter : MonoBehaviour
         "lailou-250-256-76"
     };
 
+    public Texture2D defTex2D;
     //这是画指定的，上一级随机的名字
     private void DrawUserIconImage(User user, string IName)
     {
@@ -747,7 +763,16 @@ public class PlaceCenter : MonoBehaviour
         max = PlaceBoardManager.Instance.height / 2;
         x = Random.Range(1, PlaceBoardManager.Instance.width - max);
         y = Random.Range(1, PlaceBoardManager.Instance.height - max);
-        Texture2D userTex = user.userIcon.texture;
+        Texture2D userTex;
+        if (user.userIcon == null)
+        {
+             userTex = defTex2D;
+        }
+        else
+        {
+            userTex= user.userIcon.texture;
+        }
+        
         List<Instruction> IL = Instance.GiftGenerateImage(x, y, max, userTex, IName);
         if (IL.Count != 0)
         {

@@ -124,7 +124,7 @@ public class PlaceInkPoolManager : MonoBehaviour
         }
         if (willGrow)
         {
-            GameObject obj = Instantiate(BlueInkBuilder.projectilePrefab);
+            GameObject obj = Instantiate(BlueInkBuilder.projectilePrefab,transform);
             BlueInkProjectilesPools.Add(obj);
             return obj;
         }
@@ -144,7 +144,7 @@ public class PlaceInkPoolManager : MonoBehaviour
         }
         if (willGrow)
         {
-            GameObject obj = Instantiate(GreenInkBuilder.projectilePrefab);
+            GameObject obj = Instantiate(GreenInkBuilder.projectilePrefab,transform);
             GreenInkProjectilesPools.Add(obj);
             return obj;
         }
@@ -164,7 +164,7 @@ public class PlaceInkPoolManager : MonoBehaviour
         }
         if (willGrow)
         {
-            GameObject obj = Instantiate(BlueInkBuilder.muzzleFlashPrefab);
+            GameObject obj = Instantiate(BlueInkBuilder.muzzleFlashPrefab,transform);
             BlueInkFlashPools.Add(obj);
             return obj;
         }
@@ -183,7 +183,7 @@ public class PlaceInkPoolManager : MonoBehaviour
         }
         if (willGrow)
         {
-            GameObject obj = Instantiate(GreenInkBuilder.muzzleFlashPrefab);
+            GameObject obj = Instantiate(GreenInkBuilder.muzzleFlashPrefab,transform);
             GreenInkFlashPools.Add(obj);
             return obj;
         }
@@ -203,7 +203,7 @@ public class PlaceInkPoolManager : MonoBehaviour
         }
         if (willGrow)
         {
-            GameObject obj = Instantiate(BlueInkBuilder.impactPrefab);
+            GameObject obj = Instantiate(BlueInkBuilder.impactPrefab,transform);
             BlueInkImpactPools.Add(obj);
             return obj;
         }
@@ -222,7 +222,7 @@ public class PlaceInkPoolManager : MonoBehaviour
         }
         if (willGrow)
         {
-            GameObject obj = Instantiate(GreenInkBuilder.impactPrefab);
+            GameObject obj = Instantiate(GreenInkBuilder.impactPrefab,transform);
             GreenInkImpactPools.Add(obj);
             return obj;
         }

@@ -1495,14 +1495,14 @@ public class PlaceInstructionManager : MonoBehaviour
                         user.Camp = 2;
                         DefaultRunChatCommand(user, "/a 2");
                         break;
-                    case "黄":
-                        user.Camp = 3;
-                        DefaultRunChatCommand(user, "/a 3");
-                        break;
-                    case "紫":
-                        user.Camp = 4;
-                        DefaultRunChatCommand(user, "/a 4");
-                        break;
+                    // case "黄":
+                    //     user.Camp = 3;
+                    //     DefaultRunChatCommand(user, "/a 3");
+                    //     break;
+                    // case "紫":
+                    //     user.Camp = 4;
+                    //     DefaultRunChatCommand(user, "/a 4");
+                    //     break;
                     default:
                         break;
                 }

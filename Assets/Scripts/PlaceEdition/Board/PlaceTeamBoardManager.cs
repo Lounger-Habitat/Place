@@ -908,7 +908,7 @@ public class PlaceTeamBoardManager : MonoBehaviour
         string destinationFolder = team2Board.savePath;
 #else
         string sourceFolder = Application.persistentDataPath;
-        string destinationFolder = Path.Combine(sourceFolder, $"Log/{UniqueTime}/{teamID}");
+        string destinationFolder = Path.Combine(sourceFolder, $"Log/{UniqueTime}");
 #endif
         // 目标文件夹路径
         if (!Directory.Exists(destinationFolder))
