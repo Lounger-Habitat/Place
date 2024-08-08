@@ -1,0 +1,23 @@
+{
+    "name": "ByteDance.LiveOpenSDK.Samples",
+    "rootNamespace": "Douyin.LiveOpenSDK",
+    "references": [
+        "ByteDance.LiveOpenSdk.Runtime",
+        "ByteDance.StarkLogs.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.bytedance.starklogs",
+            "expression": "1.0.0",
+            "define": "LIVEOPENSDK_SAMPLES_ENABLE_STARKLOGS"
+        }
+    ],
+    "noEngineReferences": false
+}

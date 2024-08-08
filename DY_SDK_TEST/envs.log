@@ -1,0 +1,83 @@
+---- current path ----
+System.Environment.CurrentDirectory: D:\UnityProject_GIT\Place\DY_SDK_TEST
+System.IO.Directory.GetCurrentDirectory: D:\UnityProject_GIT\Place\DY_SDK_TEST
+---- unity app path ----
+unity Application.dataPath: D:/UnityProject_GIT/Place/DY_SDK_TEST/Place_Data
+unity Application.persistentDataPath: C:/Users/PC_FORV/AppData/LocalLow/OWN/Place
+unity Application.consoleLogPath: C:/Users/PC_FORV/AppData/LocalLow/OWN/Place/Player.log
+unity Application.streamingAssetsPath: D:/UnityProject_GIT/Place/DY_SDK_TEST/Place_Data/StreamingAssets
+---- assembly path ----
+CurrentDomain.BaseDirectory: D:\UnityProject_GIT\Place\DY_SDK_TEST
+ExecutingAssembly().Location: D:\UnityProject_GIT\Place\DY_SDK_TEST\Place_Data\Managed\ByteDance.LiveOpenSdk.Runtime.dll
+EntryAssembly().Location: 
+---- env vars ----
+env vars: 60
+ #0 env ALLUSERSPROFILE = C:\ProgramData
+ #1 env APPDATA = C:\Users\PC_FORV\AppData\Roaming
+ #2 env AQUA_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\aqua.vmoptions
+ #3 env CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_15940_EOLOVMVRZSMUINPV
+ #4 env CLION_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\clion.vmoptions
+ #5 env CommonProgramFiles = C:\Program Files\Common Files
+ #6 env CommonProgramFiles(x86) = C:\Program Files (x86)\Common Files
+ #7 env CommonProgramW6432 = C:\Program Files\Common Files
+ #8 env COMPUTERNAME = DESKTOP-HUBTO6G
+ #9 env ComSpec = C:\Windows\system32\cmd.exe
+ #10 env DATAGRIP_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\datagrip.vmoptions
+ #11 env DATASPELL_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\dataspell.vmoptions
+ #12 env DEVECOSTUDIO_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\devecostudio.vmoptions
+ #13 env DriverData = C:\Windows\System32\Drivers\DriverData
+ #14 env GATEWAY_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\gateway.vmoptions
+ #15 env GOLAND_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\goland.vmoptions
+ #16 env HOMEDRIVE = C:
+ #17 env HOMEPATH = \Users\PC_FORV
+ #18 env IDEA_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\idea.vmoptions
+ #19 env JetBrains Rider = D:\Program Files\JetBrains\JetBrains Rider 2024.1.4\bin;
+ #20 env JETBRAINS_CLIENT_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\jetbrains_client.vmoptions
+ #21 env JETBRAINSCLIENT_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\jetbrainsclient.vmoptions
+ #22 env LOCALAPPDATA = C:\Users\PC_FORV\AppData\Local
+ #23 env LOGONSERVER = \\DESKTOP-HUBTO6G
+ #24 env NODE_TLS_REJECT_UNAUTHORIZED = 0
+ #25 env NUMBER_OF_PROCESSORS = 12
+ #26 env OneDrive = C:\Users\PC_FORV\OneDrive
+ #27 env OneDriveConsumer = C:\Users\PC_FORV\OneDrive
+ #28 env ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+ #29 env OS = Windows_NT
+ #30 env Path = C:\Windows\system32;
+C:\Windows;
+C:\Windows\System32\Wbem;
+C:\Windows\System32\WindowsPowerShell\v1.0\;
+C:\Windows\System32\OpenSSH\;
+C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;
+C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;
+C:\Users\PC_FORV\AppData\Local\Microsoft\WindowsApps;
+C:\Users\PC_FORV\AppData\Local\GitHubDesktop\bin;
+D:\Program Files\JetBrains\JetBrains Rider 2024.1.4\bin
+ #31 env PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+ #32 env PHPSTORM_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\phpstorm.vmoptions
+ #33 env PROCESSOR_ARCHITECTURE = AMD64
+ #34 env PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 158 Stepping 10, GenuineIntel
+ #35 env PROCESSOR_LEVEL = 6
+ #36 env PROCESSOR_REVISION = 9e0a
+ #37 env ProgramData = C:\ProgramData
+ #38 env ProgramFiles = C:\Program Files
+ #39 env ProgramFiles(x86) = C:\Program Files (x86)
+ #40 env ProgramW6432 = C:\Program Files
+ #41 env PSModulePath = C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules
+ #42 env PUBLIC = C:\Users\Public
+ #43 env PYCHARM_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\pycharm.vmoptions
+ #44 env RIDER_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\rider.vmoptions
+ #45 env RUBYMINE_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\rubymine.vmoptions
+ #46 env RUSTROVER_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\rustrover.vmoptions
+ #47 env SNAP = 1
+ #48 env STUDIO_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\studio.vmoptions
+ #49 env SystemDrive = C:
+ #50 env SystemRoot = C:\Windows
+ #51 env TEMP = C:\Users\PC_FORV\AppData\Local\Temp
+ #52 env TMP = C:\Users\PC_FORV\AppData\Local\Temp
+ #53 env USERDOMAIN = DESKTOP-HUBTO6G
+ #54 env USERDOMAIN_ROAMINGPROFILE = DESKTOP-HUBTO6G
+ #55 env USERNAME = PC_FORV
+ #56 env USERPROFILE = C:\Users\PC_FORV
+ #57 env WEBIDE_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\webide.vmoptions
+ #58 env WEBSTORM_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\webstorm.vmoptions
+ #59 env windir = C:\Windows

@@ -2,7 +2,6 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
-using Unity.Sentis.Layers;
 
 public class IconNameTag : MonoBehaviour
 {
