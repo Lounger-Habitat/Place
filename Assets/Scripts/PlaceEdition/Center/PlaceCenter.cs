@@ -702,25 +702,33 @@ public class PlaceCenter : MonoBehaviour
     public void GainLikePower(User user, long power)
     {
         // B 站 每人 每天 点赞上限 1000
-        int p = (int)power * 10;//TODO:记得修改哦！根据点赞数量获取颜料，修改为自动倍率。
+        int lc = (int)power;
+        int p = lc * 10;//TODO:记得修改哦！根据点赞数量获取颜料，修改为自动倍率。
         user.score += p;
+        user.likeCount +=lc;
         user.Update();
         PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
         // 颜料增加的特效
         user.character.GetComponent<PlacePlayerController>().InkUp(p);
         var messageType = user.Camp == 1 ? TipsType.likeTipsPanel : TipsType.likeTipsPanelRight;
         string message = "";
-        if (power < 5)
+        if (lc < 5)
         {
             message = $"点赞! 颜料 x {p}";
         }
 
-        if (power > 5)
+        if (lc > 5)
         {
             message = $"点赞手速突破天际!! 颜料 x {p}";
         }
 
-
+        
+        
+        if (user.likeCount>=1000)//判断本局是否点赞数超过1000
+        {
+            lc = user.likeCount;
+            user.likeCount = 0;
+        }
         PlaceUIManager.Instance.AddTips(new TipsItem()
         {
             userName = user.Name,
@@ -728,6 +736,7 @@ public class PlaceCenter : MonoBehaviour
             icon = user.userIcon,//玩家头像
             tipsType = messageType,
             value = $"+{1}",
+            likeCount = lc,
             isLeft = user.Camp == 1
         });
         // 限时加速

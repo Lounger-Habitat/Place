@@ -12,6 +12,9 @@ public class LikeTips : TipsBase
     public TMP_Text userNameText,tipsText;
 
     public Image userIcon;
+
+    public Transform groupParent;
+    public LikeItem itemObj;
     //点赞面板
     public override void SetData(TipsItem tips)
     {
@@ -33,5 +36,12 @@ public class LikeTips : TipsBase
             (transform as RectTransform).DOAnchorPosX(closePos, 0.6f);
             //(transform as RectTransform).DOLocalRotate(new Vector3(0,0,0), 0.8f);
         }
+    }
+
+    public void SetLikeItem(TipsItem tips)
+    {
+        var item = Instantiate(itemObj, groupParent);
+        item.SetUserData(tips);
+        item.gameObject.SetActive(true);
     }
 }

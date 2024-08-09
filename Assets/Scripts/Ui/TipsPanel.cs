@@ -124,11 +124,19 @@ public class TipsPanel : MonoBehaviour
                 }
                 else if (tip.tipsType == TipsType.likeTipsPanel)
                 {
-                    tipsLikeQueue.Enqueue(tip);
-                    if (!isShowlike)
+                    if (tip.likeCount<1000)//检查本局点赞数量是否超过1000
                     {
-                        //否则就要启动弹出动画
-                        StartCoroutine(ShowTipslikeAni());
+                        var panel = (LikeTips)tipsPanels[tip.tipsType];
+                        panel.SetLikeItem(tip);
+                    }
+                    else
+                    {
+                        tipsLikeQueue.Enqueue(tip);
+                        if (!isShowlike)
+                        {
+                            //否则就要启动弹出动画
+                            StartCoroutine(ShowTipslikeAni());
+                        }
                     }
                 }
                 else
@@ -156,11 +164,19 @@ public class TipsPanel : MonoBehaviour
                 }
                 else if (tip.tipsType == TipsType.likeTipsPanelRight)
                 {
-                    tipsLikeQueueright.Enqueue(tip);
-                    if (!isShowLikeRight)
+                    if (tip.likeCount<1000)//检查本局点赞数量是否超过1000
                     {
-                        //否则就要启动弹出动画
-                        StartCoroutine(ShowTipslikeRight());
+                        var panel = (LikeTips)tipsPanels[tip.tipsType];
+                        panel.SetLikeItem(tip);
+                    }
+                    else
+                    {
+                        tipsLikeQueueright.Enqueue(tip);
+                        if (!isShowLikeRight)
+                        {
+                            //否则就要启动弹出动画
+                            StartCoroutine(ShowTipslikeRight());
+                        }
                     }
                 }
                 else
@@ -202,7 +218,7 @@ public class TipsPanel : MonoBehaviour
     private bool isShowLikeRight = false;
     private bool isShowLevel = false;
     private bool isShowLevelRight = false;
-    private TipsItem nowData;
+    //private TipsItem nowData;
 
     IEnumerator ShowTipsAni()
     {
@@ -211,7 +227,7 @@ public class TipsPanel : MonoBehaviour
         //检查队列中是否还有元素
         while (tipsQueue.Any())
         {
-            nowData = tipsQueue.Dequeue();
+            var nowData = tipsQueue.Dequeue();
             var panel = tipsPanels[nowData.tipsType];
             panel.SetData(nowData);
             panel.MoveTipsPanel();
@@ -230,7 +246,7 @@ public class TipsPanel : MonoBehaviour
         //检查队列中是否还有元素
         while (tipsQueueright.Any())
         {
-            nowData = tipsQueueright.Dequeue();
+            var nowData = tipsQueueright.Dequeue();
             var panel = tipsPanels[nowData.tipsType];
             panel.SetData(nowData);
             panel.MoveTipsPanel();
@@ -249,7 +265,7 @@ public class TipsPanel : MonoBehaviour
         //检查队列中是否还有元素
         while (tipsLikeQueue.Any())
         {
-            nowData = tipsLikeQueue.Dequeue();
+            var nowData = tipsLikeQueue.Dequeue();
             var panel = tipsPanels[nowData.tipsType];
             panel.SetData(nowData);
             panel.MoveTipsPanel();
@@ -268,7 +284,7 @@ public class TipsPanel : MonoBehaviour
         //检查队列中是否还有元素
         while (tipsLikeQueueright.Any())
         {
-            nowData = tipsLikeQueueright.Dequeue();
+            var nowData = tipsLikeQueueright.Dequeue();
             var panel = tipsPanels[nowData.tipsType];
             panel.SetData(nowData);
             panel.MoveTipsPanel();
@@ -287,7 +303,7 @@ public class TipsPanel : MonoBehaviour
         //检查队列中是否还有元素
         while (tipsLevelUpQueue.Any())
         {
-            nowData = tipsLevelUpQueue.Dequeue();
+            var nowData = tipsLevelUpQueue.Dequeue();
             var panel = tipsPanels[nowData.tipsType];
             panel.SetData(nowData);
             panel.MoveTipsPanel();
@@ -306,7 +322,7 @@ public class TipsPanel : MonoBehaviour
         //检查队列中是否还有元素
         while (tipsLevelUpQueueright.Any())
         {
-            nowData = tipsLevelUpQueueright.Dequeue();
+            var nowData = tipsLevelUpQueueright.Dequeue();
             var panel = tipsPanels[nowData.tipsType];
             panel.SetData(nowData);
             panel.MoveTipsPanel();
@@ -446,6 +462,7 @@ public class TipsItem
     public bool isLeft = true;
     public int level;
     public SkillIcon skillIcon;
+    public int likeCount;
 
     public TipsItem()
     {
