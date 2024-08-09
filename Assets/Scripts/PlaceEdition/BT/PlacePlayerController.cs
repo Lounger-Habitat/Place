@@ -811,8 +811,8 @@ public class PlacePlayerController : MonoBehaviour
         PlaySmokeSpeedlUp();
         while (superSpeedUpTime > 0)
         {
-            yield return new WaitForSeconds(5f);
-            superSpeedUpTime -= 5f;
+            yield return new WaitForSeconds(1f);
+            superSpeedUpTime -= 1f;
         }
         user.exSpeed -= 10.0f;
         superSpeeding = false;
