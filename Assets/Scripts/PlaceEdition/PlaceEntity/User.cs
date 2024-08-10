@@ -54,7 +54,8 @@ public class User
 
     public float contributionRate = 0.1f; // 贡献率
 
-    public int likeCount=0;//玩家本局点赞数量
+    public int likeCount=0; // 玩家本局点赞数量
+    public int likeTimes=0; // 点赞到1000的参数
     
     public Queue<Instruction> instructionQueue;// 玩家 指令队列， 用于保存 玩家弹幕输入的指令，等待被执行
 

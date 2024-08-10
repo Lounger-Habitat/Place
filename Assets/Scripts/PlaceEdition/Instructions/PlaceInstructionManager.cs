@@ -1248,7 +1248,7 @@ public class PlaceInstructionManager : MonoBehaviour
         for (int i = 0; i < num; i++)
         {
             PlaceCenter.Instance.GainPower(username, message);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 

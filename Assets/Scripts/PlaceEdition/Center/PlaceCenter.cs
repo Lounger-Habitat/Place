@@ -537,10 +537,10 @@ public class PlaceCenter : MonoBehaviour
         switch (power)
         {
             case 1f://这是礼物得人民币价值，那应该在这个里边通知
-                normalPower = 300;
+                normalPower = 300; // 颜料数
                 message = "急速神行";
                 skill = SkillIcon.Speed;
-                u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(20);
+                u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                 break;
             case 10f:
                 normalPower = 900;//固定是加颜料
@@ -556,7 +556,7 @@ public class PlaceCenter : MonoBehaviour
                 break;
             case 52f:
                 normalPower = 3600;//固定是防御
-                u.character.GetComponent<PlacePlayerController>().Invincible(120);
+                u.character.GetComponent<PlacePlayerController>().Invincible(180);
                 message = "绝对防御";
                 skill = SkillIcon.Defense;
                 break;
@@ -732,7 +732,7 @@ public class PlaceCenter : MonoBehaviour
         if (user.likeCount>=1000)//判断本局是否点赞数超过1000
         {
             lc = user.likeCount;
-            message = $"点赞手速突破天际!! 颜料 x{lc}";
+            message = $"点赞手速突破天际!! 颜料 x {lc}";
             user.likeCount = 0;
         }
         PlaceUIManager.Instance.AddTips(new TipsItem()

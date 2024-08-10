@@ -828,8 +828,8 @@ public class PlacePlayerController : MonoBehaviour
         PlayInvincibleEffect(camp);
         while (invincibleTime > 1)
         {
-            yield return new WaitForSeconds(120f);
-            invincibleTime -= 120;
+            yield return new WaitForSeconds(180);
+            invincibleTime -= 180;
         }
         if (camp == 1)
         {
