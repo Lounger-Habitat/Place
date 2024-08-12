@@ -11,7 +11,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
     // prefab of character
     public GameObject characterPrefab;
     private float timer = 0f;
-    private float updateInterval = 1f; // 更新间隔为1秒
+    private float updateInterval = 0.1f; // 更新间隔为1秒
 
     public GameObject teamAreaName;
 
@@ -77,7 +77,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         foreach (User u in userList)
         {
             //  额外 墨水
-            exInkRate += (u.Level - 1)  / 10f;
+            exInkRate += (u.Level / 10)  / (10f / updateInterval);
             u.contributionRate = (0.1f * u.genInkCount) / teaminfo.hisExInk;
         }
         inkRate = teaminfo.currentTeamNumberCount / 10f + exInkRate;
