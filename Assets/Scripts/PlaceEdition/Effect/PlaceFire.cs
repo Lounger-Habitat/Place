@@ -1,6 +1,4 @@
 using UnityEngine;
-using DG.Tweening;
-using Unity.VisualScripting;
 
 public class PlaceFire : MonoBehaviour
 {
