@@ -4,6 +4,9 @@ using UnityEngine;
 public class PlaceNetManager : MonoBehaviour
 {
 
+
+    public string platform = "platform";
+    public string anchorName = "anchor";
     public static PlaceNetManager Instance { get; set; }
 
     void Awake()
@@ -47,6 +50,7 @@ public class PlaceNetManager : MonoBehaviour
             placeBiliNetManager.enabled = true;
             // 启用 登录界面
             bilibiliLogin.SetActive(true);
+            platform = "bilibili";
 
             // 确保dy没有同时打开
             douyin = false;
@@ -61,6 +65,8 @@ public class PlaceNetManager : MonoBehaviour
             placeDyNetManager.enabled = true;
             // 是否启用 控制台
             douyinLog.SetActive(isDyDebug);
+            platform = "douyin";
+
             // 确保bili没有同时打开
             bilibili = false;
             if (bilibiliLogin) bilibiliLogin.SetActive(false);

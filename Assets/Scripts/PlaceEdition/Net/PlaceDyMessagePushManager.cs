@@ -20,6 +20,8 @@ public static class PlaceDyMessagePushManager
         // 必须等待直播间信息可用后才能进行后续操作。
         await RoomInfoService.WaitForRoomInfoAsync();
 
+        PlaceNetManager.Instance.anchorName = RoomInfoService.RoomInfo.Anchor.Nickname;
+
         // 注册事件监听
         MessagePushService.OnConnectionStateChanged -= OnConnectionStateChanged;
         MessagePushService.OnConnectionStateChanged += OnConnectionStateChanged;

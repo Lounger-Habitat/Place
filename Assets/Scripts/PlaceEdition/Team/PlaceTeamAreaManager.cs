@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
@@ -89,7 +88,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         CheckInk();
         UpdateTeamAreaName();
         // teaminfo.score = PlaceCredits.CalculateScore(ink);
-        // PlaceCenter.Instance.OnTeamUIUpdate(teaminfo);
+        PlaceCenter.Instance.OnTeamUIUpdate(teaminfo);
         // UpDataTeamUI();
     }
 
@@ -119,6 +118,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         //UIEvent.OnTeamAreaUIUpdate(this);
     //    UIEvent.OnTeamUIUpdate(teaminfo);
     //}
+
 
     // 在队伍区域里创建角色
     public User CreateCharacterInTeamArea(User user)

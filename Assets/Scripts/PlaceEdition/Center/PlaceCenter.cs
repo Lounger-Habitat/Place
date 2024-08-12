@@ -8,9 +8,6 @@ using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using System.Text.RegularExpressions;
-using UnityEngine.UI.Extensions;
-using UnityEngine.UI;
-using Unity.VisualScripting;
 
 public class PlaceCenter : MonoBehaviour
 {
@@ -66,9 +63,8 @@ public class PlaceCenter : MonoBehaviour
     Dictionary<string, Texture2D> giftDemoTexturesDic = new Dictionary<string, Texture2D>();
     Dictionary<string, List<Texture2D>> cartoonTexturesDic = new Dictionary<string, List<Texture2D>>();
 
-    public string platform = "bilibili";
+    public string platform = "bilibili"; // Tiktok
     public string anchorName = "anchor";
-
     public bool Low = true;
     public bool High = false;
 
@@ -110,6 +106,9 @@ public class PlaceCenter : MonoBehaviour
                        PlaceBoardManager.Instance.height;
         }
         //初始化平台信息，与主播信息
+        platform = PlaceNetManager.Instance.platform;
+        anchorName = PlaceNetManager.Instance.anchorName;
+        
 
     }
 
@@ -455,7 +454,7 @@ public class PlaceCenter : MonoBehaviour
                 PlaceTeamManager.Instance.teamAreas[i - 1].teaminfo.score = score;
                 lastTeamScore[i] = score;
             }
-            OnTeamUIUpdate(PlaceTeamManager.Instance.teamAreas[i-1].teaminfo);
+            //OnTeamUIUpdate(PlaceTeamManager.Instance.teamAreas[i-1].teaminfo);
             
         }
         
