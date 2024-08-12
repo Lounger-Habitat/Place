@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.GifAssets.PowerGif;
-using TMPro;
 
 public class PlaceTeamBoardManager : MonoBehaviour
 {
@@ -36,7 +35,7 @@ public class PlaceTeamBoardManager : MonoBehaviour
     public static string UniqueTime;
     public static string UniqueId;
     public static PlaceTeamBoardManager Instance { get; private set; }
-    
+
     void Awake()
     {
         if (Instance == null)
@@ -806,11 +805,28 @@ public class PlaceTeamBoardManager : MonoBehaviour
     */
     public void ConvertTex2DToGIFTeamFun()
     {
-        team1Board.ConvertTex2DToGIF(() =>
+        // 如果 team2 赢了，那么就先生成 team1 的图片
+        if (team1Board.socre < team2Board.socre)
         {
-            Debug.Log("开始生成第二幅图片");
-            team2Board.ConvertTex2DToGIF();
-        });
+            team1Board.ConvertTex2DToGIF(() =>
+            {
+                Debug.Log("开始生成胜者图片");
+                team2Board.ConvertTex2DToGIF();
+            });
+        }
+        else
+        {
+            team2Board.ConvertTex2DToGIF(() =>
+            {
+                Debug.Log("开始生成胜者图片");
+                team1Board.ConvertTex2DToGIF();
+            });
+        }
+        // team1Board.ConvertTex2DToGIF(() =>
+        // {
+        //     Debug.Log("开始生成第二幅图片");
+        //     team2Board.ConvertTex2DToGIF();
+        // });
 
     }
 

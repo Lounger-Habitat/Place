@@ -88,7 +88,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         CheckInk();
         UpdateTeamAreaName();
         // teaminfo.score = PlaceCredits.CalculateScore(ink);
-        PlaceCenter.Instance.OnTeamUIUpdate(teaminfo);
+        // PlaceCenter.Instance.OnTeamUIUpdate(teaminfo);
         // UpDataTeamUI();
     }
 

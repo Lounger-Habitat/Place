@@ -454,7 +454,7 @@ public class PlaceCenter : MonoBehaviour
                 PlaceTeamManager.Instance.teamAreas[i - 1].teaminfo.score = score;
                 lastTeamScore[i] = score;
             }
-            //OnTeamUIUpdate(PlaceTeamManager.Instance.teamAreas[i-1].teaminfo);
+            OnTeamUIUpdate(PlaceTeamManager.Instance.teamAreas[i-1].teaminfo);
             
         }
         
