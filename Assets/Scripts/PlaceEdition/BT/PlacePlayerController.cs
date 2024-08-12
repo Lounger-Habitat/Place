@@ -758,8 +758,8 @@ public class PlacePlayerController : MonoBehaviour
         PlayStuckEffect(camp);
         while (stuckTime > 0)
         {
-            yield return new WaitForSeconds(2f);
-            stuckTime -= 2;
+            yield return new WaitForSeconds(1f);
+            stuckTime -= 1;
         }
         user.exSpeed += 5;
         stucking = false;

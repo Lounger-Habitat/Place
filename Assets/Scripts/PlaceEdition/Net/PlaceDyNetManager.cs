@@ -15,18 +15,32 @@ public class PlaceDyNetManager : MonoBehaviour
 
     private readonly LogConsole _logConsole = new LogConsole();
     private LogWriter Log { get; } = new LogWriter(SdkUnityLogger.LogSink, "SampleGameStartup");
-
-
-    private void Awake()
+    public static PlaceDyNetManager Instance { get; private set; }
+    
+    void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        // else
+        // {
+        //     if (Instance != this)
+        //     {
+        //         Destroy(gameObject);
+        //     }
+        // }
+        
         // 把 SDK 的日志输出放到场景上
         _logConsole.Text = LogText;
         SdkUnityLogger.OnRichLog += _logConsole.WriteLog;
     }
-
+    
     // Start is called before the first frame update
     void Start()
     {
+        if (Instance!=this)return;
         // 设置参数
         PlaceDySdkManager.AppId = appId;
         // 初始化 SDK
@@ -46,11 +60,12 @@ public class PlaceDyNetManager : MonoBehaviour
         StartDirectPushMode();
     }
 
-    void OnDestroy()
-    {
-        // 释放资源
-        PlaceDySdkManager.Uninitialize();
-    }
+    // void OnDestroy()
+    // {
+    //     
+    //     // 释放资源
+    //     
+    // }
 
     async void StartDirectPushMode()
     {

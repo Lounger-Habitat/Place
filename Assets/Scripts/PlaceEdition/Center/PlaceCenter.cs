@@ -109,7 +109,7 @@ public class PlaceCenter : MonoBehaviour
             maxSocre = PlaceBoardManager.Instance.width *
                        PlaceBoardManager.Instance.height;
         }
-
+        //初始化平台信息，与主播信息
 
     }
 
@@ -445,19 +445,21 @@ public class PlaceCenter : MonoBehaviour
 
         }
 
-        for (int i = 0; i < newTeamScore.Length; i++)
+        for (int i = 1; i < newTeamScore.Length; i++)
         {
-            if (i != 0 && lastTeamScore[i] != newTeamScore[i])
+            
+            if (lastTeamScore[i] != newTeamScore[i])
             {
                 int score = newTeamScore[i];
                 // 如果不相等，调用其他函数或执行其他逻辑
                 PlaceTeamManager.Instance.teamAreas[i - 1].teaminfo.score = score;
                 lastTeamScore[i] = score;
-                // OnTeamUIUpdate(PlaceTeamManager.Instance.teamAreas[i-1].teaminfo);
             }
+            OnTeamUIUpdate(PlaceTeamManager.Instance.teamAreas[i-1].teaminfo);
+            
         }
-
-        if (GameSettingManager.Instance.Mode!=GameMode.Competition)return;
+        
+        if (GameSettingManager.Instance.Mode!=GameMode.Competition) return;
         
         if (newTeamScore[1]>=maxSocre-10)
         {
@@ -477,7 +479,7 @@ public class PlaceCenter : MonoBehaviour
         }
 
         // UI显示 , 不知道为什么成为空函数了
-        // PlaceUIManager.Instance.SetTeamData(teams.Values.ToList());
+        //PlaceUIManager.Instance.SetTeamData(teams.Values.ToList());
 
     }
 
@@ -537,7 +539,7 @@ public class PlaceCenter : MonoBehaviour
         switch (power)
         {
             case 1f://这是礼物得人民币价值，那应该在这个里边通知
-                normalPower = 300; // 颜料数
+                normalPower = 300; // 颜料数（一毛相当于优惠）给300他要是冲52次也行
                 message = "急速神行";
                 skill = SkillIcon.Speed;
                 u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
@@ -548,6 +550,7 @@ public class PlaceCenter : MonoBehaviour
                 skill = SkillIcon.Tornado;
                 u.character.GetComponent<PlacePlayerController>().Tornado((int)power);
                 break;
+            case 19f:
             case 20f:
                 normalPower = 1800;//固定是攻击
                 u.character.GetComponent<PlacePlayerController>().Thunder();
@@ -555,7 +558,7 @@ public class PlaceCenter : MonoBehaviour
                 message = "雷霆万钧";
                 break;
             case 52f:
-                normalPower = 3600;//固定是防御
+                normalPower = 4800;//固定是防御
                 u.character.GetComponent<PlacePlayerController>().Invincible(180);
                 message = "绝对防御";
                 skill = SkillIcon.Defense;
@@ -597,17 +600,24 @@ public class PlaceCenter : MonoBehaviour
                 }
                 else if(GameSettingManager.Instance.Mode == GameMode.Competition)//会将所有技能释放一边
                 {
-                    normalPower = 15000;
+                    normalPower = 20000;
                     message = "天官赐福";
                     skill = SkillIcon.Pencil;
-                    u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
-                    u.character.GetComponent<PlacePlayerController>().Tornado((int)power);
+                    u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(30);
+                    u.character.GetComponent<PlacePlayerController>().Tornado(50);
                     u.character.GetComponent<PlacePlayerController>().Thunder();
-                    u.character.GetComponent<PlacePlayerController>().Invincible(120);
+                    u.character.GetComponent<PlacePlayerController>().Invincible(300);
+                    foreach (var item in u.selfTeam.userList)
+                    {
+                        item.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(5);
+                        item.character.GetComponent<PlacePlayerController>().Invincible(5);//解控，只是解控
+                    }
+
+                   
                 }
                 else
                 {
-                    normalPower = 15000;
+                    normalPower = 20000;
                     message = "天官赐福";
                     // 随机自动画一个图案
                     skill = SkillIcon.Pencil;
@@ -729,11 +739,12 @@ public class PlaceCenter : MonoBehaviour
             user.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(speedTime);//一个赞给0.1s加速。
         }
         
-        if (user.likeCount>=1000)//判断本局是否点赞数超过1000
+        if ((user.likeCount/1000)>user.likeTimes)//判断本局是否点赞数超过1000//每次过一千才提醒，你这相当于过了一千 然后每次点赞都触发这个
         {
-            lc = user.likeCount;
-            message = $"点赞手速突破天际!! 颜料 x {lc}";
-            user.likeCount = 0;
+            user.likeTimes++;
+            lc = user.likeCount;//大于一千拿总数，小于1000拿这次点赞数，
+            message = $"手速突破天际!! {lc}次！";
+            
         }
         PlaceUIManager.Instance.AddTips(new TipsItem()
         {

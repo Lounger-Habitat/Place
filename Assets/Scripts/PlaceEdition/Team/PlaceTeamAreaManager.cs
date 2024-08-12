@@ -90,7 +90,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         UpdateTeamAreaName();
         // teaminfo.score = PlaceCredits.CalculateScore(ink);
         // PlaceCenter.Instance.OnTeamUIUpdate(teaminfo);
-        UpDateTeamUI();
+        // UpDataTeamUI();
     }
 
     private void CheckInk()
@@ -114,11 +114,11 @@ public class PlaceTeamAreaManager : MonoBehaviour
     }
 
     //更新UI数据，包含队伍中包含的User排行数据
-    void UpDateTeamUI()
-    {
+    // void UpDataTeamUI()
+    // {
         //UIEvent.OnTeamAreaUIUpdate(this);
-        UIEvent.OnTeamUIUpdate(teaminfo);
-    }
+    //    UIEvent.OnTeamUIUpdate(teaminfo);
+    //}
 
     // 在队伍区域里创建角色
     public User CreateCharacterInTeamArea(User user)

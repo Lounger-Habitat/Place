@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlaceNetManager : MonoBehaviour
@@ -36,9 +37,7 @@ public class PlaceNetManager : MonoBehaviour
     public GameObject douyinLog;
 
 
-
-
-
+    
     void Start()
     {
 
@@ -52,7 +51,7 @@ public class PlaceNetManager : MonoBehaviour
             // 确保dy没有同时打开
             douyin = false;
             isDyDebug = false;
-            if (douyinLog) douyinLog.SetActive(false);
+            douyinLog.SetActive(isDyDebug);
             placeDyNetManager.enabled = false;
 
         }
@@ -60,12 +59,8 @@ public class PlaceNetManager : MonoBehaviour
         {
             // 启用 douyin net 脚本
             placeDyNetManager.enabled = true;
-            // 启用 控制台
-            if (isDyDebug)
-            {
-                douyinLog.SetActive(true);
-            }
-
+            // 是否启用 控制台
+            douyinLog.SetActive(isDyDebug);
             // 确保bili没有同时打开
             bilibili = false;
             if (bilibiliLogin) bilibiliLogin.SetActive(false);
@@ -75,7 +70,7 @@ public class PlaceNetManager : MonoBehaviour
 
     }
 
-    void Reset()
+    void ResetSelf()
     {
         bilibili = false;
         douyin = false;
@@ -84,6 +79,12 @@ public class PlaceNetManager : MonoBehaviour
         if (douyinLog) douyinLog.SetActive(false);
     }
 
-
+    private void OnDestroy()
+    {
+        if (Instance ==this)
+        {
+            PlaceDySdkManager.Uninitialize();
+        }
+    }
 }
 

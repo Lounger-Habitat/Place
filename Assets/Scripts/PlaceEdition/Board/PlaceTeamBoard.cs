@@ -162,10 +162,6 @@ public class PlaceTeamBoard : MonoBehaviour
         return "";
     }
 
-    void Update()
-    {
-    }
-
     public void SetWidthAndHeight(int width, int height)
     {
         this.width = width;
