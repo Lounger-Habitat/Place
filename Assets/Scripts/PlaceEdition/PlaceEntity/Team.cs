@@ -1,8 +1,3 @@
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.UIElements;
-
 // 简单的Team类，用于表示队伍
 [System.Serializable]
 public class Team

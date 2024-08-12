@@ -3,6 +3,9 @@ using UnityEngine;
 public class PlaceNetManager : MonoBehaviour
 {
 
+
+    public string platform = "platform";
+    public string anchorName = "anchor";
     public static PlaceNetManager Instance { get; set; }
 
     void Awake()
@@ -48,6 +51,7 @@ public class PlaceNetManager : MonoBehaviour
             placeBiliNetManager.enabled = true;
             // 启用 登录界面
             bilibiliLogin.SetActive(true);
+            platform = "bilibili";
 
             // 确保dy没有同时打开
             douyin = false;
@@ -60,6 +64,7 @@ public class PlaceNetManager : MonoBehaviour
         {
             // 启用 douyin net 脚本
             placeDyNetManager.enabled = true;
+            platform = "tiktok";
             // 启用 控制台
             if (isDyDebug)
             {
