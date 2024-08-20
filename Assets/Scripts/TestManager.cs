@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ByteDance.LiveOpenSdk.Push;
+using ByteDance.LiveOpenSdk.Room;
 using OpenBLive.Runtime.Data;
 using UnityEngine;
 //using UnityEditor;
@@ -61,17 +63,34 @@ public class TestManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Slash))
         {
             ins = ins.Trim();
-    
-            if (PlaceCenter.Instance.users.ContainsKey(playerName))
+
+            if (PlaceCenter.Instance.platform == "douyin")
             {
-                Dm dm = MakeDm(playerName, ins);
-                PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
+                if (PlaceCenter.Instance.users.ContainsKey(playerName))
+                {
+                    ICommentMessage dm = MakeDyDm(playerName,ins);
+                    PlaceInstructionManager.Instance.DyDanmuCommand(dm);
+                }
+                else
+                {
+                    ICommentMessage dm = MakeDyDm(playerName,ins);
+                    PlaceInstructionManager.Instance.DyDanmuCommand(dm);
+                }
             }
             else
             {
-                Dm dm = MakeDm(playerName, ins);
-                PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
+                if (PlaceCenter.Instance.users.ContainsKey(playerName))
+                {
+                    Dm dm = MakeDm(playerName, ins);
+                    PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
+                }
+                else
+                {
+                    Dm dm = MakeDm(playerName, ins);
+                    PlaceInstructionManager.Instance.DefaultDanmuCommand(dm);
+                }
             }
+            
         }
     //     // 按下‘，执行指令  接受 指令
     //     if (Input.GetKeyDown(KeyCode.F1))
@@ -145,6 +164,38 @@ public class TestManager : MonoBehaviour
         Camera.main.transform.rotation = Quaternion.Euler(rotation);
     }
 
+   public class DyUserInfo : IUserInfo
+    {
+        public string OpenId { get; set; }
+        public string AvatarUrl { get; set; }
+        public string Nickname { get; set; }
+
+        public DyUserInfo(string id, string url, string name)
+        {
+            OpenId = id;
+            AvatarUrl = url;
+            Nickname = name;
+        }
+    }
+
+    class DyComMes : ICommentMessage
+    {
+        public string MsgId { get; }
+        public string MsgType { get; }
+        public long Timestamp { get; }
+        public IUserInfo Sender { get; set; }
+        public string Content { get; set; }
+    }
+
+    public ICommentMessage MakeDyDm(string name, string ins)
+    {
+        DyComMes dm = new DyComMes();
+        dm.Sender = new DyUserInfo("0","https://unsplash.com/photos/mou0S7ViElQ/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8M3x8Y2FydG9vbnxlbnwwfHx8fDE3MTg3Nzg5MzZ8MA&force=true&w=640",name);
+        // dm.Sender.AvatarUrl = "https://unsplash.com/photos/mou0S7ViElQ/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8M3x8Y2FydG9vbnxlbnwwfHx8fDE3MTg3Nzg5MzZ8MA&force=true&w=640";
+        
+        dm.Content = ins;
+        return dm;
+    }
     public Dm MakeDm(string name, string ins)
     {
         Dm dm = new Dm();

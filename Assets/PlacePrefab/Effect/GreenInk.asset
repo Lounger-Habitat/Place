@@ -20,9 +20,9 @@ MonoBehaviour:
   effectPrefab: {fileID: 0}
   spawnTouchingFloor: 0
   projectileSpeed: 15
-  projectilePrefab: {fileID: 7258936774047215834, guid: 0644c589f7483468eac8cf5c06f879da, type: 3}
-  muzzleFlashPrefab: {fileID: 3686776489152041964, guid: fd029556964fc4e6090b39ee1404e9ce, type: 3}
-  impactPrefab: {fileID: 7031711661290200971, guid: 3066c14b0cda949b58ce877b9164172d, type: 3}
+  projectilePrefab: {fileID: 7258936774047215834, guid: 46e5f28c927f3114b8b519181dbac340, type: 3}
+  muzzleFlashPrefab: {fileID: 3686776489152041964, guid: 0c7063f9e82b6b940915904a4d92031d, type: 3}
+  impactPrefab: {fileID: 7031711661290200971, guid: 471e880d417848c479a0d29653645534, type: 3}
   doCameraShake: 0
   mainEffectShakeAmount: 1
   projectileImpactShakeAmount: 1

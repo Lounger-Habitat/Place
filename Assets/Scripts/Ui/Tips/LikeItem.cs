@@ -27,6 +27,6 @@ public class LikeItem : MonoBehaviour
     {
         userIcon.sprite = tips.icon;
         likeCountText.text = $"x {tips.likeCount}";
-        inkCountText.text = $"+ {tips.likeCount*10}";
+        inkCountText.text = $"+ {tips.likeCount*2}";
     }
 }

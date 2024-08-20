@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,6 +36,7 @@ public class PlaceCenter : MonoBehaviour
 #nullable enable
     // 用户信息
     public Dictionary<string, User> users = new Dictionary<string, User>();
+
     // 队伍信息
     public Dictionary<string, Team> teams = new Dictionary<string, Team>();
 
@@ -58,6 +58,7 @@ public class PlaceCenter : MonoBehaviour
     int baseId = 0;
 
     private int maxSocre = 120000;
+
     // List<Texture2D>? demoTextures = null;
     Dictionary<string, Texture2D> freeDemoTexturesDic = new Dictionary<string, Texture2D>();
     Dictionary<string, Texture2D> giftDemoTexturesDic = new Dictionary<string, Texture2D>();
@@ -105,11 +106,10 @@ public class PlaceCenter : MonoBehaviour
             maxSocre = PlaceBoardManager.Instance.width *
                        PlaceBoardManager.Instance.height;
         }
+
         //初始化平台信息，与主播信息
         platform = PlaceNetManager.Instance.platform;
         anchorName = PlaceNetManager.Instance.anchorName;
-        
-
     }
 
     void Update()
@@ -165,6 +165,7 @@ public class PlaceCenter : MonoBehaviour
             tagScript.user = u;
             // 设置其他必要的属性，如偏移量等
         }
+
         return nameTagObj;
     }
 
@@ -201,7 +202,6 @@ public class PlaceCenter : MonoBehaviour
         // int t = user.Camp;
         User u = PlaceTeamManager.Instance.teamAreas[t - 1].CreateCharacterInTeamArea(user);
         users.Add(u.Name, u);
-
     }
 
     public GameObject CreateMessageBubble(Transform characterTransform, string message)
@@ -222,6 +222,7 @@ public class PlaceCenter : MonoBehaviour
             messageTagScript.message = message;
             // 设置其他必要的属性，如偏移量等
         }
+
         return bubblTagObj;
     }
 
@@ -249,6 +250,7 @@ public class PlaceCenter : MonoBehaviour
             Debug.Log("用户不存在");
             return false;
         }
+
         return true;
     }
 
@@ -259,6 +261,7 @@ public class PlaceCenter : MonoBehaviour
             Debug.Log("用户不存在");
             return null;
         }
+
         User u = users[username];
         return u;
     }
@@ -275,7 +278,7 @@ public class PlaceCenter : MonoBehaviour
         // 多少位？
         // 平台 + 时间 + 主播 + 人数 + 价值 + ？？
         // TODO
-        if (GameSettingManager.Instance.Mode == GameMode.Competition)//不切换场景会报错
+        if (GameSettingManager.Instance.Mode == GameMode.Competition) //不切换场景会报错
         {
             PlaceTeamBoardManager.GenerateUniqueId();
         }
@@ -286,8 +289,6 @@ public class PlaceCenter : MonoBehaviour
             var text = GameObject.Find("DrawID").transform.GetChild(0).GetComponent<TMP_Text>();
             text.text = $"PUID : {puid}";
         }
-        
-        
     }
 
     public void JoinGame(User user, string teamId)
@@ -299,6 +300,7 @@ public class PlaceCenter : MonoBehaviour
             Debug.Log("用户已存在");
             return;
         }
+
         // 检查队伍是否已经存在
         // if (!teams.ContainsKey(teamId))
         // {
@@ -306,7 +308,8 @@ public class PlaceCenter : MonoBehaviour
         //     return;
         // }
         // 检查队伍是否已经满员
-        if (PlaceTeamManager.Instance.teamAreas[t - 1].userList.Count >= PlaceTeamManager.Instance.teamAreas[t - 1].teaminfo.MaxTeamNumber)
+        if (PlaceTeamManager.Instance.teamAreas[t - 1].userList.Count >=
+            PlaceTeamManager.Instance.teamAreas[t - 1].teaminfo.MaxTeamNumber)
         {
             Debug.Log("队伍已满");
             return;
@@ -335,10 +338,11 @@ public class PlaceCenter : MonoBehaviour
             case "/p":
                 colorNumber = PlaceBoardManager.Instance.GetPaintCount(ins.dx, ins.dy);
                 break;
-
         }
+
         return colorNumber;
     }
+
     // 获取队伍颜料数
     public int GetTeamInkCount(int teamId)
     {
@@ -361,6 +365,7 @@ public class PlaceCenter : MonoBehaviour
             Debug.Log("游戏已经开始");
             return;
         }
+
         satrtGameAction?.Invoke();
         PlaceUIManager.Instance.StartGame(() =>
         {
@@ -377,8 +382,6 @@ public class PlaceCenter : MonoBehaviour
 
     public void OnRankUIUpdate(User user)
     {
-
-
         if (user.score > 0)
         {
             // 如果 top 8 数量为 小于8 ,且用户不在 top 里
@@ -433,7 +436,6 @@ public class PlaceCenter : MonoBehaviour
             // }
             newTeamScore[1] = PlaceTeamBoardManager.Instance.team1Board.socre;
             newTeamScore[2] = PlaceTeamBoardManager.Instance.team2Board.socre;
-
         }
         else
         {
@@ -441,12 +443,10 @@ public class PlaceCenter : MonoBehaviour
             {
                 newTeamScore[c]++;
             }
-
         }
 
         for (int i = 1; i < newTeamScore.Length; i++)
         {
-            
             if (lastTeamScore[i] != newTeamScore[i])
             {
                 int score = newTeamScore[i];
@@ -454,13 +454,12 @@ public class PlaceCenter : MonoBehaviour
                 PlaceTeamManager.Instance.teamAreas[i - 1].teaminfo.score = score;
                 lastTeamScore[i] = score;
             }
-            OnTeamUIUpdate(PlaceTeamManager.Instance.teamAreas[i-1].teaminfo);
-            
+            //OnTeamUIUpdate(PlaceTeamManager.Instance.teamAreas[i-1].teaminfo);
         }
-        
-        if (GameSettingManager.Instance.Mode!=GameMode.Competition) return;
-        
-        if (newTeamScore[1]>=maxSocre-10)
+
+        if (GameSettingManager.Instance.Mode != GameMode.Competition) return;
+
+        if (newTeamScore[1] >= maxSocre - 10)
         {
             //一队获胜
             GameEnd();
@@ -468,7 +467,8 @@ public class PlaceCenter : MonoBehaviour
             Debug.Log("Game end ,win team1");
             return;
         }
-        if (newTeamScore[2]>=maxSocre-10)
+
+        if (newTeamScore[2] >= maxSocre - 10)
         {
             //二队获胜
             GameEnd();
@@ -479,13 +479,12 @@ public class PlaceCenter : MonoBehaviour
 
         // UI显示 , 不知道为什么成为空函数了
         //PlaceUIManager.Instance.SetTeamData(teams.Values.ToList());
-
     }
 
     //游戏结束
     public void GameEnd()
     {
-        gameRuning=false;
+        gameRuning = false;
         GenPUID();
         GenGif();
         Reset();
@@ -499,7 +498,8 @@ public class PlaceCenter : MonoBehaviour
         {
             return;
         }
-        if (PlaceTeamBoardManager.Instance.team1Board.socre>PlaceTeamBoardManager.Instance.team2Board.socre)
+
+        if (PlaceTeamBoardManager.Instance.team1Board.socre > PlaceTeamBoardManager.Instance.team2Board.socre)
         {
             //一队获胜
             PlaceUIManager.Instance.SetWinInfo(1);
@@ -509,8 +509,8 @@ public class PlaceCenter : MonoBehaviour
             PlaceUIManager.Instance.SetWinInfo(2);
         }
     }
-    
-    
+
+
     public void GainPower(string username, float power)
     {
         if (!users.ContainsKey(username))
@@ -518,6 +518,7 @@ public class PlaceCenter : MonoBehaviour
             Debug.Log("用户不存在");
             return;
         }
+
         User u = users[username];
         TipsType messageType = TipsType.messagePanel;
         int normalPower = 0;
@@ -535,116 +536,216 @@ public class PlaceCenter : MonoBehaviour
                 messageType = TipsType.giftDefensePanel;
                 break;
         }
-        switch (power)
+
+        if (Instance.platform == "douyin")
         {
-            case 1f://这是礼物得人民币价值，那应该在这个里边通知
-                normalPower = 300; // 颜料数（一毛相当于优惠）给300他要是冲52次也行
-                message = "急速神行";
-                skill = SkillIcon.Speed;
-                u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
-                break;
-            case 10f:
-                normalPower = 900;//固定是加颜料
-                message = "风之束缚";
-                skill = SkillIcon.Tornado;
-                u.character.GetComponent<PlacePlayerController>().Tornado((int)power);
-                break;
-            case 19f:
-            case 20f:
-                normalPower = 1800;//固定是攻击
-                u.character.GetComponent<PlacePlayerController>().Thunder();
-                skill = SkillIcon.Thunder;
-                message = "雷霆万钧";
-                break;
-            case 52f:
-                normalPower = 4800;//固定是防御
-                u.character.GetComponent<PlacePlayerController>().Invincible(180);
-                message = "绝对防御";
-                skill = SkillIcon.Defense;
-                break;
-            case 99f:
-                // normalPower = 3600;
-                // message = "天官赐福";
-                // // 随机自动画一个图案
-                // skill = SkillIcon.Pencil;
-                // u.character.GetComponent<PlacePlayerController>().Blessing(180);
-                // int x = Random.Range(0, PlaceBoardManager.Instance.width - 64);
-                // int y = Random.Range(0, PlaceBoardManager.Instance.height - 64);
-                // List<Instruction> IL = GenerateRandomImage(x, y, 64);
-                // if (IL.Count != 0)
-                // {
-                //     IL.ForEach(i => u.instructionQueue.Enqueue(i));
-                // }
-                break;
-            case 199f:
-                if (GameSettingManager.Instance.Mode == GameMode.Graffiti)
-                {
-                    u.character.GetComponent<PlacePlayerController>().Invincible(20);
-                    var Iname = iconNames[Random.Range(0, 5)];
-                    DrawUserIconImage(u, Iname);
-                    int max = PlaceBoardManager.Instance.height / 2;
-                    normalPower = max * max + 10;
-                    switch (Iname)
-                    {
-                        case "comeOn-150-115-40":
-                            messageType = TipsType.giftImageBaiTuo;
-                            break;
-                        case "guang-608-452-141":
-                            messageType = TipsType.gittImagePanel;
-                            break;
-                        case "lailou-250-256-76":
-                            messageType = TipsType.giftImageComeOn;
-                            break;
-                    }
-                }
-                else if(GameSettingManager.Instance.Mode == GameMode.Competition)//会将所有技能释放一边
-                {
-                    normalPower = 20000;
-                    message = "天官赐福";
-                    skill = SkillIcon.Pencil;
-                    u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(30);
-                    u.character.GetComponent<PlacePlayerController>().Tornado(50);
+            switch (power)
+            {
+                case 10f: //这是礼物的人民币价值，那应该在这个里边通知,抖音单位是分
+                    normalPower = 300; // 颜料数（一毛相当于优惠）
+                    message = "急速神行";
+                    skill = SkillIcon.Speed;
+                    u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
+                    break;
+                case 100f:
+                    normalPower = 900; //固定是加颜料
+                    message = "风之束缚";
+                    skill = SkillIcon.Tornado;
+                    u.character.GetComponent<PlacePlayerController>().Tornado((int)(power/10));
+                    break;
+                case 190f:
+                case 200f:
+                    normalPower = 1800; //固定是攻击
                     u.character.GetComponent<PlacePlayerController>().Thunder();
-                    u.character.GetComponent<PlacePlayerController>().Invincible(300);
-                    foreach (var item in u.selfTeam.userList)
+                    skill = SkillIcon.Thunder;
+                    message = "雷霆万钧";
+                    break;
+                case 520f:
+                    normalPower = 4800; //固定是防御
+                    u.character.GetComponent<PlacePlayerController>().Invincible(180);
+                    message = "绝对防御";
+                    skill = SkillIcon.Defense;
+                    break;
+                case 99f:
+                    // normalPower = 3600;
+                    // message = "天官赐福";
+                    // // 随机自动画一个图案
+                    // skill = SkillIcon.Pencil;
+                    // u.character.GetComponent<PlacePlayerController>().Blessing(180);
+                    // int x = Random.Range(0, PlaceBoardManager.Instance.width - 64);
+                    // int y = Random.Range(0, PlaceBoardManager.Instance.height - 64);
+                    // List<Instruction> IL = GenerateRandomImage(x, y, 64);
+                    // if (IL.Count != 0)
+                    // {
+                    //     IL.ForEach(i => u.instructionQueue.Enqueue(i));
+                    // }
+                    break;
+                case 1990f:
+                    if (GameSettingManager.Instance.Mode == GameMode.Graffiti)
                     {
-                        item.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(5);
-                        item.character.GetComponent<PlacePlayerController>().Invincible(5);//解控，只是解控
+                        u.character.GetComponent<PlacePlayerController>().Invincible(20);
+                        var Iname = iconNames[Random.Range(0, 5)];
+                        DrawUserIconImage(u, Iname);
+                        int max = PlaceBoardManager.Instance.height / 2;
+                        normalPower = max * max + 10;
+                        switch (Iname)
+                        {
+                            case "comeOn_150_115_40":
+                                messageType = TipsType.giftImageBaiTuo;
+                                break;
+                            case "guang_608_452_141":
+                                messageType = TipsType.gittImagePanel;
+                                break;
+                            case "lailou_250_256_76":
+                                messageType = TipsType.giftImageComeOn;
+                                break;
+                        }
+                    }
+                    else if (GameSettingManager.Instance.Mode == GameMode.Competition) //会将所有技能释放一边
+                    {
+                        normalPower = 20000;
+                        message = "天官赐福";
+                        skill = SkillIcon.Pencil;
+                        u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(30);
+                        u.character.GetComponent<PlacePlayerController>().Tornado(40);
+                        u.character.GetComponent<PlacePlayerController>().Thunder();
+                        u.character.GetComponent<PlacePlayerController>().Invincible(300);
+                        foreach (var item in u.selfTeam.userList)
+                        {
+                            item.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(5);
+                            item.character.GetComponent<PlacePlayerController>().Invincible(5); //解控，只是解控
+                        }
+                    }
+                    else
+                    {
+                        normalPower = 20000;
+                        message = "天官赐福";
+                        // 随机自动画一个图案
+                        skill = SkillIcon.Pencil;
+                        u.character.GetComponent<PlacePlayerController>().Blessing(180);
+                        int x128 = Random.Range(0, PlaceBoardManager.Instance.width - 128);
+                        int y128 = Random.Range(0, PlaceBoardManager.Instance.height - 128);
+                        List<Instruction> IL128 = GenerateRandomImage(x128, y128, 128);
+                        if (IL128.Count != 0)
+                        {
+                            IL128.ForEach(i => u.instructionQueue.Enqueue(i));
+                        }
+                    }
+                    break;
+            }
+
+            power /= 10;
+        }
+        else
+        {
+            switch (power)
+            {
+                case 1f: //这是礼物得人民币价值，那应该在这个里边通知  b站单位是毛
+                    normalPower = 300; // 颜料数（一毛相当于优惠）给300他要是冲52次也行
+                    message = "急速神行";
+                    skill = SkillIcon.Speed;
+                    u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
+                    break;
+                case 10f:
+                    normalPower = 900; //固定是加颜料
+                    message = "风之束缚";
+                    skill = SkillIcon.Tornado;
+                    u.character.GetComponent<PlacePlayerController>().Tornado((int)power);
+                    break;
+                case 19f:
+                case 20f:
+                    normalPower = 1800; //固定是攻击
+                    u.character.GetComponent<PlacePlayerController>().Thunder();
+                    skill = SkillIcon.Thunder;
+                    message = "雷霆万钧";
+                    break;
+                case 52f:
+                    normalPower = 4800; //固定是防御
+                    u.character.GetComponent<PlacePlayerController>().Invincible(180);
+                    message = "绝对防御";
+                    skill = SkillIcon.Defense;
+                    break;
+                case 99f:
+                    // normalPower = 3600;
+                    // message = "天官赐福";
+                    // // 随机自动画一个图案
+                    // skill = SkillIcon.Pencil;
+                    // u.character.GetComponent<PlacePlayerController>().Blessing(180);
+                    // int x = Random.Range(0, PlaceBoardManager.Instance.width - 64);
+                    // int y = Random.Range(0, PlaceBoardManager.Instance.height - 64);
+                    // List<Instruction> IL = GenerateRandomImage(x, y, 64);
+                    // if (IL.Count != 0)
+                    // {
+                    //     IL.ForEach(i => u.instructionQueue.Enqueue(i));
+                    // }
+                    break;
+                case 199f:
+                    if (GameSettingManager.Instance.Mode == GameMode.Graffiti)
+                    {
+                        u.character.GetComponent<PlacePlayerController>().Invincible(20);
+                        var Iname = iconNames[Random.Range(0, 5)];
+                        DrawUserIconImage(u, Iname);
+                        int max = PlaceBoardManager.Instance.height / 2;
+                        normalPower = max * max + 10;
+                        switch (Iname)
+                        {
+                            case "comeOn_150_115_40":
+                                messageType = TipsType.giftImageBaiTuo;
+                                break;
+                            case "guang_608_452_141":
+                                messageType = TipsType.gittImagePanel;
+                                break;
+                            case "lailou_250_256_76":
+                                messageType = TipsType.giftImageComeOn;
+                                break;
+                        }
+                    }
+                    else if (GameSettingManager.Instance.Mode == GameMode.Competition) //会将所有技能释放一边
+                    {
+                        normalPower = 20000;
+                        message = "天官赐福";
+                        skill = SkillIcon.Pencil;
+                        u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(30);
+                        u.character.GetComponent<PlacePlayerController>().Tornado(50);
+                        u.character.GetComponent<PlacePlayerController>().Thunder();
+                        u.character.GetComponent<PlacePlayerController>().Invincible(300);
+                        foreach (var item in u.selfTeam.userList)
+                        {
+                            item.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(5);
+                            item.character.GetComponent<PlacePlayerController>().Invincible(5); //解控，只是解控
+                        }
+                    }
+                    else
+                    {
+                        normalPower = 20000;
+                        message = "天官赐福";
+                        // 随机自动画一个图案
+                        skill = SkillIcon.Pencil;
+                        u.character.GetComponent<PlacePlayerController>().Blessing(180);
+                        int x128 = Random.Range(0, PlaceBoardManager.Instance.width - 128);
+                        int y128 = Random.Range(0, PlaceBoardManager.Instance.height - 128);
+                        List<Instruction> IL128 = GenerateRandomImage(x128, y128, 128);
+                        if (IL128.Count != 0)
+                        {
+                            IL128.ForEach(i => u.instructionQueue.Enqueue(i));
+                        }
                     }
 
-                   
-                }
-                else
-                {
-                    normalPower = 20000;
-                    message = "天官赐福";
-                    // 随机自动画一个图案
-                    skill = SkillIcon.Pencil;
-                    u.character.GetComponent<PlacePlayerController>().Blessing(180);
-                    int x128 = Random.Range(0, PlaceBoardManager.Instance.width - 128);
-                    int y128 = Random.Range(0, PlaceBoardManager.Instance.height - 128);
-                    List<Instruction> IL128 = GenerateRandomImage(x128, y128, 128);
-                    if (IL128.Count != 0)
-                    {
-                        IL128.ForEach(i => u.instructionQueue.Enqueue(i));
-                    }
-                }
-
-                break;
-            case 299f:
-                // normalPower = 62500;
-                // message = "天官赐福";
-                // // 随机自动画一个图案
-                // skill = SkillIcon.Pencil;
-                // u.character.GetComponent<PlacePlayerController>().Blessing(180);
-                // int x256 = Random.Range(0, PlaceBoardManager.Instance.width - 256);
-                // int y256 = Random.Range(0, PlaceBoardManager.Instance.height - 256);
-                // List<Instruction> IL256 = GenerateRandomImage(x256, y256, 256);
-                // if (IL256.Count != 0)
-                // {
-                //     IL256.ForEach(i => u.instructionQueue.Enqueue(i));
-                // }
-                break;
+                    break;
+                case 299f:
+                    // normalPower = 62500;
+                    // message = "天官赐福";
+                    // // 随机自动画一个图案
+                    // skill = SkillIcon.Pencil;
+                    // u.character.GetComponent<PlacePlayerController>().Blessing(180);
+                    // int x256 = Random.Range(0, PlaceBoardManager.Instance.width - 256);
+                    // int y256 = Random.Range(0, PlaceBoardManager.Instance.height - 256);
+                    // List<Instruction> IL256 = GenerateRandomImage(x256, y256, 256);
+                    // if (IL256.Count != 0)
+                    // {
+                    //     IL256.ForEach(i => u.instructionQueue.Enqueue(i));
+                    // }
+                    break;
                 // case 19.9f:
                 //     normalPower = 1999;
                 //     break;
@@ -684,7 +785,9 @@ public class PlaceCenter : MonoBehaviour
                 //     message = "";
                 //     normalPower = 30000;
                 //     break;
+            }
         }
+
         u.character.GetComponent<PlacePlayerController>().InkUp(normalPower);
         u.score += normalPower;
         u.genInkCount += normalPower;
@@ -699,7 +802,7 @@ public class PlaceCenter : MonoBehaviour
         {
             userName = username,
             text = message,
-            icon = u.userIcon,//玩家头像
+            icon = u.userIcon, //玩家头像
             tipsType = messageType,
             value = $"+{normalPower:D}",
             isLeft = u.Camp == 1,
@@ -713,9 +816,9 @@ public class PlaceCenter : MonoBehaviour
         // B 站 每人 每天 点赞上限 1000
         // Dy 每人 每天 不限
         int lc = (int)power;
-        int p = lc * 10;//TODO:记得修改哦！根据点赞数量获取颜料，修改为自动倍率。
+        int p = lc * 2; //TODO:记得修改哦！根据点赞数量获取颜料，修改为自动倍率。
         user.score += p;
-        user.likeCount +=lc;
+        user.likeCount += lc;
         user.Update();
         PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
         // 颜料增加的特效
@@ -735,21 +838,21 @@ public class PlaceCenter : MonoBehaviour
         if (lc >= 10)
         {
             int speedTime = lc / 10;
-            user.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(speedTime);//一个赞给0.1s加速。
+            user.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(speedTime); //一个赞给0.1s加速。
         }
-        
-        if ((user.likeCount/1000)>user.likeTimes)//判断本局是否点赞数超过1000//每次过一千才提醒，你这相当于过了一千 然后每次点赞都触发这个
+
+        if ((user.likeCount / 1000) > user.likeTimes) //判断本局是否点赞数超过1000//每次过一千才提醒，你这相当于过了一千 然后每次点赞都触发这个
         {
             user.likeTimes++;
-            lc = user.likeCount;//大于一千拿总数，小于1000拿这次点赞数，
-            message = $"手速突破天际!! {lc}次！";
-            
+            lc = user.likeCount; //大于一千拿总数，小于1000拿这次点赞数，
+            message = $"手速突破天际!! 点赞{lc}次！";
         }
+
         PlaceUIManager.Instance.AddTips(new TipsItem()
         {
             userName = user.Name,
             text = message,
-            icon = user.userIcon,//玩家头像
+            icon = user.userIcon, //玩家头像
             tipsType = messageType,
             value = $"+{1}",
             likeCount = lc,
@@ -770,17 +873,19 @@ public class PlaceCenter : MonoBehaviour
     // }
 
 
+
     private string[] iconNames = new[]
     {
-        "comeOn-150-115-40",
-        "comeOn-150-115-40",
+        "comeOn_150_115_40",
+        "comeOn_150_115_40",
         //"flower",
-        "guang-608-452-141",
-        "lailou-250-256-76",
-        "lailou-250-256-76"
+        "guang_608_452_141",
+        "lailou_250_256_76",
+        "lailou_250_256_76"
     };
 
     public Texture2D defTex2D;
+
     //这是画指定的，上一级随机的名字
     private void DrawUserIconImage(User user, string IName)
     {
@@ -791,13 +896,13 @@ public class PlaceCenter : MonoBehaviour
         Texture2D userTex;
         if (user.userIcon == null)
         {
-             userTex = defTex2D;
+            userTex = defTex2D;
         }
         else
         {
-            userTex= user.userIcon.texture;
+            userTex = user.userIcon.texture;
         }
-        
+
         List<Instruction> IL = Instance.GiftGenerateImage(x, y, max, userTex, IName);
         if (IL.Count != 0)
         {
@@ -807,7 +912,6 @@ public class PlaceCenter : MonoBehaviour
         {
             Debug.Log("roll 失败,或许名字key 不对");
         }
-
     }
 
 
@@ -827,7 +931,6 @@ public class PlaceCenter : MonoBehaviour
         // clear 
         users.Clear();
         top8.Clear();
-
     }
 
     // 开始记录图像
@@ -835,6 +938,7 @@ public class PlaceCenter : MonoBehaviour
     {
         StartCoroutine(SaveImagePreRecorderTime(recorderTime));
     }
+
     // 结束 生成 gif
     public void GenGif()
     {
@@ -846,7 +950,6 @@ public class PlaceCenter : MonoBehaviour
         {
             PlaceTeamBoardManager.Instance.ConvertTex2DToGIFTeamFun();
         }
-
     }
 
     // public void ShowGif(string path) {
@@ -870,6 +973,7 @@ public class PlaceCenter : MonoBehaviour
             {
                 return new List<Instruction>();
             }
+
             Texture2D tex = freeDemoTexturesDic[name];
             // texture 2d
             // Texture2D tex = Resources.Load<Texture2D>($"Images/{index}");
@@ -881,6 +985,7 @@ public class PlaceCenter : MonoBehaviour
 
         return new List<Instruction>();
     }
+
     public List<Instruction> GiftGenerateImage(int ox, int oy, int max, Texture2D userTex, string name)
     {
         // 图库
@@ -897,6 +1002,7 @@ public class PlaceCenter : MonoBehaviour
             {
                 return new List<Instruction>();
             }
+
             Texture2D tex = giftDemoTexturesDic[name];
             tex.name = name;
             // texture 2d
@@ -968,6 +1074,7 @@ public class PlaceCenter : MonoBehaviour
         // 转换成 instruction
         return Image2Instruction(retex, ox, oy);
     }
+
     List<Instruction> Image2Instruction(Texture2D tex, int ox, int oy)
     {
         // 读取 颜色
@@ -1008,10 +1115,9 @@ public class PlaceCenter : MonoBehaviour
                 insList.Add(ins);
             }
         }
+
         return insList;
     }
-
-
 
 
     // public Texture2D ImageFitBoardProcessor(List<Texture2D> texlist, int texindex)
@@ -1028,6 +1134,9 @@ public class PlaceCenter : MonoBehaviour
     {
         return LoadResources(demoPath);
     }
+    
+    
+
     public Dictionary<string, Texture2D> LoadDemoDicResources(string sbuClass)
     {
         string classFormat = @"free|gift";
@@ -1036,9 +1145,11 @@ public class PlaceCenter : MonoBehaviour
         {
             return LoadDicResources(Path.Combine(demoPath, sbuClass));
         }
+
         Debug.LogError("Class not found: " + sbuClass);
         return new Dictionary<string, Texture2D>();
     }
+
     public Dictionary<string, List<Texture2D>> LoadCartoonDemoDicResources(string sbuClass)
     {
         string classFormat = @"cartoon";
@@ -1047,6 +1158,7 @@ public class PlaceCenter : MonoBehaviour
         {
             return LoadCartoonDicResources(Path.Combine(demoPath, sbuClass));
         }
+
         Debug.LogError("Class not found: " + sbuClass);
         return new Dictionary<string, List<Texture2D>>();
     }
@@ -1062,15 +1174,11 @@ public class PlaceCenter : MonoBehaviour
             string[] subDirs = Directory.GetDirectories(imagePath);
             foreach (string subDirectory in subDirs)
             {
-
                 // 获取目录中的所有文件
                 List<Texture2D> texlist = LoadResources(subDirectory);
 
                 texCartoonDic.Add(Path.GetFileName(subDirectory), texlist);
             }
-
-
-
         }
         else
         {
@@ -1145,6 +1253,7 @@ public class PlaceCenter : MonoBehaviour
 
         return texlist;
     }
+
     bool IsImageFile(string filePath)
     {
         string extension = Path.GetExtension(filePath).ToLower();
@@ -1159,6 +1268,7 @@ public class PlaceCenter : MonoBehaviour
         {
             Debug.LogError("Failed to load texture: " + filePath);
         }
+
         // Debug.Log("Load Texture: " + filePath + " " + texture.width + " " + texture.height);
         return texture;
     }
@@ -1167,13 +1277,55 @@ public class PlaceCenter : MonoBehaviour
     {
         return users.Count.ToString();
     }
+
     public List<string> AllMemberName()
     {
         return users.Values.Select(user => user.Name).ToList();
     }
+
     public string Price()
     {
         return users.Values.Sum(u => u.usePowerCount).ToString();
+    }
+
+    public string[] GetFreeAllName()
+    {
+        return GetAllName(Path.Combine(demoPath, "free"));
+    }
+
+    string[] GetAllName(string directoryPath)
+    {
+        // 获取 free 目录下的 图片名字
+        // 制作成 string[]
+        // 赋值给 _str
+        // 确保目录路径存在
+        if (!Directory.Exists(directoryPath))
+        {
+            Debug.LogError("Directory does not exist: " + directoryPath);
+            return null;
+        }
+
+        // 获取目录下所有文件
+        string[] filePaths = Directory.GetFiles(directoryPath);
+
+        // 过滤出图片文件，这里以常见的图片格式为例
+        string[] imageExtensions = new string[] { ".png", ".jpg", ".jpeg", ".gif", ".bmp" };
+        List<string> imageNames = new List<string>();
+
+        foreach (string filePath in filePaths)
+        {
+            // 获取文件的扩展名
+            string extension = Path.GetExtension(filePath);
+            // 检查是否是图片文件
+            if (Array.IndexOf(imageExtensions, extension) >= 0)
+            {
+                // 添加文件名（不包含扩展名）到列表
+                imageNames.Add(Path.GetFileNameWithoutExtension(filePath));
+            }
+        }
+
+        // 将列表转换为字符串数组
+        return imageNames.ToArray();
     }
 
 

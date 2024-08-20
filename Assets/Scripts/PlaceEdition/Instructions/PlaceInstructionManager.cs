@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Text.RegularExpressions;
 using ByteDance.LiveOpenSdk.Push;
+using Unity.VisualScripting;
 
 public class PlaceInstructionManager : MonoBehaviour
 {
@@ -64,6 +65,14 @@ public class PlaceInstructionManager : MonoBehaviour
 
             return instance;
         }
+    }
+
+    private string[] _str;
+    // private string[] _str = { "heart", "Hi", "Hi", "ok", "smile", "heart" };
+
+    void Start()
+    {
+        _str = PlaceCenter.Instance.GetFreeAllName();
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
@@ -1308,7 +1317,8 @@ public class PlaceInstructionManager : MonoBehaviour
     }
 
 
-    private string[] _str = { "heart", "Hi", "Hi", "ok", "smile", "heart" };
+    
+
     // 弹幕
     public void DefaultDanmuCommand(Dm dm)
     {
@@ -1331,7 +1341,7 @@ public class PlaceInstructionManager : MonoBehaviour
 
                 if (msg.StartsWith("777"))//随便画一幅图片
                 {
-                    DefaultRunChatCommand(user, $"/roll {x} {y} 30 {_str[Random.Range(0, 6)]}");
+                    DefaultRunChatCommand(user, $"/roll {x} {y} 30 {_str[Random.Range(0, 95)]}");
                     return;
                 }
                 if (msg.StartsWith("hi") || msg.StartsWith("Hi"))//画出嗨
@@ -1516,6 +1526,15 @@ public class PlaceInstructionManager : MonoBehaviour
             Dy  Dammu    
     */
 
+    private int GetPosWithCommand(string msg,int randomMax)
+    {
+        if (int.TryParse(msg,out int res))
+        {
+            return res;
+        }
+        return Random.Range(1, randomMax);
+    }
+    
     public void DyDanmuCommand(ICommentMessage dm)
     {
         string username = dm.Sender.Nickname;
@@ -1527,9 +1546,20 @@ public class PlaceInstructionManager : MonoBehaviour
             if (GameSettingManager.Instance.Mode == GameMode.Graffiti)
             {
                 int x, y;
-                x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
-                y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
-                if (msg.StartsWith("666"))//画自己头像
+                var advMsg = msg.Split(' ');
+                //x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
+                //y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
+                if (advMsg.Length>=3)
+                {
+                    x = GetPosWithCommand(advMsg[1],PlaceBoardManager.Instance.width - 35);
+                    y = GetPosWithCommand(advMsg[2], PlaceBoardManager.Instance.height - 35);
+                }
+                else
+                {
+                    x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
+                    y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
+                }
+                if (msg.StartsWith("888")) //画自己头像
                 {
                     DefaultRunChatCommand(user, $"/userIcon {x} {y}");
                     return;
@@ -1537,7 +1567,15 @@ public class PlaceInstructionManager : MonoBehaviour
 
                 if (msg.StartsWith("777"))//随便画一幅图片
                 {
-                    DefaultRunChatCommand(user, $"/roll {x} {y} 30 {_str[Random.Range(0, 6)]}");
+                    DefaultRunChatCommand(user, $"/roll {x} {y} 30 {_str[Random.Range(0, _str.Length)]}");
+                    return;
+                }
+                if (msg.StartsWith("666")) // 弹幕点赞！？
+                {
+                    if (PlaceCenter.Instance.users.ContainsKey(username))
+                    {
+                        PlaceCenter.Instance.GainLikePower(user, 10);
+                    }
                     return;
                 }
                 if (msg.StartsWith("hi") || msg.StartsWith("Hi"))//画出嗨
@@ -1553,6 +1591,12 @@ public class PlaceInstructionManager : MonoBehaviour
                 if (msg.StartsWith("ok") || msg.StartsWith("OK"))//画出ok
                 {
                     DefaultRunChatCommand(user, $"/roll {x} {y} 30 ok");
+                    return;
+                }
+
+                if (msg.StartsWith("9") && msg.Length<4)
+                {
+                    DefaultRunChatCommand(user, $"/roll {x} {y} 30 {advMsg[0]}");
                     return;
                 }
             }
@@ -1659,6 +1703,18 @@ public class PlaceInstructionManager : MonoBehaviour
                     DefaultRunChatCommand(user, "/" + msg);
                 }
             }
+
+            if (GameSettingManager.Instance.Mode == GameMode.Competition)
+            {
+                if (msg.StartsWith("666")) // 弹幕点赞！？
+                {
+                    if (PlaceCenter.Instance.users.ContainsKey(username))
+                    {
+                        PlaceCenter.Instance.GainLikePower(user, 10);
+                    }
+                    return;
+                }
+            }
         }
         // List<string> selectList = new List<string>(){
         //     "蓝",
@@ -1674,12 +1730,13 @@ public class PlaceInstructionManager : MonoBehaviour
         {
             string userFace = dm.Sender.AvatarUrl;
             User user = new User(username);
+            user.Id = PlaceCenter.Instance.GenId();
             StartCoroutine(DownloadImage(user, userFace));
             // 加入
             if (msg.StartsWith("/a"))
             {
                 user.Camp = int.Parse(Regex.Match(msg, @"\d+").Value);
-                user.Id = PlaceCenter.Instance.GenId();
+                //user.Id = PlaceCenter.Instance.GenId();
                 DefaultRunChatCommand(user, msg);
             }
             else

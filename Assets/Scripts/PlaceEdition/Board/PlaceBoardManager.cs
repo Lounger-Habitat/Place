@@ -975,7 +975,7 @@ public class PlaceBoardManager : MonoBehaviour
     {
         // 获取tex对userTex的要求
         string format = tex.name;
-        string[] formats = format.Split('-');
+        string[] formats = format.Split('_');
         int centerX = int.Parse(formats[1]);
         int centerY = int.Parse(formats[2]); // base left top ,but need left bottom,so use tex.height - centerY
         centerY = tex.height - centerY; // base left top ,but need left bottom,so use tex.height - centerY

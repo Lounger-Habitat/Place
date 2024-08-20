@@ -1030,8 +1030,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'PUID : XX-20240301-X1106X-6603'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e0962d31f1f084fa3ba7147d76f5b6e8, type: 2}
-  m_sharedMaterial: {fileID: 1653631458307283989, guid: e0962d31f1f084fa3ba7147d76f5b6e8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: eb8bacd46357fb4418b3d529965e7b08, type: 2}
+  m_sharedMaterial: {fileID: 2979193228837331801, guid: eb8bacd46357fb4418b3d529965e7b08, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1916,6 +1916,10 @@ MonoBehaviour:
   loadingTransform: {fileID: 4009500458561458261}
   loadingText: {fileID: 7153930221705389394}
   nextBtnText: {fileID: 3961188326023142453}
+  UniqueID_text1: {fileID: 0}
+  UniqueID_text2: {fileID: 0}
+  team1: {fileID: 0}
+  team2: {fileID: 0}
 --- !u!1 &6793783993293616044
 GameObject:
   m_ObjectHideFlags: 0
