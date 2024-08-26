@@ -68,6 +68,8 @@ public class BeginUI : MonoBehaviour
 
     public TMP_InputField inputField;
 
+    private int playerNumber = 25;
+    
     public void OnNumberInputEnd(string str)
     {
         int number = int.Parse(str);
@@ -75,6 +77,18 @@ public class BeginUI : MonoBehaviour
         inputField.text = number.ToString();
         GameSettingManager.Instance.maxNumber = number; //记录
         PlaceTeamManager.Instance.SetTeamNumber(number);
+    }
+
+    public void OnNumberBtnClick(TMP_Text tmpText)
+    {
+        playerNumber += 25;
+        if (playerNumber>100)
+        {
+            playerNumber = 25;
+        }
+        tmpText.text = playerNumber.ToString();
+        GameSettingManager.Instance.maxNumber = playerNumber; //记录
+        PlaceTeamManager.Instance.SetTeamNumber(playerNumber);
     }
 
     //自动游戏相关

@@ -1346,7 +1346,7 @@ public class PlaceInstructionManager : MonoBehaviour
                 }
                 if (msg.StartsWith("hi") || msg.StartsWith("Hi"))//画出嗨
                 {
-                    DefaultRunChatCommand(user, $"/roll {x} {y} 30 Hi");
+                    DefaultRunChatCommand(user, $"/roll {x} {y} 30 hi");
                     return;
                 }
                 if (msg.StartsWith("心") || msg.StartsWith("heart"))//画出心
@@ -1559,12 +1559,17 @@ public class PlaceInstructionManager : MonoBehaviour
                     x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
                     y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
                 }
-                if (msg.StartsWith("888")) //画自己头像
+                // if (msg.StartsWith("888")) //画自己头像
+                // {
+                //     DefaultRunChatCommand(user, $"/userIcon {x} {y}");
+                //     return;
+                // }
+                if (msg.StartsWith("888")) //由于dy审核限制将头像改为心心
                 {
-                    DefaultRunChatCommand(user, $"/userIcon {x} {y}");
+                    //DefaultRunChatCommand(user, $"/userIcon {x} {y}");
+                    DefaultRunChatCommand(user, $"/roll {x} {y} 30 888");
                     return;
                 }
-
                 if (msg.StartsWith("777"))//随便画一幅图片
                 {
                     DefaultRunChatCommand(user, $"/roll {x} {y} 30 {_str[Random.Range(0, _str.Length)]}");
@@ -1580,7 +1585,7 @@ public class PlaceInstructionManager : MonoBehaviour
                 }
                 if (msg.StartsWith("hi") || msg.StartsWith("Hi"))//画出嗨
                 {
-                    DefaultRunChatCommand(user, $"/roll {x} {y} 30 Hi");
+                    DefaultRunChatCommand(user, $"/roll {x} {y} 30 hi");
                     return;
                 }
                 if (msg.StartsWith("心") || msg.StartsWith("heart"))//画出心

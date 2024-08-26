@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ByteDance.LiveOpenSdk.Push;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -54,22 +55,35 @@ public class AutoPlayerManager : MonoBehaviour
         PlaceInstructionManager.Instance.DefaultRunChatCommand(team1Leader, "/a 1");
         PlaceInstructionManager.Instance.DefaultRunChatCommand(team2Leader, "/a 2");
 
+        string cmd;
+        if (GameSettingManager.Instance.Mode == GameMode.Competition)
+        {
+            cmd = "666";
+        }
+        else
+        {
+            cmd = "777";
+        }
         while (PlaceCenter.Instance.gameRuning) // 无限循环生成指令
         {
             
             if (Random.Range(1, 3) == 1)
             {
                 if (team1Leader.instructionQueue.Count == 0) {
-                    string drawIns = RandomGenDrawIns("team1");
-                    PlaceInstructionManager.Instance.DefaultRunChatCommand(team1Leader, drawIns);
+                    //string drawIns = RandomGenDrawIns("team1");
+                    //PlaceInstructionManager.Instance.DefaultRunChatCommand(team1Leader, drawIns);
+                    ICommentMessage dmDrawIns =TestManager.MakeDyDm(team1Leader.Name,cmd);//随机画图片
+                    PlaceInstructionManager.Instance.DyDanmuCommand(dmDrawIns);
                 }
 
             }
             else
             {
                 if (team2Leader.instructionQueue.Count == 0) {
-                    string drawIns = RandomGenDrawIns("team2");
-                    PlaceInstructionManager.Instance.DefaultRunChatCommand(team2Leader, drawIns);
+                    //string drawIns = RandomGenDrawIns("team2");
+                    //PlaceInstructionManager.Instance.DefaultRunChatCommand(team2Leader, drawIns);
+                    ICommentMessage dmDrawIns =TestManager.MakeDyDm(team2Leader.Name,cmd);//随机画图片
+                    PlaceInstructionManager.Instance.DyDanmuCommand(dmDrawIns);
                 }
 
             }

@@ -187,7 +187,7 @@ public class TestManager : MonoBehaviour
         public string Content { get; set; }
     }
 
-    public ICommentMessage MakeDyDm(string name, string ins)
+    public static ICommentMessage MakeDyDm(string name, string ins)
     {
         DyComMes dm = new DyComMes();
         dm.Sender = new DyUserInfo("0","https://unsplash.com/photos/mou0S7ViElQ/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8M3x8Y2FydG9vbnxlbnwwfHx8fDE3MTg3Nzg5MzZ8MA&force=true&w=640",name);

@@ -584,7 +584,7 @@ public class PlaceCenter : MonoBehaviour
                     if (GameSettingManager.Instance.Mode == GameMode.Graffiti)
                     {
                         u.character.GetComponent<PlacePlayerController>().Invincible(20);
-                        var Iname = iconNames[Random.Range(0, 5)];
+                        var Iname = iconNames[Random.Range(0, 6)];
                         DrawUserIconImage(u, Iname);
                         int max = PlaceBoardManager.Instance.height / 2;
                         normalPower = max * max + 10;
@@ -593,9 +593,9 @@ public class PlaceCenter : MonoBehaviour
                             case "comeOn_150_115_40":
                                 messageType = TipsType.giftImageBaiTuo;
                                 break;
-                            case "guang_608_452_141":
-                                messageType = TipsType.gittImagePanel;
-                                break;
+                            // case "guang_608_452_141":
+                            //     messageType = TipsType.gittImagePanel;
+                            //     break;
                             case "lailou_250_256_76":
                                 messageType = TipsType.giftImageComeOn;
                                 break;
@@ -612,7 +612,7 @@ public class PlaceCenter : MonoBehaviour
                         u.character.GetComponent<PlacePlayerController>().Invincible(300);
                         foreach (var item in u.selfTeam.userList)
                         {
-                            item.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(5);
+                            // item.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(5);
                             item.character.GetComponent<PlacePlayerController>().Invincible(5); //解控，只是解控
                         }
                     }
@@ -683,7 +683,7 @@ public class PlaceCenter : MonoBehaviour
                     if (GameSettingManager.Instance.Mode == GameMode.Graffiti)
                     {
                         u.character.GetComponent<PlacePlayerController>().Invincible(20);
-                        var Iname = iconNames[Random.Range(0, 5)];
+                        var Iname = iconNames[Random.Range(0, 6)];
                         DrawUserIconImage(u, Iname);
                         int max = PlaceBoardManager.Instance.height / 2;
                         normalPower = max * max + 10;
@@ -692,9 +692,9 @@ public class PlaceCenter : MonoBehaviour
                             case "comeOn_150_115_40":
                                 messageType = TipsType.giftImageBaiTuo;
                                 break;
-                            case "guang_608_452_141":
-                                messageType = TipsType.gittImagePanel;
-                                break;
+                            // case "guang_608_452_141":
+                            //     messageType = TipsType.gittImagePanel;
+                            //     break;
                             case "lailou_250_256_76":
                                 messageType = TipsType.giftImageComeOn;
                                 break;
@@ -878,8 +878,10 @@ public class PlaceCenter : MonoBehaviour
     {
         "comeOn_150_115_40",
         "comeOn_150_115_40",
+        "comeOn_150_115_40",
         //"flower",
-        "guang_608_452_141",
+        //"guang_608_452_141",
+        "lailou_250_256_76",
         "lailou_250_256_76",
         "lailou_250_256_76"
     };

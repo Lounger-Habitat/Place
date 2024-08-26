@@ -102,6 +102,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
     // 协程
     IEnumerator UseTeamInk(System.Action callback)
     {
+        int insCounter = 0;
         inEpoch = true;
         int teamInkCount = PlaceCenter.Instance.GetTeamInkCount(pc.user.Camp);
         while (teamInkCount > 0 && pc.user.instructionQueue.Count > 0)
@@ -137,6 +138,13 @@ public class DrawWaitingForInsAndPower : PlaceAction
                 Debug.Log("携带颜料到达最大值");
                 break;
             }
+        
+            insCounter++;
+            if (insCounter >= 100)
+            {
+                insCounter = 0;
+                yield return null;
+            }
         }
         yield return new WaitForSeconds(0.5f);
         Debug.Log("协程结束");
@@ -149,6 +157,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
 
     IEnumerator UseAvailableInk(System.Action callback)
     {
+        int insCounter = 0;
         inEpoch = true;
         int availableInkCount = pc.user.currentCarryingInkCount;
         // 有多少颜料 拿 多少指令，拿到没指令位置
@@ -175,6 +184,13 @@ public class DrawWaitingForInsAndPower : PlaceAction
             pc.insQueue.Enqueue(instruction);
             // 6.增加携带指令数量
             pc.user.currentCarryingInsCount += 1;
+            
+            insCounter++;
+            if (insCounter >= 100)
+            {
+                insCounter = 0;
+                yield return null;
+            }
         }
         yield return new WaitForSeconds(0.2f);
         Debug.Log("协程结束");

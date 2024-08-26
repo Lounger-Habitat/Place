@@ -951,6 +951,13 @@ public class PlaceTeamBoard : MonoBehaviour
         {
             // get and display the decoded texture here:
             dpImage.texture = texture2D;
+        }, (progress) =>
+        {
+            if (Math.Abs(progress - 99.0f) < 1f)
+            {
+                // 等待3秒？
+                Debug.Log($"{progress} wait 3s?");
+            }
         });
     }
 
@@ -1011,8 +1018,9 @@ public class PlaceTeamBoard : MonoBehaviour
     public bool take_random = true;
     public bool take_sequence = false;
     // 竞赛取出像素
-    public void TakeIns(User user)
+    public bool TakeIns(User user)
     {
+        bool isWork = false;
         string drawIns = "";
         int take_count = user.maxCarryingInsCount - user.currentCarryingInsCount;
         for (int i = 0; i < take_count && currentIndex < currentPixels.Length; i++)
@@ -1057,6 +1065,10 @@ public class PlaceTeamBoard : MonoBehaviour
                 drawIns = $"/d {x} {y} {c.r} {c.g} {c.b}";
                 PlaceTeamInstructionManager.Instance.DefaultRunChatCommand(user, drawIns);
             }
+
+            isWork = true;
         }
+
+        return isWork;
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ByteDance.LiveOpenSdk.Push;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -51,9 +52,24 @@ public class AutoCompetitionManager : MonoBehaviour
         yield return new WaitUntil(() => PlaceCenter.Instance.gameRuning == true);
 
         // 生成队伍负责人
+        // ICommentMessage dm =TestManager.MakeDyDm(team1Leader.Name,"/a 1");
+        // PlaceInstructionManager.Instance.DyDanmuCommand(dm);
+        // ICommentMessage dm2 =TestManager.MakeDyDm(team2Leader.Name,"/a 2");
+        // PlaceInstructionManager.Instance.DyDanmuCommand(dm2);
+        
         PlaceInstructionManager.Instance.DefaultRunChatCommand(team1Leader, "/a 1");
         PlaceInstructionManager.Instance.DefaultRunChatCommand(team2Leader, "/a 2");
 
+        string cmd;
+        if (GameSettingManager.Instance.Mode == GameMode.Competition)
+        {
+            cmd = "666";
+        }
+        else
+        {
+            cmd = "777";
+        }
+        
         while (PlaceCenter.Instance.gameRuning) // 无限循环生成指令
         {
             
@@ -62,6 +78,8 @@ public class AutoCompetitionManager : MonoBehaviour
                 if (team1Leader.instructionQueue.Count == 0) {
                     // string drawIns = RandomGenDrawIns("team1");
                     // PlaceInstructionManager.Instance.DefaultRunChatCommand(team1Leader, drawIns);
+                    ICommentMessage dmDrawIns =TestManager.MakeDyDm(team1Leader.Name,cmd);//随机画图片
+                    PlaceInstructionManager.Instance.DyDanmuCommand(dmDrawIns);
                 }
 
             }
@@ -70,6 +88,8 @@ public class AutoCompetitionManager : MonoBehaviour
                 if (team2Leader.instructionQueue.Count == 0) {
                     // string drawIns = RandomGenDrawIns("team2");
                     // PlaceInstructionManager.Instance.DefaultRunChatCommand(team2Leader, drawIns);
+                    ICommentMessage dmDrawIns =TestManager.MakeDyDm(team2Leader.Name,cmd);//随机画图片
+                    PlaceInstructionManager.Instance.DyDanmuCommand(dmDrawIns);
                 }
 
             }

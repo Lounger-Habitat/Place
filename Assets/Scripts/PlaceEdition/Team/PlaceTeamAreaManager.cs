@@ -271,12 +271,16 @@ public class PlaceTeamAreaManager : MonoBehaviour
             if (IsUserInTeam(name)) //  && pc.user.currentCarryingInsCount == 0) // 本队队员进入队伍区域
             {
                 Debug.Log("拿取颜料");
-                placeTeamBoard.TakeIns(pc.user);
+                bool isWork = placeTeamBoard.TakeIns(pc.user);
+                Debug.Log("is Work " + isWork);
+                // if null 
+                // goto emeny area
             }
             // TODO ： 友方队伍
             else // 敌对队员进入队伍区域
             {
                 Debug.Log("敌对队员进入队伍区域");
+                // emeny 进入 ， emeny 加分 ， 第一名 1w ，逐次 递减
             }
         }
     }

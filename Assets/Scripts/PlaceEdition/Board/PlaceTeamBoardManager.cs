@@ -866,6 +866,7 @@ public class PlaceTeamBoardManager : MonoBehaviour
             Debug.Log("Both Save OK!!!!!!!!!!!!");
         }
     }
+    
     private void OnFileSavedBoard1(int id, string path)
     {
         PlaceUIManager.Instance.GetEndUi().OnSaveGifOk();
