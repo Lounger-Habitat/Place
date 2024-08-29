@@ -1,3 +1,5 @@
+using System;
+using BehaviorDesigner.Runtime.Tasks.Unity.SharedVariables;
 using UnityEngine;
 
 public class GameSettingManager : MonoBehaviour
@@ -24,20 +26,22 @@ public class GameSettingManager : MonoBehaviour
     public bool addAutoPlayer = false;
     public int playTime = 15;
     public int maxNumber = 25;
+    public GameDisplayRatio displayRatio = GameDisplayRatio.R9_16;
+    
 
-    private GameMode mode;
+    private GameMode _mode;
     public GameMode Mode
     {
-        get => mode;
+        get => _mode;
         set
         {
             if ((int)value>3)
             {
-                mode = GameMode.Create;
+                _mode = GameMode.Create;
             }
             else
             {
-                mode = value;
+                _mode = value;
             }
         }
     }
@@ -47,6 +51,12 @@ public class GameSettingManager : MonoBehaviour
     {
         Debug.Log(Mode);
     }
+}
+
+public enum GameDisplayRatio
+{
+    R16_9 = 0,
+    R9_16 = 3,
 }
 
 public enum GameMode {

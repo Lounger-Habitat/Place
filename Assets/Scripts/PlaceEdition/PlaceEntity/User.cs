@@ -93,8 +93,8 @@ public class User
         this.selfTeam = null;
         this.lastColor = Color.white;
         this.score = 0;
-        this.maxCarryingInkCount = 10;
-        this.maxCarryingInsCount = 10;
+        this.maxCarryingInkCount = 500;
+        this.maxCarryingInsCount = 500;
         this.userIcon = null;
         this.speed = 2.0f;
         this.currentState = new PlayerState(HighLevelState.Draw, DetailState.DrawMoveToTotem);
@@ -112,9 +112,9 @@ public class User
 
         // 重置玩家状态
         score = 0;
-        maxCarryingInkCount = 10;
-        maxCarryingInsCount = 10;
-        currentCarryingInkCount = 300;
+        maxCarryingInkCount = 500;
+        maxCarryingInsCount = 500;
+        currentCarryingInkCount = 0;
         currentCarryingInsCount = 0;
         speed = 2.0f;
 
@@ -127,8 +127,8 @@ public class User
         // 速度
         this.speed = 2 + (level - 1) * 0.03f;
         // 承载量
-        this.maxCarryingInsCount = (int)(10 + (level - 1) * 20f);
-        this.maxCarryingInkCount = (int)(10 + (level - 1) * 20f);
+        this.maxCarryingInsCount = (int)(500 + (level - 1) * 20f);
+        this.maxCarryingInkCount = (int)(500 + (level - 1) * 20f);
 
         // 体现角色能力
         if (nameTag != null && character != null)

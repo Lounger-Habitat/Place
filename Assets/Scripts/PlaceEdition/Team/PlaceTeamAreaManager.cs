@@ -17,10 +17,11 @@ public class PlaceTeamAreaManager : MonoBehaviour
 
     public Transform totem;
     public Transform door;
+    public Transform enemyDoor;
     GameObject ps;
 
     public PlaceTeamBoard placeTeamBoard;
-
+    
     void Start()
     {
         // 如果totem 和 door 为空，获取本对象层级下的子物体
@@ -145,6 +146,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
             {
                 // PlayerControllerScript.selfTotem = totem;
                 // PlayerControllerScript.selfDoor = door;
+                PlayerControllerScript.enemyDoor =this.enemyDoor;
                 PlayerControllerScript.user = user;
                 PlayerControllerScript.teamBoard = placeTeamBoard;
             }
@@ -275,12 +277,23 @@ public class PlaceTeamAreaManager : MonoBehaviour
                 Debug.Log("is Work " + isWork);
                 // if null 
                 // goto emeny area
+                if (!isWork)
+                {
+                    if (pc.user.currentState.detailState == DetailState.DrawWaitingForInsAndPower || pc.user.currentState.detailState == DetailState.DrawMoveToTotem)
+                    {
+                        // goto emeny area
+                        Debug.Log($"{name} go enemy area");
+                        pc.GoEnemyArea();
+                    }
+                    
+                }
             }
             // TODO ： 友方队伍
             else // 敌对队员进入队伍区域
             {
                 Debug.Log("敌对队员进入队伍区域");
                 // emeny 进入 ， emeny 加分 ， 第一名 1w ，逐次 递减
+                pc.user.score += 10000;
             }
         }
     }

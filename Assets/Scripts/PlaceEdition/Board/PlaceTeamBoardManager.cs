@@ -57,6 +57,8 @@ public class PlaceTeamBoardManager : MonoBehaviour
 
         team1Board.SetWidthAndHeight(width, height);
         team2Board.SetWidthAndHeight(width, height);
+        team1Board.InitPlaceTeamBord();
+        team2Board.InitPlaceTeamBord();
     }
     private string GenerateUniqueTime()
     {

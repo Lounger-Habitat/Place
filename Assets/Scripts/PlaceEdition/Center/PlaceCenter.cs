@@ -584,10 +584,18 @@ public class PlaceCenter : MonoBehaviour
                     if (GameSettingManager.Instance.Mode == GameMode.Graffiti)
                     {
                         u.character.GetComponent<PlacePlayerController>().Invincible(20);
+                        u.character.GetComponent<PlacePlayerController>().Blessing(180);
                         var Iname = iconNames[Random.Range(0, 6)];
                         DrawUserIconImage(u, Iname);
-                        int max = PlaceBoardManager.Instance.height / 2;
-                        normalPower = max * max + 10;
+                        int max = 0;
+                        if (GameSettingManager.Instance.displayRatio == GameDisplayRatio.R9_16)
+                        {
+                            max = PlaceBoardManager.Instance.width / 2;
+                        }else
+                        {
+                            max = PlaceBoardManager.Instance.height / 2;
+                        }
+                        normalPower = max * max + 10; // ????
                         switch (Iname)
                         {
                             case "comeOn_150_115_40":
@@ -683,9 +691,18 @@ public class PlaceCenter : MonoBehaviour
                     if (GameSettingManager.Instance.Mode == GameMode.Graffiti)
                     {
                         u.character.GetComponent<PlacePlayerController>().Invincible(20);
+                        u.character.GetComponent<PlacePlayerController>().Blessing(180);
+
                         var Iname = iconNames[Random.Range(0, 6)];
                         DrawUserIconImage(u, Iname);
-                        int max = PlaceBoardManager.Instance.height / 2;
+                        int max = 0;
+                        if (GameSettingManager.Instance.displayRatio == GameDisplayRatio.R9_16)
+                        {
+                            max = PlaceBoardManager.Instance.width / 2;
+                        }else
+                        {
+                            max = PlaceBoardManager.Instance.height / 2;
+                        }
                         normalPower = max * max + 10;
                         switch (Iname)
                         {
@@ -790,11 +807,11 @@ public class PlaceCenter : MonoBehaviour
 
         u.character.GetComponent<PlacePlayerController>().InkUp(normalPower);
         u.score += normalPower;
-        u.genInkCount += normalPower;
-        u.usePowerCount += power * 10;
+        u.genInkCount += normalPower;  // 颜料 充给 自己
+        u.usePowerCount += power * 10; // 以分为单位
         u.Update();
         u.currentCarryingInkCount += normalPower;
-        PlaceTeamManager.Instance.teamAreas[u.Camp - 1].teaminfo.ink += (int)(0.1 * normalPower);
+        PlaceTeamManager.Instance.teamAreas[u.Camp - 1].teaminfo.ink += (int)(0.1 * normalPower); // 10% 返利给 队伍
         PlaceTeamManager.Instance.teamAreas[u.Camp - 1].teaminfo.hisInk += (int)(0.1 * normalPower);
         PlaceTeamManager.Instance.teamAreas[u.Camp - 1].teaminfo.hisExInk += (int)(0.1 * normalPower);
         //在这通知UI？还得要状态切换啊，先检查状态再通知
@@ -892,7 +909,14 @@ public class PlaceCenter : MonoBehaviour
     private void DrawUserIconImage(User user, string IName)
     {
         int x, y, max;
-        max = PlaceBoardManager.Instance.height / 2;
+        if (GameSettingManager.Instance.displayRatio == GameDisplayRatio.R9_16)
+        {
+            max = PlaceBoardManager.Instance.width / 2;
+        }else
+        {
+            max = PlaceBoardManager.Instance.height / 2;
+        }
+        
         x = Random.Range(1, PlaceBoardManager.Instance.width - max);
         y = Random.Range(1, PlaceBoardManager.Instance.height - max);
         Texture2D userTex;

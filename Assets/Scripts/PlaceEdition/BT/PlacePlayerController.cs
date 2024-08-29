@@ -18,6 +18,7 @@ public class PlacePlayerController : MonoBehaviour
     public Transform selfTotem;
 
     public Transform selfDoor;
+    public Transform enemyArea;
 
     public Transform enemyTotem;
 
@@ -117,16 +118,17 @@ public class PlacePlayerController : MonoBehaviour
         {
             selfDoor = GameObject.Find($"TeamArea{user.Camp}Door").transform;
         }
-        // if (enemyTotem == null)
+        // if (enemyArea == null)
         // {
-        //     enemyTotem = GameObject.Find("TeamArea2").transform;
+        //    int enemy_camp = (user.Camp + 1) % 2;
+        //    enemyArea = GameObject.Find($"TeamArea{user.Camp}").transform;
         // }
         // if (enemyDoor == null)
         // {
         //     enemyDoor = GameObject.Find("TeamArea2Door").transform;
         // }
-        totemPath = GenerateCirclePath(selfTotem.position, 3, 100);
-        consolePath = GenerateCirclePath(altar.position, 3, 100);
+        // totemPath = GenerateCirclePath(selfTotem.position, 3, 100);
+        // consolePath = GenerateCirclePath(altar.position, 3, 100);
         navMeshAgent = GetComponent<NavMeshAgent>();
         lastLevel = user.Level;
         StartLevelUp();
@@ -656,6 +658,11 @@ public class PlacePlayerController : MonoBehaviour
         rg.isKinematic = true;
     }
 
+    public void DelayRecoverKinematic()
+    {
+        Invoke("RecoverKinematic", 1.5f);
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Tornado")
@@ -857,12 +864,18 @@ public class PlacePlayerController : MonoBehaviour
         blessing = true; // 特效 
         PlayBlessingEffect();
 
-        Collider[] cs = Physics.OverlapSphere(transform.position, 20f * 1).ToList().Where(c => c.CompareTag("Player") && c.gameObject.GetComponent<PlacePlayerController>().user.Camp != user.Camp).ToArray();
+        Collider[] cs = Physics.OverlapSphere(transform.position, 200f * 1).ToList().Where(c => c.CompareTag("Player") && c.gameObject.GetComponent<PlacePlayerController>().user.Camp != user.Camp).ToArray();
 
         foreach (var c in cs)
         {
             Debug.Log(c.name + "被击退");
-            c.GetComponent<Rigidbody>().AddExplosionForce(1000, transform.position, 20f);
+            Rigidbody rg = c.GetComponent<Rigidbody>();
+            rg.isKinematic = false;
+            Vector3 dir = (transform.position - c.transform.position).normalized;
+            dir.y = 0;
+            // 施加力
+            rg.AddForce(-dir * 100000);
+            c.GetComponent<PlacePlayerController>().DelayRecoverKinematic();
         }
 
         while (blessingTime > 1)
@@ -980,5 +993,13 @@ public class PlacePlayerController : MonoBehaviour
         btDrawFinish.Value = true;
         btDrawing.Value = false;
         Debug.Log($"[PC] : btDrawFinish: {btDrawFinish.Value} btDrawing: {btDrawing.Value}");
+    }
+
+    public void GoEnemyArea()
+    {
+        Vector2 nosie = new Vector2(UnityEngine.Random.Range(-3f, 3f), UnityEngine.Random.Range(-3f, 3f));
+        Vector3 aimPoint = new Vector3(enemyDoor.position.x + nosie.x, enemyDoor.position.y, enemyDoor.position.z + nosie.y);
+        MoveToTarget(aimPoint);
+        Debug.Log("go ed enemmy");
     }
 }

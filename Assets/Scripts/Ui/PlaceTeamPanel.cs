@@ -14,7 +14,9 @@ public class PlaceTeamPanel : MonoBehaviour
     public PlaceTeamSlider leftTeamScore, rightTeamScore;
     public void Init()
     {
-        numMax = 5;
+        teamItem = transform.GetChild(0);
+        numMax = GameSettingManager.Instance.Mode == GameMode.Competition ? 3 : 5;
+        numMax = teamItem.Find("RankList").Find("RankContent").childCount;
         UIEvent.OnTeamUpdateEvent += UpdateTeamUI;//
     }
 

@@ -14,7 +14,7 @@ public class PlaceDyNetManager : MonoBehaviour
     public Text LogText;
 
     private readonly LogConsole _logConsole = new LogConsole();
-    private LogWriter Log { get; } = new LogWriter(SdkUnityLogger.LogSink, "SampleGameStartup");
+    public LogWriter Log { get; } = new LogWriter(SdkUnityLogger.LogSink, "SampleGameStartup");
     public static PlaceDyNetManager Instance { get; private set; }
     
     void Awake()

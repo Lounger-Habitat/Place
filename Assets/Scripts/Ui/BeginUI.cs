@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class BeginUI : MonoBehaviour
 {
@@ -11,6 +12,26 @@ public class BeginUI : MonoBehaviour
 
     //开始时调用，先把整个UI移到屏幕中间
     public GameObject placeSettingUI;
+
+    public Toggle shuToggle;
+    public Toggle hengToggle;
+    void Start()
+    {
+        if (shuToggle == null)return;
+        if (GameSettingManager.Instance.displayRatio == GameDisplayRatio.R9_16)
+        {
+            //SetShu();
+            shuToggle.isOn = true;
+            hengToggle.isOn = false;
+        }
+
+        if (GameSettingManager.Instance.displayRatio == GameDisplayRatio.R16_9)
+        {
+            //SetHeng();
+            hengToggle.isOn = true;
+            shuToggle.isOn = false;
+        }
+    }
 
     public void Init()
     {
@@ -166,15 +187,97 @@ public class BeginUI : MonoBehaviour
                 break;
         }
     }
-
+    
     public void SelectGameModel(int gameMode)
     {   //选择后直接进入对应游戏模式场景
         GameSettingManager.Instance.Mode =(GameMode)gameMode;
+        if (GameSettingManager.Instance.displayRatio == GameDisplayRatio.R9_16)
+        {
+            gameMode += 3;
+        }
         SceneManager.LoadSceneAsync(gameMode);
     }
 
     public void GoToFirstScene()
     {
         SceneManager.LoadSceneAsync(0);
+    }
+    //分辨率下拉框
+    public void OnShuToggleValueChange(bool isOn)
+    {
+        if (isOn && GameSettingManager.Instance.displayRatio != GameDisplayRatio.R9_16)
+        {
+            SetShu();
+        }
+    }
+
+    public void SetShu()
+    {
+        int aim_height = 1920;
+        int aim_width = 1080;
+
+        int bestMatchIndex = 0;
+        int smallestDifference = int.MaxValue;
+        Resolution[] res = Screen.resolutions;
+        for (int i = 0; i < res.Length; i++)
+        {
+            Resolution resolution = res[i];
+            int currentDifference = Math.Abs(resolution.height - aim_height);
+            // 找到更接近目标分辨率的分辨率
+            if (currentDifference < smallestDifference)
+            {
+                smallestDifference = currentDifference;
+                bestMatchIndex = i;
+            }
+        }
+        int height = res[bestMatchIndex].height;
+        if (height < aim_height)
+        {
+            aim_height = height;
+            aim_width = height / 16 * 9; 
+        }
+
+            
+        Screen.SetResolution(aim_width,aim_height,false);
+        GameSettingManager.Instance.displayRatio = GameDisplayRatio.R9_16;
+
+    }
+
+    public void OnHengToggleValueChange(bool isOn)
+    {
+        if (isOn && GameSettingManager.Instance.displayRatio == GameDisplayRatio.R9_16)
+        {
+            SetHeng();
+        }
+    }
+
+    public void SetHeng()
+    {
+        int aim_height = 1080;
+        int aim_width = 1920;
+        
+        int bestMatchIndex = 0;
+        int smallestDifference = int.MaxValue;
+        Resolution[] res = Screen.resolutions;
+        for (int i = 0; i < res.Length; i++)
+        {
+            Resolution resolution = res[i];
+            int currentDifference = Math.Abs(resolution.width - aim_width);
+            // 找到更接近目标分辨率的分辨率
+            if (currentDifference < smallestDifference)
+            {
+                smallestDifference = currentDifference;
+                bestMatchIndex = i;
+            }
+        }
+        int width = res[bestMatchIndex].width;
+        if (width < aim_width)
+        { 
+            aim_width = width;
+            aim_height = width / 16 * 9;
+        }
+        Screen.SetResolution(aim_width,aim_height,false);
+        GameSettingManager.Instance.displayRatio = GameDisplayRatio.R16_9;
+        
     }
 }

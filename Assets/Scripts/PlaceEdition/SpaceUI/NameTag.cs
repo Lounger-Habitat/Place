@@ -56,6 +56,7 @@ public class NameTag : MonoBehaviour
             return;
         }
         LackIcon.DOKill();//关闭所有变化
+        LackIcon.transform.localScale = Vector3.one;
         LackIcon.gameObject.SetActive(false);
     }
 }

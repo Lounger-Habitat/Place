@@ -12,6 +12,8 @@ using Assets.GifAssets.PowerGif;
 
 public class PlaceTeamBoard : MonoBehaviour
 {
+
+    public Texture2D defTexture2D;
     public bool darkMode = false;
 
     // for 2d canvas use ， 
@@ -22,7 +24,7 @@ public class PlaceTeamBoard : MonoBehaviour
     // 实际图片
     public RawImage realImage;
 
-    private Texture2D texture;
+    private Texture2D _texture;
     private Color drawColor = Color.white; // 可以改为您想要的颜色
 
     public int height = 800;
@@ -32,9 +34,11 @@ public class PlaceTeamBoard : MonoBehaviour
     // 像素信息 ， 0 为未涂色，>0 为涂色, 数字代表队伍
     // public int[] pixelsInfos;
     // 像素用户信息， 0 为未涂色，>0 为涂色, 数字代表用户
-    public int[] pixelsUserInfos;
-    public int[] randomIndexs;
+    int[] pixelsUserInfos;
+    private List<int[]> multiStageRandomIndexs = new List<int[]>();
+    int [] randomIndexs;
     Color[] currentPixels;
+    private List<Color[]> multiStagePixels = new List<Color[]>();
     int currentIndex = 0;
 
     public string gifPath = "";
@@ -51,14 +55,31 @@ public class PlaceTeamBoard : MonoBehaviour
 #else
     string competitionsDir = Application.streamingAssetsPath + "/Competitions/";
 #endif
+
     void Start()
+    {
+        /*
+        bool dxt1 = SystemInfo.SupportsTextureFormat(TextureFormat.DXT1);
+        bool dxt5 = SystemInfo.SupportsTextureFormat(TextureFormat.DXT5);
+        Debug.Log($"dxt1 : {dxt1} ,  dxt5 : {dxt5}");
+        string dir = competitionsDir + "default";
+        // 加载当前目录中加载所有图片路径,并打乱顺序
+        string[] files = Directory.GetFiles(dir);
+        foreach (var f in files.Where(name => IsImageFile(name)).ToArray())
+        {
+            LoadTexture(f);
+        }
+        */
+    }
+
+    public void InitPlaceTeamBord()
     {
         // 初始化画布 背景颜色，默认白色
         Color bgColor = darkMode ? new Color(64 / 255f, 64 / 255f, 64 / 255f) : Color.white;
 
         // 生成一张贴图
         Texture2D bgTexture = GenerateTexture(width, height, bgColor); // 可以根据需要调整尺寸和颜色
-        texture = GenerateTexture(width, height, Color.clear);
+        _texture = GenerateTexture(width, height, Color.clear);
 
 
         if (bgImage == null)
@@ -67,15 +88,20 @@ public class PlaceTeamBoard : MonoBehaviour
         }
 
         bgImage.texture = bgTexture;
-        realImage.texture = texture;
+        realImage.texture = _texture;
 
         // 随机选取一张贴图
         string imagePath = LoadRandomImage();
-        // ImageProcessor processor = new ImageProcessor();
+        
         templateTexture = LoadTexture(imagePath);
-        templateTexture = ScaleTextureFixed(templateTexture, width, height);
-        currentPixels = templateTexture.GetPixels();
-        SetRandomIndex(currentPixels.Length);
+        if (templateTexture == null)
+        {
+            templateTexture = defTexture2D;
+        }
+        
+        
+        MakeMultiStagePixels();
+
         Debug.Log("currentPixels.Length : " + currentPixels.Length);
         Texture2D contex = MakeContours(imagePath);
         contex = ScaleTextureFixed(contex, width, height);
@@ -83,25 +109,50 @@ public class PlaceTeamBoard : MonoBehaviour
         //UniqueTime =string.IsNullOrEmpty(UniqueTime)? GenerateUniqueTime():UniqueTime;
     }
 
-    public void SetRandomIndex(int len)
+    private void MakeMultiStagePixels()
+    {
+        // Stage 1
+        Texture2D templateTexture_d10 = ScaleTextureFixed(templateTexture, width/10, height/10);
+        Color[] currentPixels_d10 = templateTexture_d10.GetPixels();
+        multiStageRandomIndexs.Add(SetRandomIndex(currentPixels_d10.Length));
+        multiStagePixels.Add(currentPixels_d10);
+        
+        // Stage 2
+        Texture2D templateTexture_d5 = ScaleTextureFixed(templateTexture, width/5, height/5);
+        Color[] currentPixels_d5 = templateTexture_d5.GetPixels();
+        multiStageRandomIndexs.Add(SetRandomIndex(currentPixels_d5.Length));
+        multiStagePixels.Add(currentPixels_d5);
+        
+        
+        // Stage 3 Full
+        templateTexture = ScaleTextureFixed(templateTexture, width, height);
+        currentPixels = templateTexture.GetPixels();
+        randomIndexs = SetRandomIndex(currentPixels.Length);
+        multiStageRandomIndexs.Add(randomIndexs);
+        multiStagePixels.Add(currentPixels);
+    }
+
+    public int[] SetRandomIndex(int len)
     {
         // 初始化1到100的数组
-        randomIndexs = new int[len];
-        for (int i = 0; i < randomIndexs.Length; i++)
+        int[] randomIdx = new int[len];
+        for (int i = 0; i < randomIdx.Length; i++)
         {
-            randomIndexs[i] = i + 1;
+            randomIdx[i] = i + 1;
         }
 
         // 使用Random的静态方法生成随机数
         System.Random random = new System.Random();
-        for (int i = randomIndexs.Length - 1; i > 0; i--)
+        for (int i = randomIdx.Length - 1; i > 0; i--)
         {
             int j = random.Next(i + 1); // 随机选择一个索引
             // 交换i和j位置的元素
-            var temp = randomIndexs[i];
-            randomIndexs[i] = randomIndexs[j];
-            randomIndexs[j] = temp;
+            var temp = randomIdx[i];
+            randomIdx[i] = randomIdx[j];
+            randomIdx[j] = temp;
         }
+
+        return randomIdx;
     }
 
 
@@ -184,10 +235,10 @@ public class PlaceTeamBoard : MonoBehaviour
                 if (IsImageFile(filePath))
                 {
                     // 加载图片资源并添加到List
-                    Texture2D texture = LoadTexture(filePath);
-                    if (texture != null)
+                    Texture2D res_texture = LoadTexture(filePath);
+                    if (res_texture != null)
                     {
-                        loadedTextures.Add(texture);
+                        loadedTextures.Add(res_texture);
                     }
                 }
             }
@@ -208,10 +259,10 @@ public class PlaceTeamBoard : MonoBehaviour
     Texture2D LoadTexture(string filePath)
     {
         byte[] fileData = File.ReadAllBytes(filePath);
-        Texture2D texture = new Texture2D(2, 2); // 创建一个临时Texture2D，稍后会被替换为实际的图像数据
-        if (texture.LoadImage(fileData)) // 加载图像数据
+        Texture2D tempTexture = new Texture2D(width, height); // 创建一个临时Texture2D，稍后会被替换为实际的图像数据
+        if (tempTexture.LoadImage(fileData)) // 加载图像数据
         {
-            return texture;
+            return tempTexture;
         }
         else
         {
@@ -248,11 +299,11 @@ public class PlaceTeamBoard : MonoBehaviour
         // 新Texture2D
         Texture2D scaleTexture;
 
-        if (source.width > texture.width / limit || source.height > texture.height / limit)
+        if (source.width > _texture.width / limit || source.height > _texture.height / limit)
         {
             // 等比例缩放源贴图到目标贴图的1/10大小
-            int maxWidth = texture.width / limit;
-            int maxHeight = texture.height / limit;
+            int maxWidth = _texture.width / limit;
+            int maxHeight = _texture.height / limit;
             scaleTexture = ScaleTextureProportionally(source, maxWidth, maxHeight);
             Debug.Log(scaleTexture);
         }
@@ -261,13 +312,13 @@ public class PlaceTeamBoard : MonoBehaviour
             scaleTexture = source;
         }
         // 检查贴图是否超出画布范围
-        if (posX + scaleTexture.width > texture.width || posY + scaleTexture.height > texture.height)
+        if (posX + scaleTexture.width > _texture.width || posY + scaleTexture.height > _texture.height)
         {
             Debug.Log("The source texture is too large");
         }
 
         Color[] sourcePixels = scaleTexture.GetPixels();
-        Color[] targetPixels = texture.GetPixels(posX, posY, scaleTexture.width, scaleTexture.height);
+        Color[] targetPixels = _texture.GetPixels(posX, posY, scaleTexture.width, scaleTexture.height);
 
         for (int y = 0; y < scaleTexture.height; y++)
         {
@@ -283,8 +334,8 @@ public class PlaceTeamBoard : MonoBehaviour
             }
         }
 
-        texture.SetPixels(posX, posY, scaleTexture.width, scaleTexture.height, targetPixels);
-        texture.Apply(); // 应用更改到目标贴图
+        _texture.SetPixels(posX, posY, scaleTexture.width, scaleTexture.height, targetPixels);
+        _texture.Apply(); // 应用更改到目标贴图
     }
 
     public Texture2D ScaleTextureFixed(Texture2D source, int maxWidth, int maxHeight)
@@ -357,7 +408,7 @@ public class PlaceTeamBoard : MonoBehaviour
 
         for (int y = 0; y < newHeight; y++)
         {
-            for (int x = 0; x < newWidth; x++)
+            for (int x = 0; x < newWidth; x++)  
             {
                 float xFrac = x / (float)newWidth;
                 float yFrac = y / (float)newHeight;
@@ -480,10 +531,10 @@ public class PlaceTeamBoard : MonoBehaviour
     public void DrawPixels(int x, int y, int r, int g, int b, int a = 255)
     {
         Color32 aimColor = new Color32((byte)r, (byte)g, (byte)b, (byte)a);
-        if (texture != null && x >= 0 && x < texture.width && y >= 0 && y < texture.height)
+        if (_texture != null && x >= 0 && x < _texture.width && y >= 0 && y < _texture.height)
         {
-            texture.SetPixel(x, y, aimColor);
-            texture.Apply(); // 应用更改到贴图
+            _texture.SetPixel(x, y, aimColor);
+            _texture.Apply(); // 应用更改到贴图
         }
     }
 
@@ -715,7 +766,7 @@ public class PlaceTeamBoard : MonoBehaviour
 
     void DrawPaint(string command = "/p", int x = 0, int y = 0, int dx = 0, int dy = 0, int r = 0, int g = 0, int b = 0, int camp = 0)
     {
-        Color[] colors = texture.GetPixels(x, y, dx, dy);
+        Color[] colors = _texture.GetPixels(x, y, dx, dy);
         for (int i = x; i < x + dx; i++)
         {
             for (int j = y; j < y + dy; j++)
@@ -725,8 +776,8 @@ public class PlaceTeamBoard : MonoBehaviour
                 MarkPixels(i, j, camp);
             }
         }
-        texture.SetPixels(x, y, dx, dy, colors);
-        texture.Apply(); // 应用更改到目标贴图
+        _texture.SetPixels(x, y, dx, dy, colors);
+        _texture.Apply(); // 应用更改到目标贴图
     }
 
 
@@ -1030,8 +1081,11 @@ public class PlaceTeamBoard : MonoBehaviour
             // 顺序取
             if (take_sequence)
             {
+                // 取颜色
                 c = currentPixels[currentIndex];
+                // 当前 点位置
                 tempIndex = currentIndex;
+                // 自增到下一个点
                 currentIndex++;
             }
             // 随机取

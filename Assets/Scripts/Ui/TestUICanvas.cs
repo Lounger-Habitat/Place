@@ -42,7 +42,7 @@ public class TestUICanvas : MonoBehaviour
 
     public void DefIns(string cmd)
     {
-        if (cmd.Contains("a"))
+        if (cmd.Contains("/a"))
         {
             tipsText.gameObject.SetActive(false);
             playerName = GenRandomName();

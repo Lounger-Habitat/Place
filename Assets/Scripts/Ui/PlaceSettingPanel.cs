@@ -27,7 +27,7 @@ public class PlaceSettingPanel : MonoBehaviour
 
     public void OnClickExitBtn()
     {
-        if (PlaceCenter.Instance.gameRuning)
+        if (PlaceCenter.Instance||PlaceCenter.Instance.gameRuning)
         {
             //游戏时 无法退出
             return;

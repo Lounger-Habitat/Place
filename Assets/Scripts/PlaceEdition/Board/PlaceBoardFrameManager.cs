@@ -11,7 +11,12 @@ public class PlaceBoardFrameManager : MonoBehaviour
     // Start is called before the first frame update
     int width;
     int height;
-    void Start()
+    void Start()//这边start得时候 那边还没改完宽高
+    {
+        Invoke("Init",2f);
+    }
+
+    private void Init()
     {
         if (board != null)
         {

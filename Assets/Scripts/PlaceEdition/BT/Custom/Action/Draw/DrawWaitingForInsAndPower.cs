@@ -140,7 +140,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
             }
         
             insCounter++;
-            if (insCounter >= 100)
+            if (insCounter >= 1000)
             {
                 insCounter = 0;
                 yield return null;
@@ -186,13 +186,13 @@ public class DrawWaitingForInsAndPower : PlaceAction
             pc.user.currentCarryingInsCount += 1;
             
             insCounter++;
-            if (insCounter >= 100)
+            if (insCounter >= 1000)
             {
                 insCounter = 0;
                 yield return null;
             }
         }
-        yield return new WaitForSeconds(0.2f);
+        // yield return new WaitForSeconds(0.1f);
         Debug.Log("协程结束");
         if (callback != null)
         {

@@ -49,16 +49,21 @@ public class EndUI : MonoBehaviour
     public void OnClickNextBtn()
     {
         StopAllCoroutines();
+        string scene = "";
+        if (GameSettingManager.Instance.displayRatio == GameDisplayRatio.R9_16)
+        {
+            scene = " 9-16";
+        }
         switch (GameSettingManager.Instance.Mode)
         {
             case GameMode.Create:
-                SceneManager.LoadScene("1920-1080Scene");
+                SceneManager.LoadScene($"1920-1080Scene{scene}");
                 break;
             case GameMode.Graffiti:
-                SceneManager.LoadScene("1920-1080Scene Mode2");
+                SceneManager.LoadScene($"1920-1080Scene Mode2{scene}");
                 break;
             case GameMode.Competition:
-                SceneManager.LoadScene("1920-1080Scene Mode3");
+                SceneManager.LoadScene($"1920-1080Scene Mode3{scene}");
                 break;
         }
     }
@@ -104,16 +109,21 @@ public class EndUI : MonoBehaviour
             secends--;
         }
         nextBtnText.text = $"开始下一局";
+        string scene = "";
+        if (GameSettingManager.Instance.displayRatio == GameDisplayRatio.R9_16)
+        {
+            scene = " 9-16";
+        }
         switch (GameSettingManager.Instance.Mode)
         {
             case GameMode.Create:
-                SceneManager.LoadScene("1920-1080Scene");
+                SceneManager.LoadScene($"1920-1080Scene{scene}");
                 break;
             case GameMode.Graffiti:
-                SceneManager.LoadScene("1920-1080Scene Mode2");
+                SceneManager.LoadScene($"1920-1080Scene Mode2{scene}");
                 break;
             case GameMode.Competition:
-                SceneManager.LoadScene("1920-1080Scene Mode3");
+                SceneManager.LoadScene($"1920-1080Scene Mode3{scene}");
                 break;
         }
     }
