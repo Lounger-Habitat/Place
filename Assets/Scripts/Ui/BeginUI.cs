@@ -213,8 +213,8 @@ public class BeginUI : MonoBehaviour
 
     public void SetShu()
     {
-        int aim_height = 1920;
-        int aim_width = 1080;
+        int aim_height = 2560;
+        int aim_width = 1440;
 
         int bestMatchIndex = 0;
         int smallestDifference = int.MaxValue;
@@ -253,8 +253,8 @@ public class BeginUI : MonoBehaviour
 
     public void SetHeng()
     {
-        int aim_height = 1080;
-        int aim_width = 1920;
+        int aim_height = 1440;
+        int aim_width = 2560;
         
         int bestMatchIndex = 0;
         int smallestDifference = int.MaxValue;

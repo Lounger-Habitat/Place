@@ -45,6 +45,8 @@ public class NameTag : MonoBehaviour
             return;
         }
         LackIcon.gameObject.SetActive(true);
+        LackIcon.transform.localScale = Vector3.one;
+        LackIcon.color = new Color(1, 0.2f, 0.2f, 0);
         LackIcon.DOFade(1f, 1f).SetLoops(-1, LoopType.Restart);
         LackIcon.transform.DOScale(Vector3.one * 1.2f, 1f).SetLoops(-1, LoopType.Restart);
     }
@@ -56,7 +58,8 @@ public class NameTag : MonoBehaviour
             return;
         }
         LackIcon.DOKill();//关闭所有变化
-        LackIcon.transform.localScale = Vector3.one;
+        LackIcon.transform.DOKill();
+        //LackIcon.transform.localScale = Vector3.one;
         LackIcon.gameObject.SetActive(false);
     }
 }

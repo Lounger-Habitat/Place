@@ -542,29 +542,74 @@ public class PlaceCenter : MonoBehaviour
             switch (power)
             {
                 case 10f: //这是礼物的人民币价值，那应该在这个里边通知,抖音单位是分
-                    normalPower = 300; // 颜料数（一毛相当于优惠）
-                    message = "急速神行";
-                    skill = SkillIcon.Speed;
-                    u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
+                    if (GameSettingManager.Instance.Mode == GameMode.Competition) //会将所有技能释放一边
+                    {
+                        normalPower = 100; // 颜料数（一毛相当于优惠）
+                        message = "急速神行";
+                        skill = SkillIcon.Speed;
+                        u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
+                    }
+                    else
+                    {
+                        
+                        normalPower = 300; // 颜料数（一毛相当于优惠）
+                        message = "急速神行";
+                        skill = SkillIcon.Speed;
+                        u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
+                    }
+
                     break;
                 case 100f:
-                    normalPower = 900; //固定是加颜料
-                    message = "风之束缚";
-                    skill = SkillIcon.Tornado;
-                    u.character.GetComponent<PlacePlayerController>().Tornado((int)(power/10));
+                    if (GameSettingManager.Instance.Mode == GameMode.Competition) //会将所有技能释放一边
+                    {
+                        normalPower = 200; //固定是加颜料
+                        message = "风之束缚";
+                        skill = SkillIcon.Tornado;
+                        u.character.GetComponent<PlacePlayerController>().Tornado((int)(power / 10));
+                    }
+                    else
+                    {
+                        normalPower = 900; //固定是加颜料
+                        message = "风之束缚";
+                        skill = SkillIcon.Tornado;
+                        u.character.GetComponent<PlacePlayerController>().Tornado((int)(power / 10));
+                    }
+
                     break;
                 case 190f:
                 case 200f:
-                    normalPower = 1800; //固定是攻击
-                    u.character.GetComponent<PlacePlayerController>().Thunder();
-                    skill = SkillIcon.Thunder;
-                    message = "雷霆万钧";
+                    if (GameSettingManager.Instance.Mode == GameMode.Competition) //会将所有技能释放一边
+                    {
+                        normalPower = 500; //固定是攻击
+                        u.character.GetComponent<PlacePlayerController>().Thunder();
+                        skill = SkillIcon.Thunder;
+                        message = "雷霆万钧";
+                    }
+                    else
+                    {
+                        normalPower = 1800; //固定是攻击
+                        u.character.GetComponent<PlacePlayerController>().Thunder();
+                        skill = SkillIcon.Thunder;
+                        message = "雷霆万钧";
+                    }
                     break;
                 case 520f:
-                    normalPower = 4800; //固定是防御
-                    u.character.GetComponent<PlacePlayerController>().Invincible(180);
-                    message = "绝对防御";
-                    skill = SkillIcon.Defense;
+                    if (GameSettingManager.Instance.Mode == GameMode.Competition) //会将所有技能释放一边
+                    {
+                        normalPower = 1000; //固定是防御
+                        u.character.GetComponent<PlacePlayerController>().Invincible(180);
+                        message = "绝对防御";
+                        skill = SkillIcon.Defense;
+                    }
+                    else
+                    {
+                        normalPower = 4800; //固定是防御
+                        u.character.GetComponent<PlacePlayerController>().Invincible(180);
+                        message = "绝对防御";
+                        skill = SkillIcon.Defense;
+                    }
+
+
                     break;
                 case 99f:
                     // normalPower = 3600;
@@ -611,7 +656,7 @@ public class PlaceCenter : MonoBehaviour
                     }
                     else if (GameSettingManager.Instance.Mode == GameMode.Competition) //会将所有技能释放一边
                     {
-                        normalPower = 20000;
+                        normalPower = 5000; // 20000 -> 5000 
                         message = "天官赐福";
                         skill = SkillIcon.Pencil;
                         u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(30);

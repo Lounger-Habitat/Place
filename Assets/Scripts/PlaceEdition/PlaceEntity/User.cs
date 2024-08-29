@@ -133,9 +133,9 @@ public class User
         // 体现角色能力
         if (nameTag != null && character != null)
         {
-            float delta = level * 0.03f;
+            float delta = level * 0.025f;
             nameTag.GetComponent<IconNameTag>().UpdateIconRect(delta);
-            character.transform.localScale = new Vector3(1 + delta, 1 + delta, 1 + delta);
+            character.transform.localScale = new Vector3(2 + delta, 2 + delta, 2 + delta);
             character.GetComponent<NavMeshAgent>().avoidancePriority = Mathf.Clamp(99 - level, 0, 99);
         }
 

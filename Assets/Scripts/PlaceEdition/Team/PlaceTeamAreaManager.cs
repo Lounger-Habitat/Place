@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+
 [System.Serializable]
 public class PlaceTeamAreaManager : MonoBehaviour
 {
@@ -42,7 +43,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         }
 
 #if UNITY_EDITOR
-        teaminfo.ink = 100000;
+        teaminfo.ink = 10000;
 #endif
     }
 
@@ -134,7 +135,9 @@ public class PlaceTeamAreaManager : MonoBehaviour
             Vector3 spawnPosition = GetRandomPositionInArea();
             go = Instantiate(characterPrefab, spawnPosition, Quaternion.identity);
             go.name = user.Name;
+            go.transform.localScale = new Vector3(2, 2, 2);
             go.transform.SetParent(ps.transform);
+            // go.GetComponent<NavMeshAgent>().avoidancePriority = 99;
             PlacePlayerController PlayerControllerScript = go.GetComponent<PlacePlayerController>();
             GameObject nameTag = PlaceCenter.Instance.CreateNameTag(go.transform, user);
             nameTag.name = user.Name + "-NameTag";
@@ -279,12 +282,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
                 // goto emeny area
                 if (!isWork)
                 {
-                    if (pc.user.currentState.detailState == DetailState.DrawWaitingForInsAndPower || pc.user.currentState.detailState == DetailState.DrawMoveToTotem)
-                    {
-                        // goto emeny area
-                        Debug.Log($"{name} go enemy area");
-                        pc.GoEnemyArea();
-                    }
+                    StartCoroutine(pc.GoEnemyArea());
                     
                 }
             }

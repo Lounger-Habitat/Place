@@ -1599,7 +1599,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     return;
                 }
 
-                if (msg.StartsWith("9") && msg.Length<4)
+                if (msg.StartsWith("9") && advMsg.Length<4)
                 {
                     DefaultRunChatCommand(user, $"/roll {x} {y} 30 {advMsg[0]}");
                     return;

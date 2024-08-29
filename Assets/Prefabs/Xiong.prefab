@@ -247,6 +247,7 @@ MonoBehaviour:
     currentState:
       topState: 0
       detailState: 0
+    score: 0
     currentCarryingInkCount: 0
     currentCarryingInsCount: 0
     maxCarryingInkCount: 0
@@ -255,6 +256,8 @@ MonoBehaviour:
     exSpeed: 0
     waitingSpeed: 0
     contributionRate: 0
+    likeCount: 0
+    likeTimes: 0
     character: {fileID: 0}
     nameTag: {fileID: 0}
     drawTimes: 0
@@ -290,7 +293,7 @@ NavMeshAgent:
   m_Radius: 0.5
   m_Speed: 3.5
   m_Acceleration: 8
-  avoidancePriority: 50
+  avoidancePriority: 99
   m_AngularSpeed: 120
   m_StoppingDistance: 0.2
   m_AutoTraverseOffMeshLink: 1

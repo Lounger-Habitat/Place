@@ -9,12 +9,15 @@ using OpenCVForUnity.CoreModule;
 using OpenCVForUnity.ImgcodecsModule;
 using OpenCVForUnity.UnityUtils;
 using Assets.GifAssets.PowerGif;
+using Random = UnityEngine.Random;
 
 public class PlaceTeamBoard : MonoBehaviour
 {
 
+    public List<Texture2D> availablePic = new List<Texture2D>();
+    public List<Texture2D> availableContours = new List<Texture2D>();
     public Texture2D defTexture2D;
-    public bool darkMode = false;
+    public bool darkMode = true;
 
     // for 2d canvas use ， 
     // 背景图片
@@ -70,6 +73,8 @@ public class PlaceTeamBoard : MonoBehaviour
             LoadTexture(f);
         }
         */
+        string dafault_path = competitionsDir + "default";
+        LoadResourcesAndContours(dafault_path);
     }
 
     public void InitPlaceTeamBord()
@@ -91,9 +96,10 @@ public class PlaceTeamBoard : MonoBehaviour
         realImage.texture = _texture;
 
         // 随机选取一张贴图
-        string imagePath = LoadRandomImage();
-        
-        templateTexture = LoadTexture(imagePath);
+        // string imagePath = LoadRandomImage();
+        int c = availablePic.Count();
+        int idx = Random.Range(0, c);
+        templateTexture = availablePic[idx];
         if (templateTexture == null)
         {
             templateTexture = defTexture2D;
@@ -103,7 +109,7 @@ public class PlaceTeamBoard : MonoBehaviour
         MakeMultiStagePixels();
 
         Debug.Log("currentPixels.Length : " + currentPixels.Length);
-        Texture2D contex = MakeContours(imagePath);
+        Texture2D contex = availableContours[idx];
         contex = ScaleTextureFixed(contex, width, height);
         contoursImage.texture = contex;
         //UniqueTime =string.IsNullOrEmpty(UniqueTime)? GenerateUniqueTime():UniqueTime;
@@ -111,6 +117,7 @@ public class PlaceTeamBoard : MonoBehaviour
 
     private void MakeMultiStagePixels()
     {
+        /*
         // Stage 1
         Texture2D templateTexture_d10 = ScaleTextureFixed(templateTexture, width/10, height/10);
         Color[] currentPixels_d10 = templateTexture_d10.GetPixels();
@@ -122,7 +129,7 @@ public class PlaceTeamBoard : MonoBehaviour
         Color[] currentPixels_d5 = templateTexture_d5.GetPixels();
         multiStageRandomIndexs.Add(SetRandomIndex(currentPixels_d5.Length));
         multiStagePixels.Add(currentPixels_d5);
-        
+        */
         
         // Stage 3 Full
         templateTexture = ScaleTextureFixed(templateTexture, width, height);
@@ -239,6 +246,7 @@ public class PlaceTeamBoard : MonoBehaviour
                     if (res_texture != null)
                     {
                         loadedTextures.Add(res_texture);
+                        
                     }
                 }
             }
@@ -248,6 +256,39 @@ public class PlaceTeamBoard : MonoBehaviour
             Debug.LogError("Directory not found: " + directoryPath);
         }
         return loadedTextures;
+    }
+
+    void LoadResourcesAndContours(string directoryPath)
+    {
+        // List<Texture2D> loadedTextures = new List<Texture2D>();
+        // 检查目录是否存在
+        if (Directory.Exists(directoryPath))
+        {
+            // 获取目录中的所有文件
+            string[] files = Directory.GetFiles(directoryPath);
+
+            foreach (string filePath in files)
+            {
+                // 检查文件是否是图片
+                Debug.Log("filePath : " + filePath);
+                if (IsImageFile(filePath))
+                {
+                    // 加载图片资源并添加到List
+                    Texture2D res_texture = LoadTexture(filePath);
+                    Texture2D con_texture = MakeContours(filePath);
+                    if (res_texture != null && con_texture != null)
+                    {
+                        availablePic.Add(res_texture);
+                        availableContours.Add(con_texture);
+                        
+                    }
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("Directory not found: " + directoryPath);
+        }
     }
 
     bool IsImageFile(string filePath)

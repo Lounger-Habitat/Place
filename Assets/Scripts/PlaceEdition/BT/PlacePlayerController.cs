@@ -729,8 +729,7 @@ public class PlacePlayerController : MonoBehaviour
     GameObject reGreen;
     GameObject reThunderBall;
     GameObject reBlessing;
-
-
+    private static readonly int TwistDance = Animator.StringToHash("TwistDance");
 
 
     // 升级
@@ -995,11 +994,42 @@ public class PlacePlayerController : MonoBehaviour
         Debug.Log($"[PC] : btDrawFinish: {btDrawFinish.Value} btDrawing: {btDrawing.Value}");
     }
 
-    public void GoEnemyArea()
+    public IEnumerator GoEnemyArea()
     {
-        Vector2 nosie = new Vector2(UnityEngine.Random.Range(-3f, 3f), UnityEngine.Random.Range(-3f, 3f));
-        Vector3 aimPoint = new Vector3(enemyDoor.position.x + nosie.x, enemyDoor.position.y, enemyDoor.position.z + nosie.y);
-        MoveToTarget(aimPoint);
-        Debug.Log("go ed enemmy");
+        if (user.currentState.detailState == DetailState.DrawMoveToTotem)
+        {
+            // goto emeny area
+            Debug.Log($"{name} 还没结束到 图腾");
+            yield return new WaitForSeconds(5f); // 5s 怎么 也结束了吧
+        }
+
+        // 没颜料了，就别等了，去堵门
+        if (user.currentState.detailState == DetailState.DrawWaitingForInsAndPower)
+        {
+            
+            Vector2 nosie = new Vector2(UnityEngine.Random.Range(-3f, 3f), UnityEngine.Random.Range(-3f, 3f));
+            Vector3 aimPoint = new Vector3(enemyDoor.position.x + nosie.x, enemyDoor.position.y, enemyDoor.position.z + nosie.y);
+            playerAnimator.SetBool("isRun", true); // 跑起来
+            MoveToTarget(aimPoint);
+            Debug.Log("go ed enemmy");
+            float runtime = 0;
+            while (navMeshAgent.path.corners.Length != 1 && runtime<15)
+            {
+                runtime += 0.5f;
+                yield return new WaitForSeconds(0.5f);
+            }
+            playerAnimator.SetBool("isRun",false);
+            // 这里加上跳舞嘲讽 TODO @GT
+            int danceIndex = UnityEngine.Random.Range(0, 4);
+            playerAnimator.SetBool(danceName[danceIndex], true);
+        }
+        
+        // 如果，这两个 状态 都没拦截住,Ummm
+        // 那就原地罚站吧
+
+
     }
+    
+    private string[] danceName = new[] { "TwistDance", //"BreakDacne",
+        "SillyDance","SillyDance", "HipHopDance" };
 }
