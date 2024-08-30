@@ -807,6 +807,7 @@ public class PlaceTeamBoardManager : MonoBehaviour
     */
     public void ConvertTex2DToGIFTeamFun()
     {
+        
         // 如果 team2 赢了，那么就先生成 team1 的图片
         if (team1Board.socre < team2Board.socre)
         {

@@ -1,5 +1,6 @@
 ﻿// Created by SwanDEV 2017
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +14,7 @@ public sealed class ProGifPlayerImage : ProGifPlayerComponent
 	private Texture2D _displayTexture2D = null;
 	private Sprite _displaySprite = null;
 
+	public Action OnEndFrameCallBack;
 	void Awake()
 	{
 		if(destinationImage == null)
@@ -68,6 +70,12 @@ public sealed class ProGifPlayerImage : ProGifPlayerComponent
 						}
 					}
 				}
+
+				if (spriteIndex == gifTextures.Count - 1)
+				{
+					//最后一帧
+					_SetEndFrameCallBack();
+				}
 			}
 		}
 	}
@@ -89,6 +97,11 @@ public sealed class ProGifPlayerImage : ProGifPlayerComponent
             _SetDisplay(0);
         }
 	}
+    
+    private void _SetEndFrameCallBack()
+    {
+	    if (OnEndFrameCallBack != null) OnEndFrameCallBack.Invoke();
+    }
 
 	private void _SetDisplay(int frameIndex)
 	{

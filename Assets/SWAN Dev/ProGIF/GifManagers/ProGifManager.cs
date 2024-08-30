@@ -540,12 +540,12 @@ public class ProGifManager : MonoBehaviour
     /// <param name="playerImage">Target image for displaying gif.</param>
     /// <param name="onLoading">On loading. Return value: loading progress(float)</param>
     /// <param name="shouldSaveFromWeb">The flag indicating to save or not to save file that download from web.</param>
-    public void PlayGif(string gifPath, Image playerImage, Action<float> onLoading = null, bool shouldSaveFromWeb = false)
+    public void PlayGif(string gifPath, Image playerImage, Action<float> onLoading = null, bool shouldSaveFromWeb = false,Action onEndFrame = null)
     {
         Clear();
         m_GifPlayer = new ProGifPlayer();
 		m_GifPlayer.SetDecodeSettings(m_Decoder, m_DecodeMode, m_TargetDecodeFrameNum, m_FramePickingMethod, m_OptimizeMemoryUsage);
-        m_GifPlayer.Play(gifPath, playerImage, shouldSaveFromWeb);
+        m_GifPlayer.Play(gifPath, playerImage, shouldSaveFromWeb,onEndFrame);
         m_GifPlayer.SetLoadingCallback((progress) => {
             //Check progress
             if (progress >= 1f)

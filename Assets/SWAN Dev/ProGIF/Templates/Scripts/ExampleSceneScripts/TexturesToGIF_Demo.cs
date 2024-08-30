@@ -16,7 +16,12 @@ public class TexturesToGIF_Demo : MonoBehaviour
 	private List<Texture2D> tex2DList = null;
 
 	private Action SavedAction;
-	
+
+	private void Start()
+	{
+		ConvertTex2DToGIF();
+	}
+
 	public void ConvertTex2DToGIF(Action FileSavedCallBack=null)
 	{
 		SavedAction = FileSavedCallBack;
@@ -103,10 +108,44 @@ public class TexturesToGIF_Demo : MonoBehaviour
 		// 		displayImage.SetNativeSize();
 		// 	}
 		// });
-		PGif.iPlayGif(path, m_RawImage2.gameObject, "MyGifPlayerName 01", (texture2D) => {
+		string playerGifName = "MyGifPlayerName 01";
+		//PGif.iPlayGif(path, m_RawImage2.gameObject, playerGifName, (texture2D) => {
+		//	// get and display the decoded texture here:
+		//	m_RawImage2.texture = texture2D;
+		//});
+		
+		PGif.iPlayGif(path, m_RawImage2.gameObject, playerGifName, (texture2D) =>
+		{
 			// get and display the decoded texture here:
 			m_RawImage2.texture = texture2D;
+		}, (progress) =>
+		{
+			int progressInt = Mathf.CeilToInt(progress * 100);
+			Debug.Log($"{progressInt}% wait");
+			if (progressInt >= 100)
+			{
+				// 加载完成
+				// 设置 
+                
+				Debug.Log($"{progress} wait 3s?");
+				if (showGifCoroutine==null)
+				{
+					//showGifCoroutine = StartCoroutine(showGifPause(info));
+				}
+			}
+		},OnEndFrame: () =>
+		{
+			//Debug.Log("触发回调");
+			PGif.iPausePlayer("MyGifPlayerName 01");
+			StartCoroutine(showGifPause());
 		});
+	}
+
+	private Coroutine showGifCoroutine = null;
+	IEnumerator showGifPause()
+	{
+		yield return new WaitForSeconds(5);
+		PGif.iResumePlayer("MyGifPlayerName 01");
 	}
 
 	//It is important to Clear textures every time (prevent memory leak)

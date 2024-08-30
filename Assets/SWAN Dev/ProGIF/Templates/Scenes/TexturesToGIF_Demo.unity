@@ -3641,7 +3641,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1858481725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3779,7 +3779,7 @@ MonoBehaviour:
   text1: {fileID: 800928988}
   displayImage: {fileID: 893048443}
   m_Rotation: 0
-  path: 0
+  path: Log/20240828030154/2
   m_RawImage2: {fileID: 1878944031}
 --- !u!4 &1989613152
 Transform:

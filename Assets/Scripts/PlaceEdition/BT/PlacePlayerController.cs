@@ -863,7 +863,7 @@ public class PlacePlayerController : MonoBehaviour
         blessing = true; // 特效 
         PlayBlessingEffect();
 
-        Collider[] cs = Physics.OverlapSphere(transform.position, 200f * 1).ToList().Where(c => c.CompareTag("Player") && c.gameObject.GetComponent<PlacePlayerController>().user.Camp != user.Camp).ToArray();
+        Collider[] cs = Physics.OverlapSphere(transform.position, 20f * 1).ToList().Where(c => c.CompareTag("Player") && c.gameObject.GetComponent<PlacePlayerController>().user.Camp != user.Camp).ToArray();
 
         foreach (var c in cs)
         {
@@ -873,7 +873,7 @@ public class PlacePlayerController : MonoBehaviour
             Vector3 dir = (transform.position - c.transform.position).normalized;
             dir.y = 0;
             // 施加力
-            rg.AddForce(-dir * 100000);
+            rg.AddForce(-dir * 1000);
             c.GetComponent<PlacePlayerController>().DelayRecoverKinematic();
         }
 

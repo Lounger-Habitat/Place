@@ -8,7 +8,7 @@ public sealed class ProGifPlayerTexture2D : ProGifPlayerComponent
     [HideInInspector] public Texture2D m_Texture2D;
 
     public Action<Texture2D> OnTexture2DCallback;
-
+    public Action OnEndFrameCallBack;
     void Awake()
     {
         displayType = DisplayType.None;
@@ -34,6 +34,12 @@ public sealed class ProGifPlayerTexture2D : ProGifPlayerComponent
 
                     _SetTexture(spriteIndex);
                 }
+
+                if (spriteIndex==gifTextures.Count - 1 && spriteIndex!=0)
+                {
+                    //Debug.Log("最后一帧。");
+                    _SetEndFrameCallBack();
+                }
             }
         }
     }
@@ -44,6 +50,7 @@ public sealed class ProGifPlayerTexture2D : ProGifPlayerComponent
         
         displayType = DisplayType.None;
         _SetTexture(0);
+        Debug.Log("第一帧播放");
     }
 
     protected override void _OnFrameReady(GifTexture gTex, bool isFirstFrame)
@@ -62,6 +69,11 @@ public sealed class ProGifPlayerTexture2D : ProGifPlayerComponent
             gifTextures[frameIndex].SetColorsToTexture2D(ref m_Texture2D);
             if (OnTexture2DCallback != null) OnTexture2DCallback(m_Texture2D);
         }
+    }
+
+    private void _SetEndFrameCallBack()
+    {
+        if (OnEndFrameCallBack != null) OnEndFrameCallBack.Invoke();
     }
 
     public override void Clear(bool clearBytes = true, bool clearCallbacks = true)

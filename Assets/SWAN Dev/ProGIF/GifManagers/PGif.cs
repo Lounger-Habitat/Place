@@ -576,7 +576,7 @@ public class PGif : MonoBehaviour
     /// <param name="onTexture2D">Returns the played Texture2D in each Update. You can get the texture and set it to your own materials/renderers/UI.</param>
     /// <param name="onLoading">On loading. Return value: loading progress(float)</param>
     /// <param name="shouldSaveFromWeb">The flag indicating to save or not to save file that download from web.</param>
-    public void PlayGif(string gifPath, GameObject playerComponentTarget, string playerName, Action<Texture2D> onTexture2D, Action<float> onLoading = null, bool shouldSaveFromWeb = false)
+    public void PlayGif(string gifPath, GameObject playerComponentTarget, string playerName, Action<Texture2D> onTexture2D, Action<float> onLoading = null, bool shouldSaveFromWeb = false,Action OnEndFrame=null)
     {
         if (string.IsNullOrEmpty(gifPath))
         {
@@ -586,7 +586,7 @@ public class PGif : MonoBehaviour
 
         ProGifPlayer newGifPlayer = _SetupPlayer(playerComponentTarget, playerName);
         newGifPlayer.SetDecodeSettings(m_Decoder, m_DecodeMode, m_TargetDecodeFrameNum, m_FramePickingMethod, m_OptimizeMemoryUsage);
-        newGifPlayer.Play(gifPath, playerComponentTarget, onTexture2D, shouldSaveFromWeb);
+        newGifPlayer.Play(gifPath, playerComponentTarget, onTexture2D, shouldSaveFromWeb,OnEndFrame);
         newGifPlayer.SetLoadingCallback((progress) => {
             //Check progress
             if (progress >= 1f)
@@ -1105,9 +1105,9 @@ public class PGif : MonoBehaviour
     /// <param name="onTexture2D">Returns the played Texture2D in each Update. You can get the texture and set it to your own materials/renderers/UI.</param>
     /// <param name="onLoading">On loading. Return value: loading progress(float)</param>
     /// <param name="shouldSaveFromWeb">The flag indicating to save or not to save file that download from web.</param>
-    public static void iPlayGif(string gifPath, GameObject playerComponentTarget, string playerName, Action<Texture2D> onTexture2D, Action<float> onLoading = null, bool shouldSaveFromWeb = false)
+    public static void iPlayGif(string gifPath, GameObject playerComponentTarget, string playerName, Action<Texture2D> onTexture2D, Action<float> onLoading = null, bool shouldSaveFromWeb = false,Action OnEndFrame=null)
     {
-        Instance.PlayGif(gifPath, playerComponentTarget, playerName, onTexture2D, onLoading, shouldSaveFromWeb);
+        Instance.PlayGif(gifPath, playerComponentTarget, playerName, onTexture2D, onLoading, shouldSaveFromWeb,OnEndFrame);
     }
 
     /// <summary>

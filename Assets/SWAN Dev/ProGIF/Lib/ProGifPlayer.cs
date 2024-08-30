@@ -174,24 +174,26 @@ public class ProGifPlayer
         player.Play(recorder.Frames, recorder.FPS, recorder.IsCustomRatio, recorder.Width, recorder.Height, optimizeMemoryUsage);
     }
     
-    public void Play(string loadPath, GameObject playerComponentTarget, Action<Texture2D> onTexture2D, bool shouldSaveFromWeb)
+    public void Play(string loadPath, GameObject playerComponentTarget, Action<Texture2D> onTexture2D, bool shouldSaveFromWeb,Action onEndCallback=null)
     {
         rotation = ImageRotator.Rotation.None;
         _SetupPlayerComponent(playerComponentTarget);
         _SetDecodeSettings();
         player.Play(loadPath, shouldSaveFromWeb);
         playerComponentTarget.GetComponent<ProGifPlayerTexture2D>().OnTexture2DCallback = onTexture2D;
+        playerComponentTarget.GetComponent<ProGifPlayerTexture2D>().OnEndFrameCallBack = onEndCallback;
     }
 
     /// <summary>
     /// Load & Decode to Play gif at the loadPath, display with Image.
     /// </summary>
-	public void Play(string loadPath, UnityEngine.UI.Image destination, bool shouldSaveFromWeb)
+	public void Play(string loadPath, UnityEngine.UI.Image destination, bool shouldSaveFromWeb,Action onEndFrame=null)
     {
         rotation = ImageRotator.Rotation.None;
         _SetupPlayerComponent(destination);
         _SetDecodeSettings();
         player.Play(loadPath, shouldSaveFromWeb);
+        destination.GetComponent<ProGifPlayerImage>().OnEndFrameCallBack = onEndFrame;
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -1027,6 +1028,7 @@ public class PlaceTeamBoard : MonoBehaviour
         PlaceTeamBoardManager.Instance.OnfileProgress(teamID, progressInt);
     }
 
+    public string playerGifName = "";
     void ShowGIF(string path)
     {
         // ProGifManager.Instance.m_OptimizeMemoryUsage = true;
@@ -1039,18 +1041,33 @@ public class PlaceTeamBoard : MonoBehaviour
         //     // 	dpImage.SetNativeSize();
         //     // }
         // });
-        PGif.iPlayGif(path, dpImage.gameObject, "MyGifPlayerName 01", (texture2D) =>
+        playerGifName = $"gifPlayer{teamID}";
+        ProGifDecoder.GifInfo info = PGif.GetGifInfo(path);
+        PGif.iPlayGif(path, dpImage.gameObject, playerGifName, (texture2D) =>
         {
             // get and display the decoded texture here:
             dpImage.texture = texture2D;
-        }, (progress) =>
+        }, OnEndFrame: () =>
         {
-            if (Math.Abs(progress - 99.0f) < 1f)
-            {
-                // 等待3秒？
-                Debug.Log($"{progress} wait 3s?");
-            }
+            //Debug.Log("触发回调");
+            PGif.iPausePlayer(playerGifName);
+            StartCoroutine(showGifPause());
         });
+    }
+
+    private Coroutine showGifCoroutine = null;
+    IEnumerator showGifPause()
+    {
+       
+        yield return new WaitForSeconds(5);
+        PGif.iResumePlayer(playerGifName);
+    }
+
+    private void OnDestroy()
+    {
+        //StopCoroutine(showGifCoroutine);
+        StopAllCoroutines();
+        showGifCoroutine = null;
     }
 
     internal Texture2D MergeTexture(Texture2D userTex, Texture2D tex)

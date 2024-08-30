@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -103,7 +105,7 @@ public class PlaceBoardManager : MonoBehaviour
         UniqueTime = GenerateUniqueTime();
 
     }
-
+#if UNITY_EDITOR
     void Update()
     {
         if (mode == "2D")
@@ -183,7 +185,7 @@ public class PlaceBoardManager : MonoBehaviour
             }
         }
     }
-
+#endif
     public static string GenerateUniqueTime()
     {
         // 根据时间生成唯一ID
@@ -425,7 +427,7 @@ public class PlaceBoardManager : MonoBehaviour
         return false;
     }
 
-    public void SaveImage(bool lastone = false)
+    public async Task SaveImage(bool lastone = false)
     {
         byte[] bytes = texture.EncodeToPNG();
         // 检测文件夹是否存在
@@ -440,13 +442,22 @@ public class PlaceBoardManager : MonoBehaviour
             Directory.CreateDirectory(savePath);
         }
         string path = $"{savePath}/save_{DateTime.Now.ToString("yyyyMMddHHmmss")}.png";
-        System.IO.File.WriteAllBytes(path, bytes);
+        await WriteByteAsync(path, bytes);
         //Debug.Log("Saved Image to: " + path);
         // if (lastone)
         // {
         //     // 创建 Sprite
         //     Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         // }
+    }
+
+    public async Task WriteByteAsync(string filePath,byte[] data)
+    {
+        using (FileStream fs = new FileStream(filePath,FileMode.Create, FileAccess.ReadWrite, FileShare.None,
+                   bufferSize: 4096, useAsync: true))
+        {
+            await fs.WriteAsync(data, 0, data.Length);
+        }
     }
 
     public void GenGif()
@@ -962,15 +973,18 @@ public class PlaceBoardManager : MonoBehaviour
         ProGifManager.Instance.m_OptimizeMemoryUsage = true;
 
         //Open the Pro GIF player to show the converted GIF
-        ProGifManager.Instance.PlayGif(path, dpImage, (loadProgress) =>
+        ProGifManager.Instance.PlayGif(path, dpImage,onEndFrame:() =>
         {
-            // if(loadProgress < 1f)
-            // {
-            // 	dpImage.SetNativeSize();
-            // }
+            ProGifManager.Instance.PausePlayer();
+            StartCoroutine(showGifPause());
         });
     }
-
+    IEnumerator showGifPause()
+    {
+       
+        yield return new WaitForSeconds(5);
+        ProGifManager.Instance.ResumePlayer();
+    }
     internal Texture2D MergeTexture(Texture2D userTex, Texture2D tex)
     {
         // 获取tex对userTex的要求

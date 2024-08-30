@@ -486,7 +486,7 @@ public class PlaceCenter : MonoBehaviour
     {
         gameRuning = false;
         GenPUID();
-        GenGif();
+        Invoke(nameof(GenGif),6f);
         Reset();
         CheckWinTeam();
         PlaceUIManager.Instance.EndGameUI();
@@ -1410,8 +1410,9 @@ public class PlaceCenter : MonoBehaviour
 
     IEnumerator SaveImagePreRecorderTime(int time = 6)
     {
+        int delayTime = time;
         // 持续等待一分钟
-        while (gameRuning)
+        while (gameRuning || delayTime < 1)
         {
             yield return new WaitForSeconds(time);
             if (GameSettingManager.Instance.Mode == GameMode.Competition)
@@ -1421,6 +1422,11 @@ public class PlaceCenter : MonoBehaviour
             else
             {
                 PlaceBoardManager.Instance.SaveImage();
+            }
+
+            if (!gameRuning)
+            {
+                delayTime -= time;
             }
         }
         // PlaceBoardManager.Instance.SaveImage(lastone: true);
