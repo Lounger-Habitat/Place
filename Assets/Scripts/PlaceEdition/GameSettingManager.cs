@@ -35,7 +35,7 @@ public class GameSettingManager : MonoBehaviour
         get => _mode;
         set
         {
-            if ((int)value>3)
+            if ((int)value>4)
             {
                 _mode = GameMode.Create;
             }
@@ -56,12 +56,13 @@ public class GameSettingManager : MonoBehaviour
 public enum GameDisplayRatio
 {
     R16_9 = 0,
-    R9_16 = 3,
+    R9_16 = 4,
 }
 
 public enum GameMode {
     Create=1, // 创作模式
     Graffiti, // 涂鸦模式
-    Competition // 竞赛模式
+    Competition, // 竞赛模式
+    NewYear//新春模式
 }
 

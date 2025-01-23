@@ -59,7 +59,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         // 获取 frame 宽 高
 
         // TODO 滞后修改
-        if (GameSettingManager.Instance.Mode == GameMode.Create || GameSettingManager.Instance.Mode == GameMode.Graffiti)
+        if (GameSettingManager.Instance.Mode == GameMode.Create || GameSettingManager.Instance.Mode == GameMode.Graffiti || GameSettingManager.Instance.Mode == GameMode.NewYear)
         {
             boradWidth = PlaceBoardManager.Instance.width;
             boradHeight = PlaceBoardManager.Instance.height;
