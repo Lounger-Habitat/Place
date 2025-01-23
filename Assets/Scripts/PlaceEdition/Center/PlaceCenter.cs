@@ -486,7 +486,7 @@ public class PlaceCenter : MonoBehaviour
     {
         gameRuning = false;
         GenPUID();
-        Invoke(nameof(GenGif),6f);
+        Invoke(nameof(GenGif), 6f);
         Reset();
         CheckWinTeam();
         PlaceUIManager.Instance.EndGameUI();
@@ -549,9 +549,25 @@ public class PlaceCenter : MonoBehaviour
                         skill = SkillIcon.Speed;
                         u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                     }
+                    else if (GameSettingManager.Instance.Mode == GameMode.NewYear) // TODO New Year
+                    {
+                        normalPower = 100; // 颜料数（一毛相当于优惠）
+                        message = "急速神行";
+                        skill = SkillIcon.Speed;
+                        u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
+                        // 添加 send fireworks
+                        // id
+                        // time
+                        int x, y;
+                        x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
+                        y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
+                        Debug.Log("画画");
+                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/userIcon {x} {y}"); // TODO New Year /roll
+                        u.fireworksInstructionQueue.Enqueue((1,1));
+                    }
                     else
                     {
-                        
+
                         normalPower = 300; // 颜料数（一毛相当于优惠）
                         message = "急速神行";
                         skill = SkillIcon.Speed;
@@ -566,6 +582,19 @@ public class PlaceCenter : MonoBehaviour
                         message = "风之束缚";
                         skill = SkillIcon.Tornado;
                         u.character.GetComponent<PlacePlayerController>().Tornado((int)(power / 10));
+                    }
+                    else if (GameSettingManager.Instance.Mode == GameMode.NewYear) // TODO NewYear
+                    {
+                        normalPower = 200; //固定是加颜料
+                        message = "风之束缚";
+                        skill = SkillIcon.Tornado;
+                        u.character.GetComponent<PlacePlayerController>().Tornado((int)(power / 10));
+                        int x, y;
+                        x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
+                        y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
+                        Debug.Log("画画");
+                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/userIcon {x} {y}"); // TODO New Year /roll
+                        u.fireworksInstructionQueue.Enqueue((1,1));
                     }
                     else
                     {
@@ -585,6 +614,19 @@ public class PlaceCenter : MonoBehaviour
                         skill = SkillIcon.Thunder;
                         message = "雷霆万钧";
                     }
+                    else if (GameSettingManager.Instance.Mode == GameMode.NewYear) // TODO NewYear
+                    {
+                        normalPower = 200; //固定是加颜料
+                        message = "风之束缚";
+                        skill = SkillIcon.Tornado;
+                        u.character.GetComponent<PlacePlayerController>().Tornado((int)(power / 10));
+                        int x, y;
+                        x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
+                        y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
+                        Debug.Log("画画");
+                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/userIcon {x} {y}"); // TODO New Year /roll
+                        u.fireworksInstructionQueue.Enqueue((1,1));
+                    }
                     else
                     {
                         normalPower = 1800; //固定是攻击
@@ -600,6 +642,19 @@ public class PlaceCenter : MonoBehaviour
                         u.character.GetComponent<PlacePlayerController>().Invincible(180);
                         message = "绝对防御";
                         skill = SkillIcon.Defense;
+                    }
+                    else if (GameSettingManager.Instance.Mode == GameMode.NewYear) // TODO NewYear
+                    {
+                        normalPower = 200; //固定是加颜料
+                        message = "风之束缚";
+                        skill = SkillIcon.Tornado;
+                        u.character.GetComponent<PlacePlayerController>().Tornado((int)(power / 10));
+                        int x, y;
+                        x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
+                        y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
+                        Debug.Log("画画");
+                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/userIcon {x} {y}"); // TODO New Year /roll
+                        u.fireworksInstructionQueue.Enqueue((1,1));
                     }
                     else
                     {
@@ -636,7 +691,8 @@ public class PlaceCenter : MonoBehaviour
                         if (GameSettingManager.Instance.displayRatio == GameDisplayRatio.R9_16)
                         {
                             max = PlaceBoardManager.Instance.width / 2;
-                        }else
+                        }
+                        else
                         {
                             max = PlaceBoardManager.Instance.height / 2;
                         }
@@ -668,6 +724,19 @@ public class PlaceCenter : MonoBehaviour
                             // item.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(5);
                             item.character.GetComponent<PlacePlayerController>().Invincible(5); //解控，只是解控
                         }
+                    }
+                    else if (GameSettingManager.Instance.Mode == GameMode.NewYear) // TODO NewYear
+                    {
+                        normalPower = 200; //固定是加颜料
+                        message = "风之束缚";
+                        skill = SkillIcon.Tornado;
+                        u.character.GetComponent<PlacePlayerController>().Tornado((int)(power / 10));
+                        int x, y;
+                        x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
+                        y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
+                        Debug.Log("画画");
+                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/userIcon {x} {y}"); // TODO New Year /roll
+                        u.fireworksInstructionQueue.Enqueue((1,1));
                     }
                     else
                     {
@@ -744,7 +813,8 @@ public class PlaceCenter : MonoBehaviour
                         if (GameSettingManager.Instance.displayRatio == GameDisplayRatio.R9_16)
                         {
                             max = PlaceBoardManager.Instance.width / 2;
-                        }else
+                        }
+                        else
                         {
                             max = PlaceBoardManager.Instance.height / 2;
                         }
@@ -808,45 +878,45 @@ public class PlaceCenter : MonoBehaviour
                     //     IL256.ForEach(i => u.instructionQueue.Enqueue(i));
                     // }
                     break;
-                // case 19.9f:
-                //     normalPower = 1999;
-                //     break;
-                // case 29.9f:
-                //     message = "";
-                //     normalPower = 2990;
-                //     break;
-                // case 52f:
-                //     message = "";
-                //     normalPower = 5200;
-                //     break;
-                // case 66.6f:
-                //     message = "";
-                //     normalPower = 6666;
-                //     break;
-                // case 88.8f:
-                //     message = "";
-                //     normalPower = 8888;
-                //     break;
-                // case 99.9f:
-                //     message = "";
-                //     normalPower = 9999;
-                //     break;
-                // case 120f:
-                //     message = "";
-                //     normalPower = 12000;
-                //     break;
-                // case 166.6f:
-                //     message = "";
-                //     normalPower = 16666;
-                //     break;
-                // case 188.8f:
-                //     message = "";
-                //     normalPower = 18888;
-                //     break;
-                // case 300f:
-                //     message = "";
-                //     normalPower = 30000;
-                //     break;
+                    // case 19.9f:
+                    //     normalPower = 1999;
+                    //     break;
+                    // case 29.9f:
+                    //     message = "";
+                    //     normalPower = 2990;
+                    //     break;
+                    // case 52f:
+                    //     message = "";
+                    //     normalPower = 5200;
+                    //     break;
+                    // case 66.6f:
+                    //     message = "";
+                    //     normalPower = 6666;
+                    //     break;
+                    // case 88.8f:
+                    //     message = "";
+                    //     normalPower = 8888;
+                    //     break;
+                    // case 99.9f:
+                    //     message = "";
+                    //     normalPower = 9999;
+                    //     break;
+                    // case 120f:
+                    //     message = "";
+                    //     normalPower = 12000;
+                    //     break;
+                    // case 166.6f:
+                    //     message = "";
+                    //     normalPower = 16666;
+                    //     break;
+                    // case 188.8f:
+                    //     message = "";
+                    //     normalPower = 18888;
+                    //     break;
+                    // case 300f:
+                    //     message = "";
+                    //     normalPower = 30000;
+                    //     break;
             }
         }
 
@@ -875,53 +945,120 @@ public class PlaceCenter : MonoBehaviour
 
     public void GainLikePower(User user, long power)
     {
-        // B 站 每人 每天 点赞上限 1000
-        // Dy 每人 每天 不限
-        int lc = (int)power;
-        int p = lc * 2; //TODO:记得修改哦！根据点赞数量获取颜料，修改为自动倍率。
-        user.score += p;
-        user.likeCount += lc;
-        user.Update();
-        PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
-        // 颜料增加的特效
-        user.character.GetComponent<PlacePlayerController>().InkUp(p);
-        var messageType = user.Camp == 1 ? TipsType.likeTipsPanel : TipsType.likeTipsPanelRight;
-        string message = "";
-        // if (lc < 5)
-        // {
-        //     message = $"点赞! 颜料 x {p}";
-        // }
-        //
-        // if (lc > 5)
-        // {
-        //     message = $"点赞手速突破天际!! 颜料 x {p}";
-        // }
-
-        if (lc >= 10)
+        Debug.Log("点赞" + GameSettingManager.Instance.Mode);
+        if (GameSettingManager.Instance.Mode == GameMode.NewYear)
         {
-            int speedTime = lc / 10;
-            user.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(speedTime); //一个赞给0.1s加速。
+            // B 站 每人 每天 点赞上限 1000
+            // Dy 每人 每天 不限
+            int lc = (int)power;
+            Debug.Log("点赞 lc : " + lc);
+            int p = lc * 2; //TODO:记得修改哦！根据点赞数量获取颜料，修改为自动倍率。
+            user.score += p;
+            user.likeCount += lc;
+            user.Update();
+            PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
+            // 颜料增加的特效
+            user.character.GetComponent<PlacePlayerController>().InkUp(p);
+            var messageType = user.Camp == 1 ? TipsType.likeTipsPanel : TipsType.likeTipsPanelRight;
+            string message = "";
+            // if (lc < 5)
+            // {
+            //     message = $"点赞! 颜料 x {p}";
+            // }
+            //
+            // if (lc > 5)
+            // {
+            //     message = $"点赞手速突破天际!! 颜料 x {p}";
+            // }
+
+            if (lc >= 10)
+            {
+                Debug.Log("执行点赞 高级");
+                int speedTime = lc / 10;
+                user.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(speedTime); //一个赞给0.1s加速。
+                // 给画画
+                int x, y;
+                x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
+                y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
+                Debug.Log("画画");
+                PlaceInstructionManager.Instance.DefaultRunChatCommand(user, $"/userIcon {x} {y}"); // TODO New Year /roll
+                // 给放烟花
+                Debug.Log("烟花");
+                user.fireworksInstructionQueue.Enqueue((1, 1));
+            }
+
+            if ((user.likeCount / 1000) > user.likeTimes) //判断本局是否点赞数超过1000//每次过一千才提醒，你这相当于过了一千 然后每次点赞都触发这个
+            {
+                user.likeTimes++;
+                lc = user.likeCount; //大于一千拿总数，小于1000拿这次点赞数，
+                message = $"手速突破天际!! 点赞{lc}次！";
+            }
+
+            PlaceUIManager.Instance.AddTips(new TipsItem()
+            {
+                userName = user.Name,
+                text = message,
+                icon = user.userIcon, //玩家头像
+                tipsType = messageType,
+                value = $"+{1}",
+                likeCount = lc,
+                isLeft = user.Camp == 1
+            });
+            // TODO New Year
+            // 参数 是 元组类型 （id，time）
+            // 放入 user.fireworksInstructionQueue((id,time))
+            // 行为树，会触发，在 pc上，会 执行 takeFireworks解析，然后 sendFireworkstoSky
         }
-
-        if ((user.likeCount / 1000) > user.likeTimes) //判断本局是否点赞数超过1000//每次过一千才提醒，你这相当于过了一千 然后每次点赞都触发这个
+        else
         {
-            user.likeTimes++;
-            lc = user.likeCount; //大于一千拿总数，小于1000拿这次点赞数，
-            message = $"手速突破天际!! 点赞{lc}次！";
+            // B 站 每人 每天 点赞上限 1000
+            // Dy 每人 每天 不限
+            int lc = (int)power;
+            int p = lc * 2; //TODO:记得修改哦！根据点赞数量获取颜料，修改为自动倍率。
+            user.score += p;
+            user.likeCount += lc;
+            user.Update();
+            PlaceTeamManager.Instance.teamAreas[user.Camp - 1].teaminfo.ink += p;
+            // 颜料增加的特效
+            user.character.GetComponent<PlacePlayerController>().InkUp(p);
+            var messageType = user.Camp == 1 ? TipsType.likeTipsPanel : TipsType.likeTipsPanelRight;
+            string message = "";
+            // if (lc < 5)
+            // {
+            //     message = $"点赞! 颜料 x {p}";
+            // }
+            //
+            // if (lc > 5)
+            // {
+            //     message = $"点赞手速突破天际!! 颜料 x {p}";
+            // }
+
+            if (lc >= 10)
+            {
+                int speedTime = lc / 10;
+                user.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(speedTime); //一个赞给0.1s加速。
+            }
+
+            if ((user.likeCount / 1000) > user.likeTimes) //判断本局是否点赞数超过1000//每次过一千才提醒，你这相当于过了一千 然后每次点赞都触发这个
+            {
+                user.likeTimes++;
+                lc = user.likeCount; //大于一千拿总数，小于1000拿这次点赞数，
+                message = $"手速突破天际!! 点赞{lc}次！";
+            }
+
+            PlaceUIManager.Instance.AddTips(new TipsItem()
+            {
+                userName = user.Name,
+                text = message,
+                icon = user.userIcon, //玩家头像
+                tipsType = messageType,
+                value = $"+{1}",
+                likeCount = lc,
+                isLeft = user.Camp == 1
+            });
+            // 限时加速
+            // StartCoroutine(user.character.GetComponent<PlacePlayerController>().TimeLimitSpeedUp(p));
         }
-
-        PlaceUIManager.Instance.AddTips(new TipsItem()
-        {
-            userName = user.Name,
-            text = message,
-            icon = user.userIcon, //玩家头像
-            tipsType = messageType,
-            value = $"+{1}",
-            likeCount = lc,
-            isLeft = user.Camp == 1
-        });
-        // 限时加速
-        // StartCoroutine(user.character.GetComponent<PlacePlayerController>().TimeLimitSpeedUp(p));
     }
 
     // public void GainGiftPower(User user, float power)
@@ -957,11 +1094,12 @@ public class PlaceCenter : MonoBehaviour
         if (GameSettingManager.Instance.displayRatio == GameDisplayRatio.R9_16)
         {
             max = PlaceBoardManager.Instance.width / 2;
-        }else
+        }
+        else
         {
             max = PlaceBoardManager.Instance.height / 2;
         }
-        
+
         x = Random.Range(1, PlaceBoardManager.Instance.width - max);
         y = Random.Range(1, PlaceBoardManager.Instance.height - max);
         Texture2D userTex;
@@ -1205,8 +1343,8 @@ public class PlaceCenter : MonoBehaviour
     {
         return LoadResources(demoPath);
     }
-    
-    
+
+
 
     public Dictionary<string, Texture2D> LoadDemoDicResources(string sbuClass)
     {

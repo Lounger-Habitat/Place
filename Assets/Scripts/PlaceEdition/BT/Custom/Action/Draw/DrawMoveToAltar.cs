@@ -12,7 +12,14 @@ public class DrawMoveToAltar : PlaceAction
     public override void OnStart()
     {
         base.OnStart();
-        pc.target = pc.altar;
+        if (GameSettingManager.Instance.Mode == GameMode.NewYear)
+        {
+            pc.target = pc.playGround;
+        }
+        else
+        {
+            pc.target = pc.altar;
+        }
 
         pc.playerAnimator.SetBool("isRun", true);
         pc.user.currentState.detailState = DetailState.DrawMoveToAltar;
@@ -20,13 +27,13 @@ public class DrawMoveToAltar : PlaceAction
 
         GetTargetPoint();
 
-        
+
     }
 
     public override TaskStatus OnUpdate()
     {
         Vector2 positionA = new Vector2(transform.position.x, transform.position.z);
-        
+
 
         if (Vector2.Distance(positionA, targetPosition) < 3f)
         {
@@ -45,14 +52,22 @@ public class DrawMoveToAltar : PlaceAction
 
     void GetTargetPoint()
     {
-        randPosition = new Vector2(GetRandom(), GetRandom());
+        if (GameSettingManager.Instance.Mode == GameMode.NewYear)
+        {
+            randPosition = new Vector2(Random.Range(-6f, 6f), Random.Range(-6f, 6f));
+        }
+        else
+        {
+            randPosition = new Vector2(GetRandom(), GetRandom());
+        }
         targetPosition = new Vector2(base.pc.target.position.x, base.pc.target.position.z) + randPosition;
         targetPositionV3 = new Vector3(targetPosition.x, pc.target.position.y, targetPosition.y);
         targetPositionV3 = NavMesh.SamplePosition(targetPositionV3, out NavMeshHit hit, 1.0f, NavMesh.AllAreas) ? hit.position : targetPositionV3;
         targetPosition = new Vector2(targetPositionV3.x, targetPositionV3.z);
     }
 
-    float GetRandom() {
+    float GetRandom()
+    {
         // 随机决定选择哪个区间
         bool selectFirstRange = Random.Range(0, 2) == 0; // 0 表示选第一个区间，1 表示选第二个区间
         float randomNumber;

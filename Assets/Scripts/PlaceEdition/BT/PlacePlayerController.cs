@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using DG.Tweening;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class PlacePlayerController : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class PlacePlayerController : MonoBehaviour
     public Transform target;
     // 祭坛
     public Transform altar;
+
+    public Transform playGround;
     // 自家图腾
     public Transform selfTotem;
 
@@ -109,6 +112,10 @@ public class PlacePlayerController : MonoBehaviour
         if (altar == null)
         {
             altar = GameObject.Find("ConsoleTarget").transform;
+        }
+        if (playGround == null && GameSettingManager.Instance.Mode == GameMode.NewYear)
+        {
+            playGround = GameObject.Find("PlayGround").transform;
         }
         if (selfTotem == null)
         {
@@ -637,17 +644,17 @@ public class PlacePlayerController : MonoBehaviour
     public void KnockBack(Collider c)
     {
         //
-        
+
         // 获取 collider 的 方向
         Vector3 dir = c.transform.forward;
         // 沿方向 施加一个冲击力
-        
+
         Rigidbody rg = transform.GetComponent<Rigidbody>();
         // 先取消 isKinematic
         rg.isKinematic = false;
         // 施加力
         rg.AddForce(dir * 10000);
-        
+
         Debug.Log($"{user.name} 被击退 , 击退方向 {dir}");
         // 1.5秒后 恢复
         Invoke("RecoverKinematic", 1.5f);
@@ -932,6 +939,21 @@ public class PlacePlayerController : MonoBehaviour
         user.instructionQueue.Clear();
     }
 
+    public void TakeFireWorks()
+    {
+        // 从队列里取出指令
+        if (user.fireworksInstructionQueue.Count > 0)
+        {
+            var (id, time) = user.fireworksInstructionQueue.Dequeue();
+            SendFireWorksToSky(id, time); // TODO NEW YEAR
+        }
+    }
+
+    public void SendFireWorksToSky(int id, int time)
+    {
+        Debug.Log($"[PC] : {user.name} 发射烟花 {id} 时长 {time}");
+    }
+
     public IEnumerator DrawPattern(RefWrapper<bool> btDrawing, RefWrapper<bool> btDrawFinish)
     {
         int timer = 0;
@@ -1006,30 +1028,30 @@ public class PlacePlayerController : MonoBehaviour
         // 没颜料了，就别等了，去堵门
         if (user.currentState.detailState == DetailState.DrawWaitingForInsAndPower)
         {
-            
+
             Vector2 nosie = new Vector2(UnityEngine.Random.Range(-3f, 3f), UnityEngine.Random.Range(-3f, 3f));
             Vector3 aimPoint = new Vector3(enemyDoor.position.x + nosie.x, enemyDoor.position.y, enemyDoor.position.z + nosie.y);
             playerAnimator.SetBool("isRun", true); // 跑起来
             MoveToTarget(aimPoint);
             Debug.Log("go ed enemmy");
             float runtime = 0;
-            while (navMeshAgent.path.corners.Length != 1 && runtime<15)
+            while (navMeshAgent.path.corners.Length != 1 && runtime < 15)
             {
                 runtime += 0.5f;
                 yield return new WaitForSeconds(0.5f);
             }
-            playerAnimator.SetBool("isRun",false);
+            playerAnimator.SetBool("isRun", false);
             // 这里加上跳舞嘲讽 TODO @GT
             int danceIndex = UnityEngine.Random.Range(0, 4);
             playerAnimator.SetBool(danceName[danceIndex], true);
         }
-        
+
         // 如果，这两个 状态 都没拦截住,Ummm
         // 那就原地罚站吧
 
 
     }
-    
+
     private string[] danceName = new[] { "TwistDance", //"BreakDacne",
         "SillyDance","SillyDance", "HipHopDance" };
 }

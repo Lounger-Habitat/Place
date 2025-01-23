@@ -191,9 +191,6 @@ public class BeginUI : MonoBehaviour
     public void SelectGameModel(int gameMode)
     {   //选择后直接进入对应游戏模式场景
         GameSettingManager.Instance.Mode =(GameMode)gameMode;
-        Debug.Log(gameMode);
-        Debug.Log(GameSettingManager.Instance.displayRatio);
-        Debug.Log(GameDisplayRatio.R9_16);
         if (GameSettingManager.Instance.displayRatio == GameDisplayRatio.R9_16)
         {
             gameMode += 4;

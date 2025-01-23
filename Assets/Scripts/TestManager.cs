@@ -505,7 +505,7 @@ public class TestManager : MonoBehaviour
             return;
         }
         User u = PlaceCenter.Instance.users[playerName];
-        int count = Random.Range(1, 10);
+        int count = Random.Range(10, 20);
         PlaceCenter.Instance.GainLikePower(u, count);
     }
 

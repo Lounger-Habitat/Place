@@ -42,10 +42,10 @@ public class User
     public int Level { get { return level; } set { level = value; } }
     public PlayerState currentState; // 玩家当前状态
     public int score;  // 玩家当前分数
-    public int currentCarryingInkCount = 300;  // 玩家 身上携带的 颜料数量
+    public int currentCarryingInkCount = 0;  // 玩家 身上携带的 颜料数量
     public int currentCarryingInsCount = 0; // 玩家 身上携带的 最大指令数量
-    public int maxCarryingInkCount = 100; // 玩家 身上携带的 颜料数量
-    public int maxCarryingInsCount = 100; // 玩家 身上携带的 最大指令数量
+    public int maxCarryingInkCount = 10000; // 玩家 身上携带的 颜料数量
+    public int maxCarryingInsCount = 10000; // 玩家 身上携带的 最大指令数量
     // base 速度
     public float speed;
     // 额外速度
@@ -58,6 +58,8 @@ public class User
     public int likeTimes=0; // 点赞到1000的参数
     
     public Queue<Instruction> instructionQueue;// 玩家 指令队列， 用于保存 玩家弹幕输入的指令，等待被执行
+
+    public Queue<(int,int)> fireworksInstructionQueue = new Queue<(int,int)>(); // 玩家 烟花指令队列， 用于保存 玩家弹幕输入的指令，等待被执行
 
     /*
         资源
@@ -93,8 +95,8 @@ public class User
         this.selfTeam = null;
         this.lastColor = Color.white;
         this.score = 0;
-        this.maxCarryingInkCount = 500;
-        this.maxCarryingInsCount = 500;
+        this.maxCarryingInkCount = 10000;
+        this.maxCarryingInsCount = 10000;
         this.userIcon = null;
         this.speed = 2.0f;
         this.currentState = new PlayerState(HighLevelState.Draw, DetailState.DrawMoveToTotem);
@@ -112,8 +114,8 @@ public class User
 
         // 重置玩家状态
         score = 0;
-        maxCarryingInkCount = 500;
-        maxCarryingInsCount = 500;
+        maxCarryingInkCount = 10000;
+        maxCarryingInsCount = 10000;
         currentCarryingInkCount = 0;
         currentCarryingInsCount = 0;
         speed = 2.0f;
@@ -127,8 +129,8 @@ public class User
         // 速度
         this.speed = 2 + (level - 1) * 0.03f;
         // 承载量
-        this.maxCarryingInsCount = (int)(500 + (level - 1) * 20f);
-        this.maxCarryingInkCount = (int)(500 + (level - 1) * 20f);
+        this.maxCarryingInsCount = (int)(10000 + (level - 1) * 20f);
+        this.maxCarryingInkCount = (int)(10000 + (level - 1) * 20f);
 
         // 体现角色能力
         if (nameTag != null && character != null)

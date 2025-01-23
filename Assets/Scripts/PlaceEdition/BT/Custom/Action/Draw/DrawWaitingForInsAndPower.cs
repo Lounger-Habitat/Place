@@ -63,17 +63,28 @@ public class DrawWaitingForInsAndPower : PlaceAction
                     Debug.Log("身上取指令没完成，等待中");
                     return TaskStatus.Running;
                 }
-                if (pc.insQueue.Count > 0 && pc.user.currentCarryingInkCount >= pc.user.maxCarryingInkCount)
+                if (GameSettingManager.Instance.Mode == GameMode.NewYear)
                 {
-                    Debug.Log("身上颜料富裕，直接走");
-                    return TaskStatus.Success;
+                    if (pc.insQueue.Count > 0)
+                    {
+
+                        return TaskStatus.Success;
+                    }
+                }
+                else
+                {
+                    if (pc.insQueue.Count > 0 && pc.user.currentCarryingInkCount >= pc.user.maxCarryingInkCount)
+                    {
+                        Debug.Log("身上颜料富裕，直接走");
+                        return TaskStatus.Success;
+                    }
                 }
             }
 
             // 队伍颜料充足
             if (teamInkCount > 0)
             {
-                if (inEpoch == false && free == true )
+                if (inEpoch == false && free == true)
                 {
                     StartCoroutine(UseTeamInk(() =>
                     {
@@ -138,7 +149,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
                 Debug.Log("携带颜料到达最大值");
                 break;
             }
-        
+
             insCounter++;
             if (insCounter >= 1000)
             {
@@ -166,11 +177,20 @@ public class DrawWaitingForInsAndPower : PlaceAction
             Debug.Log("身上有待用颜料和队伍有待用的指令");
             // 计算指令 消耗颜料数量
             int needInkCount = PlaceCenter.Instance.ComputeInstructionColorCount(pc.user.instructionQueue.Peek());
-            if (availableInkCount < needInkCount) // 身上颜料不够 ，跳出循环
+            if (GameSettingManager.Instance.Mode == GameMode.NewYear)
             {
-                Debug.Log("身上颜料不够了, 身上颜料: " + availableInkCount + " 需要颜料: " + needInkCount);
-                break;
+                Debug.Log("needInkCount: " + needInkCount + " 但不处理");
             }
+            else
+            {
+                Debug.Log("needInkCount: " + needInkCount);
+                if (availableInkCount < needInkCount) // 身上颜料不够 ，跳出循环
+                {
+                    Debug.Log("身上颜料不够了, 身上颜料: " + availableInkCount + " 需要颜料: " + needInkCount);
+                    break;
+                }
+            }
+
             // 身上颜料可以负担这个指令
             // 1.取出指令
             Instruction instruction = pc.user.instructionQueue.Dequeue();
@@ -184,7 +204,7 @@ public class DrawWaitingForInsAndPower : PlaceAction
             pc.insQueue.Enqueue(instruction);
             // 6.增加携带指令数量
             pc.user.currentCarryingInsCount += 1;
-            
+
             insCounter++;
             if (insCounter >= 1000)
             {
@@ -192,6 +212,15 @@ public class DrawWaitingForInsAndPower : PlaceAction
                 yield return null;
             }
         }
+        if (GameSettingManager.Instance.Mode == GameMode.NewYear)
+        {
+            if (availableInkCount < 0)
+            {
+                pc.user.currentCarryingInkCount += -availableInkCount;
+                PlaceCenter.Instance.SetTeamInkCount(pc.user.Camp, availableInkCount);
+            }
+        }
+
         // yield return new WaitForSeconds(0.1f);
         Debug.Log("协程结束");
         if (callback != null)

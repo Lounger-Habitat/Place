@@ -5,7 +5,6 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Text.RegularExpressions;
 using ByteDance.LiveOpenSdk.Push;
-using Unity.VisualScripting;
 
 public class PlaceInstructionManager : MonoBehaviour
 {
@@ -1317,7 +1316,7 @@ public class PlaceInstructionManager : MonoBehaviour
     }
 
 
-    
+
 
     // 弹幕
     public void DefaultDanmuCommand(Dm dm)
@@ -1526,15 +1525,15 @@ public class PlaceInstructionManager : MonoBehaviour
             Dy  Dammu    
     */
 
-    private int GetPosWithCommand(string msg,int randomMax)
+    private int GetPosWithCommand(string msg, int randomMax)
     {
-        if (int.TryParse(msg,out int res))
+        if (int.TryParse(msg, out int res))
         {
             return res;
         }
         return Random.Range(1, randomMax);
     }
-    
+
     public void DyDanmuCommand(ICommentMessage dm)
     {
         string username = dm.Sender.Nickname;
@@ -1549,9 +1548,9 @@ public class PlaceInstructionManager : MonoBehaviour
                 var advMsg = msg.Split(' ');
                 //x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
                 //y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
-                if (advMsg.Length>=3)
+                if (advMsg.Length >= 3)
                 {
-                    x = GetPosWithCommand(advMsg[1],PlaceBoardManager.Instance.width - 35);
+                    x = GetPosWithCommand(advMsg[1], PlaceBoardManager.Instance.width - 35);
                     y = GetPosWithCommand(advMsg[2], PlaceBoardManager.Instance.height - 35);
                 }
                 else
@@ -1599,7 +1598,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     return;
                 }
 
-                if (msg.StartsWith("9") && advMsg.Length<4)
+                if (msg.StartsWith("9") && advMsg.Length < 4)
                 {
                     DefaultRunChatCommand(user, $"/roll {x} {y} 30 {advMsg[0]}");
                     return;
@@ -1708,7 +1707,6 @@ public class PlaceInstructionManager : MonoBehaviour
                     DefaultRunChatCommand(user, "/" + msg);
                 }
             }
-
             if (GameSettingManager.Instance.Mode == GameMode.Competition)
             {
                 if (msg.StartsWith("666")) // 弹幕点赞！？
@@ -1718,6 +1716,109 @@ public class PlaceInstructionManager : MonoBehaviour
                         PlaceCenter.Instance.GainLikePower(user, 10);
                     }
                     return;
+                }
+            }
+            if (GameSettingManager.Instance.Mode == GameMode.NewYear)
+            {
+                // 指令 - 传统指令
+                if (msg.StartsWith("/"))
+                {
+                    DefaultRunChatCommand(user, msg);
+                }
+
+                // 指令 - 快捷指令
+                /*
+                    快速加入
+                    快速画点
+                    快速画线
+                    快速画自定义线
+                    快速画圆、方块、三角、星星
+                */
+
+                // 快速画点
+                if (Regex.IsMatch(msg, FAST_DRAW_PATTERN))
+                {
+                    // 快速画点
+                    DefaultRunChatCommand(user, "/d " + msg);
+                }
+                else if (Regex.IsMatch(msg, FAST_LINE_PATTERN))
+                {
+                    // 快速画线
+                    DefaultRunChatCommand(user, "/l " + msg);
+                }
+                else if (Regex.IsMatch(msg, FAST_DRAW_DIY_PATTERN))
+                {
+                    // 快速画自定义线
+                    DefaultRunChatCommand(user, "/m " + msg);
+                }
+                else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN))
+                {
+                    // 快速画圆
+                    DefaultRunChatCommand(user, "/c " + msg);
+                }
+
+                // no slash
+                if (Regex.IsMatch(msg, FAST_DRAW_POINT_PATTERN_NO_SLASH))
+                {
+                    // 快速画点
+                    DefaultRunChatCommand(user, "/" + msg);
+                }
+                else if (Regex.IsMatch(msg, FAST_LINE_PATTERN_NO_SLASH))
+                {
+                    // 快速画线
+                    DefaultRunChatCommand(user, "/" + msg);
+                }
+                else if (Regex.IsMatch(msg, FAST_DRAW_DIY_PATTERN_NO_SLASH))
+                {
+                    // 快速画自定义线
+                    DefaultRunChatCommand(user, "/" + msg);
+                }
+                else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN_NO_SLASH))
+                {
+                    // 快速画圆
+                    DefaultRunChatCommand(user, "/" + msg);
+                }
+                else if (Regex.IsMatch(msg, FAST_PAINT_PATTERN_NO_SLASH))
+                {
+                    // 快速画方块
+                    DefaultRunChatCommand(user, "/" + msg);
+                }
+                else if (Regex.IsMatch(msg, FAST_RECT_PATTERN_NO_SLASH))
+                {
+                    // 快速画rect
+                    DefaultRunChatCommand(user, "/" + msg);
+                }
+
+                // chinese
+                if (Regex.IsMatch(msg, FAST_DRAW_POINT_PATTERN_CHINESE))
+                {
+                    // 快速画点
+                    msg = msg.Replace("点", "d");
+                    DefaultRunChatCommand(user, "/" + msg);
+                }
+                else if (Regex.IsMatch(msg, FAST_LINE_PATTERN_CHINESE))
+                {
+                    // 快速画线
+                    msg = msg.Replace("线", "l");
+                    DefaultRunChatCommand(user, "/" + msg);
+                }
+                else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN_CHINESE))
+                {
+                    // 快速画圆
+                    msg = msg.Replace("圆", "c");
+                    DefaultRunChatCommand(user, "/" + msg);
+                }
+                else if (Regex.IsMatch(msg, FAST_PAINT_PATTERN_CHINESE))
+                {
+                    // 快速画方块
+                    msg = msg.Replace("面", "paint");
+                    DefaultRunChatCommand(user, "/" + msg);
+                }
+                else if (Regex.IsMatch(msg, FAST_RECT_PATTERN_CHINESE))
+                {
+                    // 快速画rect
+                    msg = msg.Replace("矩形", "rect");
+                    DefaultRunChatCommand(user, "/" + msg);
                 }
             }
         }
@@ -1789,6 +1890,7 @@ public class PlaceInstructionManager : MonoBehaviour
             long count = like.LikeCount;
             // 指令 - 传统指令
             PlaceCenter.Instance.GainLikePower(user, count);
+
         }
 
 

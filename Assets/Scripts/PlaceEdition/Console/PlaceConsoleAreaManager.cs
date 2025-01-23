@@ -59,7 +59,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         // 获取 frame 宽 高
 
         // TODO 滞后修改
-        if (GameSettingManager.Instance.Mode == GameMode.Create || GameSettingManager.Instance.Mode == GameMode.Graffiti || GameSettingManager.Instance.Mode == GameMode.NewYear)
+        if (GameSettingManager.Instance.Mode == GameMode.Create || GameSettingManager.Instance.Mode == GameMode.Graffiti || GameSettingManager.Instance.Mode == GameMode.NewYear || GameObject.Find("Board"))
         {
             boradWidth = PlaceBoardManager.Instance.width;
             boradHeight = PlaceBoardManager.Instance.height;
@@ -153,7 +153,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
 
     // }
 
-    public void PlayEffect(int x, int y, int camp,int r, int g, int b)
+    public void PlayEffect(int x, int y, int camp, int r, int g, int b)
     {
         // 检测 x,y 小于 width height, 超出部分做截断处理
         // x = Mathf.Clamp(x, 0, boradWidth);
@@ -179,7 +179,7 @@ public class PlaceConsoleAreaManager : MonoBehaviour
         {
             projGo.GetComponent<ColorProjectileManager>().SetProjectileColor(color);
         }
-        
+
         projGo.transform.position = spawnPoint.position;
         //projGo.transform.forward = spawnPoint.forward;
         projGo.transform.LookAt(aimPos);

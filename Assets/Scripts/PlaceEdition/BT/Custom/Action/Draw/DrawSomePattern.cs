@@ -23,8 +23,11 @@ public class DrawSomePattern : PlaceAction
         if (!drawing.Value)
         {
             drawing.Value = true;
-            Debug.Log(pc);
             StartCoroutine(pc.DrawPattern(drawing,drawFinish));
+            if (GameSettingManager.Instance.Mode == GameMode.NewYear)
+            {
+                pc.TakeFireWorks();
+            }
         }
         if (drawFinish.Value)
         {
