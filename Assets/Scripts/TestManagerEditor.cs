@@ -36,38 +36,38 @@ public class TestManagerEditor : Editor
         {
            // 调用MyScript中的DoSomething方法
            //
-           ((TestManager)target).SendGift(1f);
+           ((TestManager)target).SendGift(10f);
         }
         if (GUILayout.Button("¥1"))
         {
            // 调用MyScript中的DoSomething方法
-           ((TestManager)target).SendGift(10f);
+           ((TestManager)target).SendGift(100f);
         }
         if (GUILayout.Button("¥2"))
         {
-           ((TestManager)target).SendGift(20f);
+           ((TestManager)target).SendGift(200f);
         }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         // 如果按钮被点击
         if (GUILayout.Button("¥5.2"))
         {
-           ((TestManager)target).SendGift(52);
+           ((TestManager)target).SendGift(520);
         }
         if (GUILayout.Button("¥9.9"))
         {
-            ((TestManager)target).SendGift(99f);
+            ((TestManager)target).SendGift(990f);
         }
         if (GUILayout.Button("¥19.9"))
         {
-           ((TestManager)target).SendGift(199f);
+           ((TestManager)target).SendGift(1990f);
         }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         // 如果按钮被点击
         if (GUILayout.Button("¥29.9"))
         {
-           ((TestManager)target).SendGift(299f);
+           ((TestManager)target).SendGift(2990f);
         }
         GUILayout.EndHorizontal();
         GUILayout.TextField(insTxt);

@@ -51,6 +51,9 @@ public class BeginUI : MonoBehaviour
             CheckAutoPlay();
             // GameSettingManager.Instance.mode = GameMode.Competition;
             UpdateUi();
+
+            // 默认
+            // SetShu(); 好像没啥用
         //}
     }
 
@@ -156,6 +159,7 @@ public class BeginUI : MonoBehaviour
     public GameObject createIcon;
     public GameObject graffitiIcon;
     public GameObject competitionIcon;
+    public GameObject newyearIcon;
 
     public void OnClickModeBtn()
     {
@@ -172,18 +176,28 @@ public class BeginUI : MonoBehaviour
                 createIcon.SetActive(true);
                 graffitiIcon.SetActive(false);
                 competitionIcon.SetActive(false);
+                newyearIcon.SetActive(false);
                 break;
             case GameMode.Graffiti:
                 modeText.text = "涂鸦模式";
                 createIcon.SetActive(false);
                 graffitiIcon.SetActive(true);
                 competitionIcon.SetActive(false);
+                newyearIcon.SetActive(false);
                 break;
             case GameMode.Competition:
                 modeText.text = "竞赛模式";
                 createIcon.SetActive(false);
                 graffitiIcon.SetActive(false);
                 competitionIcon.SetActive(true);
+                newyearIcon.SetActive(false);
+                break;
+            case GameMode.NewYear:
+                modeText.text = "新春模式";
+                createIcon.SetActive(false);
+                graffitiIcon.SetActive(false);
+                competitionIcon.SetActive(false);
+                newyearIcon.SetActive(true);
                 break;
         }
     }

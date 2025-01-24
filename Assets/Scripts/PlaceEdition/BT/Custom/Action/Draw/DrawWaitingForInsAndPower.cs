@@ -63,21 +63,10 @@ public class DrawWaitingForInsAndPower : PlaceAction
                     Debug.Log("身上取指令没完成，等待中");
                     return TaskStatus.Running;
                 }
-                if (GameSettingManager.Instance.Mode == GameMode.NewYear)
+                if (pc.insQueue.Count > 0 && pc.user.currentCarryingInkCount >= pc.user.maxCarryingInkCount)
                 {
-                    if (pc.insQueue.Count > 0)
-                    {
-
-                        return TaskStatus.Success;
-                    }
-                }
-                else
-                {
-                    if (pc.insQueue.Count > 0 && pc.user.currentCarryingInkCount >= pc.user.maxCarryingInkCount)
-                    {
-                        Debug.Log("身上颜料富裕，直接走");
-                        return TaskStatus.Success;
-                    }
+                    Debug.Log("身上颜料富裕，直接走");
+                    return TaskStatus.Success;
                 }
             }
 
@@ -214,11 +203,11 @@ public class DrawWaitingForInsAndPower : PlaceAction
         }
         if (GameSettingManager.Instance.Mode == GameMode.NewYear)
         {
-            if (availableInkCount < 0)
-            {
-                pc.user.currentCarryingInkCount += -availableInkCount;
-                PlaceCenter.Instance.SetTeamInkCount(pc.user.Camp, availableInkCount);
-            }
+            // if (availableInkCount < 0)
+            // {
+            //     pc.user.currentCarryingInkCount += -availableInkCount;
+            //     PlaceCenter.Instance.SetTeamInkCount(pc.user.Camp, availableInkCount);
+            // }
         }
 
         // yield return new WaitForSeconds(0.1f);

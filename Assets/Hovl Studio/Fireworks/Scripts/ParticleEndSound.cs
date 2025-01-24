@@ -20,7 +20,7 @@ public class ParticleEndSound : MonoBehaviour
     public AudioClip[] audioShot;
     
 
-    public static ParticleEndSound SharedInstance;
+    public ParticleEndSound SharedInstance;
 
     [System.Serializable]
     public class Pool
@@ -87,9 +87,10 @@ public class ParticleEndSound : MonoBehaviour
     }
 
     
-
+    public bool isDestroy= false;
     public void LateUpdate()
     {
+        if (isDestroy)return;
         ParticleSystem.Particle[] particles = new ParticleSystem.Particle[GetComponent<ParticleSystem>().particleCount];
         int length = GetComponent<ParticleSystem>().GetParticles(particles);
         int i = 0;
@@ -97,7 +98,7 @@ public class ParticleEndSound : MonoBehaviour
         {
             if (audioExplosion.Length > 0 && particles[i].remainingLifetime < Time.deltaTime)
             {
-                GameObject soundInstance = ParticleEndSound.SharedInstance.SpawnFromPool("AudioExplosion", particles[i].position);
+                GameObject soundInstance = SharedInstance.SpawnFromPool("AudioExplosion", particles[i].position);
                 if(soundInstance != null)
                 {
                     StartCoroutine(LateCall(soundInstance));
@@ -105,7 +106,7 @@ public class ParticleEndSound : MonoBehaviour
             }
             if (audioShot.Length > 0 && particles[i].remainingLifetime >= particles[i].startLifetime - Time.deltaTime)
             {
-                GameObject soundInstance = ParticleEndSound.SharedInstance.SpawnFromPool("AudioShot", particles[i].position);
+                GameObject soundInstance = SharedInstance.SpawnFromPool("AudioShot", particles[i].position);
                 if (soundInstance != null)
                 {
                     StartCoroutine(LateCall(soundInstance));
@@ -118,6 +119,10 @@ public class ParticleEndSound : MonoBehaviour
     // Return Instances to the pool
     private IEnumerator LateCall(GameObject soundInstance)
     {
+        if (isDestroy)
+        {
+            yield break;
+        }
         yield return new WaitForSeconds(poolReturnTimer);
         soundInstance.SetActive(false);
     }

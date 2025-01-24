@@ -1,86 +1,89 @@
 ---- current path ----
-System.Environment.CurrentDirectory: D:\UnityProject_GIT\Place
-System.IO.Directory.GetCurrentDirectory: D:\UnityProject_GIT\Place
+System.Environment.CurrentDirectory: D:\GitRepository\Place
+System.IO.Directory.GetCurrentDirectory: D:\GitRepository\Place
 ---- unity app path ----
-unity Application.dataPath: D:/UnityProject_GIT/Place/DY_SDK_TEST/Place_Data
-unity Application.persistentDataPath: C:/Users/PC_FORV/AppData/LocalLow/OWN/Place
-unity Application.consoleLogPath: C:/Users/PC_FORV/AppData/LocalLow/OWN/Place/Player.log
-unity Application.streamingAssetsPath: D:/UnityProject_GIT/Place/DY_SDK_TEST/Place_Data/StreamingAssets
+unity Application.dataPath: D:/GitRepository/Place/newyear/Place_Data
+unity Application.persistentDataPath: C:/Users/ForSF/AppData/LocalLow/OWN/Place
+unity Application.consoleLogPath: C:/Users/ForSF/AppData/LocalLow/OWN/Place/Player.log
+unity Application.streamingAssetsPath: D:/GitRepository/Place/newyear/Place_Data/StreamingAssets
 ---- assembly path ----
-CurrentDomain.BaseDirectory: D:\UnityProject_GIT\Place\DY_SDK_TEST
-ExecutingAssembly().Location: D:\UnityProject_GIT\Place\DY_SDK_TEST\Place_Data\Managed\ByteDance.LiveOpenSdk.Runtime.dll
+CurrentDomain.BaseDirectory: D:\GitRepository\Place\newyear
+ExecutingAssembly().Location: D:\GitRepository\Place\newyear\Place_Data\Managed\ByteDance.LiveOpenSdk.Runtime.dll
 EntryAssembly().Location: 
 ---- env vars ----
-env vars: 62
- #0 env __COMPAT_LAYER = DetectorsAppHealth
- #1 env ALLUSERSPROFILE = C:\ProgramData
- #2 env APPDATA = C:\Users\PC_FORV\AppData\Roaming
- #3 env AQUA_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\aqua.vmoptions
- #4 env CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_15368_NEKMHXMWLETOIVRR
- #5 env CLION_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\clion.vmoptions
- #6 env CommonProgramFiles = C:\Program Files\Common Files
- #7 env CommonProgramFiles(x86) = C:\Program Files (x86)\Common Files
- #8 env CommonProgramW6432 = C:\Program Files\Common Files
- #9 env COMPUTERNAME = DESKTOP-HUBTO6G
- #10 env ComSpec = C:\Windows\system32\cmd.exe
- #11 env DATAGRIP_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\datagrip.vmoptions
- #12 env DATASPELL_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\dataspell.vmoptions
- #13 env DEVECOSTUDIO_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\devecostudio.vmoptions
- #14 env DriverData = C:\Windows\System32\Drivers\DriverData
- #15 env FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
- #16 env FPS_BROWSER_USER_PROFILE_STRING = Default
- #17 env GATEWAY_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\gateway.vmoptions
- #18 env GOLAND_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\goland.vmoptions
- #19 env HOMEDRIVE = C:
- #20 env HOMEPATH = \Users\PC_FORV
- #21 env IDEA_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\idea.vmoptions
- #22 env JetBrains Rider = D:\Program Files\JetBrains\JetBrains Rider 2024.1.4\bin;
- #23 env JETBRAINS_CLIENT_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\jetbrains_client.vmoptions
- #24 env JETBRAINSCLIENT_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\jetbrainsclient.vmoptions
- #25 env LOCALAPPDATA = C:\Users\PC_FORV\AppData\Local
- #26 env LOGONSERVER = \\DESKTOP-HUBTO6G
- #27 env NUMBER_OF_PROCESSORS = 12
- #28 env OneDrive = C:\Users\PC_FORV\OneDrive
- #29 env OneDriveConsumer = C:\Users\PC_FORV\OneDrive
- #30 env ORIGINAL_XDG_CURRENT_DESKTOP = undefined
- #31 env OS = Windows_NT
- #32 env Path = C:\Windows\system32;
+env vars: 61
+ #0 env ALLUSERSPROFILE = C:\ProgramData
+ #1 env AMPLITUDE_API_KEY = 28f3cae0b33b8b3702120c9ed1a935aa
+ #2 env AMPLITUDE_API_KEY_GREENBUCKET_DEV = 3ded2a762163603391a425f688f990c8
+ #3 env AMPLITUDE_API_KEY_GREENBUCKET_PROD = c86fea37a9e1d3f0878b96e15b111c7c
+ #4 env AMPLITUDE_API_KEY_REDBUCKET_DEV = 46b8b46515e7632fc42a504b72e05fd0
+ #5 env AMPLITUDE_API_KEY_REDBUCKET_PROD = ca12bb461ea96f9bdf5df4ded7d52994
+ #6 env AMPLITUDE_API_KEY_STAGING = 83ee04fccc67e4fcc7dd527c4c6f1e21
+ #7 env AMPLITUDE_API_KEY_YELLOWBUCKET_DEV = 48835b4d1f5e342aefe5f016324d296a
+ #8 env AMPLITUDE_API_KEY_YELLOWBUCKET_PROD = e03a9bbe92dc38a88cdb068d24c65b46
+ #9 env AMPLITUDE_DEPLOYMENT_KEY_RED_BUCKET_DEV = client-wbjHYrmeSR87GmWOE7LDpf7sUySOIKHm
+ #10 env AMPLITUDE_DEPLOYMENT_KEY_RED_BUCKET_PROD = client-zH8Y7OK1i331EKuG77C6UxN8ygcM6LzS
+ #11 env AMPLITUDE_TOKEN_GREENBUCKET_DEV = 84H2gMm_FJzhr3mBaX1lM1JVukmCM7d9
+ #12 env AMPLITUDE_TOKEN_GREENBUCKET_PROD = ZpUcbAdZXJYzNSoHsAWtL_s_JppwWid9
+ #13 env AMPLITUDE_TOKEN_REDBUCKET_DEV = U4PSN7S7PuYVRODivvdcFwbu8R6IHGqa
+ #14 env AMPLITUDE_TOKEN_REDBUCKET_PROD = jTIgKs5KTZOjiqEEVdZFbgo_VRhABduL
+ #15 env AMPLITUDE_TOKEN_YELLOWBUCKET_DEV = wKi8foVigDditGFvmZewRFWsEbX9Y0YO
+ #16 env AMPLITUDE_TOKEN_YELLOWBUCKET_PROD = UYDQtPOw83dIfVy3SrW5oMyo7ru4PRkV
+ #17 env APPDATA = C:\Users\ForSF\AppData\Roaming
+ #18 env CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_8320_QVRBTRGUZLNHQAVE
+ #19 env CommonProgramFiles = C:\Program Files\Common Files
+ #20 env CommonProgramFiles(x86) = C:\Program Files (x86)\Common Files
+ #21 env CommonProgramW6432 = C:\Program Files\Common Files
+ #22 env COMPUTERNAME = DESKTOP-34GGLUD
+ #23 env ComSpec = C:\Windows\system32\cmd.exe
+ #24 env DEBUG_ENV_VAR = UnityHub
+ #25 env DriverData = C:\Windows\System32\Drivers\DriverData
+ #26 env FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
+ #27 env FPS_BROWSER_USER_PROFILE_STRING = Default
+ #28 env HOMEDRIVE = C:
+ #29 env HOMEPATH = \Users\ForSF
+ #30 env LOCALAPPDATA = C:\Users\ForSF\AppData\Local
+ #31 env LOGONSERVER = \\DESKTOP-34GGLUD
+ #32 env NUMBER_OF_PROCESSORS = 12
+ #33 env OneDrive = C:\Users\ForSF\OneDrive
+ #34 env OneDriveConsumer = C:\Users\ForSF\OneDrive
+ #35 env ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+ #36 env OS = Windows_NT
+ #37 env Path = C:\Windows\system32;
 C:\Windows;
 C:\Windows\System32\Wbem;
 C:\Windows\System32\WindowsPowerShell\v1.0\;
 C:\Windows\System32\OpenSSH\;
+C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;
 C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;
-C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;
-C:\Users\PC_FORV\AppData\Local\Microsoft\WindowsApps;
-C:\Users\PC_FORV\AppData\Local\GitHubDesktop\bin;
-D:\Program Files\JetBrains\JetBrains Rider 2024.1.4\bin;
-
- #33 env PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
- #34 env PHPSTORM_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\phpstorm.vmoptions
- #35 env PROCESSOR_ARCHITECTURE = AMD64
- #36 env PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 158 Stepping 10, GenuineIntel
- #37 env PROCESSOR_LEVEL = 6
- #38 env PROCESSOR_REVISION = 9e0a
- #39 env ProgramData = C:\ProgramData
- #40 env ProgramFiles = C:\Program Files
- #41 env ProgramFiles(x86) = C:\Program Files (x86)
- #42 env ProgramW6432 = C:\Program Files
- #43 env PSModulePath = C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules
- #44 env PUBLIC = C:\Users\Public
- #45 env PYCHARM_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\pycharm.vmoptions
- #46 env RIDER_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\rider.vmoptions
- #47 env RUBYMINE_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\rubymine.vmoptions
- #48 env RUSTROVER_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\rustrover.vmoptions
- #49 env SESSIONNAME = Console
- #50 env STUDIO_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\studio.vmoptions
+C:\Program Files\dotnet\;
+C:\Users\ForSF\AppData\Local\GitHubDesktop\app-3.4.12\resources\app\git\cmd;
+C:\Users\ForSF\AppData\Local\Programs\Python\Python313\Scripts\;
+C:\Users\ForSF\AppData\Local\Programs\Python\Python313\;
+C:\Users\ForSF\AppData\Local\Microsoft\WindowsApps;
+C:\Users\ForSF\AppData\Local\Programs\Microsoft VS Code\bin;
+C:\Users\ForSF\AppData\Local\GitHubDesktop\bin;
+C:\Users\ForSF\.dotnet\tools
+ #38 env PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+ #39 env PROCESSOR_ARCHITECTURE = AMD64
+ #40 env PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 158 Stepping 10, GenuineIntel
+ #41 env PROCESSOR_LEVEL = 6
+ #42 env PROCESSOR_REVISION = 9e0a
+ #43 env ProgramData = C:\ProgramData
+ #44 env ProgramFiles = C:\Program Files
+ #45 env ProgramFiles(x86) = C:\Program Files (x86)
+ #46 env ProgramW6432 = C:\Program Files
+ #47 env PSModulePath = C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules
+ #48 env PUBLIC = C:\Users\Public
+ #49 env SENTRY_ACCESS_TOKEN = 3df78d9e53f8456aa90fbae044ce1a6261421ab1d0014674bc2e933477289017
+ #50 env SESSIONNAME = Console
  #51 env SystemDrive = C:
  #52 env SystemRoot = C:\Windows
- #53 env TEMP = C:\Users\PC_FORV\AppData\Local\Temp
- #54 env TMP = C:\Users\PC_FORV\AppData\Local\Temp
- #55 env USERDOMAIN = DESKTOP-HUBTO6G
- #56 env USERDOMAIN_ROAMINGPROFILE = DESKTOP-HUBTO6G
- #57 env USERNAME = PC_FORV
- #58 env USERPROFILE = C:\Users\PC_FORV
- #59 env WEBIDE_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\webide.vmoptions
- #60 env WEBSTORM_VM_OPTIONS = C:\Users\PC_FORV\Downloads\jetbra\vmoptions\webstorm.vmoptions
- #61 env windir = C:\Windows
+ #53 env TEMP = C:\Users\ForSF\AppData\Local\Temp
+ #54 env TMP = C:\Users\ForSF\AppData\Local\Temp
+ #55 env USERDOMAIN = DESKTOP-34GGLUD
+ #56 env USERDOMAIN_ROAMINGPROFILE = DESKTOP-34GGLUD
+ #57 env USERNAME = ForSF
+ #58 env USERPROFILE = C:\Users\ForSF
+ #59 env windir = C:\Windows
+ #60 env WOOTRIC_CLIENT_TOKEN = NPS-aa8be4c3

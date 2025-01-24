@@ -14,6 +14,7 @@ public class DanMuItem : MonoBehaviour
     {
         iconImage.sprite = user.userIcon;
         tMP_Text.text = text;
-        (transform as RectTransform).DOAnchorPosX(1400, 5f).SetEase(Ease.Linear).OnComplete(()=>Destroy(gameObject));
+        float randomtime = Random.Range(10, 15);
+        (transform as RectTransform).DOAnchorPosX(1400, randomtime).SetEase(Ease.Linear).OnComplete(()=>Destroy(gameObject));
     }
 }

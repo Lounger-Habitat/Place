@@ -49,7 +49,6 @@ namespace Douyin.LiveOpenSDK.Samples
             SampleLiveOpenSdkManager.AppId = "tt767800c5e948f69a10";
             // SampleDyCloudManager.EnvId = "NDpveZe+Rc1TEVKOMk X6MTyuaUf3UybIYMoGM+q1i5jow4GDTUQceMgsgVML3LV14vgeiVdi2HxQgSMHix/a9XH500iLe0itMedtObcCE4X6UKT\npCMr2B8IPGw=";
             // SampleDyCloudManager.ServiceId = "";
-            SampleLiveOpenSdkManager.Token = "NDpveZe+Rc1TEVKOMk X6MTyuaUf3UybIYMoGM+q1i5jow4GDTUQceMgsgVML3LV14vgeiVdi2HxQgSMHix/a9XH500iLe0itMedtObcCE4X6UKT\npCMr2B8IPGw=";
 
             // 初始化直播开放 SDK
             SampleLiveOpenSdkManager.Initialize();

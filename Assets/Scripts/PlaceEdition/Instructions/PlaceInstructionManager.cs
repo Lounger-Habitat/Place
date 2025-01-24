@@ -1115,6 +1115,64 @@ public class PlaceInstructionManager : MonoBehaviour
                 // 把 图 -> 指令
                 // 给到 player
                 break;
+            case "/rollNewYear":
+                if (parts.Length == 4)
+                {
+                    int x, y, max;
+                    string c, name;
+                    c = parts[0]; // /roll
+                    x = int.Parse(parts[1]); // x
+                    y = int.Parse(parts[2]); // y
+                    max = int.Parse(parts[3]); // max
+                    // 随机获取图片
+                    //name = parts[4]; // name
+                    name = $"image{Random.Range(1,12).ToString()}Deleteblack";
+                    List<Instruction> IL = PlaceCenter.Instance.NewYearGenerateImage(x, y, max, name);
+                    if (IL.Count != 0)
+                    {
+                        IL.ForEach(i => user.instructionQueue.Enqueue(i));
+                    }
+                    else
+                    {
+                        Debug.Log("roll 失败,或许名字key 不对");
+                    }
+                }
+                else if (parts.Length == 6)
+                {
+                    int x, y, max;
+                    string c, name, mode;
+                    c = parts[0]; // /roll
+                    x = int.Parse(parts[1]); // x
+                    y = int.Parse(parts[2]); // y
+                    max = int.Parse(parts[3]); // max
+                    name = parts[4]; // name
+                    mode = parts[5]; // mode : gift
+                    if (mode == "gift")
+                    {
+                        Texture2D userTex = user.userIcon.texture;
+                        List<Instruction> IL = PlaceCenter.Instance.GiftGenerateImage(x, y, max, userTex, name);
+                        if (IL.Count != 0)
+                        {
+                            IL.ForEach(i => user.instructionQueue.Enqueue(i));
+                        }
+                        else
+                        {
+                            Debug.Log("roll 失败,或许名字key 不对");
+                        }
+                    }
+                    // List<Instruction> IL = PlaceCenter.Instance.FreeGenerateImage(x, y, max,name);
+                    // if (IL.Count != 0)
+                    // {
+                    //     IL.ForEach(i => user.instructionQueue.Enqueue(i));
+                    // }else {
+                    //     Debug.Log("roll 失败,或许名字key 不对");
+                    // }
+                }
+
+                // 从 已有的 图集 中 找一个 图
+                // 把 图 -> 指令
+                // 给到 player
+                break;
             // case "/generate": // diffusion
             // case "/g":
             //     if (parts.Length >= 4)
@@ -1720,12 +1778,19 @@ public class PlaceInstructionManager : MonoBehaviour
             }
             if (GameSettingManager.Instance.Mode == GameMode.NewYear)
             {
-                // 指令 - 传统指令
-                if (msg.StartsWith("/"))
+                // // 指令 - 传统指令
+                // if (msg.StartsWith("/"))
+                // {
+                //     DefaultRunChatCommand(user, msg);
+                // }
+                if (msg.StartsWith("666")) // 弹幕点赞！？
                 {
-                    DefaultRunChatCommand(user, msg);
+                    if (PlaceCenter.Instance.users.ContainsKey(username))
+                    {
+                        PlaceCenter.Instance.GainLikePower(user, 10);
+                    }
+                    return;
                 }
-
                 // 指令 - 快捷指令
                 /*
                     快速加入
@@ -1735,91 +1800,7 @@ public class PlaceInstructionManager : MonoBehaviour
                     快速画圆、方块、三角、星星
                 */
 
-                // 快速画点
-                if (Regex.IsMatch(msg, FAST_DRAW_PATTERN))
-                {
-                    // 快速画点
-                    DefaultRunChatCommand(user, "/d " + msg);
-                }
-                else if (Regex.IsMatch(msg, FAST_LINE_PATTERN))
-                {
-                    // 快速画线
-                    DefaultRunChatCommand(user, "/l " + msg);
-                }
-                else if (Regex.IsMatch(msg, FAST_DRAW_DIY_PATTERN))
-                {
-                    // 快速画自定义线
-                    DefaultRunChatCommand(user, "/m " + msg);
-                }
-                else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN))
-                {
-                    // 快速画圆
-                    DefaultRunChatCommand(user, "/c " + msg);
-                }
-
-                // no slash
-                if (Regex.IsMatch(msg, FAST_DRAW_POINT_PATTERN_NO_SLASH))
-                {
-                    // 快速画点
-                    DefaultRunChatCommand(user, "/" + msg);
-                }
-                else if (Regex.IsMatch(msg, FAST_LINE_PATTERN_NO_SLASH))
-                {
-                    // 快速画线
-                    DefaultRunChatCommand(user, "/" + msg);
-                }
-                else if (Regex.IsMatch(msg, FAST_DRAW_DIY_PATTERN_NO_SLASH))
-                {
-                    // 快速画自定义线
-                    DefaultRunChatCommand(user, "/" + msg);
-                }
-                else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN_NO_SLASH))
-                {
-                    // 快速画圆
-                    DefaultRunChatCommand(user, "/" + msg);
-                }
-                else if (Regex.IsMatch(msg, FAST_PAINT_PATTERN_NO_SLASH))
-                {
-                    // 快速画方块
-                    DefaultRunChatCommand(user, "/" + msg);
-                }
-                else if (Regex.IsMatch(msg, FAST_RECT_PATTERN_NO_SLASH))
-                {
-                    // 快速画rect
-                    DefaultRunChatCommand(user, "/" + msg);
-                }
-
-                // chinese
-                if (Regex.IsMatch(msg, FAST_DRAW_POINT_PATTERN_CHINESE))
-                {
-                    // 快速画点
-                    msg = msg.Replace("点", "d");
-                    DefaultRunChatCommand(user, "/" + msg);
-                }
-                else if (Regex.IsMatch(msg, FAST_LINE_PATTERN_CHINESE))
-                {
-                    // 快速画线
-                    msg = msg.Replace("线", "l");
-                    DefaultRunChatCommand(user, "/" + msg);
-                }
-                else if (Regex.IsMatch(msg, FAST_CIRCLE_PATTERN_CHINESE))
-                {
-                    // 快速画圆
-                    msg = msg.Replace("圆", "c");
-                    DefaultRunChatCommand(user, "/" + msg);
-                }
-                else if (Regex.IsMatch(msg, FAST_PAINT_PATTERN_CHINESE))
-                {
-                    // 快速画方块
-                    msg = msg.Replace("面", "paint");
-                    DefaultRunChatCommand(user, "/" + msg);
-                }
-                else if (Regex.IsMatch(msg, FAST_RECT_PATTERN_CHINESE))
-                {
-                    // 快速画rect
-                    msg = msg.Replace("矩形", "rect");
-                    DefaultRunChatCommand(user, "/" + msg);
-                }
+                
             }
         }
         // List<string> selectList = new List<string>(){

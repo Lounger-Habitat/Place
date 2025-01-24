@@ -65,6 +65,9 @@ public class EndUI : MonoBehaviour
             case GameMode.Competition:
                 SceneManager.LoadScene($"1920-1080Scene Mode3{scene}");
                 break;
+            case GameMode.NewYear:
+                SceneManager.LoadScene($"1920-1080Scene Mode4 9-16 New Year");
+                break;
         }
     }
 

@@ -952,6 +952,8 @@ public class PlacePlayerController : MonoBehaviour
     public void SendFireWorksToSky(int id, int time)
     {
         Debug.Log($"[PC] : {user.name} 发射烟花 {id} 时长 {time}");
+        FireManager.Instance.Fire(id,time,transform.position);
+        DanMuUIManager.Instance.ShowHappyNewYearText(user);
     }
 
     public IEnumerator DrawPattern(RefWrapper<bool> btDrawing, RefWrapper<bool> btDrawFinish)

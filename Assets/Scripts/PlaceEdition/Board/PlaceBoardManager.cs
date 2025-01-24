@@ -58,6 +58,12 @@ public class PlaceBoardManager : MonoBehaviour
         // DiffusionManager.Instance.OnImageLoaded += OnImageLoaded;
         // 假设平面使用的是材质的第一个贴图
         // 生成一个新的贴图
+
+        if (GameSettingManager.Instance.Mode == GameMode.NewYear)
+        {
+            darkMode = true;
+        }
+
         Color bgColor = darkMode ? new Color(64 / 255f, 64 / 255f, 64 / 255f) : Color.white;
         Texture2D myTexture = GenerateTexture(width, height, bgColor); // 可以根据需要调整尺寸和颜色
 

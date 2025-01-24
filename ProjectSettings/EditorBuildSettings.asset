@@ -38,4 +38,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene_Radoll.unity
     guid: 8baef2e4975b9284ab2058684c06580c
+  - enabled: 0
+    path: Packages/com.bytedance.liveopensdk/Samples/SampleGameScene.unity
+    guid: 07d4d5ce4bd35f64185ead16379a1de2
   m_configObjects: {}

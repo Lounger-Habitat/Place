@@ -62,6 +62,7 @@ public class PlaceCenter : MonoBehaviour
     // List<Texture2D>? demoTextures = null;
     Dictionary<string, Texture2D> freeDemoTexturesDic = new Dictionary<string, Texture2D>();
     Dictionary<string, Texture2D> giftDemoTexturesDic = new Dictionary<string, Texture2D>();
+    Dictionary<string, Texture2D> newyearDemoTexturesDic = new Dictionary<string, Texture2D>();
     Dictionary<string, List<Texture2D>> cartoonTexturesDic = new Dictionary<string, List<Texture2D>>();
 
     public string platform = "bilibili"; // Tiktok
@@ -95,6 +96,7 @@ public class PlaceCenter : MonoBehaviour
 
         freeDemoTexturesDic = LoadDemoDicResources("free");
         giftDemoTexturesDic = LoadDemoDicResources("gift");
+        newyearDemoTexturesDic = LoadDemoDicResources("newyear");
         // DemoTexturesDic = LoadDemoDicResources("free");
         if (GameSettingManager.Instance.Mode == GameMode.Competition)
         {
@@ -552,17 +554,17 @@ public class PlaceCenter : MonoBehaviour
                     else if (GameSettingManager.Instance.Mode == GameMode.NewYear) // TODO New Year
                     {
                         normalPower = 100; // 颜料数（一毛相当于优惠）
-                        message = "急速神行";
+                        message = "新年快乐";
                         skill = SkillIcon.Speed;
                         u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                         // 添加 send fireworks
                         // id
                         // time
                         int x, y;
-                        x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
-                        y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
+                        x = Random.Range(1, PlaceBoardManager.Instance.width - 40 - 1);
+                        y = Random.Range(1, PlaceBoardManager.Instance.height - 40 - 1);
                         Debug.Log("画画");
-                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/userIcon {x} {y}"); // TODO New Year /roll
+                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/rollNewYear {x} {y} 40"); // TODO New Year /roll
                         u.fireworksInstructionQueue.Enqueue((1,1));
                     }
                     else
@@ -586,15 +588,15 @@ public class PlaceCenter : MonoBehaviour
                     else if (GameSettingManager.Instance.Mode == GameMode.NewYear) // TODO NewYear
                     {
                         normalPower = 200; //固定是加颜料
-                        message = "风之束缚";
-                        skill = SkillIcon.Tornado;
-                        u.character.GetComponent<PlacePlayerController>().Tornado((int)(power / 10));
+                        message = "健康平安";
+                        skill = SkillIcon.Speed;
+                        u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                         int x, y;
-                        x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
-                        y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
-                        Debug.Log("画画");
-                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/userIcon {x} {y}"); // TODO New Year /roll
-                        u.fireworksInstructionQueue.Enqueue((1,1));
+                        int nysize = 50;
+                        x = Random.Range(1, PlaceBoardManager.Instance.width - nysize - 1);
+                        y = Random.Range(1, PlaceBoardManager.Instance.height - nysize - 1);
+                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/rollNewYear {x} {y} {nysize}"); // TODO New Year /roll
+                        u.fireworksInstructionQueue.Enqueue((1,10));
                     }
                     else
                     {
@@ -617,15 +619,15 @@ public class PlaceCenter : MonoBehaviour
                     else if (GameSettingManager.Instance.Mode == GameMode.NewYear) // TODO NewYear
                     {
                         normalPower = 200; //固定是加颜料
-                        message = "风之束缚";
-                        skill = SkillIcon.Tornado;
-                        u.character.GetComponent<PlacePlayerController>().Tornado((int)(power / 10));
+                        message = "万事如意";
+                        skill = SkillIcon.Speed;
+                        u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                         int x, y;
-                        x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
-                        y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
-                        Debug.Log("画画");
-                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/userIcon {x} {y}"); // TODO New Year /roll
-                        u.fireworksInstructionQueue.Enqueue((1,1));
+                        int nysize = 70;
+                        x = Random.Range(1, PlaceBoardManager.Instance.width - nysize - 1);
+                        y = Random.Range(1, PlaceBoardManager.Instance.height - nysize - 1);
+                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/rollNewYear {x} {y} {nysize}"); // TODO New Year /roll
+                        u.fireworksInstructionQueue.Enqueue((1,20));
                     }
                     else
                     {
@@ -646,15 +648,15 @@ public class PlaceCenter : MonoBehaviour
                     else if (GameSettingManager.Instance.Mode == GameMode.NewYear) // TODO NewYear
                     {
                         normalPower = 200; //固定是加颜料
-                        message = "风之束缚";
-                        skill = SkillIcon.Tornado;
-                        u.character.GetComponent<PlacePlayerController>().Tornado((int)(power / 10));
+                        message = "财源滚滚";
+                        skill = SkillIcon.Speed;
+                        u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                         int x, y;
-                        x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
-                        y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
-                        Debug.Log("画画");
-                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/userIcon {x} {y}"); // TODO New Year /roll
-                        u.fireworksInstructionQueue.Enqueue((1,1));
+                        int nysize = 130;
+                        x = Random.Range(1, PlaceBoardManager.Instance.width - nysize - 1);
+                        y = Random.Range(1, PlaceBoardManager.Instance.height - nysize - 1);
+                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/rollNewYear {x} {y} {nysize}"); // TODO New Year /roll
+                        u.fireworksInstructionQueue.Enqueue((1,52));
                     }
                     else
                     {
@@ -666,7 +668,7 @@ public class PlaceCenter : MonoBehaviour
 
 
                     break;
-                case 99f:
+                case 990f:
                     // normalPower = 3600;
                     // message = "天官赐福";
                     // // 随机自动画一个图案
@@ -728,15 +730,15 @@ public class PlaceCenter : MonoBehaviour
                     else if (GameSettingManager.Instance.Mode == GameMode.NewYear) // TODO NewYear
                     {
                         normalPower = 200; //固定是加颜料
-                        message = "风之束缚";
-                        skill = SkillIcon.Tornado;
-                        u.character.GetComponent<PlacePlayerController>().Tornado((int)(power / 10));
+                        message = "十全十美";
+                        skill = SkillIcon.Speed;
+                        u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                         int x, y;
-                        x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
-                        y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
-                        Debug.Log("画画");
-                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/userIcon {x} {y}"); // TODO New Year /roll
-                        u.fireworksInstructionQueue.Enqueue((1,1));
+                        int nysize = 200;
+                        x = Random.Range(1, PlaceBoardManager.Instance.width - nysize - 1);
+                        y = Random.Range(1, PlaceBoardManager.Instance.height - nysize - 1);
+                        PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/rollNewYear {x} {y} {nysize}"); // TODO New Year /roll
+                        u.fireworksInstructionQueue.Enqueue((1,200));
                     }
                     else
                     {
@@ -978,10 +980,11 @@ public class PlaceCenter : MonoBehaviour
                 user.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(speedTime); //一个赞给0.1s加速。
                 // 给画画
                 int x, y;
-                x = Random.Range(1, PlaceBoardManager.Instance.width - 35);
-                y = Random.Range(1, PlaceBoardManager.Instance.height - 35);
+                int nysize = 30;
+                x = Random.Range(1, PlaceBoardManager.Instance.width - nysize - 1);
+                y = Random.Range(1, PlaceBoardManager.Instance.height - nysize - 1);
                 Debug.Log("画画");
-                PlaceInstructionManager.Instance.DefaultRunChatCommand(user, $"/userIcon {x} {y}"); // TODO New Year /roll
+                PlaceInstructionManager.Instance.DefaultRunChatCommand(user, $"/rollNewYear {x} {y} {nysize}"); // TODO New Year /roll
                 // 给放烟花
                 Debug.Log("烟花");
                 user.fireworksInstructionQueue.Enqueue((1, 1));
@@ -1195,6 +1198,35 @@ public class PlaceCenter : MonoBehaviour
         return new List<Instruction>();
     }
 
+    public List<Instruction> NewYearGenerateImage(int ox, int oy, int max, string name)
+    {
+        // 图库
+        // 获取index 
+        if (newyearDemoTexturesDic != null && newyearDemoTexturesDic.Count > 0)
+        {
+            // Texture2D tex;
+            // demoTexturesDic.TryGetValue(name,out tex);
+            // if (tex == null)
+            // {
+            //     return new List<Instruction>();
+            // }
+            if (!newyearDemoTexturesDic.ContainsKey(name))
+            {
+                return new List<Instruction>();
+            }
+
+            Texture2D tex = newyearDemoTexturesDic[name];
+            // texture 2d
+            // Texture2D tex = Resources.Load<Texture2D>($"Images/{index}");
+            Texture2D retex = PlaceBoardManager.Instance.ScaleTextureProportionally(tex, max, max);
+
+            // 转换成 instruction
+            return Image2Instruction(retex, ox, oy);
+        }
+
+        return new List<Instruction>();
+    }
+
     public List<Instruction> GiftGenerateImage(int ox, int oy, int max, Texture2D userTex, string name)
     {
         // 图库
@@ -1348,7 +1380,7 @@ public class PlaceCenter : MonoBehaviour
 
     public Dictionary<string, Texture2D> LoadDemoDicResources(string sbuClass)
     {
-        string classFormat = @"free|gift";
+        string classFormat = @"free|gift|newyear";
 
         if (Regex.IsMatch(sbuClass, classFormat))
         {

@@ -12,7 +12,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
     // prefab of character
     public GameObject characterPrefab;
     private float timer = 0f;
-    private float updateInterval = 0.1f; // 更新间隔为1秒
+    private float updateInterval = 1f; // 更新间隔为1秒
 
     public GameObject teamAreaName;
 
@@ -22,7 +22,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
     GameObject ps;
 
     public PlaceTeamBoard placeTeamBoard;
-    
+
     void Start()
     {
         // 如果totem 和 door 为空，获取本对象层级下的子物体
@@ -43,8 +43,13 @@ public class PlaceTeamAreaManager : MonoBehaviour
         }
 
 #if UNITY_EDITOR
-        teaminfo.ink = 10000;
+        teaminfo.ink = 9999;
 #endif
+        //新春模式，墨水数量增加
+        if (GameSettingManager.Instance.Mode == GameMode.NewYear)
+        {
+            teaminfo.ink = 20000;
+        }
     }
 
 
@@ -63,7 +68,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
             timer = 0f;
 
         }
-        
+
     }
 
     public int inkMagnification = 1;
@@ -72,7 +77,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         // 墨水数随着时间增加，默认初始每10s增加一点，随着人数的增加，增加速度增加
         // 额外颜料数 = 每个人的等级-1/10
         // 当前人数/10 + 额外颜料数 = 每秒产生颜料数
-        
+
         // if vip ，
         float inkRate = 0f;
         float exInkRate = 0f;
@@ -80,12 +85,20 @@ public class PlaceTeamAreaManager : MonoBehaviour
         foreach (User u in userList)
         {
             //  额外 墨水
-            exInkRate += (u.Level / 10)  / (10f / updateInterval);
+            exInkRate += (u.Level / 10) / (10f / updateInterval);
             u.contributionRate = (0.1f * u.genInkCount) / teaminfo.hisExInk;
         }
         inkRate = teaminfo.currentTeamNumberCount / 10f + exInkRate;
         inkRate *= inkMagnification;
-        teaminfo.ink += inkRate;
+
+        if (GameSettingManager.Instance.Mode == GameMode.NewYear)
+        {
+            teaminfo.ink += teaminfo.currentTeamNumberCount * 50;
+        }
+        else
+        {
+            teaminfo.ink += inkRate;
+        }
         teaminfo.hisInk += inkRate;
         //Debug.Log("ink " + ink);
         CheckInk();
@@ -97,7 +110,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
 
     private void CheckInk()
     {
-        if (teaminfo.ink<=20)//检测颜料数是否小于20
+        if (teaminfo.ink <= 20)//检测颜料数是否小于20
         {
             teamAreaName.GetComponent<NameTag>().SparkleOn();
         }
@@ -118,7 +131,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
     //更新UI数据，包含队伍中包含的User排行数据
     // void UpDataTeamUI()
     // {
-        //UIEvent.OnTeamAreaUIUpdate(this);
+    //UIEvent.OnTeamAreaUIUpdate(this);
     //    UIEvent.OnTeamUIUpdate(teaminfo);
     //}
 
@@ -127,7 +140,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
     public User CreateCharacterInTeamArea(User user)
     {
         GameObject go = null;
-        
+
         // 检查队伍区域是否已满
         if (teaminfo.currentTeamNumberCount < teaminfo.MaxTeamNumber)
         {
@@ -149,7 +162,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
             {
                 // PlayerControllerScript.selfTotem = totem;
                 // PlayerControllerScript.selfDoor = door;
-                PlayerControllerScript.enemyDoor =this.enemyDoor;
+                PlayerControllerScript.enemyDoor = this.enemyDoor;
                 PlayerControllerScript.user = user;
                 PlayerControllerScript.teamBoard = placeTeamBoard;
             }
@@ -157,13 +170,14 @@ public class PlaceTeamAreaManager : MonoBehaviour
             userList.Add(user);
             teaminfo.currentTeamNumberCount += 1;
             // 可以在这里设置角色的其他属性，比如所属队伍等
-            PlaceUIManager.Instance.AddTips(new TipsItem(){
-                userName=user.Name,
-                text =$"加入{teaminfo.Name}队伍！",
+            PlaceUIManager.Instance.AddTips(new TipsItem()
+            {
+                userName = user.Name,
+                text = $"加入{teaminfo.Name}队伍！",
                 tipsType = TipsType.messagePanel,
                 isLeft = user.Camp == 1
             });
-            
+
         }
         else
         {
@@ -208,7 +222,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
     {
         teaminfo.MaxTeamNumber = Num;
     }
-    
+
     public void setTeamInfo(Team team)
     {
         teaminfo = team;
@@ -256,7 +270,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (GameSettingManager.Instance.Mode!=GameMode.Competition)
+        if (GameSettingManager.Instance.Mode != GameMode.Competition)
         {
             return;
         }
@@ -264,7 +278,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
         {
             PlacePlayerController pc = other.transform.GetComponent<PlacePlayerController>();
             // 角色刚刚进入触发器
-            
+
             string name = pc.user.Name;
             Debug.Log($"角色：{name} 进入触发器");
             // 如果角色在此队伍区域内
@@ -283,7 +297,7 @@ public class PlaceTeamAreaManager : MonoBehaviour
                 if (!isWork)
                 {
                     StartCoroutine(pc.GoEnemyArea());
-                    
+
                 }
             }
             // TODO ： 友方队伍
