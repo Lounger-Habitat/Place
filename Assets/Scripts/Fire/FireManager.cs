@@ -15,9 +15,9 @@ public class FireManager : MonoBehaviour
     }
     public List<GameObject> firePrefabs;
 
-    public void Fire(int id, int time, Vector3 pos)
+    public void Fire(int id, float time, Vector3 pos)
     {
-        float timeFloat = time * 0.3f;
+        float timeFloat = time;
         GameObject fire = Instantiate(firePrefabs[Random.Range(0, firePrefabs.Count)], pos, Quaternion.identity);
         var particleSystem = fire.GetComponent<ParticleSystem>();
         particleSystem.Stop();

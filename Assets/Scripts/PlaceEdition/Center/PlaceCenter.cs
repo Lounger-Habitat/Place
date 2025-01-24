@@ -565,7 +565,7 @@ public class PlaceCenter : MonoBehaviour
                         y = Random.Range(1, PlaceBoardManager.Instance.height - 40 - 1);
                         Debug.Log("画画");
                         PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/rollNewYear {x} {y} 40"); // TODO New Year /roll
-                        u.fireworksInstructionQueue.Enqueue((1,1));
+                        u.fireworksInstructionQueue.Enqueue((1,5));
                     }
                     else
                     {
@@ -589,14 +589,15 @@ public class PlaceCenter : MonoBehaviour
                     {
                         normalPower = 200; //固定是加颜料
                         message = "健康平安";
-                        skill = SkillIcon.Speed;
+                        skill = SkillIcon.Tornado;
                         u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                         int x, y;
                         int nysize = 50;
                         x = Random.Range(1, PlaceBoardManager.Instance.width - nysize - 1);
                         y = Random.Range(1, PlaceBoardManager.Instance.height - nysize - 1);
                         PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/rollNewYear {x} {y} {nysize}"); // TODO New Year /roll
-                        u.fireworksInstructionQueue.Enqueue((1,10));
+                        u.fireworksInstructionQueue.Enqueue((1,15));
+                        u.fireworksInstructionQueue.Enqueue((1,15));
                     }
                     else
                     {
@@ -620,14 +621,16 @@ public class PlaceCenter : MonoBehaviour
                     {
                         normalPower = 200; //固定是加颜料
                         message = "万事如意";
-                        skill = SkillIcon.Speed;
+                        skill = SkillIcon.Thunder;
                         u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                         int x, y;
                         int nysize = 70;
                         x = Random.Range(1, PlaceBoardManager.Instance.width - nysize - 1);
                         y = Random.Range(1, PlaceBoardManager.Instance.height - nysize - 1);
                         PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/rollNewYear {x} {y} {nysize}"); // TODO New Year /roll
-                        u.fireworksInstructionQueue.Enqueue((1,20));
+                        u.fireworksInstructionQueue.Enqueue((1,30));
+                        u.fireworksInstructionQueue.Enqueue((1,30));
+                        u.fireworksInstructionQueue.Enqueue((1,30));
                     }
                     else
                     {
@@ -649,14 +652,17 @@ public class PlaceCenter : MonoBehaviour
                     {
                         normalPower = 200; //固定是加颜料
                         message = "财源滚滚";
-                        skill = SkillIcon.Speed;
+                        skill = SkillIcon.Defense;
                         u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                         int x, y;
                         int nysize = 130;
                         x = Random.Range(1, PlaceBoardManager.Instance.width - nysize - 1);
                         y = Random.Range(1, PlaceBoardManager.Instance.height - nysize - 1);
                         PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/rollNewYear {x} {y} {nysize}"); // TODO New Year /roll
-                        u.fireworksInstructionQueue.Enqueue((1,52));
+                        u.fireworksInstructionQueue.Enqueue((1,50));
+                        u.fireworksInstructionQueue.Enqueue((1,50));
+                        u.fireworksInstructionQueue.Enqueue((1,50));
+                        u.fireworksInstructionQueue.Enqueue((1,50));
                     }
                     else
                     {
@@ -731,14 +737,18 @@ public class PlaceCenter : MonoBehaviour
                     {
                         normalPower = 200; //固定是加颜料
                         message = "十全十美";
-                        skill = SkillIcon.Speed;
+                        skill = SkillIcon.Pencil;
                         u.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(10);
                         int x, y;
                         int nysize = 200;
                         x = Random.Range(1, PlaceBoardManager.Instance.width - nysize - 1);
                         y = Random.Range(1, PlaceBoardManager.Instance.height - nysize - 1);
                         PlaceInstructionManager.Instance.DefaultRunChatCommand(u, $"/rollNewYear {x} {y} {nysize}"); // TODO New Year /roll
-                        u.fireworksInstructionQueue.Enqueue((1,200));
+                        u.fireworksInstructionQueue.Enqueue((1,90));
+                        u.fireworksInstructionQueue.Enqueue((1,90));
+                        u.fireworksInstructionQueue.Enqueue((1,90));
+                        u.fireworksInstructionQueue.Enqueue((1,90));
+                        u.fireworksInstructionQueue.Enqueue((1,90));
                     }
                     else
                     {
@@ -973,10 +983,10 @@ public class PlaceCenter : MonoBehaviour
             //     message = $"点赞手速突破天际!! 颜料 x {p}";
             // }
 
-            if (lc >= 10)
+            if (lc >= 5)
             {
                 Debug.Log("执行点赞 高级");
-                int speedTime = lc / 10;
+                float speedTime = lc / 2.5f;
                 user.character.GetComponent<PlacePlayerController>().ActiveSpeedlUp(speedTime); //一个赞给0.1s加速。
                 // 给画画
                 int x, y;
@@ -987,7 +997,7 @@ public class PlaceCenter : MonoBehaviour
                 PlaceInstructionManager.Instance.DefaultRunChatCommand(user, $"/rollNewYear {x} {y} {nysize}"); // TODO New Year /roll
                 // 给放烟花
                 Debug.Log("烟花");
-                user.fireworksInstructionQueue.Enqueue((1, 1));
+                user.fireworksInstructionQueue.Enqueue((1, 0.3f));
             }
 
             if ((user.likeCount / 1000) > user.likeTimes) //判断本局是否点赞数超过1000//每次过一千才提醒，你这相当于过了一千 然后每次点赞都触发这个

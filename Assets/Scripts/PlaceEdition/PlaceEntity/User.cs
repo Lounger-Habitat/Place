@@ -59,7 +59,7 @@ public class User
     
     public Queue<Instruction> instructionQueue;// 玩家 指令队列， 用于保存 玩家弹幕输入的指令，等待被执行
 
-    public Queue<(int,int)> fireworksInstructionQueue = new Queue<(int,int)>(); // 玩家 烟花指令队列， 用于保存 玩家弹幕输入的指令，等待被执行
+    public Queue<(int,float)> fireworksInstructionQueue = new Queue<(int,float)>(); // 玩家 烟花指令队列， 用于保存 玩家弹幕输入的指令，等待被执行
 
     /*
         资源

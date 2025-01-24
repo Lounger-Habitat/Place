@@ -942,14 +942,20 @@ public class PlacePlayerController : MonoBehaviour
     public void TakeFireWorks()
     {
         // 从队列里取出指令
-        if (user.fireworksInstructionQueue.Count > 0)
+        // if (user.fireworksInstructionQueue.Count > 0)
+        // {
+        //     var (id, time) = user.fireworksInstructionQueue.Dequeue();
+        //     SendFireWorksToSky(id, time); // TODO NEW YEAR
+        // }
+        
+        for (int i = 0; i < user.fireworksInstructionQueue.Count; i++)
         {
             var (id, time) = user.fireworksInstructionQueue.Dequeue();
-            SendFireWorksToSky(id, time); // TODO NEW YEAR
+            SendFireWorksToSky(id, time);
         }
     }
 
-    public void SendFireWorksToSky(int id, int time)
+    public void SendFireWorksToSky(int id, float time)
     {
         Debug.Log($"[PC] : {user.name} 发射烟花 {id} 时长 {time}");
         FireManager.Instance.Fire(id,time,transform.position);
